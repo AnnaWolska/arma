@@ -9,8 +9,7 @@ def register(response):
         form = RegisterForm(response.POST)
         if form.is_valid():
             user = form.save()
-            permission = Permission.objects.get(name="can add tag")
-            user.user_premissions.add(permission)
+
         return redirect(reverse('main:home'))
     else:
         form = RegisterForm()

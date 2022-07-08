@@ -32,12 +32,12 @@
 
     <h1>Lista turniejów:</h1>
 
-{% for tournament in tournaments_list  %}
+{% for tournament in tournaments  %}
         <div class="list-group">
         <ol>
             <li class="list-group-item">
                {{ tournament.id}}    {{  tournament.title }} , {{  tournament.organizer }} , {{  tournament.description }} ,
-                 <a href = "{% url 'tournaments:details' book.id %}" > szczegóły
+                 <a href = "{% url 'tournaments:details' tournament.id %}" > szczegóły
                 </a>
             </li>
         </ol>
