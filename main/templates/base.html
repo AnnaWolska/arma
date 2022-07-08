@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Strona główna {% endblock %}</title>
+    <!-- Required meta tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="container">
+
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+{#            <img src="https://pywww.pl/assets/graphics/logo.png">#}
+          <span class="fs-4">turnieje</span>
+      </a>
+
+    <div class="col-md-3 text-end">
+        {%  if user.is_authenticated %}
+            <a type ="button" class="btn btn-outline-primary me-2" href="{% url "logout" %}">Wyloguj</a>
+        {% else %}
+            <a type="button" class="btn btn-outline-primary me-2" href="{% url "login" %}">Zaloguj</a>
+            <a type="button" class="btn btn-primary" href="{% url "register:register" %}">Zarejestruj</a>
+        {% endif %}
+    </div>
+
+
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a href="{% url 'main:home' %}" class="nav-link active" aria-current="page">Strona główna</a></li>
+        <li class="nav-item"><a href="{% url 'tournaments:tournaments_list' %}" class="nav-link">Lista turniejów</a></li>
+{#           <li class="nav-item"><a href="{% url 'tournaments:add_tournament' %}" class="nav-link">Dodaj turniej</a></li>#}
+{#        <li class="nav-item"><a href="{% url 'posts:list' %}" class="nav-link">Lista postów</a></li>#}
+{#          <li class="nav-item"><a href="{% url 'posts:add_post' %}" class="nav-link">dodaj post</a></li>#}
+{#        <li class="nav-item"><a href="{% url 'galleries:galleries_list' %}" class="nav-link">galerie</a></li>#}
+{#        <li class="nav-item"><a href="{% url 'main:contact' %}" class="nav-link">kontakt</a></li>#}
+{#        <li class="nav-item"><a href="{% url 'main:hello' %}" class="nav-link">O blogu</a></li>#}
+          {% if user.id %}
+          <li class="nav-item"> <a href="{% url 'main:userprofile' user.id %}" class="nav-link">Mój profil ({{ request.user }}) </a> </li>
+        {% endif %}
+      </ul>
+    </header>
+</div>
+
+{% block header %}
+{% endblock %}
+
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+{% block footer %}
+  <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <p class="col-md-4 mb-0 text-muted"> 2022 A.M.W. </p>
+
+    <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+      <svg class="bi me-2" width="5" height="4"><use xlink:href="#bootstrap"></use></svg>
+{#        <img src="https://pywww.pl/assets/graphics/logo.png">#}
+    </a>
+
+    <ul class="nav col-md-4 justify-content-end">
+      <li class="nav-item"><a href="{% url 'main:home' %}" class="nav-link px-2 text-muted">Strona główna</a></li>
+{#       <li class="nav-item"><a href="{% url 'main:hello' %}" class="nav-link px-2 text-muted">O nas</a></li>#}
+{#        <li class="nav-item"><a href="{% url 'main:contact' %}" class="nav-link px-2 text-muted">Kontakt</a></li>#}
+    </ul>
+  </footer>
+{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+{%  block additional_scripts %}
+{%  endblock %}
+
+</body>
+</html>

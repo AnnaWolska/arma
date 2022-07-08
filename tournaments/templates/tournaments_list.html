@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <img src="/static/sword.jpeg" width="400" height="300" alt="zdj">
+    <h2>  <a href = "{% url 'toruanaments:add_tournament' %}"> Dodaj turniej </a>  </h2>
+
+         <div class="pagination">
+        <span class = "step-links">
+
+        {% if books_list.has_previous %}
+            <a href="?page=1">&laquo; pierwsza</a>
+            <a href="?page={{ tournaments_list.previous_page_number }}">poprzednia</a>
+        {% endif %}
+
+        <span class="current">
+            strona {{ tournaments_list.number}}  z {{ tournaments_list.paginator.num_pages }}.
+        </span>
+
+        {% if tournaments_list.has_next %}
+            <a href="?page={{ tournaments_list.next_page_number }}">następna</a>
+            <a href="?page={{ tournaments_list.end_index }}">ostatnia</a>
+        {% endif %}
+
+        {% if tournaments_list.end_index %}
+        {% endif %}
+        </span>
+    </div>
+
+
+    <h1>Lista turniejów:</h1>
+
+{% for tournament in tournaments_list  %}
+        <div class="list-group">
+        <ol>
+            <li class="list-group-item">
+               {{ tournament.id}}    {{  tournament.title }} , {{  tournament.organizer }} , {{  tournament.description }} ,
+                 <a href = "{% url 'tournaments:details' book.id %}" > szczegóły
+                </a>
+            </li>
+        </ol>
+        </div>
+    {% endfor %}
+
+    <div class="pagination">
+        <span class = "step-links">
+
+        {% if tournaments_list.has_previous %}
+            <a href="?page=1">&laquo; pierwsza</a>
+            <a href="?page={{ tournaments_list.previous_page_number }}">poprzednia</a>
+        {% endif %}
+
+        <span class="current">
+            strona {{ tournaments_list.number}}  z {{ tournaments_list.paginator.num_pages }}.
+        </span>
+
+        {% if tournaments_list.has_next %}
+            <a href="?page={{ tournaments_list.next_page_number }}">następna</a>
+            <a href="?page={{ tournaments_list.end_index }}">ostatnia</a>
+        {% endif %}
+
+        {% if tournaments_list.end_index %}
+        {% endif %}
+        </span>
+    </div>
+
+{% endblock %}
+
