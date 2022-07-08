@@ -41,4 +41,4 @@ def user_profile(request, user_id):
             for field in form.fields:
                 form.fields[field].disabled = True
             form.helper.inputs = []
-    return render(request, 'main/userprofile.html', {'form':form})
+    return render(request, 'userprofile.html', {'form':form})
