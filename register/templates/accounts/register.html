@@ -1,13 +1,13 @@
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
 
+{% block title %} Create an Account {% endblock %}
+{% load crispy_forms_tags %}
 
-class RegisterForm(UserCreationForm):
-    email = forms.EmailField()
-    first_name = forms.CharField()
-    last_name = forms.CharField()
-
-    class Meta:
-        model = User
-        fields = ["username", "email", "password1","first_name","last_name", "password2"]
+{% block content %}
+<form method="POST" class="form-group">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-success">Zarejestruj</button>
+</form>
+{% endblock %}
