@@ -1,3 +1,1 @@
-
-
-echo "web: gunicorn arma.wsgi --log-file -" > Procfile
+web: gunicorn myproject.wsgi
