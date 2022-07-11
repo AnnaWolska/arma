@@ -20,13 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
+SECRET_KEY = 'django-insecure-+u&=jqridt$6ds_1^3oobf!njk000tw)+h5cmkbg(pr^1oiq#q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['herokuappname.herokuapp.com']
-
+# ALLOWED_HOSTS = ['herokuappname.herokuapp.com']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -86,8 +86,12 @@ WSGI_APPLICATION = 'arma.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'arma_db',
+        'USER': 'postgres',
+        'PASSWORD': 'haslo123',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 

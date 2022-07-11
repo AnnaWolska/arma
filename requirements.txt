@@ -25,3 +25,4 @@ sorl-thumbnail==12.8.0
 sqlparse==0.4.2
 urllib3==1.26.10
 Werkzeug==2.1.2
+# psycopg2

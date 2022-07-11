@@ -25,6 +25,7 @@ urlpatterns = [
     path('',include('main.urls')),
     # path('galleries/', include('galleries.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    # path('register', include('register.urls')),
     path('', include('register.urls')),
     path('home/',include('main.urls')),
 
