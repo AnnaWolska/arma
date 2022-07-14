@@ -13,12 +13,15 @@ class OrganizerForm(forms.ModelForm):
         fields = "__all__"
 
 
+OrganizerFormSet = forms.modelformset_factory(Organizer, form=OrganizerForm)
+
+
 class TournamentForm(forms.ModelForm):
-    tournaments = forms.ModelMultipleChoiceField(
-        queryset=Tournament.objects.all(),
-        widget=autocomplete.ModelSelect2Multiple(url='tournaments:tournament-autocomplete')
-    )
-    organizer = forms.ModelChoiceField(queryset=Organizer.objects.all(), required=False)
+    # tournaments = forms.ModelMultipleChoiceField(
+    #     queryset=Tournament.objects.all(),
+    #     widget=autocomplete.ModelSelect2Multiple(url='tournaments:tournament-autocomplete')
+    # )
+    # organizator = forms.ModelChoiceField(queryset=Organizer.objects.all(), required=False)
 
     class Meta:
         model = Tournament
