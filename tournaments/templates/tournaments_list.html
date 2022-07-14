@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block content %}
+    <h2>  <a href = "{% url 'tournaments:add_tournamnet' %}"> Dodaj turniej </a>  </h2>
     <img src="/static/sword.jpeg" width="400" height="300" alt="zdj">
 {#    <h2>  <a href = "{% url 'tournaments:add_tournament' %}"> Dodaj turniej </a>  </h2>#}
 
@@ -38,6 +39,7 @@
             <li class="list-group-item">
                {{ tournament.id}}    {{  tournament.title }} , {{  tournament.organizer }} , {{  tournament.description }} ,
                  <a href = "{% url 'tournaments:details' tournament.id %}" > szczegóły
+
                 </a>
             </li>
         </ol>

@@ -5,7 +5,7 @@ from tournaments.models import Tournament, Organizer
 from django.template import loader
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import AnonymousUser
-# from tournamnets.forms import TournamentForm
+from tournamnets.forms import TournamentForm, OrganizerForm
 # from django.utils import timezone
 from django.core.paginator import Paginator
 
@@ -35,25 +35,23 @@ def tournament_details(request, tournament_id):
     })
 
 
-# def add_book(request):
-#     formset = AuthorFormSet(queryset=Author.objects.none())
-#     if request.method == "POST":
-#         form = BookForm(request.POST, request.FILES)
-#         formset = AuthorFormSet(request.POST)
-#         if formset.is_valid():
-#             instance = form.save()
-#             for f in formset.cleaned_data:
-#                 if f:
-#                     author, _ = Author.objects.get_or_create(**f)
-#                     # if author not in instance.authors.all():
-#                     #     instance.authors.add(author)
-#             instance.save()
-#         return HttpResponseRedirect(reverse("books:list"))
-#     else:
-#         form = BookForm()
-#     return(
-#         render(request, "add_book.html", {"form": form, "formset": formset})
-#     )
-
 def add_tournament(request):
-    pass
+    formset = OrganizerForm(queryset=Organizer.objects.none())
+    if request.method == "POST":
+        form = TournamentForm(request.POST, request.FILES)
+        formset = OrganizerForm(request.POST)
+        if formset.is_valid():
+            instance = form.save()
+            for f in formset.cleaned_data:
+                if f:
+                    orgaznier, _ = Organizer.objects.get_or_create(**f)
+                    # if author not in instance.authors.all():
+                    #     instance.authors.add(author)
+            instance.save()
+        return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
+    else:
+        form = TournamentForm()
+    return(
+        render(request, "add_tournament.html", {"form": form, "formset": formset})
+    )
+
