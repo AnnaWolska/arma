@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{%  block style %}
+    <link href="{% static "posts/css/style.css" %}" rel=stylesheet">
+{% endblock %}
+
+{% block header %}
+    <h3>Dodawanie nowgo posta:</h3>
+{% endblock %}
+
+{% block title %}  Nowy post {% endblock %}
+
+{% block content %}
+    <form method = "POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit"
+    class = "btn btn-primary">Wyślij</button>
+    </form>
+{#    {% crispy form form.helper %}#}
+{% endblock %}
+
+{% block additional_scripts %}
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    {{ form.media }}
+{% endblock %}

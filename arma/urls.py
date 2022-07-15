@@ -23,11 +23,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tournaments/', include('tournaments.urls')),
     path('',include('main.urls')),
+    path('posts/', include('posts.urls')),
     # path('galleries/', include('galleries.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     # path('register', include('register.urls')),
     path('', include('register.urls')),
-    # path('home/',include('main.urls')),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
