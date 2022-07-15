@@ -11,25 +11,29 @@ class OrganizerForm(forms.ModelForm):
     class Meta:
         model = Organizer
         fields = "__all__"
+        labels = {
+            "name": "nazwa organizatora",
+            "description": "opis organizatora"
+        }
 
 
 OrganizerFormSet = forms.modelformset_factory(Organizer, form=OrganizerForm)
 
-
+#
 class TournamentForm(forms.ModelForm):
-    # tournaments = forms.ModelMultipleChoiceField(
-    #     queryset=Tournament.objects.all(),
-    #     widget=autocomplete.ModelSelect2Multiple(url='tournaments:tournament-autocomplete')
-    # )
-    # organizator = forms.ModelChoiceField(queryset=Organizer.objects.all(), required=False)
+#     tournaments = forms.ModelMultipleChoiceField(
+#         queryset=Tournament.objects.all(),
+#         widget=autocomplete.ModelSelect2Multiple(url='tournaments:tournament-autocomplete')
+#     )
+#     organizator = forms.ModelChoiceField(queryset=Organizer.objects.all(), required=False)
 
     class Meta:
         model = Tournament
-        fields = ["title", "description", "organizer"]
+        fields = ["title", "description", "organizers"]
         labels = {
             "title": "tytuł",
             "description": "opis",
-            "organizer": "organizator"
+            "organizers": "organizatorzy"
         }
 
         def __init__(self, *args, **kwargs):
@@ -42,7 +46,7 @@ class TournamentForm(forms.ModelForm):
                 Fieldset(
                     'title',
                     'description',
-                    'organizer'
+                    'organizers'
                     'image'
                 ),
                 ButtonHolder(

@@ -3,14 +3,14 @@ from .models import Tournament, Organizer
 
 
 @admin.register(Tournament)
-class AuthorAdmin(admin.ModelAdmin):
-    list_display = ["id", "title", "description", "organizer"]
-    search_fields = ["title", "organizer"]
-    list_filter = ["title", "organizer"]
+class TournamentAdmin(admin.ModelAdmin):
+    list_display = ["id", "title", "description"]
+    search_fields = ["title"]
+    list_filter = ["title"]
 
 
 @admin.register(Organizer)
-class AuthorAdmin(admin.ModelAdmin):
+class OrganizerAdmin(admin.ModelAdmin):
     list_display = ["name"]
     search_fields = ["name"]
     list_filter = ["name"]

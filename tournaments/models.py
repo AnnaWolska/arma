@@ -18,11 +18,11 @@ class Organizer(models.Model):
 class Tournament(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    organizer = models.ForeignKey("Organizer", on_delete=models.CASCADE, related_name="organized_tournaments", null=True, blank=True)
+    organizers = models.ManyToManyField('Organizer', related_name="tournaments")
     image = ImageField(upload_to="tournaments/logos/%Y/%m/%d/", blank=True, null=True)
 
     def __str__(self):
-        return f"{self.id} {self.title} {self.description} {self.organizer} {self.image}"
+        return f"{self.id} {self.title} {self.description} {self.image}"
 
     class Meta:
         verbose_name = "Turniej"

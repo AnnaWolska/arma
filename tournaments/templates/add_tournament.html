@@ -21,17 +21,20 @@
     {{ form|crispy }}
         <hr>
         {{ formset.management_form }}
-        {% for form in formset %}
+
+        <input type="submit" name="submit" value="Prześlij" class="btn btn-primary"/>
+{#        <button type="submit"#}
+{#        class = "btn btn-primary">Wyślij</button>#}
+         <hr>
+        <button id="add-form" type="button" class="btn btn-primary">Dodaj organizatora</button>
+        <hr>
+            {% for form in formset %}
             <div class="author-form">
                 {{ form|crispy }}
             </div>
         {% endfor %}
-        <hr>
-        <button id="add-form" type="button" class="btn btn-primary">Dodaj organizatora</button>
-        <hr>
-        <input type="submit" name="submit" value="Prześlij" class="btn btn-primary"/>
-{#        <button type="submit"#}
-{#        class = "btn btn-primary">Wyślij</button>#}
+
+
     </form>
 {% endblock %}
 

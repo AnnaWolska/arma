@@ -5,15 +5,14 @@
 
 {% block content %}
     <h3><a href = "{% url 'tournaments:tournaments_list' %}"> Powrót do listy turniejów </a></h3>
-{#        <img src="/static/first.png" alt="zdj">#}
-{#            {% thumbnail "/static/main/img/otwarta.jpeg" "200x200" as im %}#}
-{#                <img src="{{ im.url }}" alt="otwarta">#}
-{#                dlaczego nie wyświetla się miniaturka?#}
-{#            {% endthumbnail %}#}
+
 
      <h1> Szczegóły turnieju : </h1>
      <div>
          <ul>
+             <li>
+                 informację o turnieju tworzy: {{ user }}
+             </li>
              <li>
                  tytuł:  {{ title }}
              </li>
@@ -22,27 +21,23 @@
                  opis:  {{ description }}
              </li>
              <li>
-                  organizator: {{ organizer }}
+                  organizatorzy:
+                 {% for organizer in tournament.organizers %}
+                {{  organizer }}
+                {% endfor %}
              </li>
-
-
          </ul>
      </div>
 
+    <button id="delete_tournament" type="button" class="btn btn-primary" onclick="delete_tournament">Usuń turniej</button>
+
      <div>
          {% if image %}
-{#             <img src="{{ image.url }}">#}
              {% thumbnail image "300x300" as im %}
               <img src="{{ im.url }}" alt="zdj">
              {% endthumbnail %}
          {% endif %}
      </div>
-
-         <div>
-
-{#            {% crispy form %}#}
-
-        </div>
 
 {% endblock %}
 

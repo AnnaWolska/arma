@@ -4,14 +4,14 @@
 {% endblock %}
 
 {% block content %}
-    <h2>  <a href = "{% url 'tournaments:add_tournamnet' %}"> Dodaj turniej </a>  </h2>
-    <img src="/static/sword.jpeg" width="400" height="300" alt="zdj">
-{#    <h2>  <a href = "{% url 'tournaments:add_tournament' %}"> Dodaj turniej </a>  </h2>#}
+    <h2>  <a href = "{% url 'tournaments:add_tournament' %}"> Dodaj turniej </a>  </h2>
+    <img src="/static/sword.jpeg" width="225" height="225" alt="zdj">
+
 
          <div class="pagination">
         <span class = "step-links">
 
-        {% if books_list.has_previous %}
+        {% if tournaments_list.has_previous %}
             <a href="?page=1">&laquo; pierwsza</a>
             <a href="?page={{ tournaments_list.previous_page_number }}">poprzednia</a>
         {% endif %}
@@ -33,11 +33,19 @@
 
     <h1>Lista turniejów:</h1>
 
-{% for tournament in tournaments  %}
+{% for tournament in tournaments_list  %}
         <div class="list-group">
         <ol>
             <li class="list-group-item">
-               {{ tournament.id}}    {{  tournament.title }} , {{  tournament.organizer }} , {{  tournament.description }} ,
+               {{ tournament.id}}
+
+{#                wydarzenie tworzy: {{ user }}#}
+
+                {{  tournament.title }} ,
+{#                {% for organizer in organizers %}#}
+{#                {{  organizer }}#}
+{#                {% endfor %}#}
+{#                {{  tournament.description }} ,#}
                  <a href = "{% url 'tournaments:details' tournament.id %}" > szczegóły
 
                 </a>

@@ -3,9 +3,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from tournaments.models import Tournament, Organizer
 from django.template import loader
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import AnonymousUser
-from tournaments.forms import TournamentForm, OrganizerForm
+from tournaments.forms import TournamentForm, OrganizerFormSet
 # from django.utils import timezone
 from django.core.paginator import Paginator
 
@@ -15,7 +15,7 @@ def tournaments_list(request):
     paginator = Paginator(tournaments, 10)
     page_number = request.GET.get('page')
     tournaments_list = paginator.get_page(page_number)
-    context = {'tournaments' : tournaments}
+    context = {'tournaments_list': tournaments_list}
     return render(request, "tournaments_list.html", context)
 
 
@@ -23,37 +23,50 @@ def tournament_details(request, tournament_id):
     tournament = Tournament.objects.get(pk=tournament_id)
     title = tournament.title
     description = tournament.description
-    organizer = tournament.organizer
+    organizers = tournament.organizers
     image = tournament.image
-    # form = BookBorrowForm()
-    # form.helper.form_action = reverse("books:borrows", args=[book.id])
-    return render(request, "tournament_details.html", context = {
-        'title' : title,
+    return render(request, "tournament_details.html", context={
+        'title': title,
         'description': description,
-        'organizer' : organizer,
-        "image":image,
+        'organizers': organizers,
+        "image": image,
     })
 
 
 def add_tournament(request):
-    formset = OrganizerForm(queryset=Organizer.objects.none())
-    if request.method == "POST":
-        form = TournamentForm(request.POST, request.FILES)
-        formset = OrganizerForm(request.POST)
-        if formset.is_valid():
-            instance = form.save()
-            for f in formset.cleaned_data:
-                if f:
-                    orgaznier, _ = Organizer.objects.get_or_create(**f)
-                    if  not in instance.organizer.all():
-                        instance.authors.add(organizer)
-            instance.save()
-        return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
+    if request.user.is_authenticated:
+        formset = OrganizerFormSet(queryset=Organizer.objects.none())
+        if request.method == "POST":
+            form = TournamentForm(request.POST, request.FILES)
+            formset = OrganizerFormSet(request.POST)
+            if formset.is_valid():
+                instance = form.save()
+                for f in formset.cleaned_data:
+                    if f:
+                        orgaznier, _ = Organizer.objects.get_or_create(**f)
+                        if orgaznier not in instance.organizers.all():
+                            instance.organizers.add(orgaznier)
+                instance.save()
+            return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
+        else:
+            form = TournamentForm()
+        return(
+            render(request, "add_tournament.html", {"form": form, "formset": formset })
+        )
     else:
-        form = TournamentForm()
-    return(
-        render(request, "add_tournament.html", {"form": form, "formset": formset })
-    )
+        return redirect(reverse('login'))
+
+
+def delete_tournament(request, tournament_id):
+    user = request.user
+    if request.method == "POST":
+        if user.is_authenticated:
+            tournament = Tournament.objects.get(pk=tournament_id)
+            tournament.delete()
+            return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
+
+
+
 
 # def add_tournament(request):
 #
@@ -68,5 +81,5 @@ def add_tournament(request):
 #     else:
 #         form = TournamentForm()
 #     return(
-#         render(request, "add_tournament.html", {"form": form })
+#         render(request, "add_tournament.html", {"form": form})
 #     )
