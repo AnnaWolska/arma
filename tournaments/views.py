@@ -23,7 +23,7 @@ def tournament_details(request, tournament_id):
     tournament = Tournament.objects.get(pk=tournament_id)
     title = tournament.title
     description = tournament.description
-    organizers = tournament.organizers
+    organizers = tournament.organizers.all()
     image = tournament.image
     return render(request, "tournament_details.html", context={
         'title': title,

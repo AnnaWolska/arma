@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'sorl.thumbnail',
     'tournaments.apps.TournamentsConfig',
+    'posts.apps.PostsConfig',
     'register.apps.RegisterConfig',
     # 'galleries.apps.GalleriesConfig',
     'main.apps.MainConfig',
