@@ -11,7 +11,7 @@
 {% block content %}
 
 {#    <img src="/static/main/img/czytanie.jpeg" alt="czytanie">#}
-    <h2>  <a href = "{% url 'posts:add_post' %}"> Dodaj post </a>  </h2>
+    <h2>  <a href = "{% url 'tournaments:add_post' %}"> Dodaj post </a>  </h2>
 
     <div class="pagination">
         <span class = "step-links">
@@ -46,7 +46,7 @@
                 <li class="list-group-item">
                     {{ post.id}}  {{ post.user }}  {{ post.title }} , {{  post.content }}  ,
 
-                     <p> <a href = "{% url 'posts:details' post.id %}" > Szczegóły  </a>   </p>
+                     <p> <a href = "{% url 'posts:post_details' post.id %}" > Szczegóły  </a>   </p>
 
                        {% if post.user == request.user %}
                      <p> <a href = "{% url 'posts:edit_post' post.id %}">  Edytuj post </a>   </p>
