@@ -31,7 +31,9 @@
          </ul>
      </div>
 
+     {% if user == request.user %}
     <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}"> Usuń turniej </a></button>
+    {% endif %}
 
      <div>
          {% if image %}

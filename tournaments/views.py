@@ -26,6 +26,7 @@ def tournament_details(request, tournament_id):
     organizers = tournament.organizers.all()
     image = tournament.image
     posts = tournament.comments.all()
+    user = tournament.user
     paginator = Paginator(posts, 20)
     page_number = request.GET.get('page')
     posts = paginator.get_page(page_number)
@@ -35,18 +36,52 @@ def tournament_details(request, tournament_id):
         'organizers': organizers,
         "image": image,
         "posts": posts,
-        "tournament_id": tournament_id
+        "tournament_id": tournament_id,
+        "user": user
     })
 
 
+# def add_tournament(request):
+#     if request.user.is_authenticated:
+#         formset = OrganizerFormSet(queryset=Organizer.objects.none())
+#         if request.method == "POST":
+#             form = TournamentForm(request.POST, request.FILES)
+#             formset = OrganizerFormSet(request.POST)
+#             if formset.is_valid():
+#
+#                 instance = form.save()
+#                 instance.user = request.user
+#                 instance.save()
+#                 for f in formset.cleaned_data:
+#                     if f:
+#                         orgaznier, _ = Organizer.objects.get_or_create(**f)
+#                         if orgaznier not in instance.organizers.all():
+#                             instance.organizers.add(orgaznier)
+#                 instance.save()
+#             return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
+#         else:
+#             form = TournamentForm()
+#         return(
+#             render(request, "add_tournament.html", {"form": form, "formset": formset })
+#         )
+#     else:
+#         return redirect(reverse('login'))
+
+
 def add_tournament(request):
+    # user = request.user
     if request.user.is_authenticated:
         formset = OrganizerFormSet(queryset=Organizer.objects.none())
         if request.method == "POST":
+            # if user == post.user:
             form = TournamentForm(request.POST, request.FILES)
             formset = OrganizerFormSet(request.POST)
             if formset.is_valid():
+
                 instance = form.save()
+                instance.user = request.user
+                # instance.user = request.user
+                instance.save()
                 for f in formset.cleaned_data:
                     if f:
                         orgaznier, _ = Organizer.objects.get_or_create(**f)
@@ -63,6 +98,30 @@ def add_tournament(request):
         return redirect(reverse('login'))
 
 #
+# def edit_post(request, post_id):
+#     user = request.user
+#     posts = user.posts.all()
+#     for post in posts:
+#         if request.method == "POST":
+#             if user.is_authenticated:
+#                 if user == post.user:
+#                     form = PostForm(request.POST, request.FILES, instance=post)
+#                     if form.is_valid():
+#                         form.save()
+#                         return HttpResponseRedirect(reverse("posts:list"))
+#                     else:
+#                         return redirect(reverse('login'))
+#     else:
+#         if user.is_authenticated:
+#             if user == request.user:
+#                 form = PostForm(instance=post)
+#                 return render( request,"posts/edit.html", {"form": form})
+
+
+
+
+
+
 # def delete_tournament(request, tournament_id):
 #     user = request.user
 #     if request.method == "POST":
