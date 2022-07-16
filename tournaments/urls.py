@@ -5,7 +5,7 @@ from posts.views import add_post
 app_name = "tournaments"
 urlpatterns = [
     path('', tournaments_list, name="tournaments_list"),
-    path('<int:tournament_id>', tournament_details, name="details"),
+    path('<int:tournament_id>', tournament_details, name="tournament_details"),
     path('add', add_tournament, name="add_tournament"),
     path('<int:tournament_id>/posts', add_post, name="add_posts")
     # path('delete', delete_tournament, name="delete_tournament")

@@ -25,11 +25,17 @@ def tournament_details(request, tournament_id):
     description = tournament.description
     organizers = tournament.organizers.all()
     image = tournament.image
+    posts = tournament.comments.all()
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    posts_list = paginator.get_page(page_number)
     return render(request, "tournament_details.html", context={
         'title': title,
         'description': description,
         'organizers': organizers,
         "image": image,
+        "posts": posts,
+        "posts_list": posts_list
     })
 
 
