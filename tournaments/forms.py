@@ -56,5 +56,14 @@ class TournamentForm(forms.ModelForm):
             )
 
 
+class TournamentDeleteForm(forms.ModelForm):
+
+        ButtonHolder(
+            Submit('submit', 'Usuń', css_class='btn btn-primary'),
+            css_class="d-flex justify-content-end"
+        )
+
+
+
 
 

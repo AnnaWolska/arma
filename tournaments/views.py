@@ -5,14 +5,14 @@ from tournaments.models import Tournament, Organizer
 from django.template import loader
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import AnonymousUser
-from tournaments.forms import TournamentForm, OrganizerFormSet
+from tournaments.forms import TournamentForm, OrganizerFormSet, TournamentDeleteForm
 # from django.utils import timezone
 from django.core.paginator import Paginator
 
 
 def tournaments_list(request):
     tournaments = Tournament.objects.all()
-    paginator = Paginator(tournaments, 10)
+    paginator = Paginator(tournaments, 20)
     page_number = request.GET.get('page')
     tournaments_list = paginator.get_page(page_number)
     context = {'tournaments_list': tournaments_list}
@@ -26,16 +26,16 @@ def tournament_details(request, tournament_id):
     organizers = tournament.organizers.all()
     image = tournament.image
     posts = tournament.comments.all()
-    paginator = Paginator(posts, 10)
+    paginator = Paginator(posts, 20)
     page_number = request.GET.get('page')
-    posts_list = paginator.get_page(page_number)
+    posts = paginator.get_page(page_number)
     return render(request, "tournament_details.html", context={
         'title': title,
         'description': description,
         'organizers': organizers,
         "image": image,
         "posts": posts,
-        "posts_list": posts_list
+        "tournament_id": tournament_id
     })
 
 
@@ -62,30 +62,54 @@ def add_tournament(request):
     else:
         return redirect(reverse('login'))
 
-
-def delete_tournament(request, tournament_id):
-    user = request.user
-    if request.method == "POST":
-        if user.is_authenticated:
-            tournament = Tournament.objects.get(pk=tournament_id)
-            tournament.delete()
-            return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
-
-
-
-
-# def add_tournament(request):
 #
+# def delete_tournament(request, tournament_id):
+#     user = request.user
 #     if request.method == "POST":
-#         form = TournamentForm(request.POST, request.FILES)
-#
-#         if form.is_valid():
-#             instance = form.save()
-#
-#             instance.save()
-#         return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
+#         if user.is_authenticated:
+#             form = TournamentDeleteForm(request.POST)
+#             if form.is_valid():
+#                 tournament = Tournament.objects.get(pk=tournament_id)
+#                 tournament.delete()
+#             # return HttpResponseRedirect(reverse("tournaments:delete_tournament"))
+#             return(
+#                 render(request, "delete_tournament.html", {"form": form})
+#             )
 #     else:
 #         form = TournamentForm()
-#     return(
-#         render(request, "add_tournament.html", {"form": form})
-#     )
+
+
+# def delete_tournament(request, tournament_id):
+#     if request.user.is_authenticated:
+#         if request.method == "POST":
+#             # form = TournamentDeleteForm(request.POST)
+#             # if form.is_valid():
+#             # tournament = Tournament.objects.get(pk=tournament_id)
+#             # tournament.delete()
+#             # return HttpResponseRedirect(reverse("tournaments:delete_tournament"))
+#         # else:
+#         #     form = TournamentDeleteForm()
+#             return(
+#                 # render(request, "delete_tournament.html", {"form": form})
+#                 render(request, "delete_tournament.html", {"tournament_id": tournament_id})
+#             )
+#     else:
+#         return redirect(reverse('login'))
+#
+#
+# def delete_post(request, id):
+#     del_post = get_object_or_404(Post, id=id)
+#     del_post.delete(Post, id=id)
+#     return render(request, 'account/delete-post.html', {'del_post': del_post})
+
+def delete_tournament(request, tournament_id):
+    if request.user.is_authenticated:
+        del_tournament = get_object_or_404(Tournament, id=tournament_id)
+        del_tournament.delete()
+        # if not del_tournament is None:
+        # if request.method == "POST":
+        return render(request, 'delete_tournament.html', {'del_tournament': del_tournament})
+
+        # # else:
+        # #     return redirect(reverse('tournaments:tournaments_list'))
+        # return redirect(reverse('tournaments:tournaments_list'))

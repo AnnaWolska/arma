@@ -10,7 +10,6 @@
 {% block content %}
     <h3><a href = "{% url 'tournaments:tournaments_list' %}"> Powrót do listy turniejów </a></h3>
 
-
      <h1> Szczegóły turnieju : </h1>
      <div>
          <ul>
@@ -20,7 +19,6 @@
              <li>
                  tytuł:  {{ title }}
              </li>
-
              <li>
                  opis:  {{ description }}
              </li>
@@ -33,10 +31,7 @@
          </ul>
      </div>
 
-
-{#    <a class="btn btn-primary" href = "{% url 'tournaments:add_post' %}"> Dyskusja </a>#}
-
-    <button id="delete_tournament" type="button" style="background-color:Tomato;" class="btn btn-primary" onclick="delete_tournament">Usuń turniej</button>
+    <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}"> Usuń turniej </a></button>
 
      <div>
          {% if image %}
@@ -50,110 +45,65 @@
 
     <div class="pagination">
         <span class = "step-links">
-
-        {% if posts_list.has_previous %}
+        {% if posts.has_previous %}
             <a href="?page=1">&laquo; pierwsza</a>
-            <a href="?page={{ posts_list.previous_page_number }}">poprzednia</a>
+            <a href="?page={{ posts.previous_page_number }}">poprzednia</a>
         {% endif %}
-
             <span class="current">
-                strona {{ posts_list.number}}  z {{ posts_list.paginator.num_pages }}.
+                strona {{ posts.number}}  z {{ posts.paginator.num_pages }}.
             </span>
-
-        {% if posts_list.has_next %}
-            <a href="?page={{ posts_list.next_page_number }}">następna</a>
-            <a href="?page={{ posts_list.end_index }}">ostatnia</a>
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">następna</a>
+            <a href="?page={{ posts.end_index }}">ostatnia</a>
         {% endif %}
-
-        {% if posts_list.end_index %}
+        {% if posts.end_index %}
         {% endif %}
         </span>
     </div>
 
-
-
-
-        <ul>
+    <ul>
     {%  for post in posts %}
-{#        #}
-{#            <div class="pagination">#}
-{#        <span class = "step-links">#}
-{##}
-{#        {% if posts_list.has_previous %}#}
-{#            <a href="?page=1">&laquo; pierwsza</a>#}
-{#            <a href="?page={{ posts_list.previous_page_number }}">poprzednia</a>#}
-{#        {% endif %}#}
-{##}
-{#            <span class="current">#}
-{#                strona {{ posts_list.number}}  z {{ posts_list.paginator.num_pages }}.#}
-{#            </span>#}
-{##}
-{#        {% if posts_list.has_next %}#}
-{#            <a href="?page={{ posts_list.next_page_number }}">następna</a>#}
-{#            <a href="?page={{ posts_list.end_index }}">ostatnia</a>#}
-{#        {% endif %}#}
-{##}
-{#        {% if posts_list.end_index %}#}
-{#        {% endif %}#}
-{#        </span>#}
-{#    </div>#}
-
-
-
         <div class="list-group">
             <ol>
-
                 <li class="list-group-item">
-                    {{ post.title}}  {{ post.content }}  {{ post.exemple_file }} ,
+                    <ul>
+                        <li> {{ post.user }}, {{ post.title}} - {{ post.created }}:
+                     </li>
+                        <li>{{ post.content }}</li>
+                    </ul>
+
                     {% if image %}
                     {% thumbnail post.image "300x300" as im %}
                       <img src="{{ im.url }}" alt="zdj">
                      {% endthumbnail %}
                     {% endif %}
-
 {#                     <p> <a href = "{% url 'posts:details' post.id %}" > Szczegóły  </a>   </p>#}
-
                        {% if post.user == request.user %}
                      <p> <a href = "{% url 'posts:edit_post' post.id %}">  Edytuj post </a>   </p>
                      {% endif %}
-{#                 {% if post.sponsored %}#}
-{##}
-{#                        <p class="list-group-item list-group-item-action disabled">post sponsorowany</p>#}
-{#                     {% else %}#}
-{#                         <p class="list-group-item list-group-item-action disabled">post niesponsorowany</p>#}
-{#                     {% endif %}#}
-
-
                 </li>
             </ol>
-            </div>
+        </div>
     {% endfor %}
+
    </ul>
-
-
     <div class="pagination">
         <span class = "step-links">
-
-        {% if posts_list.has_previous %}
+        {% if posts.has_previous %}
             <a href="?page=1">&laquo; pierwsza</a>
-            <a href="?page={{ posts_list.previous_page_number }}">poprzednia</a>
+            <a href="?page={{ posts.previous_page_number }}">poprzednia</a>
         {% endif %}
-
             <span class="current">
-                strona {{ posts_list.number}}  z {{ posts_list.paginator.num_pages }}.
+                strona {{ posts.number}}  z {{ posts.paginator.num_pages }}.
             </span>
-
-        {% if posts_list.has_next %}
-            <a href="?page={{ posts_list.next_page_number }}">następna</a>
-            <a href="?page={{ posts_list.end_index }}">ostatnia</a>
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">następna</a>
+            <a href="?page={{ posts.end_index }}">ostatnia</a>
         {% endif %}
-
-        {% if posts_list.end_index %}
+        {% if posts.end_index %}
         {% endif %}
         </span>
     </div>
-
-
 
 {% endblock %}
 
