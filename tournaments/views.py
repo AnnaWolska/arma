@@ -161,6 +161,7 @@ def add_tournament(request):
 #     del_post.delete(Post, id=id)
 #     return render(request, 'account/delete-post.html', {'del_post': del_post})
 
+
 def delete_tournament(request, tournament_id):
     if request.user.is_authenticated:
         del_tournament = get_object_or_404(Tournament, id=tournament_id)

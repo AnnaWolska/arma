@@ -79,7 +79,7 @@
                         <li>{{ post.content }}</li>
                     </ul>
 
-                    {% if image %}
+                    {% if post.image %}
                     {% thumbnail post.image "300x300" as im %}
                       <img src="{{ im.url }}" alt="zdj">
                      {% endthumbnail %}
@@ -87,6 +87,7 @@
 {#                     <p> <a href = "{% url 'posts:details' post.id %}" > Szczegóły  </a>   </p>#}
                        {% if post.user == request.user %}
                      <p> <a href = "{% url 'tournaments:edit_post' tournament_id post.id %}">  Edytuj post </a>   </p>
+                      <p> <a href = "{% url 'tournaments:delete_post' tournament_id post.id %}">  Usuń post </a>   </p>
                      {% endif %}
                 </li>
             </ol>
