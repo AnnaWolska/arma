@@ -86,7 +86,7 @@
                     {% endif %}
 {#                     <p> <a href = "{% url 'posts:details' post.id %}" > Szczegóły  </a>   </p>#}
                        {% if post.user == request.user %}
-                     <p> <a href = "{% url 'tournaments:edit_post' post.id %}">  Edytuj post </a>   </p>
+                     <p> <a href = "{% url 'tournaments:edit_post' tournament_id post.id %}">  Edytuj post </a>   </p>
                      {% endif %}
                 </li>
             </ol>
