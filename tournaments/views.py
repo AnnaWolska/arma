@@ -8,6 +8,7 @@ from django.contrib.auth.models import AnonymousUser
 from tournaments.forms import TournamentForm, OrganizerFormSet, TournamentDeleteForm
 # from django.utils import timezone
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 
 def tournaments_list(request):
@@ -162,14 +163,26 @@ def add_tournament(request):
 #     return render(request, 'account/delete-post.html', {'del_post': del_post})
 
 
-def delete_tournament(request, tournament_id):
-    if request.user.is_authenticated:
-        del_tournament = get_object_or_404(Tournament, id=tournament_id)
-        del_tournament.delete()
-        # if not del_tournament is None:
-        # if request.method == "POST":
-        return render(request, 'delete_tournament.html', {'del_tournament': del_tournament})
+        #
+        # del_tournament = get_object_or_404(Tournament, id=tournament_id)
+        # del_tournament.delete()
+        # # if not del_tournament is None:
+        # return render(request, 'delete_tournament.html', {'del_tournament': del_tournament})
+        # else:
+        #     return redirect(reverse('tournaments:tournaments_list'))
 
-        # # else:
-        # #     return redirect(reverse('tournaments:tournaments_list'))
-        # return redirect(reverse('tournaments:tournaments_list'))
+# @login_required
+# def delete_tournament(request, tournament_id):
+#     del_tournament = get_object_or_404(Tournament, id=tournament_id)
+#     if request.method == "POST":
+#
+#
+#         form = TournamentDeleteForm(request.POST)
+#         del_tournament.delete()
+#         return redirect("tournaments:tournaments_list")
+
+
+
+@login_required
+def delete_tournament(request, tournament_id)):
+
