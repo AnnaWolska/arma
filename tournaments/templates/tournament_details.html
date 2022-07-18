@@ -45,6 +45,9 @@
 
     <h3>Dyskusja:</h3>
 
+     <h2>  <a href = "{% url 'tournaments:add_post' tournament_id %}"> Dodaj post </a>  </h2>
+
+
     <div class="pagination">
         <span class = "step-links">
         {% if posts.has_previous %}
@@ -62,6 +65,8 @@
         {% endif %}
         </span>
     </div>
+
+
 
     <ul>
     {%  for post in posts %}
@@ -81,7 +86,7 @@
                     {% endif %}
 {#                     <p> <a href = "{% url 'posts:details' post.id %}" > Szczegóły  </a>   </p>#}
                        {% if post.user == request.user %}
-                     <p> <a href = "{% url 'posts:edit_post' post.id %}">  Edytuj post </a>   </p>
+                     <p> <a href = "{% url 'tournaments:edit_post' post.id %}">  Edytuj post </a>   </p>
                      {% endif %}
                 </li>
             </ol>
