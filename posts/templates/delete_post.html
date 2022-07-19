@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
   <div class="container">
-    <h4>Czy na pewno chcesz usunąć ten post? <b>{{ del_post.title }}</b></h4>
+    <h4>Czy na pewno chcesz usunąć ten post: <b>{{ post.title }} ?</b></h4>
     <form method="POST">
       {% csrf_token %}
       {{ form.as_p }}
