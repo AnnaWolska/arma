@@ -19,11 +19,12 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'content', 'tournament', 'image']
+        # fields = ['title', 'content', 'image', "tournament"]
+        fields = ['title', 'content', 'image']
         labels = {
             "title": "Tytuł",
             "content": "Treść",
-            "tournament": "turniej"
+            # "tournament": "Turniej"
         }
 
         def __init__(self, *args, **kwargs):

@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <h3><a href = "{% url 'tournaments:tournaments_list' %}"> Powrót do listy turniejów </a></h3>
+    <h3><a href = "{% url 'tournaments:tournaments_list' %}"> <-Powrót do listy turniejów </a></h3>
 
      <h1> Szczegóły turnieju : </h1>
      <div>
@@ -25,7 +25,10 @@
              <li>
                   organizatorzy:
                  {% for organizer in organizers %}
-                {{  organizer }}
+                     <ul>
+                     <li>{{  organizer }}</li>
+                     </ul>
+
                 {% endfor %}
              </li>
          </ul>
@@ -33,7 +36,9 @@
 
      {% if user == request.user %}
     <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}"> Usuń turniej </a></button>
-    {% endif %}
+      <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Edytuj turniej </a></button>
+         <p>
+     {% endif %}
 
      <div>
          {% if image %}
@@ -43,6 +48,7 @@
          {% endif %}
      </div>
 
+     <h3>Przejdź do galerii</h3>
     <h3>Dyskusja:</h3>
 
      <h2>  <a href = "{% url 'tournaments:add_post' tournament_id %}"> Dodaj post </a>  </h2>

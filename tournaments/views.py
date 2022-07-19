@@ -73,6 +73,25 @@ def add_tournament(request):
         return redirect(reverse('login'))
 
 
+def edit_tournament(request, tournament_id):
+    tournament = Tournament.objects.get(pk=tournament_id)
+    user = request.user
+    if request.method == "POST":
+        if user.is_authenticated:
+            if user == tournament.user:
+                form = TournamentForm(request.POST, request.FILES, instance=tournament)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect(reverse('tournaments:tournament_details', args=[tournament_id] ))
+                else:
+                    return redirect(reverse('login'))
+    else:
+        if user.is_authenticated:
+            if user == request.user:
+                form = TournamentForm(instance=tournament)
+                return render( request,"edit_post.html", {"form": form})
+
+
 def delete_tournament(request, tournament_id):
     tournament = Tournament.objects.get(pk=tournament_id)
     user = request.user

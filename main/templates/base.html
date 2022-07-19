@@ -16,22 +16,18 @@
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-{#            <img src="https://pywww.pl/assets/graphics/logo.png">#}
-{#          <span class="fs-4">turnieje</span>#}
+            <img src="/static/arma.png" alt="zdjecie" width="207" height="60">
       </a>
-
 
       <ul class="nav nav-pills">
         <li class="nav-item"><a href="{% url 'main:home' %}" class="nav-link active" aria-current="page">Strona główna</a></li>
-        <li class="nav-item"><a href="{% url 'tournaments:tournaments_list' %}" class="nav-link">Lista turniejów</a></li>
-{#      <li class="nav-item"><a href="{% url 'tournaments:tournaments_list' %}" class="nav-link">Lista organizatorów</a></li>#}
+      <li class="nav-item"><a  class="nav-link">Generator zasad</a></li>
+        <li class="nav-item"><a href="{% url 'tournaments:tournaments_list' %}" class="nav-link">Turnieje</a></li>
       <li class="nav-item"><a href="{% url 'tournaments:tournaments_list' %}" class="nav-link">Uczestnicy</a></li>
-{#           <li class="nav-item"><a href="{% url 'tournaments:add_tournament' %}" class="nav-link">Dodaj turniej</a></li>#}
-{#        <li class="nav-item"><a href="{% url 'posts:list' %}" class="nav-link">Lista postów</a></li>#}
-{#          <li class="nav-item"><a href="{% url 'posts:add_post' %}" class="nav-link">dodaj post</a></li>#}
-{#        <li class="nav-item"><a href="{% url 'galleries:galleries_list' %}" class="nav-link">galerie</a></li>#}
-{#        <li class="nav-item"><a href="{% url 'main:contact' %}" class="nav-link">kontakt</a></li>#}
-{#        <li class="nav-item"><a href="{% url 'main:hello' %}" class="nav-link">O blogu</a></li>#}
+      <li class="nav-item"><a  class="nav-link">Organizatorzy</a></li>
+       <li class="nav-item"><a  class="nav-link">Statystyki</a></li>
+        <li class="nav-item"><a  class="nav-link">Kontakt</a></li>
+        <li class="nav-item"><a  class="nav-link">O nas</a></li>
           {% if user.id %}
           <li class="nav-item"> <a href="{% url 'main:userprofile' user.id %}" class="nav-link">Mój profil ({{ request.user }}) </a> </li>
         {% endif %}
@@ -60,7 +56,7 @@
 
 {% block footer %}
   <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-    <p class="col-md-4 mb-0 text-muted"> 2022 A.M.W. </p>
+    <p class="col-md-4 mb-0 text-muted"> 2022 A.M.W. a_wl@wp.pl </p>
 
     <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
       <svg class="bi me-2" width="5" height="4"><use xlink:href="#bootstrap"></use></svg>
