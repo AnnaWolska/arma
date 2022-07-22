@@ -13,7 +13,8 @@ from django.contrib.auth.decorators import login_required
 
 
 def tournaments_list(request):
-    tournaments = Tournament.objects.all()
+    tournaments = Tournament.objects.all().order_by('id')
+    # tournaments = tournaments.
     paginator = Paginator(tournaments, 20)
     page_number = request.GET.get('page')
     tournaments_list = paginator.get_page(page_number)
