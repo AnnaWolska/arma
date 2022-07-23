@@ -11,6 +11,6 @@ class TournamentAdmin(admin.ModelAdmin):
 
 @admin.register(Organizer)
 class OrganizerAdmin(admin.ModelAdmin):
-    list_display = ["name"]
+    list_display = ["id", "name"]
     search_fields = ["name"]
     list_filter = ["name"]

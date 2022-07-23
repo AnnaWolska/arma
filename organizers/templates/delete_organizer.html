@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <h4>Czy na pewno chcesz usunąć organizatora: <b>{{ organizer.name }} ? </b></h4>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-danger"> Usuń  </button>
+    </form>
+  </div>
+{% endblock %}

@@ -47,10 +47,10 @@
 {#                {{  organizer }}#}
 {#                {% endfor %}#}
 {#                {{  tournament.description }} ,#}
-{#                 <a href = "{% url 'organizers:organizer_details' organizer.id %}" > szczegóły</a>#}
+                 <a href = "{% url 'organizers:organizer_details' organizer.id %}" > szczegóły</a>
 
 {#                     {% if user == request.user %}#}
-{#    <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}"> Usuń turniej </a></button>#}
+    <button id="delete_organizer" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'organizers:delete_organizer' organizer.id %}"> Usuń organizatora </a></button>
 {#      <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Edytuj turniej </a></button>#}
 {#         <p>#}
 {#     {% endif %}#}
