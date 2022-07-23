@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{%  block style %}
+    <link href= "{% static "organizers/css/style.css" %}" rel=stylesheet">
+{% endblock %}
+
+{% block header %}
+    <p><h3>Dodawanie nowego organizatora:</h3></p>
+{% endblock %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+    <form method = "POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+        <hr>
+{#        {{ formset.management_form }}#}
+
+        <input type="submit" name="submit" value="Prześlij" class="btn btn-primary"/>
+{#        <button type="submit"#}
+{#        class = "btn btn-primary">Wyślij</button>#}
+         <hr>
+{#        <button id="add-form" type="button" class="btn btn-primary">Dodaj organizatora</button>#}
+        <hr>
+{#            {% for form in formset %}#}
+{#            <div class="author-form">#}
+{#                {{ form|crispy }}#}
+{#            </div>#}
+{#        {% endfor %}#}
+
+
+    </form>
+{% endblock %}
+
+{% block additional_scripts %}
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    {{ form.media }}
+    <script>
+        let form = document.querySelectorAll(".photo-form")
+        let container = document.querySelector("#form-container")
+        let addButton = document.querySelector("#add-form")
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+        let formNum = form.length - 1
+        addButton.addEventListener('click', addForm)
+        function addForm(e){
+            e.preventDefault()
+            let newForm = form[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+            totalForms.setAttribute(`value`, `${formNum + 1}`)
+        }
+    </script>
+{% endblock %}

@@ -8,23 +8,13 @@ from django.contrib.admin.widgets import AutocompleteSelectMultiple
 
 
 class PostForm(forms.ModelForm):
-    # tags = forms.ModelMultipleChoiceField(
-    #     queryset=Tag.objects.all(),
-    #     widget=autocomplete.ModelSelect2Multiple(url='tags:tag-autocomplete'
-    #     ))
-    # categories = forms.ModelMultipleChoiceField(
-    #     queryset=Category.objects.all(),
-    #     widget=autocomplete.ModelSelect2Multiple(url='posts:category-autocomplete'
-    #     ))
 
     class Meta:
         model = Post
-        # fields = ['title', 'content', 'image', "tournament"]
         fields = ['title', 'content', 'image']
         labels = {
             "title": "Tytuł",
             "content": "Treść",
-            # "tournament": "Turniej"
         }
 
         def __init__(self, *args, **kwargs):

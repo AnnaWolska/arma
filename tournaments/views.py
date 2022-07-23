@@ -14,7 +14,6 @@ from django.contrib.auth.decorators import login_required
 
 def tournaments_list(request):
     tournaments = Tournament.objects.all().order_by('id')
-    # tournaments = tournaments.
     paginator = Paginator(tournaments, 20)
     page_number = request.GET.get('page')
     tournaments_list = paginator.get_page(page_number)
@@ -90,7 +89,7 @@ def edit_tournament(request, tournament_id):
         if user.is_authenticated:
             if user == request.user:
                 form = TournamentForm(instance=tournament)
-                return render( request,"edit_post.html", {"form": form})
+                return render(request,"edit_tournament.html", {"form": form})
 
 
 def delete_tournament(request, tournament_id):
