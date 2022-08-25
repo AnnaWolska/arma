@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'posts.apps.PostsConfig',
     'register.apps.RegisterConfig',
     'organizers.apps.OrganizersConfig',
+    'tournament_calculating.apps.TournamentCalculatingConfig',
     # 'galleries.apps.GalleriesConfig',
     'main.apps.MainConfig',
 ]

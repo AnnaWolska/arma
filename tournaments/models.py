@@ -14,7 +14,7 @@ class Organizer(models.Model):
 
     class Meta:
         verbose_name = "Organizator"
-        verbose_name_plural = "organizatorzy"
+        verbose_name_plural = "Organizatorzy"
 
 
 class Tournament(models.Model):
