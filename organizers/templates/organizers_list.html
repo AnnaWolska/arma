@@ -36,11 +36,11 @@
 {% for organizer in organizers_list  %}
         <div class="list-group">
         <ol>
-            <li class="list-group-item">
-               {{ organizer.name}}
+            <li class="list-group-item" >
+              <p style="font-family: cursive " >{{ organizer.name}}</p>
                 {{ organizer.description}}
 
-                organizatora zgłasza użytkownik: {{ organizer.user }}
+                 - organizatora zgłasza użytkownik: {{ organizer.user }}
 
 {#                {{  organizer.user }} ,#}
 {#                {% for organizer in organizers %}#}
@@ -50,10 +50,13 @@
                  <a href = "{% url 'organizers:organizer_details' organizer.id %}" > szczegóły</a>
 
 {#                     {% if user == request.user %}#}
+              {% if organizer.user == request.user %}
     <button id="delete_organizer" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'organizers:delete_organizer' organizer.id %}"> Usuń organizatora </a></button>
+         <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'organizers:edit_organizer' organizer.id %}"> Edytuj organizatora </a></button>
+                {% endif %}
 {#      <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Edytuj turniej </a></button>#}
 {#         <p>#}
-{#     {% endif %}#}
+
 
 
             </li>

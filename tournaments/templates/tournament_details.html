@@ -10,7 +10,7 @@
 {% block content %}
     <h3><a href = "{% url 'tournaments:tournaments_list' %}"> <-Powrót do listy turniejów </a></h3>
 
-     <h1> Szczegóły turnieju : </h1>
+     <h2> Szczegóły turnieju : </h2>
      <div>
          <ul>
              <li>
@@ -80,9 +80,9 @@
             <ol>
                 <li class="list-group-item">
                     <ul>
-                        <li> {{ post.user }}, {{ post.title}} - {{ post.created }}:
-                     </li>
-                        <li>{{ post.content }}</li>
+                        <li> {{ post.user }} <p> {{ post.title}} - {{ post.created }}: </p></li>
+
+                       {{ post.content }}
                     </ul>
 
                     {% if post.image %}

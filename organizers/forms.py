@@ -19,13 +19,8 @@ class OrganizerForm(forms.ModelForm):
 
 OrganizerFormSet = forms.modelformset_factory(Organizer, form=OrganizerForm)
 
-#
+
 class OrganizerForm(forms.ModelForm):
-#     tournaments = forms.ModelMultipleChoiceField(
-#         queryset=Tournament.objects.all(),
-#         widget=autocomplete.ModelSelect2Multiple(url='tournaments:tournament-autocomplete')
-#     )
-#     organizator = forms.ModelChoiceField(queryset=Organizer.objects.all(), required=False)
 
     class Meta:
         model = Organizer
@@ -53,14 +48,4 @@ class OrganizerForm(forms.ModelForm):
                     css_class="d-flex justify-content-end"
                 )
             )
-
-
-# class OrganizerDeleteForm(forms.ModelForm):
-#
-#         ButtonHolder(
-#             Submit('submit', 'Usuń', css_class='btn btn-primary'),
-#             css_class="d-flex justify-content-end"
-#         )
-#
-#
 

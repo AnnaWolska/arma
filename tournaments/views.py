@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 
 
 def tournaments_list(request):
-    tournaments = Tournament.objects.all().order_by('id')
+    tournaments = Tournament.objects.all().order_by('-created')
     paginator = Paginator(tournaments, 20)
     page_number = request.GET.get('page')
     tournaments_list = paginator.get_page(page_number)
@@ -44,22 +44,21 @@ def tournament_details(request, tournament_id):
 
 
 def add_tournament(request):
-    # user = request.user
     if request.user.is_authenticated:
         formset = OrganizerFormSet(queryset=Organizer.objects.none())
         if request.method == "POST":
-            # if user == post.user:
             form = TournamentForm(request.POST, request.FILES)
             formset = OrganizerFormSet(request.POST)
+            form.user = request.user
             if formset.is_valid():
-
                 instance = form.save()
+                # instance.user.id = request.user
                 instance.user = request.user
-                # instance.user = request.user
                 instance.save()
                 for f in formset.cleaned_data:
                     if f:
                         orgaznier, _ = Organizer.objects.get_or_create(**f)
+                        orgaznier.user = request.user
                         if orgaznier not in instance.organizers.all():
                             instance.organizers.add(orgaznier)
                 instance.save()

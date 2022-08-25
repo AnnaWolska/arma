@@ -10,33 +10,25 @@
 {% block content %}
     <h3><a href = "{% url 'organizers:organizers_list' %}"> <-Powrót do listy turniejów </a></h3>
 
-     <h1> Szczegóły organizatora : </h1>
+     <h2> Szczegóły organizatora : </h2>
      <div>
          <ul>
              <li>
-                 informację o organizatorze tworzy: {{ user }}
+                 informację o organizatorze tworzy: <p style="font-family: luminari fantasy;"> {{ user }} </p>
              </li>
              <li>
-                 nazwa:  {{ name }}
+                 nazwa: <p style="font-family: luminari fantasy;">  {{ name }} </p>
              </li>
              <li>
-                 opis:  {{ description }}
+                 opis: <p style="font-family: luminari fantasy;">  {{ description }} </p>
              </li>
-             <li>
-{#                  organizatorzy:#}
-{#                 {% for organizer in organizers %}#}
-{#                     <ul>#}
-{#                     <li>{{  organizer }}</li>#}
-{#                     </ul>#}
 
-{#                {% endfor %}#}
-             </li>
          </ul>
      </div>
 
      {% if user == request.user %}
     <button id="delete_organizer" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'organizers:delete_organizer' organizer_id %}"> Usuń organizatora </a></button>
-{#      <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Edytuj turniej </a></button>#}
+      <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'organizers:edit_organizer' organizer_id %}"> Edytuj organizatora </a></button>
          <p>
      {% endif %}
 
