@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{%  block style %}
+    <link href= "{% static "tournaments_calculating/css/style.css" %}" rel=stylesheet">
+{% endblock %}
+
+{% block header %}
+    <p><h3>Przeprowadzenie turnieju:</h3></p>
+
+{% endblock %}
+
+
+{% block content %}
+
+{% endblock %}
+
+{#{% block additional_scripts %}#}
+{#    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>#}
+{#    {{ form.media }}#}
+{#    <script>#}
+{#        let form = document.querySelectorAll(".photo-form")#}
+{#        let container = document.querySelector("#form-container")#}
+{#        let addButton = document.querySelector("#add-form")#}
+{#        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")#}
+{#        let formNum = form.length - 1#}
+{#        addButton.addEventListener('click', addForm)#}
+{#        function addForm(e){#}
+{#            e.preventDefault()#}
+{#            let newForm = form[0].cloneNode(true)#}
+{#            let formRegex = RegExp(`form-(\\d){1}-`,'g')#}
+{#            formNum++#}
+{#            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)#}
+{#            container.insertBefore(newForm, addButton)#}
+{#            totalForms.setAttribute(`value`, `${formNum + 1}`)#}
+{#        }#}
+{#    </script>#}
+{#{% endblock %}#}

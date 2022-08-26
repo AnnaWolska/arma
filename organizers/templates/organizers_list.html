@@ -4,34 +4,30 @@
 {% endblock %}
 
 {% block content %}
-    <h2>  <a href = "{% url 'organizers:add_organizer' %}"> Dodaj organizatora</a>  </h2>
-    <img src="/static/sword.jpeg" width="225" height="225" alt="zdj">
+       <img src="/static/czytaja.jpg" width="360" height="250" alt="zdj">
 
+    <p><h2>  <a href = "{% url 'organizers:add_organizer' %}"> Dodaj organizatora</a>  </h2></p>
+ <hr>
+ <h3>Lista organizatorów:</h3>
 
-         <div class="pagination">
+     <div class="pagination">
         <span class = "step-links">
-
         {% if organizers_list.has_previous %}
             <a href="?page=1">&laquo; pierwsza</a>
             <a href="?page={{ organizers_list.previous_page_number }}">poprzednia</a>
         {% endif %}
-
         <span class="current">
             strona {{ organizers_list.number}}  z {{ organizers_list.paginator.num_pages }}.
         </span>
-
         {% if organizers_list.has_next %}
             <a href="?page={{ organizers_list.next_page_number }}">następna</a>
             <a href="?page={{ organizers_list.end_index }}">ostatnia</a>
         {% endif %}
-
         {% if organizers_list.end_index %}
         {% endif %}
         </span>
     </div>
 
-
-    <h1>Lista organizatorów:</h1>
 
 {% for organizer in organizers_list  %}
         <div class="list-group">

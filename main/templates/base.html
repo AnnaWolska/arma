@@ -21,13 +21,13 @@
 
       <ul class="nav nav-pills">
         <li class="nav-item"><a href="{% url 'main:home' %}" class="nav-link active" aria-current="page">Strona główna</a></li>
-      <li class="nav-item"><a  class="nav-link">Generator zasad</a></li>
+      <li class="nav-item"><a style="color:gray" class="nav-link">Generator zasad</a></li>
         <li class="nav-item"><a href="{% url 'tournaments:tournaments_list' %}" class="nav-link">Turnieje</a></li>
-      <li class="nav-item"><a href="{% url 'tournaments:tournaments_list' %}" class="nav-link">Uczestnicy</a></li>
+      <li class="nav-item"><a href="{% url 'tournament_calculating:participants_list' %}" class="nav-link">Uczestnicy</a></li>
       <li class="nav-item"><a href="{% url 'organizers:organizers_list' %}" class="nav-link">Organizatorzy</a></li>
-       <li class="nav-item"><a  class="nav-link">Statystyki</a></li>
-        <li class="nav-item"><a  class="nav-link">Kontakt</a></li>
-        <li class="nav-item"><a  class="nav-link">O nas</a></li>
+       <li class="nav-item"><a style="color:gray" class="nav-link">Statystyki</a></li>
+        <li class="nav-item"><a style="color:gray" class="nav-link">Kontakt</a></li>
+        <li class="nav-item"><a style="color:gray" class="nav-link">O nas</a></li>
           {% if user.id %}
           <li class="nav-item"> <a href="{% url 'main:userprofile' user.id %}" class="nav-link">Mój profil ({{ request.user }}) </a> </li>
         {% endif %}

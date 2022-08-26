@@ -6,7 +6,6 @@ from django.template import loader
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import AnonymousUser
 from tournaments.forms import TournamentForm, OrganizerFormSet, TournamentDeleteForm
-# from posts.forms import PostDeleteForm
 # from django.utils import timezone
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -29,6 +28,7 @@ def tournament_details(request, tournament_id):
     image = tournament.image
     posts = tournament.comments.all()
     user = tournament.user
+    created = tournament.created
     paginator = Paginator(posts, 20)
     page_number = request.GET.get('page')
     posts = paginator.get_page(page_number)
@@ -39,7 +39,9 @@ def tournament_details(request, tournament_id):
         "image": image,
         "posts": posts,
         "tournament_id": tournament_id,
-        "user": user
+        "user": user,
+        "created": created
+
     })
 
 

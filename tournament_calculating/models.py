@@ -34,6 +34,7 @@ class Group(models.Model):
 class Fight(models.Model):
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="fights")
     rounds = models.PositiveSmallIntegerField(null=True)
+    tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="fights")
 
     def __str__(self):
         return f"{self.group} {self.rounds}"
