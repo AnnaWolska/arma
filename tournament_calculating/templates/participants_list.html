@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load thumbnail %}
 
 {% block content %}
     <img src="/static/rycerz2.jpg" width="250" height="276" alt="zdj">
@@ -31,11 +34,38 @@
             <li class="list-group-item" >
               <p style="font-family: cursive " >{{ participant.name}} z {{ participant.school}}</p>
 
+                {% if participant.image %}
+                    {% thumbnail participant.image "300x300" as im %}
+                      <img src="{{ im.url }}" alt="zdj">
+                     {% endthumbnail %}
+             {% endif %}
+
+{#            {% if participant.tournaments %}#}
+            turnieje:
+            {% for tournament in tournaments %}
+            <li> {{ tournament.title }}</li>
+            {% endfor %}
+{#            {%  for participant in participants%}#}
+{#                 {{ participant.tournaments.title  }}#}
+{#            {% endfor %}#}
+{#            {% endif %}#}
+
+{#                         turnieje:#}
+{#                 {% for organizer in organizers %}#}
+{#                     <ul>#}
+{#                     <li>{{  organizer.name }}</li>#}
+{#                     </ul>#}
+{#                {% endfor %}#}
+
+
+
 
             </li>
         </ol>
         </div>
     {% endfor %}
+
+
 
      <div class="pagination">
         <span class = "step-links">

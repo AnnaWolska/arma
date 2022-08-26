@@ -37,18 +37,26 @@
   <div class="list-group">
         <ol>
             <li class="list-group-item">
-                <p>  <h5>{{  title }}</h5>  </p>
-                             organizatorzy turnieju:
+
+                <p>  <h5>{{  title }}</h5>
+
+                organizatorzy turnieju:
                  {% for organizer in organizers %}
                      <ul>
                      <li>{{  organizer.name }}</li>
                      </ul>
-                {% endfor %} wydarzenie utworzył użytkownik:                      <ul>
+                {% endfor %} wydarzenie utworzył użytkownik:
+                <ul>
                      <li>{{  user }} w dniu {{ created}} </li>
-                     </ul> </li>
+                 </ul>
+            uczestnicy:
+            <ol>
+            {% for participant in participants %}
+            <li> {{ participant.name }}</li>
 
 
-            </li>
+            {% endfor %}
+
 
         </ol>
         </div>

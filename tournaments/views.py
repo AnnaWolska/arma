@@ -29,6 +29,7 @@ def tournament_details(request, tournament_id):
     posts = tournament.comments.all()
     user = tournament.user
     created = tournament.created
+    participants = tournament.participants.all()
     paginator = Paginator(posts, 20)
     page_number = request.GET.get('page')
     posts = paginator.get_page(page_number)
@@ -40,7 +41,8 @@ def tournament_details(request, tournament_id):
         "posts": posts,
         "tournament_id": tournament_id,
         "user": user,
-        "created": created
+        "created": created,
+        "participants": participants
 
     })
 

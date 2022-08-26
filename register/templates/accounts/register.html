@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% load crispy_forms_filters %}
-
-{% block title %} Create an Account {% endblock %}
 {% load crispy_forms_tags %}
 
 {% block content %}
+
+      <img src="/static/drzwi.jpg" width="134" height="200" alt="zdj">
+<hr>
+    <h3>Rejestracja:</h3>
 <form method="POST" class="form-group">
     {% csrf_token %}
     {{ form|crispy }}

@@ -20,27 +20,35 @@
       </a>
 
       <ul class="nav nav-pills">
-        <li class="nav-item"><a href="{% url 'main:home' %}" class="nav-link active" aria-current="page">Strona główna</a></li>
-      <li class="nav-item"><a style="color:gray" class="nav-link">Generator zasad</a></li>
-        <li class="nav-item"><a href="{% url 'tournaments:tournaments_list' %}" class="nav-link">Turnieje</a></li>
-      <li class="nav-item"><a href="{% url 'tournament_calculating:participants_list' %}" class="nav-link">Uczestnicy</a></li>
-      <li class="nav-item"><a href="{% url 'organizers:organizers_list' %}" class="nav-link">Organizatorzy</a></li>
-       <li class="nav-item"><a style="color:gray" class="nav-link">Statystyki</a></li>
-        <li class="nav-item"><a style="color:gray" class="nav-link">Kontakt</a></li>
-        <li class="nav-item"><a style="color:gray" class="nav-link">O nas</a></li>
+{#        <li class="nav-item"><a href="{% url 'main:home' %}" class="nav-link active" aria-current="page">Strona główna</a></li>#}
+       <li class="nav-item"><a href="{% url 'main:home' %}" class="btn btn-outline-primary me-2" aria-current="page">Strona główna</a></li>
+{#      <li class="nav-item"><a style="color:gray" class="nav-link">Generator zasad</a></li>#}
+        <li class="nav-item"><a href="{% url 'tournaments:tournaments_list' %}" class="btn btn-outline-primary me-2">Turnieje</a></li>
+      <li class="nav-item"><a href="{% url 'tournament_calculating:participants_list' %}" class="btn btn-outline-primary me-2">Uczestnicy</a></li>
+      <li class="nav-item"><a href="{% url 'organizers:organizers_list' %}" class="btn btn-outline-primary me-2">Organizatorzy</a></li>
+       <li class="nav-item"><a style="color:gray" class="btn btn-outline-primary me-2">Statystyki</a></li>
+{#        <li class="nav-item"><a style="color:gray" class="btn btn-outline-primary me-2">Kontakt</a></li>#}
+{#        <li class="nav-item"><a style="color:gray" class="btn btn-outline-primary me-2">O nas</a></li>#}
           {% if user.id %}
-          <li class="nav-item"> <a href="{% url 'main:userprofile' user.id %}" class="nav-link">Mój profil ({{ request.user }}) </a> </li>
+          <li class="nav-item"> <a href="{% url 'main:userprofile' user.id %}" class="btn btn-outline-primary me-2">Mój profil ({{ request.user }}) </a> </li>
         {% endif %}
+
+       {%  if user.is_authenticated %}
+       <li class="nav-item"><a href="{% url "logout" %}" class="btn btn-outline-primary me-2" aria-current="page">Wyloguj</a></li>
+      {% else %}
+             <li class="nav-item"><a href="{% url "login" %}" class="btn btn-outline-primary me-2" aria-current="page">Zaloguj</a></li>
+        {% endif %}
+            <li class="nav-item"><a href="{% url "register:register" %}" class="btn btn-outline-primary me-2" aria-current="page">Zarejestruj</a></li>
       </ul>
 
         <div class="nav nav-pills" class="col-md-3 text-end">
-        {%  if user.is_authenticated %}
-            <a type ="button" class="btn btn-outline-primary me-2" href="{% url "logout" %}">Wyloguj</a>
-        {% else %}
-            <a type="button" class="btn btn-outline-primary me-2" href="{% url "login" %}">Zaloguj</a>
-            <a type="button" class="btn btn-primary" href="{% url "register:register" %}">Zarejestruj</a>
-        {% endif %}
-    </div>
+{#        {%  if user.is_authenticated %}#}
+{#            <a type ="button" class="btn btn-outline-primary me-2" href="{% url "logout" %}">Wyloguj</a>#}
+{#        {% else %}#}
+{#            <a type="button" class="btn btn-outline-primary me-2" href="{% url "login" %}">Zaloguj</a>#}
+{#            <a type="button" class="btn btn-primary" href="{% url "register:register" %}">Zarejestruj</a>#}
+{#        {% endif %}#}
+{#    </div>#}
 
 
     </header>
