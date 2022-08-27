@@ -4,7 +4,7 @@ from .models import Participant, Group, Fight, Round
 
 @admin.register(Participant)
 class TournamentAdmin(admin.ModelAdmin):
-    list_display = ["name", "school"]
+    list_display = ["name", "school", "groups"]
     search_fields = ["name", "school"]
     list_filter = ["name", "school"]
 

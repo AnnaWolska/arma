@@ -31,7 +31,7 @@
         <div class="list-group">
         <ol>
             <li class="list-group-item" >
-              <p style="font-family: cursive " >{{ participant.name}} z {{ participant.school}}<a href = "{% url 'tournament_calculating:participant_details' participant.id %}" > szczegóły</a></p>
+              <p style="font-family: cursive " > <a href = "{% url 'tournament_calculating:participant_details' participant.id %}" >{{ participant.name}} z {{ participant.school}} </a></p>
 
                 {% if participant.image %}
                     {% thumbnail participant.image "300x300" as im %}
@@ -40,10 +40,10 @@
              {% endif %}
 
 {#            {% if participant.tournaments %}#}
-            turnieje:
-            {% for tournament in tournaments %}
-            <li> {{ tournament.title }}</li>
-            {% endfor %}
+{#            turnieje:#}
+{#            {% for tournament in tournaments %}#}
+{#            <li> {{ tournament.title }}</li>#}
+{#            {% endfor %}#}
 {#            {%  for participant in participants%}#}
 {#                 {{ participant.tournaments.title  }}#}
 {#            {% endfor %}#}

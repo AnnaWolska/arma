@@ -19,7 +19,7 @@
                 organizatorzy turnieju:
                  {% for organizer in organizers %}
                      <ul>
-                     <li>{{  organizer.name }}</li>
+                     <li><a href = "{% url 'organizers:organizer_details' organizer.id %}" >{{  organizer.name }} </a></li>
                      </ul>
                 {% endfor %} wydarzenie utworzył użytkownik:
                 <ul>
@@ -28,16 +28,22 @@
             uczestnicy:
             <ol>
             {% for participant in participants %}
-            <li> {{ participant.name }}</li>
+            <li> <a href = "{% url 'tournament_calculating:participant_details' participant.id %}" > {{ participant.name }}</a></li>
             {% endfor %}
         </ol>
+                    grupy:
+            <ul>
+            {% for group in groups %}
+            <li> {{ group.number }}</li>
+            {% endfor %}
+        </ul>
         </div>
 
 
      {% if user == request.user %}
     <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}"> Usuń turniej </a></button>
       <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Edytuj turniej </a></button>
-{#         <button id="delete_tournament" type="button" style="background-color:limegreen "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Przeprowadź turniej </a></button>#}
+         <button id="delete_tournament" type="button" style="background-color:limegreen "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Przeprowadź turniej </a></button>
          <p>
      {% endif %}
 <hr>

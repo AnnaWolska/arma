@@ -33,7 +33,7 @@
         <div class="list-group">
         <ol>
             <li class="list-group-item" >
-              <p style="font-family: cursive " >{{ organizer.name}}</p>
+              <p style="font-family: cursive " ><a href = "{% url 'organizers:organizer_details' organizer.id %}" >{{ organizer.name}} </a></p>
                 {{ organizer.description}}
 
                  - organizatora zgłasza użytkownik: {{ organizer.user }}
@@ -43,7 +43,7 @@
 {#                {{  organizer }}#}
 {#                {% endfor %}#}
 {#                {{  tournament.description }} ,#}
-                 <a href = "{% url 'organizers:organizer_details' organizer.id %}" > szczegóły</a>
+{#                 <a href = "{% url 'organizers:organizer_details' organizer.id %}" > szczegóły</a>#}
 
 {#                     {% if user == request.user %}#}
               {% if organizer.user == request.user %}

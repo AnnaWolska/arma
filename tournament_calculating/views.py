@@ -25,13 +25,15 @@ def participant_details(request, participant_id):
     name = participant.name
     school = participant.school
     image = participant.image
+    groups = participant.groups.all()
     tournaments = participant.tournaments.all()
     return render(request, "participant_details.html", context={
         "name": name,
         "school": school,
         "image": image,
         "participant_id": participant_id,
-        "tournaments": tournaments
+        "tournaments": tournaments,
+        "groups": groups
     })
 
 

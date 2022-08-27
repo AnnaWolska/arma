@@ -19,9 +19,16 @@
                 turnieje:
                  {% for tournament in tournaments %}
                      <ul>
-                     <li>{{  tournament.title }}</li>
+                     <li><a href = "{% url 'tournaments:tournament_details' tournament.id %}" >{{  tournament.title }} </a></li>
                      </ul>
             {% endfor %}
+                                grupy:
+                 {% for group in groups %}
+                     <ul>
+                     <li>{{  group.number }} w {{ group.tournament.title }}</li>
+                     </ul>
+            {% endfor %}
+
             <ol>
 {#            {% for participant in participants %}#}
 {#            <li> {{ participant.name }}</li>#}
