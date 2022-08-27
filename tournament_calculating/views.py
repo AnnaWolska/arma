@@ -20,6 +20,21 @@ def participants_list(request):
     return render(request, "participants_list.html", context)
 
 
+def participant_details(request, participant_id):
+    participant = Participant.objects.get(pk=participant_id)
+    name = participant.name
+    school = participant.school
+    image = participant.image
+    tournaments = participant.tournaments.all()
+    return render(request, "participant_details.html", context={
+        "name": name,
+        "school": school,
+        "image": image,
+        "participant_id": participant_id,
+        "tournaments": tournaments
+    })
+
+
 def tournament_calculate(request):
     pass
     # if request.user.is_authenticated:

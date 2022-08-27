@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load thumbnail %}
+
+{% block style %}
+    <link href ="{% static "tournaments_calculating/css/style.css" %}" rel = "stylesheet">
+{% endblock %}
+
+{% block content %}
+    <h3><a href = "{% url 'tournament_calculating:participants_list' %}"> <-Powrót do listy uczestników </a></h3>
+
+  <div class="list-group">
+        <ol>
+            <li class="list-group-item">
+
+                <p>  <h5>{{  name }} z {{ school }}</h5>
+
+                turnieje:
+                 {% for tournament in tournaments %}
+                     <ul>
+                     <li>{{  tournament.title }}</li>
+                     </ul>
+            {% endfor %}
+            <ol>
+{#            {% for participant in participants %}#}
+{#            <li> {{ participant.name }}</li>#}
+{#            {% endfor %}#}
+        </ol>
+        </div>
+
+
+{#     {% if user == request.user %}#}
+{#    <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}"> Usuń turniej </a></button>#}
+{#      <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Edytuj turniej </a></button>#}
+{#         <button id="delete_tournament" type="button" style="background-color:limegreen "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Przeprowadź turniej </a></button>#}
+{#         <p>#}
+{#     {% endif %}#}
+<hr>
+     <div>
+                {% if image %}
+                    {% thumbnail image "300x300" as im %}
+                      <img src="{{ im.url }}" alt="zdj">
+                     {% endthumbnail %}
+             {% endif %}
+     </div>
+
+{% endblock %}
+

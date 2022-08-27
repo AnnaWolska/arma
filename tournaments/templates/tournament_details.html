@@ -10,30 +10,6 @@
 {% block content %}
     <h3><a href = "{% url 'tournaments:tournaments_list' %}"> <-Powrót do listy turniejów </a></h3>
 
-{#     <h2> Szczegóły turnieju : </h2>#}
-{#     <div>#}
-{#         <ul>#}
-{#             <li>#}
-{#                 informację o turnieju tworzy: {{ user }}#}
-{#             </li>#}
-{#             <li>#}
-{#                 tytuł:  {{ title }}#}
-{#             </li>#}
-{#             <li>#}
-{#                 opis:  {{ description }}#}
-{#             </li>#}
-{#             <li>#}
-{#                  organizatorzy:#}
-{#                 {% for organizer in organizers %}#}
-{#                     <ul>#}
-{#                     <li>{{  organizer }}</li>#}
-{#                     </ul>#}
-{##}
-{#                {% endfor %}#}
-{#             </li>#}
-{#         </ul>#}
-{#     </div>#}
-
   <div class="list-group">
         <ol>
             <li class="list-group-item">
@@ -53,20 +29,15 @@
             <ol>
             {% for participant in participants %}
             <li> {{ participant.name }}</li>
-
-
             {% endfor %}
-
-
         </ol>
         </div>
-
 
 
      {% if user == request.user %}
     <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}"> Usuń turniej </a></button>
       <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Edytuj turniej </a></button>
-         <button id="delete_tournament" type="button" style="background-color:limegreen "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Przeprowadź turniej </a></button>
+{#         <button id="delete_tournament" type="button" style="background-color:limegreen "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Przeprowadź turniej </a></button>#}
          <p>
      {% endif %}
 <hr>
