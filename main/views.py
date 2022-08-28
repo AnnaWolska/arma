@@ -20,12 +20,14 @@ def contact(request):
             return HttpResponseRedirect(reverse("main:contact"))
     else:
         form = ContactForm()
-    return render(request, "contact.html", {"form":form})
+    return render(request, "contact.html", {"form": form})
 
-
+#
 def user_profile(request, user_id):
     user = get_object_or_404(get_user_model(), id=user_id)
     if request.method == "POST":
+        # profile = user.userprofile
+        # form = UserProfileForm(request.POST, instance=profile)
         try:
             profile = user.userprofile
             form = UserProfileForm(request.POST, instance=profile)
@@ -36,9 +38,29 @@ def user_profile(request, user_id):
             profile = user.userprofile
             form = UserProfileForm(instance=profile)
         except AttributeError:
-            form = UserProfileForm(initial={"user": user, "bio": ""})
+            form = UserProfileForm(initial={"user": user, "bio": "bio"})
         if request.user != user:
             for field in form.fields:
                 form.fields[field].disabled = True
             form.helper.inputs = []
     return render(request, 'userprofile.html', {'form':form})
+
+
+
+
+
+#
+# def user_profile(request, user_id):
+#     user = get_object_or_404(get_user_model(), id=user_id)
+#     # profile = user.user(request.POST)
+#     form = UserProfileForm(request.POST, instance=user)
+#     if request.method == "POST":
+#
+#         if form.is_valid():
+#             form.save()
+#             form = UserProfileForm(initial={"user": user, "bio": "bio"})
+#         if request.user != user:
+#             for field in form.fields:
+#                 form.fields[field].disabled = True
+#             form.helper.inputs = []
+#     return render(request, 'userprofile.html', {'form':form})

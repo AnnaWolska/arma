@@ -64,25 +64,24 @@
         </div>
     {% endfor %}
 
+     <div class="pagination">
+        <span class = "step-links">
+        {% if participants_list.has_previous %}
+            <a href="?page=1">&laquo; pierwsza</a>
+            <a href="?page={{participants_list.previous_page_number }}">poprzednia</a>
+        {% endif %}
+        <span class="current">
+            strona {{ participants_list.number}}  z {{ participants_list.paginator.num_pages }}.
+        </span>
+        {% if organizers_list.has_next %}
+            <a href="?page={{ participants_list.next_page_number }}">następna</a>
+            <a href="?page={{ participants_list.end_index }}">ostatnia</a>
+        {% endif %}
+        {% if participants_list.end_index %}
+        {% endif %}
+        </span>
+    </div>
 
-
-{#     <div class="pagination">#}
-{#        <span class = "step-links">#}
-{#        {% if participants_list.has_previous %}#}
-{#            <a href="?page=1">&laquo; pierwsza</a>#}
-{#            <a href="?page={{participants_list.previous_page_number }}">poprzednia</a>#}
-{#        {% endif %}#}
-{#        <span class="current">#}
-{#            strona {{ participants_list.number}}  z {{ participants_list.paginator.num_pages }}.#}
-{#        </span>#}
-{#        {% if organizers_list.has_next %}#}
-{#            <a href="?page={{ participants_list.next_page_number }}">następna</a>#}
-{#            <a href="?page={{ participants_list.end_index }}">ostatnia</a>#}
-{#        {% endif %}#}
-{#        {% if participants_list.end_index %}#}
-{#        {% endif %}#}
-{#        </span>#}
-{#    </div>#}
 
 {% endblock %}
 

@@ -1,0 +1,47 @@
+{#{% load thumbnail %}#}
+{##}
+{#{% block content %}#}
+{#    <img src="/static/rycerz2.jpg" width="250" height="276" alt="zdj">#}
+{#<hr>#}
+{#        <h3>Lista użytkowników:</h3>#}
+{##}
+{#     <div class="pagination">#}
+{#        <span class = "step-links">#}
+{#        {% if participants_list.has_previous %}#}
+{#            <a href="?page=1">&laquo; pierwsza</a>#}
+{#            <a href="?page={{participants_list.previous_page_number }}">poprzednia</a>#}
+{#        {% endif %}#}
+{#        <span class="current">#}
+{#            strona {{ participants_list.number}}  z {{ participants_list.paginator.num_pages }}.#}
+{#        </span>#}
+{#        {% if organizers_list.has_next %}#}
+{#            <a href="?page={{ participants_list.next_page_number }}">następna</a>#}
+{#            <a href="?page={{ participants_list.end_index }}">ostatnia</a>#}
+{#        {% endif %}#}
+{#        {% if participants_list.end_index %}#}
+{#        {% endif %}#}
+{#        </span>#}
+{#    </div>#}
+{##}
+{##}
+{#{% for participant in participants_list  %}#}
+{#        <div class="list-group">#}
+{#        <ol>#}
+{#            <li class="list-group-item" >#}
+{#              <p style="font-family: cursive " > <a href = "{% url 'tournament_calculating:participant_details' participant.id %}" >{{ participant.name}} z {{ participant.school}} </a></p>#}
+{##}
+{#                {% if participant.image %}#}
+{#                    {% thumbnail participant.image "300x300" as im %}#}
+{#                      <img src="{{ im.url }}" alt="zdj">#}
+{#                     {% endthumbnail %}#}
+{#             {% endif %}#}
+{#            #}
+{#            </li>#}
+{#        </ol>#}
+{#        </div>#}
+{#    {% endfor %}#}
+{##}
+{##}
+{##}
+{#{% endblock %}#}
+{##}

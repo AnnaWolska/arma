@@ -3,6 +3,11 @@
 {% block title %} Profil {% endblock %}
 {% block content %}
     <p><h4>Edytuj profil:</h4></p>
+
+    {{ user }}
+    {{ bio }}
+
+
     <img src="/static/students.jpeg" alt="studenci">
 {% crispy form %}
     <div>

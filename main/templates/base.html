@@ -26,8 +26,9 @@
         <li class="nav-item"><a href="{% url 'tournaments:tournaments_list' %}" class="btn btn-outline-primary me-2">Turnieje</a></li>
       <li class="nav-item"><a href="{% url 'tournament_calculating:participants_list' %}" class="btn btn-outline-primary me-2">Uczestnicy</a></li>
       <li class="nav-item"><a href="{% url 'organizers:organizers_list' %}" class="btn btn-outline-primary me-2">Organizatorzy</a></li>
-       <li class="nav-item"><a style="color:gray" class="btn btn-outline-primary me-2">Statystyki</a></li>
-{#        <li class="nav-item"><a style="color:gray" class="btn btn-outline-primary me-2">Kontakt</a></li>#}
+            <li class="nav-item"><a style="color:gray" class="btn btn-outline-primary me-2">Statystyki</a></li>
+       <li class="nav-item"><a href="{% url 'main:contact' %}" class="btn btn-outline-primary me-2">Kontakt</a></li>
+
 {#        <li class="nav-item"><a style="color:gray" class="btn btn-outline-primary me-2">O nas</a></li>#}
           {% if user.id %}
           <li class="nav-item"> <a href="{% url 'main:userprofile' user.id %}" class="btn btn-outline-primary me-2">Mój profil ({{ request.user }}) </a> </li>

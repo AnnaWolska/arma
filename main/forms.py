@@ -40,7 +40,7 @@ class ContactForm(forms.Form):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['user']
+        fields = ['user', "bio"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
