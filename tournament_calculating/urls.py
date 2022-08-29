@@ -9,7 +9,7 @@ urlpatterns = [
     path('<int:tournament_id>/calculate', tournament_calculate, name="tournament_calculate"),
     path('<int:group_id>/group/', group_details, name="group_details"),
     path('<int:participant_id>/partcipant/', participant_details, name="participant_details"),
-    path('add_participant', add_participant, name="add_participant"),
+    # path('<int:tournament_id>/add_participant', add_participant, name="add_participant"),
     #
     # path('add', add_tournament, name="add_tournament"),
     # path('<int:tournament_id>/delete_tournament', delete_tournament, name="delete_tournament"),

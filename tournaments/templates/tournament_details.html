@@ -44,6 +44,8 @@
     <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}"> Usuń turniej </a></button>
       <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Edytuj turniej </a></button>
          <button id="delete_tournament" type="button" style="background-color:limegreen "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Przeprowadź turniej </a></button>
+{#         <button id="delete_tournament" type="button" style="background-color:orange "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:add_participant' tournament_id group_id%}"> Dodaj uczestnika </a></button>≥#}
+{#          <p><h2>  <a href = "{% url 'tournament_calculating:add_participant' %}"> Dodaj uczestnika </a>  </h2></p>#}
          <p>
      {% endif %}
 <hr>
@@ -55,7 +57,7 @@
          {% endif %}
      </div>
 <hr>
-     <h3>Przejdź do galerii</h3>
+     <h3>Przejdź do galerii -> </h3>
     <hr>
     <h3>Dyskusja:</h3>
 

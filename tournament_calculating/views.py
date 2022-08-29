@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from tournament_calculating.models import Group, Fight, Round, Participant
+from tournaments.models import Tournament
+
 from django.template import loader
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import AnonymousUser
@@ -50,33 +52,33 @@ def group_details(request, group_id):
     })
 
 
-def add_participant(request):
+def add_participant(request, tournament_id, group_id):
+    tournament = Tournament.objects.get(pk=tournament_id)
+    # user = request.user
     if request.user.is_authenticated:
-
         if request.method == "POST":
+            # if request.user == tournament.user:
             form = AddParticipantForm(request.POST, request.FILES)
+            group = Group.objects.get(pk=group_id)
 
-            form.user = request.user
             if form.is_valid():
                 instance = form.save()
-                # instance.user.id = request.user
-                # instance.user = request.user
+                instance.groups.add(group)
+                instance.tournaments.add(tournament)
                 instance.save()
-                # for f in form.cleaned_data:
-                #     if f:
-                #         orgaznier, _ = Organizer.objects.get_or_create(**f)
-                #         orgaznier.user = request.user
-                #         if orgaznier not in instance.organizers.all():
-                #             instance.organizers.add(orgaznier)
-                # instance.save()
-            return HttpResponseRedirect(reverse("tournament_calculating:participants_list"))
+
+            return HttpResponseRedirect(reverse("tournament_calculating:group_details", args=[group_id]))
         else:
             form = AddParticipantForm
         return (
-            render(request, "add_participant.html", {"form": form})
+            render(request, "add_participant.html", context={
+                'form':form,
+                'tournament_id':tournament_id,
+                'group_id':group_id,
+            })
         )
-    else:
-        return redirect(reverse('login'))
+        # else:
+        #     return redirect(reverse('login'))
 
 
 def tournament_calculate(request):

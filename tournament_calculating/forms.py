@@ -2,9 +2,10 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, HTML, ButtonHolder
 from django import forms
 from tournament_calculating.models import Participant, Group, Fight, Round
-# from dal import autocomplete
+from tournament_calculating.models import Group
+from dal import autocomplete
 from django.contrib import admin
-# from django.contrib.admin.widgets import AutocompleteSelectMultiple
+from django.contrib.admin.widgets import AutocompleteSelectMultiple
 
 
 # class TournamentCalculateForm(forms.ModelForm):
@@ -13,6 +14,9 @@ from django.contrib import admin
 
 
 class AddParticipantForm(forms.ModelForm):
+    # groups = forms.ModelChoiceField(
+    #     queryset=Group.objects.all(),
+    #     widget=autocomplete.Select)
 
     class Meta:
         model = Participant
@@ -20,7 +24,8 @@ class AddParticipantForm(forms.ModelForm):
         labels = {
             "name": "Imię i nazwisko",
             "school": "Szkoła",
-            "inage": "zdjęcie"
+            "image": "zdjęcie",
+            # "groups": "grupa"
         }
 
         def __init__(self, *args, **kwargs):
@@ -46,3 +51,4 @@ class AddParticipantForm(forms.ModelForm):
 
 class AddGroupForm(forms.ModelForm):
     pass
+

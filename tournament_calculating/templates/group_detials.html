@@ -14,7 +14,10 @@
         <ol>
             <li class="list-group-item">
             <p>  <h5> grupa {{  number }} turnieju:  <a href = "{% url 'tournaments:tournament_details' tournament.id %}" >{{  tournament.title }} </a> </h5>
-
+{#         <but% if user == request.user %}ton id="delete_tournament" type="button" style="background-color:orange "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:add_participant' tournament_id group_id%}"> Dodaj uczestnika </a></button>#}
+                {% if tournament.user == request.user %}
+         <button id="delete_tournament" type="button" style="background-color:orange "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}"> Dodaj uczestnika </a></button>
+                {% endif %}
             uczestnicy:
             {% for participant in participants %}
                  <ul>
