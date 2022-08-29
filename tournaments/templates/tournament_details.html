@@ -34,7 +34,7 @@
                     grupy:
             <ul>
             {% for group in groups %}
-            <li> {{ group.number }}</li>
+            <li> <a href = "{% url 'tournament_calculating:group_details' group.id %}" > {{ group.number }} </a> </li>
             {% endfor %}
         </ul>
         </div>
@@ -79,8 +79,6 @@
         {% endif %}
         </span>
     </div>
-
-
 
     <ul>
     {%  for post in posts %}

@@ -22,7 +22,7 @@ def contact(request):
         form = ContactForm()
     return render(request, "contact.html", {"form": form})
 
-#
+
 def user_profile(request, user_id):
     user = get_object_or_404(get_user_model(), id=user_id)
     if request.method == "POST":

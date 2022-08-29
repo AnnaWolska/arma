@@ -4,10 +4,10 @@
 {% load static %}
 
 {%  block style %}
-    <link href="{% static "posts/css/style.css" %}" rel=stylesheet">
+    <link href="{% static "tournaments_calculating/css/style.css" %}" rel=stylesheet">
 {% endblock %}
 
-{% block title %}  Nowy post {% endblock %}
+{% block title %}  Nowy uczestnik {% endblock %}
 
 {% block content %}
     <form method = "POST" action="" enctype="multipart/form-data">
@@ -16,7 +16,6 @@
     <button type="submit"
     class = "btn btn-primary">Wyślij</button>
     </form>
-{#    {% crispy form form.helper %}#}
 {% endblock %}
 
 {% block additional_scripts %}

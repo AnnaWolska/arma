@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load thumbnail %}
+
+{% block style %}
+    <link href ="{% static "tournaments_calculating/css/style.css" %}" rel = "stylesheet">
+{% endblock %}
+
+{% block content %}
+{#    <h3><a href = "{% url 'tournaments:tournament_details' %}"> <-Powrót do szczegółów turnieju </a></h3>#}
+
+  <div class="list-group">
+        <ol>
+            <li class="list-group-item">
+            <p>  <h5> grupa {{  number }} turnieju:  <a href = "{% url 'tournaments:tournament_details' tournament.id %}" >{{  tournament.title }} </a> </h5>
+
+            uczestnicy:
+            {% for participant in participants %}
+                 <ul>
+                 <li><a href = "{% url 'tournament_calculating:participant_details' participant.id %}" >{{  participant.name }} </a></li>
+                 </ul>
+            {% endfor %}
+  </div>
+
+<hr>
+     <div>
+                {% if image %}
+                    {% thumbnail image "300x300" as im %}
+                      <img src="{{ im.url }}" alt="zdj">
+                     {% endthumbnail %}
+             {% endif %}
+     </div>
+
+{% endblock %}
+
