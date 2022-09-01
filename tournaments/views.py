@@ -30,6 +30,7 @@ def tournament_details(request, tournament_id):
     user = tournament.user
     created = tournament.created
     participants = tournament.participants.all()
+    # group_participants =
     groups = tournament.groups.all()
 
     paginator = Paginator(posts, 20)
@@ -47,7 +48,6 @@ def tournament_details(request, tournament_id):
         "participants": participants,
         "groups":groups,
         # "group_id
-
     })
 
 

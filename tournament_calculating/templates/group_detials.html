@@ -8,20 +8,21 @@
 {% endblock %}
 
 {% block content %}
-{#    <h3><a href = "{% url 'tournaments:tournament_details' %}"> <-Powrót do szczegółów turnieju </a></h3>#}
-
+    
   <div class="list-group">
         <ol>
             <li class="list-group-item">
             <p>  <h5> grupa {{  number }} turnieju:  <a href = "{% url 'tournaments:tournament_details' tournament.id %}" >{{  tournament.title }} </a> </h5>
-{#         <but% if user == request.user %}ton id="delete_tournament" type="button" style="background-color:orange "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:add_participant' tournament_id group_id%}"> Dodaj uczestnika </a></button>#}
                 {% if tournament.user == request.user %}
          <button id="delete_tournament" type="button" style="background-color:orange "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}"> Dodaj uczestnika </a></button>
                 {% endif %}
             uczestnicy:
             {% for participant in participants %}
                  <ul>
-                 <li><a href = "{% url 'tournament_calculating:participant_details' participant.id %}" >{{  participant.name }} </a></li>
+                 <li><a href = "{% url 'tournament_calculating:participant_details' participant.id %}" >{{  participant.name }} </a>
+                      {% if tournament.user == request.user %}
+                     <a style="color: red" href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >  usuń </a> </li>
+                 {% endif %}
                  </ul>
             {% endfor %}
   </div>

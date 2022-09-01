@@ -6,7 +6,7 @@
 {% block content %}
        <img src="/static/czytaja.jpg" width="360" height="250" alt="zdj">
 
-    <p><h2>  <a href = "{% url 'organizers:add_organizer' %}"> Dodaj organizatora</a>  </h2></p>
+    <p><h2>  <a style="text-decoration: none;"href = "{% url 'organizers:add_organizer' %}"> Dodaj organizatora</a>  </h2></p>
  <hr>
  <h3>Lista organizatorów:</h3>
 
@@ -33,7 +33,7 @@
         <div class="list-group">
         <ol>
             <li class="list-group-item" >
-              <p style="font-family: cursive " ><a href = "{% url 'organizers:organizer_details' organizer.id %}" >{{ organizer.name}} </a></p>
+              <p style="font-family: cursive; "> <a style="text-decoration: none;" href = "{% url 'organizers:organizer_details' organizer.id %}" >{{ organizer.name}} </a></p>
                 {{ organizer.description}}
 
                  - organizatora zgłasza użytkownik: {{ organizer.user }}

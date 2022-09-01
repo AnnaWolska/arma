@@ -32,7 +32,7 @@
         <div class="list-group">
         <ol>
             <li class="list-group-item" >
-              <p style="font-family: cursive " > <a href = "{% url 'tournament_calculating:participant_details' participant.id %}" >{{ participant.name}} z {{ participant.school}} </a></p>
+              <p style="font-family: cursive " > <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >{{ participant.name}} z {{ participant.school}} </a></p>
 
                 {% if participant.image %}
                     {% thumbnail participant.image "300x300" as im %}

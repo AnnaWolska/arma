@@ -2,7 +2,7 @@
 
 {% block content %}
      <img src="/static/sword.jpeg" width="225" height="225" alt="zdj">
-    <p><h2>  <a href = "{% url 'tournaments:add_tournament' %}"> Dodaj turniej </a>  </h2></p>
+    <p><h2>  <a style="text-decoration: none;" href = "{% url 'tournaments:add_tournament' %}"> Dodaj turniej </a>  </h2></p>
 
     <hr>
 
@@ -33,7 +33,7 @@
         <div class="list-group">
         <ol>
             <li class="list-group-item">
-                <p>  <h5>     <a href = "{% url 'tournaments:tournament_details' tournament.id %}" >{{  tournament.title }} </a></h5>  </p>
+                <p>  <h5>     <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >{{  tournament.title }} </a></h5>  </p>
 {#                wydarzenie tworzy: {{ user }}#}
 
 

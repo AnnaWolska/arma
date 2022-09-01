@@ -3,14 +3,13 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from tournament_calculating.models import Group, Fight, Round, Participant
 from tournaments.models import Tournament
-
 from django.template import loader
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import AnonymousUser
 from tournament_calculating.forms import AddParticipantForm
-# from django.utils import timezone
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from tournaments.views import tournament_details
 
 
 def participants_list(request):
@@ -54,7 +53,6 @@ def group_details(request, group_id):
 
 def add_participant(request, tournament_id, group_id):
     tournament = Tournament.objects.get(pk=tournament_id)
-    # user = request.user
     if request.user.is_authenticated:
         if request.method == "POST":
             # if request.user == tournament.user:
@@ -77,8 +75,36 @@ def add_participant(request, tournament_id, group_id):
                 'group_id':group_id,
             })
         )
-        # else:
-        #     return redirect(reverse('login'))
+
+
+def delete_group_participant(request, tournament_id, group_id, participant_id):
+    user = request.user
+    tournament = Tournament.objects.get(pk=tournament_id)
+    group = Group.objects.get(pk=group_id)
+    participant = Participant.objects.get(pk=participant_id)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            tournament = Tournament.objects.get(pk=tournament_id)
+            group = Group.objects.get(pk=group_id)
+            participant = Participant.objects.get(pk=participant_id)
+            if request.user == tournament.user:
+                if participant in group.participants.all():
+                    group.participants.remove(participant)
+                    # return HttpResponseRedirect(reverse("tournament_calculating:group_details",
+                                                        # args=[group_id, tournament_id, participant_id]))
+                                                        # args=[group_id]))
+                    return HttpResponseRedirect(reverse("tournaments:tournament_details",
+                                                        args=[tournament_id]))
+        else:
+            if user.is_authenticated:
+                return render(request, "delete_group_participant.html", context=
+                {"tournament": tournament,
+                 "group": group,
+                 "participant": participant,
+                 'tournament_id': tournament_id,
+                 'group_id': group_id,
+                 'participant_id': participant_id
+                 })
 
 
 def tournament_calculate(request):
@@ -108,3 +134,25 @@ def tournament_calculate(request):
     #     )
     # else:
     #     return redirect(reverse('login'))
+
+
+def group_sort(request, tournament_id):
+    tournament = Tournament.objects.get(pk=tournament_id)
+    participants = tournament.participants.all()
+    # groups =
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            groups = tournament.groups.all()
+            # for group in groups:
+            for participant in participants:
+                for group in participant.groups.all():
+                    participant.add(group)
+                    tournament_details()
+                    return HttpResponseRedirect(reverse("tournaments:tournament_details",
+                                                        args=[tournament_id]))
+        else:
+            if request.user.is_authenticated:
+                return render(request, "tournament_details.html", context=
+                {
+                 'tournament_id': tournament_id,
+                 })
