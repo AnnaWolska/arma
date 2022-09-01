@@ -2,7 +2,7 @@
 
 {% block content %}
      <img src="/static/sword.jpeg" width="225" height="225" alt="zdj">
-    <p><h2>  <a style="text-decoration: none;" href = "{% url 'tournaments:add_tournament' %}"> Dodaj turniej </a>  </h2></p>
+     <button id="delete_tournament" type="button" style="background-color:lightseagreen; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:add_tournament' %}"> Dodaj turniej </a></button>
 
     <hr>
 
@@ -11,15 +11,15 @@
      <div class="pagination">
         <span class = "step-links">
         {% if tournaments_list.has_previous %}
-            <a href="?page=1">&laquo; pierwsza</a>
-            <a href="?page={{ tournaments_list.previous_page_number }}">poprzednia</a>
+            <a style="text-decoration: none;" href="?page=1">&laquo; pierwsza</a>
+            <a style="text-decoration: none;" href="?page={{ tournaments_list.previous_page_number }}">poprzednia</a>
         {% endif %}
         <span class="current">
-            strona {{ tournaments_list.number}}  z {{ tournaments_list.paginator.num_pages }}.
+            strona {{ tournaments_list.number}}  z {{ tournaments_list.paginator.num_pages }}
         </span>
         {% if tournaments_list.has_next %}
-            <a href="?page={{ tournaments_list.next_page_number }}">następna</a>
-            <a href="?page={{ tournaments_list.end_index }}">ostatnia</a>
+            <a style="text-decoration: none;" href="?page={{ tournaments_list.next_page_number }}">następna</a>
+            <a style="text-decoration: none;" href="?page={{ tournaments_list.end_index }}">ostatnia</a>
         {% endif %}
         {% if tournaments_list.end_index %}
         {% endif %}
@@ -62,23 +62,25 @@
             </li>
         </ol>
         </div>
+
     {% endfor %}
+     <button id="delete_tournament" type="button" style="background-color:lightseagreen; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:add_tournament' %}"> Dodaj turniej </a></button>
 
     <div class="pagination">
         <span class = "step-links">
-
+<br>
         {% if tournaments_list.has_previous %}
-            <a href="?page=1">&laquo; pierwsza</a>
-            <a href="?page={{ tournaments_list.previous_page_number }}">poprzednia</a>
+            <a style="text-decoration: none;" href="?page=1">&laquo; pierwsza</a>
+            <a style="text-decoration: none;" href="?page={{ tournaments_list.previous_page_number }}">poprzednia</a>
         {% endif %}
 
         <span class="current">
-            strona {{ tournaments_list.number}}  z {{ tournaments_list.paginator.num_pages }}.
+            strona {{ tournaments_list.number}}  z {{ tournaments_list.paginator.num_pages }}
         </span>
 
         {% if tournaments_list.has_next %}
-            <a href="?page={{ tournaments_list.next_page_number }}">następna</a>
-            <a href="?page={{ tournaments_list.end_index }}">ostatnia</a>
+            <a style="text-decoration: none;" href="?page={{ tournaments_list.next_page_number }}">następna</a>
+            <a style="text-decoration: none;" href="?page={{ tournaments_list.end_index }}">ostatnia</a>
         {% endif %}
 
         {% if tournaments_list.end_index %}

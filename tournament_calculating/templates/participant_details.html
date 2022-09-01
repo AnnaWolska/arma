@@ -25,7 +25,7 @@
             grupy:
              {% for group in groups %}
                  <ul>
-                 <li> <a href = "{% url 'tournament_calculating:group_details' group.id %}" > {{ group.number }} </a>   w {{ group.tournament.title }}</li>
+                 <li> <a style="text-decoration: none; color:blue;" href = "{% url 'tournament_calculating:group_details' group.id %}" > {{ group.number }} </a>   w <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' group.tournament.id %}" >{{  group.tournament.title }} </a></li>
                  </ul>
             {% endfor %}
   </div>

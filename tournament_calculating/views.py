@@ -10,6 +10,7 @@ from tournament_calculating.forms import AddParticipantForm
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from tournaments.views import tournament_details
+import random
 
 
 def participants_list(request):
@@ -134,20 +135,25 @@ def tournament_calculate(request):
     #     )
     # else:
     #     return redirect(reverse('login'))
+#
+# >>> [(x,y) for x in range(1,5)
+#
+#  for y in range (6,3,-1)
+#
+#  if x<y]
+#
+# [(1, 6), (1, 5), (1, 4), (2, 6), (2, 5), (2, 4), (3, 6), (3, 5), (3, 4), (4, 6), (4, 5)]
 
 
 def group_sort(request, tournament_id):
     tournament = Tournament.objects.get(pk=tournament_id)
     participants = tournament.participants.all()
-    # groups =
     if request.user.is_authenticated:
         if request.method == "POST":
             groups = tournament.groups.all()
-            # for group in groups:
             for participant in participants:
                 for group in participant.groups.all():
-                    participant.add(group)
-                    tournament_details()
+                    participant.add.random.choice(group)
                     return HttpResponseRedirect(reverse("tournaments:tournament_details",
                                                         args=[tournament_id]))
         else:
@@ -155,4 +161,13 @@ def group_sort(request, tournament_id):
                 return render(request, "tournament_details.html", context=
                 {
                  'tournament_id': tournament_id,
+                 'tournament': tournament,
+                 'participants': participants,
+
+
                  })
+
+# def request_page(request):
+#     if (request.GET.get('sort')):
+#         group_sort(request.GET.get('mytextbox')))
+#     return render(request, 'tournaments:tournament_details')

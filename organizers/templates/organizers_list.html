@@ -6,22 +6,24 @@
 {% block content %}
        <img src="/static/czytaja.jpg" width="360" height="250" alt="zdj">
 
-    <p><h2>  <a style="text-decoration: none;"href = "{% url 'organizers:add_organizer' %}"> Dodaj organizatora</a>  </h2></p>
+{#    <p><h2>  <a style="text-decoration: none;"href = "{% url 'organizers:add_organizer' %}"> Dodaj organizatora</a>  </h2></p>#}
+         <button id="delete_tournament" type="button" style="background-color:lightseagreen; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'organizers:add_organizer' %}"> Dodaj organizatora </a></button>
+
  <hr>
  <h3>Lista organizatorów:</h3>
 
      <div class="pagination">
         <span class = "step-links">
         {% if organizers_list.has_previous %}
-            <a href="?page=1">&laquo; pierwsza</a>
-            <a href="?page={{ organizers_list.previous_page_number }}">poprzednia</a>
+            <a style="text-decoration: none;" href="?page=1">&laquo; pierwsza</a>
+            <a style="text-decoration: none;" href="?page={{ organizers_list.previous_page_number }}">poprzednia</a>
         {% endif %}
         <span class="current">
-            strona {{ organizers_list.number}}  z {{ organizers_list.paginator.num_pages }}.
+            strona {{ organizers_list.number}}  z {{ organizers_list.paginator.num_pages }}
         </span>
         {% if organizers_list.has_next %}
-            <a href="?page={{ organizers_list.next_page_number }}">następna</a>
-            <a href="?page={{ organizers_list.end_index }}">ostatnia</a>
+            <a style="text-decoration: none;" href="?page={{ organizers_list.next_page_number }}">następna</a>
+            <a style="text-decoration: none;" href="?page={{ organizers_list.end_index }}">ostatnia</a>
         {% endif %}
         {% if organizers_list.end_index %}
         {% endif %}
@@ -34,9 +36,9 @@
         <ol>
             <li class="list-group-item" >
               <p style="font-family: cursive; "> <a style="text-decoration: none;" href = "{% url 'organizers:organizer_details' organizer.id %}" >{{ organizer.name}} </a></p>
-                {{ organizer.description}}
+               <p> {{ organizer.description}}</p>
 
-                 - organizatora zgłasza użytkownik: {{ organizer.user }}
+                 przez: {{ organizer.user }}
 
 {#                {{  organizer.user }} ,#}
 {#                {% for organizer in organizers %}#}
@@ -64,17 +66,17 @@
         <span class = "step-links">
 
         {% if organizers_list.has_previous %}
-            <a href="?page=1">&laquo; pierwsza</a>
-            <a href="?page={{ organizers_list.previous_page_number }}">poprzednia</a>
+            <a style="text-decoration: none;" href="?page=1">&laquo; pierwsza</a>
+            <a style="text-decoration: none;" href="?page={{ organizers_list.previous_page_number }}">poprzednia</a>
         {% endif %}
 
         <span class="current">
-            strona {{ organizers_list.number}}  z {{ organizers_list.paginator.num_pages }}.
+            strona {{ organizers_list.number}}  z {{ organizers_list.paginator.num_pages }}
         </span>
 
         {% if organizers_list.has_next %}
-            <a href="?page={{ organizers_list.next_page_number }}">następna</a>
-            <a href="?page={{ organizers_list.end_index }}">ostatnia</a>
+            <a style="text-decoration: none;" href="?page={{ organizers_list.next_page_number }}">następna</a>
+            <a style="text-decoration: none;" href="?page={{ organizers_list.end_index }}">ostatnia</a>
         {% endif %}
 
         {% if organizers_list.end_index %}
