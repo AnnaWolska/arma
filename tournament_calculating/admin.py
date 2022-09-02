@@ -4,27 +4,57 @@ from .models import Participant, Group, Fight, Round
 
 @admin.register(Participant)
 class TournamentAdmin(admin.ModelAdmin):
-    list_display = ["name", "school", "groups"]
+    list_display = ["id", "name", "school"]
+
+    # def get_group(self, obj):
+    #     return obj.group.number
+    #
+    # get_number.short_description = 'Number'
+    # get_number.admin_order_field = 'group__number'
+
     search_fields = ["name", "school"]
     list_filter = ["name", "school"]
 
 
 @admin.register(Group)
 class TournamentAdmin(admin.ModelAdmin):
-    list_display = ["number", "tournament"]
-    search_fields = ["number", "tournament"]
-    list_filter = ["number", "tournament"]
+    list_display = ["id", "number", "get_title"]
+
+    def get_title(self, obj):
+        return obj.tournament.title
+
+    get_title.short_description = 'Ttile'
+    get_title.admin_order_field = 'tournament__title'
+
+    search_fields = ["id", "number"]
+    list_filter = ["id", "number"]
 
 
 @admin.register(Fight)
 class TournamentAdmin(admin.ModelAdmin):
-    list_display = ["group", "rounds", "tournament"]
-    search_fields = ["group", "rounds", "tournament"]
-    list_filter = ["group", "rounds", "tournament"]
+    list_display = ["id", "get_number", "rounds"]
+    # @display(ordering='group__number', description='Number')
+    # def get_number(self, obj):
+    #     return obj.group.number
+
+    def get_number(self, obj):
+        return obj.group.number
+
+    get_number.short_description = 'Number'
+    get_number.admin_order_field = 'group__number'
+
+    search_fields = ["group", "rounds"]
+    list_filter = ["group", "rounds"]
 
 
 @admin.register(Round)
 class TournamentAdmin(admin.ModelAdmin):
-    list_display = ["fight", "result"]
-    search_fields = ["fight", "result"]
-    list_filter = ["fight", "result"]
+    list_display = ["id", "result"]
+
+    # def get_number(self, obj):
+    #     return obj.tournament.title
+    #
+    # get_title.short_description = 'Ttile'
+    # get_title.admin_order_field = 'tournament__title'
+    search_fields = ["id", "result"]
+    list_filter = ["id", "result"]

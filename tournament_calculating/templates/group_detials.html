@@ -15,6 +15,7 @@
             <p>  <h5> grupa {{  number }} turnieju:  <a <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >{{  tournament.title }} </a> </h5>
                 {% if tournament.user == request.user %}
          <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}"> Dodaj uczestnika </a></button>
+{#                     <button id="delete_tournament" type="button" style="background-color:orange "  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:draw_fights:' tournament.id group_id%}"> wylosuj walki w grupie </a></button>#}
                 {% endif %}
             uczestnicy:
             {% for participant in participants %}

@@ -6,7 +6,7 @@ from tournaments.models import Tournament
 from django.template import loader
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import AnonymousUser
-from tournament_calculating.forms import AddParticipantForm
+from tournament_calculating.forms import AddParticipantForm, SortGroupForm
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from tournaments.views import tournament_details
@@ -56,7 +56,6 @@ def add_participant(request, tournament_id, group_id):
     tournament = Tournament.objects.get(pk=tournament_id)
     if request.user.is_authenticated:
         if request.method == "POST":
-            # if request.user == tournament.user:
             form = AddParticipantForm(request.POST, request.FILES)
             group = Group.objects.get(pk=group_id)
 
@@ -91,9 +90,6 @@ def delete_group_participant(request, tournament_id, group_id, participant_id):
             if request.user == tournament.user:
                 if participant in group.participants.all():
                     group.participants.remove(participant)
-                    # return HttpResponseRedirect(reverse("tournament_calculating:group_details",
-                                                        # args=[group_id, tournament_id, participant_id]))
-                                                        # args=[group_id]))
                     return HttpResponseRedirect(reverse("tournaments:tournament_details",
                                                         args=[tournament_id]))
         else:
@@ -108,41 +104,18 @@ def delete_group_participant(request, tournament_id, group_id, participant_id):
                  })
 
 
-def tournament_calculate(request):
-    pass
-    # if request.user.is_authenticated:
-    #     if request.method == "POST":
-    #         form = TournamentForm(request.POST, request.FILES)
-    #         formset = OrganizerFormSet(request.POST)
-    #         form.user = request.user
-    #         if formset.is_valid():
-    #             instance = form.save()
-    #             # instance.user.id = request.user
-    #             instance.user = request.user
-    #             instance.save()
-    #             for f in formset.cleaned_data:
-    #                 if f:
-    #                     orgaznier, _ = Organizer.objects.get_or_create(**f)
-    #                     orgaznier.user = request.user
-    #                     if orgaznier not in instance.organizers.all():
-    #                         instance.organizers.add(orgaznier)
-    #             instance.save()
-    #         return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
-    #     else:
-    #         form = TournamentForm()
-    #     return(
-    #         render(request, "add_tournament.html", {"form": form, "formset": formset })
-    #     )
-    # else:
-    #     return redirect(reverse('login'))
-#
-# >>> [(x,y) for x in range(1,5)
-#
-#  for y in range (6,3,-1)
-#
-#  if x<y]
-#
-# [(1, 6), (1, 5), (1, 4), (2, 6), (2, 5), (2, 4), (3, 6), (3, 5), (3, 4), (4, 6), (4, 5)]
+def draw_fights(request, tournament_id, group_id, participant_id):
+    # [(x, y) for x in range(1, 5)
+    #       for y in range(4, 0, -1)]
+    # [(1, 4), (1, 3), (1, 2), (1, 1), (2, 4), (2, 3), (2, 2), (2, 1), (3, 4), (3, 3), (3, 2), (3, 1), (4, 4), (4, 3),
+    #  (4, 2), (4, 1)]
+    # sorted(range(len(a)), key=a.__getitem__)
+    tournament = Tournament.objects.get(pk=tournament_id)
+    group = Group.objects.get(pk=group_id)
+    participant = Participant.objects.get(pk=participant_id)
+    for participant1 in range(1,len(group.participants.all())):
+        for participant2 in range(len(group.participants.all())-1,0,-1):
+            print(participant1,participant2)
 
 
 def group_sort(request, tournament_id):
@@ -150,24 +123,25 @@ def group_sort(request, tournament_id):
     participants = tournament.participants.all()
     if request.user.is_authenticated:
         if request.method == "POST":
+            form = SortGroupForm(request.POST)
             groups = tournament.groups.all()
-            for participant in participants:
-                for group in participant.groups.all():
-                    participant.add.random.choice(group)
-                    return HttpResponseRedirect(reverse("tournaments:tournament_details",
-                                                        args=[tournament_id]))
+            if form.is_valid():
+                for participant in participants:
+                    for group in participant.groups.all():
+                        participant.add.random.choice(group)
+                        form.save()
+                        return HttpResponseRedirect(reverse("tournaments:tournament_details",
+                                                            args=[tournament_id]))
         else:
+            form = SortGroupForm()
             if request.user.is_authenticated:
                 return render(request, "tournament_details.html", context=
                 {
                  'tournament_id': tournament_id,
                  'tournament': tournament,
                  'participants': participants,
-
-
+                 'form': form,
                  })
 
-# def request_page(request):
-#     if (request.GET.get('sort')):
-#         group_sort(request.GET.get('mytextbox')))
-#     return render(request, 'tournaments:tournament_details')
+def tournament_calculate(request):
+    pass

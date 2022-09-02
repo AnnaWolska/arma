@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
+from datetime import datetime
 
 
 class Organizer(models.Model):
@@ -23,7 +24,7 @@ class Tournament(models.Model):
     organizers = models.ManyToManyField('Organizer', related_name="tournaments")
     image = ImageField(upload_to="tournaments/logos/%Y/%m/%d/", blank=True, null=True)
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="tournaments_created")
-    created = models.DateTimeField(auto_now_add=True, null=True)
+    created = models.DateTimeField(auto_now=True, null=True)
     modified = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):

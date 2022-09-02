@@ -1,0 +1,12 @@
+def customer_profile(sender, instance, created, **kwagrs):
+    if created:
+        group, is_created = Group.objects.get_or_create(name='customer')
+        if is_created:
+            instance.groups.add(Group.objects.get(name='customer'))
+        else:
+            instance.groups.add(group)
+        Customer.objects.create(
+                user = instance,
+                name = instance.username
+            )
+        print('Profile created.!')
