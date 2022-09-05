@@ -43,6 +43,19 @@ class TournamentAdmin(admin.ModelAdmin):
     get_number.short_description = 'Number'
     get_number.admin_order_field = 'group__number'
 
+    # def get_name(self, obj):
+    #     return obj.fighter_one.name
+    #
+    # get_name.short_description = 'Name'
+    # get_name.admin_order_field = 'fighter_one__name'
+    #
+    # def get_name2(self, obj):
+    #     return obj.fighter_two.name
+    #
+    # get_name2.short_description = 'Name'
+    # get_name2.admin_order_field = 'fighter_two__name'
+
+
     search_fields = ["group", "rounds"]
     list_filter = ["group", "rounds"]
 
