@@ -55,7 +55,6 @@ class TournamentAdmin(admin.ModelAdmin):
     # get_name2.short_description = 'Name'
     # get_name2.admin_order_field = 'fighter_two__name'
 
-
     search_fields = ["group", "rounds"]
     list_filter = ["group", "rounds"]
 

@@ -104,6 +104,27 @@ def delete_group_participant(request, tournament_id, group_id, participant_id):
                  })
 
 
+def delete_group(request, tournament_id, group_id ):
+    user = request.user
+    tournament = Tournament.objects.get(pk=tournament_id)
+    group = Group.objects.get(pk=group_id)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            tournament = Tournament.objects.get(pk=tournament_id)
+            group = Group.objects.get(pk=group_id)
+            if request.user == tournament.user:
+                group.delete()
+                return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[tournament_id]))
+        else:
+            if user.is_authenticated:
+                return render(request, "delete_group.html", context=
+                {"tournament": tournament,
+                 "group": group,
+                 'tournament_id': tournament_id,
+                 'group_id': group_id,
+                 })
+
+
 def draw_fights(request, tournament_id, group_id, participant_id):
     # [(x, y) for x in range(1, 5)
     #       for y in range(4, 0, -1)]

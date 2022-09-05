@@ -4,7 +4,7 @@ from .models import Tournament, Organizer
 
 @admin.register(Tournament)
 class TournamentAdmin(admin.ModelAdmin):
-    list_display = ["id", "title", "description", "user", "created", "participants"]
+    list_display = ["id", "title", "description", "user", "created"]
     search_fields = ["title"]
     list_filter = ["title"]
 
