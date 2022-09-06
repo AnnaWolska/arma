@@ -35,19 +35,27 @@
      {% endif %}
 <hr>
             wszyscy uczestnicy:
-{#             <button id="delete_tournament" type="button" style="background-color:lightseagreen; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:add_participant' tournament_id group_id%}"> Dodaj uczestnika </a></button>#}
+{#             <button id="delete_tournament" type="button" style="background-color:lightseagreen; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:add_participant' tournament_id group_id %}"> Dodaj uczestnika </a></button>#}
             <br>
             <ol>
             {% for participant in participants %}
             <li> <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" > {{ participant.name }}</a></li>
             {% endfor %}
         </ol>
-            <hr>
-                    grupy:
+            <hr>                      {% if user == request.user %}
+{#        <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}"> Usuń grupę </a></button>#}
+{#        <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url '' tournament_id %}"> Edytuj grupę </a></button>#}
+        <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:add_group' tournament_id%}"> dodaj grupę </a></button>
+{#        <button id="delete_tournament" type="button" style="background-color:orange "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:group_sort' tournament_id %}"> Posortuj uczestników </a></button>#}
+         <p>
+     {% endif %}
+                  <br>  grupy:
             <ul>
+
             {% for group in groups %}
-              <br>
-            <li> <a style="color:blue" href = "{% url 'tournament_calculating:group_details' group.id %}" > grupa {{ group.number }}  </a> </li>
+
+            <li> <a style="color:blue" href = "{% url 'tournament_calculating:group_details' group.id %}" > grupa {{ group.number }}  </li>
+{#                </a>      <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournament_calculating:delete_group' tournament_id group.id  %}"> Usuń grupę </a> </button>#}
                <ol>
 
                 {% for participant in group.participants.all %}
@@ -57,16 +65,8 @@
             {% endfor %}
         </ul>
             <br>
-             {% if user == request.user %}
-        <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}"> Usuń turniej </a></button>
-        <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Edytuj turniej </a></button>
-        <button id="delete_tournament" type="button" style="background-color:limegreen "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Przeprowadź turniej </a></button>
-{#        <button id="delete_tournament" type="button" style="background-color:orange "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:group_sort' tournament_id %}"> Posortuj uczestników </a></button>#}
-         <p>
-     {% endif %}
+
  </div>
-
-
 
 <hr>
      <div>
@@ -123,7 +123,7 @@
                     {% endif %}
                        {% if post.user == request.user %}
                      <p> <a style="text-decoration: none;" href = "{% url 'tournaments:edit_post' tournament_id post.id  %}">  Edytuj post </a>   </p>
-                      <p> <a style="text-decoration: none;" href = "{% url 'tournaments:delete_post' tournament_id post.id %}">  Usuń post </a>   </p>
+                      <p> <a style="text-decoration: none; color:Tomato;" href = "{% url 'tournaments:delete_post' tournament_id post.id %}">  Usuń post </a>   </p>
                      {% endif %}
                 </li>
             </ol>

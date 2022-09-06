@@ -6,7 +6,7 @@ from tournaments.models import Tournament
 from django.template import loader
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import AnonymousUser
-from tournament_calculating.forms import AddParticipantForm, SortGroupForm
+from tournament_calculating.forms import AddParticipantForm, SortGroupForm, AddGroupForm
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from tournaments.views import tournament_details
@@ -75,6 +75,32 @@ def add_participant(request, tournament_id, group_id):
                 'group_id':group_id,
             })
         )
+
+
+def add_group(request, tournament_id):
+    tournament = Tournament.objects.get(pk=tournament_id)
+    if request.user.is_authenticated:
+        form = AddGroupForm(request.POST, instance=tournament)
+        groups = tournament.groups.all()
+        if request.method == "POST" and form.is_valid():
+            number = form.cleaned_data['number']
+            for group in groups:
+                if number != group.number:
+                    instance = form.save()
+                    instance.save()
+                    # instance.number =
+                    print(number)
+                    print(instance)
+                    tournament.groups.add(instance)
+                    return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[tournament_id]))
+        else:
+            form = AddGroupForm
+            return (
+                render(request, "add_group.html", context={
+                    'form': form,
+                    'tournament_id': tournament_id,
+                })
+            )
 
 
 def delete_group_participant(request, tournament_id, group_id, participant_id):
