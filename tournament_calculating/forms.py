@@ -48,10 +48,29 @@ class AddParticipantForm(forms.ModelForm):
             )
 
 
-
-# class AddGroupForm(forms.ModelForm):
-#     pass
-
+#
+# class CalculateFightForm(forms.ModelForm):
+#
+#     class Meta:
+#         model = Fight
+#         fields = ['number']
+#         labels = {"number": 'numer'}
+#
+#         def __init__(self, *args, **kwargs):
+#             super().__init__(*args, **kwargs)
+#             self.helper = FormHelper()
+#             self.helper.form_method = 'post'
+#             self.helper.form_action = 'tournament_calculating: add_group'
+#             self.helper.layout = Layout(
+#                 Fieldset(
+#                     'Dodaj grupę',
+#                     'numer',
+#                 ),
+#                 ButtonHolder(
+#                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),
+#                     css_class="d-flex justify-content-end"
+#                 )
+#             )
 
 class SortGroupForm(forms.ModelForm):
 
@@ -74,11 +93,30 @@ class SortGroupForm(forms.ModelForm):
                     css_class="d-flex justify-content-end"
                 )
             )
-#
-# class DrawFightsForm(forms.ModelForm):
-#
-#     class Meta:
-#         model =
+
+
+class DrawFightsForm(forms.ModelForm):
+
+    class Meta:
+        model = Group
+        fields = ['number']
+        labels = {"number": 'numer'}
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.form_method = 'post'
+            self.helper.form_action = 'tournament_calculating:sort_fights'
+            self.helper.layout = Layout(
+                Fieldset(
+                    'Wylosuj walki w grupie',
+                    'numer',
+                ),
+                ButtonHolder(
+                    Submit('submit', 'Dodaj', css_class='btn btn-primary'),
+                    css_class="d-flex justify-content-end"
+                )
+            )
 
 
 class AddGroupForm(forms.ModelForm):
@@ -103,3 +141,10 @@ class AddGroupForm(forms.ModelForm):
                     css_class="d-flex justify-content-end"
                 )
             )
+
+#
+# class DrewFightsForm(forms.ModelForm):
+#
+#     class Meta:
+#         model: Fight
+#         fields = [""

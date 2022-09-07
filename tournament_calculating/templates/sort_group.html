@@ -1,0 +1,36 @@
+{#{% extends "base.html" %}#}
+{#{% load crispy_forms_filters %}#}
+{#{% load crispy_forms_tags %}#}
+{#{% load static %}#}
+{##}
+{#{%  block style %}#}
+{#    <link href="{% static "tournaments_calculating/css/style.css" %}" rel=stylesheet">#}
+{#{% endblock %}#}
+{##}
+{#{% block title %}  Wylosuj walki w grupie: {% endblock %}#}
+{##}
+{#{% block content %}#}
+{#    <form method = "POST" action="" enctype="multipart/form-data">#}
+{#    {% csrf_token %}#}
+{#    {{ form|crispy }}#}
+{#    <button type="submit"#}
+{#    class = "btn btn-primary">Wyślij</button>#}
+{#    </form>#}
+{#{% endblock %}#}
+{##}
+{#{% block additional_scripts %}#}
+{#    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>#}
+{#    {{ form.media }}#}
+{#{% endblock %}#}
+
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <h4>Losowanie walk w grupie {{ group.number}} z turnieju: {{ tournament.title }} ? </h4>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-danger"> Losuj  </button>
+    </form>
+  </div>
+{% endblock %}

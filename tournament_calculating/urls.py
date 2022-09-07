@@ -13,7 +13,7 @@ urlpatterns = [
     path('<int:group_id>/<int:tournament_id>/delete_group/', delete_group, name="delete_group"),
 
     path('<int:tournament_id>/calculate/', tournament_calculate, name="tournament_calculate"),
-    path('<int:tournament_id>/draw_fights/', draw_fights, name="draw_fights"),
+    # path('<int:tournament_id>/draw_fights/', draw_fights, name="draw_fights"),
     path('<int:tournament_id>/group_sort/',group_sort, name="group_sort"),
 
     # path('<int:group_id>/add_participant', add_participant, name="add_participant"),

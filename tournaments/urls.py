@@ -2,7 +2,7 @@ from django.urls import path
 from tournaments.views import tournaments_list, tournament_details, add_tournament, delete_tournament, edit_tournament
 from posts.views import add_post, edit_post, delete_post
 
-from tournament_calculating.views import add_participant, add_group
+from tournament_calculating.views import add_participant, add_group,draw_fights
     # group_sort
 
 app_name = "tournaments"
@@ -20,5 +20,6 @@ urlpatterns = [
 
     path('<int:tournament_id>/add_participant/<int:group_id>/', add_participant, name="add_participant"),
     path('<int:tournament_id>/add_group/', add_group, name="add_group"),
-    # path('<int:tournament_id>/group_sort/', group_sort, name="group_sort"),
+    path('<int:tournament_id>/draw_fights/<int:group_id>/', draw_fights, name="draw_fights"),
+    # path('<int:tournament_id>/draw_fights/<int:group_id>/group_sorted/', name="group_sorted"),
 ]
