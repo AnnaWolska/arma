@@ -86,12 +86,10 @@ def add_group(request, tournament_id):
             number = form.cleaned_data['number']
             for group in groups:
                 if number != group.number:
-                    instance = form.save()
-                    instance.save()
-                    # instance.number =
-                    print(number)
-                    print(instance)
-                    tournament.groups.add(instance)
+                    obj = form.save(commit=False)
+                    obj.number = number
+                    obj.save()
+                    groups.create(number=number, tournament=tournament)
                     return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[tournament_id]))
         else:
             form = AddGroupForm
