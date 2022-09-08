@@ -149,10 +149,50 @@ def delete_group(request, tournament_id, group_id):
                  'tournament_id': tournament_id,
                  'group_id': group_id,
                  })
+#
+#
+# def draw_fights(request, group_id):
+#     group = Group.objects.get(pk=group_id)
+#     number = group.number
+#     tournament = group.tournament
+#     participants = group.participants.all()
+#     participants_names = []
+#     for p in participants:
+#         participants_names.append(p.name)
+#     first_participant = participants[0]
+#     after_replace = participants.order_by('-id')
+#     last_participant = after_replace[0]
+#     listed_participants = list(participants)
+#     listed_names = []
+#
+#     a = []
+#     result = []
+#     x = list(chain.from_iterable(combinations(participants_names, r) for r in range(2, 2+1)))
+#     for e in x:
+#         if e not in a:
+#             for f in x:
+#                 if len(set(e).union(set(f))) == 2:
+#                     result.append(e)
+#     # fights = group.fights.all()
+#     # fights.create(group=group, tournament=tournament, fighter_one=first_participant, fighter_two=last_participant)
+#     return render(request, "group_sorted.html", context={
+#         "number": number,
+#         "tournament": tournament,
+#         "group_id": group_id,
+#         "participants": participants,
+#         "first_participant": first_participant,
+#         "last_participant": last_participant,
+#         "result": result,
+#         "listed_names":listed_names,
+#         "listed_participants": listed_participants,
+#         "participants_names": participants_names,
+#
+#     })
 
 
 def draw_fights(request, group_id):
     group = Group.objects.get(pk=group_id)
+    fights = group.fights.all()
     number = group.number
     tournament = group.tournament
     participants = group.participants.all()
@@ -163,18 +203,16 @@ def draw_fights(request, group_id):
     after_replace = participants.order_by('-id')
     last_participant = after_replace[0]
     listed_participants = list(participants)
-    listed_names = []
 
+    listed_names = []
     a = []
     result = []
-    x = list(chain.from_iterable(combinations(participants_names, r) for r in range(2, 2+1)))
+    x = list(chain.from_iterable(combinations(participants, r) for r in range(2, 2+1)))
     for e in x:
         if e not in a:
             for f in x:
                 if len(set(e).union(set(f))) == 2:
                     result.append(e)
-    # fights = group.fights.all()
-    # fights.create(group=group, tournament=tournament, fighter_one=first_participant, fighter_two=last_participant)
     return render(request, "group_sorted.html", context={
         "number": number,
         "tournament": tournament,
@@ -188,6 +226,7 @@ def draw_fights(request, group_id):
         "participants_names": participants_names,
 
     })
+
 
 
 def group_sort(request, tournament_id):
