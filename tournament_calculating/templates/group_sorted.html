@@ -50,8 +50,8 @@
            <ol>
             <br/>
             {%  for r in result %}
-
-           <li><p>{{ r }} </p></li>
+            <li><p>{{ r }} </p></li>
+{#       <li><p>{{ r }} <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:tournament_calculate' group_id fight_id %}"> dodaj starcia </a></button></p></li>#}
         {% endfor %}
         </ol>
 

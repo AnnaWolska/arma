@@ -8,11 +8,6 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
 
 
-# class TournamentCalculateForm(forms.ModelForm):
-#     class Meta:
-#         model =
-
-
 class AddParticipantForm(forms.ModelForm):
     # groups = forms.ModelChoiceField(
     #     queryset=Group.objects.all(),
@@ -25,14 +20,12 @@ class AddParticipantForm(forms.ModelForm):
             "name": "Imię i nazwisko",
             "school": "Szkoła",
             "image": "zdjęcie",
-            # "groups": "grupa"
         }
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.form_method = 'post'
-            # self.helper.form_action = 'post:add'
             self.helper.form_action = 'tournament_calculating: add_participant'
             self.helper.layout = Layout(
                 Fieldset(
@@ -48,29 +41,29 @@ class AddParticipantForm(forms.ModelForm):
             )
 
 
-#
 class CalculateFightForm(forms.ModelForm):
 
     class Meta:
         model = Fight
-        fields = ['number']
-        labels = {"number": 'numer'}
+        fields = ['rounds']
+        labels = {"rounds": 'starcia'}
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.form_method = 'post'
-            self.helper.form_action = 'tournament_calculating: add_group'
+            self.helper.form_action = 'tournament_calculating:tournament_calculate'
             self.helper.layout = Layout(
                 Fieldset(
-                    'Dodaj grupę',
-                    'numer',
+                    'Dodaj ilość starć',
+                    'rounds',
                 ),
                 ButtonHolder(
                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),
                     css_class="d-flex justify-content-end"
                 )
             )
+
 
 class SortGroupForm(forms.ModelForm):
 
@@ -82,7 +75,6 @@ class SortGroupForm(forms.ModelForm):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.form_method = 'post'
-            # self.helper.form_action = 'post:add'
             self.helper.form_action = 'tournament_calculating: group_sort'
             self.helper.layout = Layout(
                 Fieldset(
@@ -142,9 +134,3 @@ class AddGroupForm(forms.ModelForm):
                 )
             )
 
-#
-# class DrewFightsForm(forms.ModelForm):
-#
-#     class Meta:
-#         model: Fight
-#         fields = [""

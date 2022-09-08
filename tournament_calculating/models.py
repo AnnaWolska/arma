@@ -23,6 +23,7 @@ class Group(models.Model):
     tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="groups")
     participants = models.ManyToManyField('Participant', related_name='groups')
 
+
     def __str__(self):
         return f"{self.number} {self.tournament} {self.participants}"
 

@@ -7,14 +7,14 @@
     <link href= "{% static "tournaments_calculating/css/style.css" %}" rel=stylesheet">
 {% endblock %}
 
-{% block header %}
-    <p><h3>Przeprowadzenie turnieju:</h3></p>
-
-{% endblock %}
-
-
 {% block content %}
+    <p><h3>Przeprowadzenie turnieju:</h3></p>
+    <p>walczą: {{ faighter_one }} i {{ faighter_two }}</p>
+            {% for round in rounds %}
 
+                starcia:
+    <ul> <li>{{ round }} </li></ul>
+           {% endfor %}
 {% endblock %}
 
 {#{% block additional_scripts %}#}
