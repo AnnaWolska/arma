@@ -19,17 +19,49 @@
 {#                     <button id="delete_tournament" type="button" style="background-color:orange "  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:draw_fights:' tournament.id group_id%}"> wylosuj walki w grupie </a></button>#}
                 {% endif %}
             uczestnicy:
+             <br/>
+            <ol>
+             <br/>
             {% for participant in participants %}
-                 <ul>
-                 <li><a <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >{{  participant.name }} </a>
+
+                 <li> <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >{{  participant.name }} </a>
                       {% if tournament.user == request.user %}
                      <a style="color: red" href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >  usuń </a> </li>
                  {% endif %}
-                 </ul>
+
             {% endfor %}
+             <br/>
+ </ol>
 
             walki:
-                <p> {{ first_particpant }} {{ last_participant }} </p>
+             <br/>
+{#                <p> {{ first_participant.name }}  <-pierwszy </p>#}
+{#        <p>{{ last_participant.name }} <-ostatni</p>#}
+            {% for list_name in listed_names %}
+ <br/>
+                <p>{{ listed_names }} listed_names</p>
+            {% endfor %}
+{#        <p>{{ listed_participants }} listed_participants  </p>#}
+{#         <p>{{ participants }} participants </p>#}
+{#         <p>{{ participants_names }} participants_names</p>#}
+{#             {% for r in result %}#}
+{#              <p>{{ r }} to jest result</p>#}
+{#             {% endfor %}#}
+           <ol>
+            <br/>
+            {%  for r in result %}
+
+           <li><p>{{ r }} </p></li>
+        {% endfor %}
+        </ol>
+
+{#             <p>{{ my_li }} to jest my_li</p>#}
+{#             {% for pn in participants %}#}
+{#         <p>{{ pn.name }} to jest pn.name</p>#}
+
+{#                 {% for index, first_fighter in enumerate(participants) %} #}
+
+{# {% endfor %}#}
   </div>
 
 <hr>

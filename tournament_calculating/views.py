@@ -11,6 +11,8 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from tournaments.views import tournament_details
 import random
+# import itertools
+from itertools import *
 
 
 def participants_list(request):
@@ -128,7 +130,7 @@ def delete_group_participant(request, tournament_id, group_id, participant_id):
                  })
 
 
-def delete_group(request, tournament_id, group_id ):
+def delete_group(request, tournament_id, group_id):
     user = request.user
     tournament = Tournament.objects.get(pk=tournament_id)
     group = Group.objects.get(pk=group_id)
@@ -149,56 +151,107 @@ def delete_group(request, tournament_id, group_id ):
                  })
 
 
+    # obj = MyModel.objects.get(...)
+    # return redirect(obj)
+# Category.objects.get(id=1)
 # def draw_fights(request, tournament_id, group_id):
 #     tournament = Tournament.objects.get(pk=tournament_id)
 #     group = Group.objects.get(pk=group_id)
 #     participants = group.participants.all()
-#     first_participant = participants[0]
+#     first_participant = participants.get(id=31)
 #     user = request.user
 #     if request.user.is_authenticated:
-#         if request.method == "POST":
 #             tournament = Tournament.objects.get(pk=tournament_id)
 #             group = Group.objects.get(pk=group_id)
 #             if user == tournament.user:
-#                 # return HttpResponseRedirect(reverse('tournaments:tournament_details', args=[tournament_id]))
-#                 return HttpResponseRedirect(reverse('tournaments:group_sorted', args=[tournament_id]))
-#             else:
-#                 return redirect(reverse('login'))
-#         else:
-#             if user.is_authenticated:
-#                 if user == request.user:
-#                     return render(request, "sort_group.html", context=
-#                     {"tournament": tournament,
-#                      "group": group,
-#                      'tournament_id': tournament_id,
-#                      'group_id': group_id,
-#                      "first_participant": first_participant,
-#                      })
-
-
-def draw_fights(request, tournament_id, group_id):
-    tournament = Tournament.objects.get(pk=tournament_id)
-    group = Group.objects.get(pk=group_id)
-    participants = group.participants.all()
-    first_participant = participants[0]
-    user = request.user
-    if request.user.is_authenticated:
-            tournament = Tournament.objects.get(pk=tournament_id)
-            group = Group.objects.get(pk=group_id)
-            if user == tournament.user:
-                render(request, "group_detials.html", context={
-                    "tournament": tournament,
-                    "group": group,
-                    "participants": participants,
-                    "first_participant":first_participant,
-                    "group_id":group_id,
-                    "tournament_id":tournament_id
-
-                })
+#                 print(first_participant.name)
+#                 return redirect(tournament_details, first_participant.name)
 
                 # return HttpResponseRedirect(reverse('tournaments:group_sorted', args=[tournament_id]))
 
 
+def draw_fights(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    number = group.number
+    tournament = group.tournament
+    participants = group.participants.all()
+    participants_names = []
+    for p in participants:
+        participants_names.append(p.name)
+    first_participant = participants[0]
+    after_replace = participants.order_by('-id')
+    last_participant = after_replace[0]
+    listed_participants = list(participants)
+    listed_names = []
+
+    my_li = []
+    # for first_player, opponent in itertools.combinations(participants_names, 2):
+    #     cos = f'{first_player} - {opponent}'
+    a = []
+    result = []
+    x = list(chain.from_iterable(combinations(participants_names, r) for r in range(2, 2+1)))
+    # x = list(chain.from_iterable(combinations(participants_names, r) for r in range))
+    for e in x:
+        if e not in a:
+            for f in x:
+                if len(set(e).union(set(f))) == 2:
+                    result.append(e)
+                    # result = result
+                    # random_result = []
+                    # for i in range(len((result)):
+                        # random_result
+                    # random.choice(result)
+                    # result = random.choice
+                    # sorted(result)
+                    # a.append(e)
+                    # a.append(f)
+    # {f'{ff} - {opponent}'}
+    return render(request, "group_sorted.html", context={
+        "number": number,
+        "tournament": tournament,
+        "group_id": group_id,
+        "participants": participants,
+        "first_participant": first_participant,
+        "last_participant": last_participant,
+        "result": result,
+        "listed_names":listed_names,
+        "listed_participants": listed_participants,
+        "participants_names": participants_names,
+        "my_li":my_li
+    })
+
+        # def powerset(iterable, n):
+        #     a = []
+        #     w = []
+        #     x = list(chain.from_iterable(combinations(iterable, r) for r in range(n, n + 1)))
+        #     for e in x:
+        #         if e not in a:
+        #             for f in x:
+        #                 if len(set(e).union(set(f))) == 2 * n:
+        #                     w.append([e, f])
+        #                     a.append(e)
+        #                     a.append(f)
+        #     return w
+
+        # my_li.append(f'{ff} - {opponent}')
+    # for index, ff in enumerate(participants_names):
+    #     for opponent in participants_names[index + 1:]:
+    #
+    #         result = {f'{ff} - {opponent}'}
+    #     for i in range(len(result)):
+    #         my_li.append(result)
+# for i in range(len(Rainbow)):
+#     print(Rainbow[i])
+    # for prtcp in listed_participants:
+    #     listed_names.append(prtcp)
+    # for x in range(len(participants)):
+    #     for y in range(len(participants) - 1, 0, -1):
+    #         result = [(x,y)]
+    # for index, first_fighter in enumerate(participants):
+
+# for index, country in enumerate(countries):
+#     for opponent in countries[index + 1:]:
+#         print(f'{country} - {opponent}')
 # def draw_fights(request, tournament_id, group_id, participant_id):
 
 #     # [(x, y) for x in range(1, 5)
@@ -214,81 +267,6 @@ def draw_fights(request, tournament_id, group_id):
 #         for participant2 in range(len(group.participants.all())-1,0,-1):
 #             print(participant1,participant2)
 #
-
-# dobre:
-# def draw_fights(request, tournament_id, group_id):
-#     tournament = Tournament.objects.get(pk=tournament_id)
-#     group = Group.objects.get(pk=group_id)
-#     participants = group.participants.all()
-#     first_participant = participants[0]
-#     # last_participant = participants[-1]
-#     user = request.user
-#     if request.method == "POST":
-#         if user.is_authenticated:
-#             if user == tournament.user:
-#                 tournament = Tournament.objects.get(pk=tournament_id)
-#                 group = Group.objects.get(pk=group_id)
-#
-
-                # form = DrawFightsForm(request.POST, instance=tournament)
-                # participants = group.participants.all()
-                # first_participant = participants[0]
-                # last_participant = participants[-1]
-                # group = Group.objects.get(pk=group_id)
-                # if form.is_valid():
-                # number = form.cleaned_data['number']
-                # obj = form.save(commit=False)
-                # obj.number = number
-                # obj.save()
-                # groups.create(number=number, tournament=tournament)
-                # form.save()
-
-                #     for x in range(1, 5)
-                #           for y in range(4, 0, -1)]
-                # faighter_one =
-                # faighter_two =
-
-        #         dobre:
-        #         return HttpResponseRedirect(reverse('tournament_calculating:group_sorted', args=[tournament_id]))
-        #         # return HttpResponseRedirect(reverse('tournament_calculating:group_details'))
-        #     else:
-        #         return redirect(reverse('login'))
-        # else:
-        #     if user.is_authenticated:
-        #         if user == request.user:
-        #             # form = DrawFightsForm(instance=tournament)
-        #             return render(request, "sort_group.html", context=
-        #             {"tournament": tournament,
-        #             "group": group,
-        #             'tournament_id': tournament_id,
-        #             'group_id': group_id,
-        #             "first_participant": first_participant,
-        #              # "last_participant": last_participant
-        #              })
-        #
-
-
-    # if request.user.is_authenticated:
-    #     if request.method == "POST":
-    #         form = DrewFightsForm(request.POST)
-    #         # groups = tournament.groups.all()
-    #         if form.is_valid():
-    #             for participant in participants:
-    #                 for group in participant.groups.all():
-    #                     participant.add.random.choice(group)
-    #                     form.save()
-    #                     return HttpResponseRedirect(reverse("tournaments:tournament_details",
-    #                                                         args=[tournament_id]))
-    #     else:
-    #         form = SortGroupForm()
-    #         if request.user.is_authenticated:
-    #             return render(request, "tournament_details.html", context=
-    #             {
-    #              'tournament_id': tournament_id,
-    #              'tournament': tournament,
-    #              'participants': participants,
-    #              'form': form,
-    #              })
 
 
 def group_sort(request, tournament_id):
@@ -317,7 +295,61 @@ def group_sort(request, tournament_id):
     #              })
     pass
 
-def tournament_calculate(request, tournament_id):
+
+# def tournament_calculate(request, tournament_id):
+def tournament_calculate(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    number = group.number
+    tournament = group.tournament
+    participants = group.participants.all()
+    participants_names = []
+    for p in participants:
+        participants_names.append(p.name)
+    first_participant = participants[0]
+    after_replace = participants.order_by('-id')
+    last_participant = after_replace[0]
+    listed_participants = list(participants)
+    # return render(request, "tournament_calculation.html", context={
+    #     "number": number,
+    #     "tournament": tournament,
+    #     "group_id": group_id,
+    #     "participants": participants,
+    #     "first_participant": first_participant,
+    #     "last_participant": last_participant,
+    #     # "result": result,
+    #     # "listed_names":listed_names,
+    #     "listed_participants": listed_participants,
+    #     "participants_names": participants_names,
+    #     # "my_li":my_li
+    # })
+    if request.user.is_authenticated:
+        form = CalculateFightForm(request.POST, instance=tournament)
+        groups = tournament.groups.all()
+        if request.method == "POST" and form.is_valid():
+            number = form.cleaned_data['number']
+            for group in groups:
+                if number != group.number:
+                    obj = form.save(commit=False)
+                    obj.number = number
+                    obj.save()
+                    groups.create(number=number, tournament=tournament)
+                    return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[tournament_id]))
+        else:
+            form = AddGroupForm
+            return (
+                render(request, "add_group.html", context={
+                    'form': form,
+                    'tournament_id': tournament_id,
+                })
+            )
+
+
+
+
+
+
+
+
     # tournament = Tournament.objects.get(pk=tournament_id)
     # if request.user.is_authenticated:
     #     if request.method == "POST":
@@ -340,7 +372,7 @@ def tournament_calculate(request, tournament_id):
     #              'participants': participants,
     #              'form': form,
     #              })
-    pass
+    # pass
 
 
 

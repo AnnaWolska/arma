@@ -20,6 +20,6 @@ urlpatterns = [
 
     path('<int:tournament_id>/add_participant/<int:group_id>/', add_participant, name="add_participant"),
     path('<int:tournament_id>/add_group/', add_group, name="add_group"),
-    path('<int:tournament_id>/draw_fights/<int:group_id>/', draw_fights, name="draw_fights"),
+    # path('<int:tournament_id>/draw_fights/<int:group_id>/', draw_fights, name="draw_fights"),
     # path('<int:tournament_id>/draw_fights/<int:group_id>/group_sorted/', name="group_sorted"),
 ]
