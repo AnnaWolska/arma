@@ -41,22 +41,31 @@
  <br/>
                 <p>{{ listed_names }} listed_names</p>
             {% endfor %}
-{#        <p>{{ listed_participants }} listed_participants  </p>#}
-{#         <p>{{ participants }} participants </p>#}
-{#         <p>{{ participants_names }} participants_names</p>#}
-{#             {% for r in result %}#}
-{#              <p>{{ r }} to jest result</p>#}
-{#             {% endfor %}#}
            <ol>
             <br/>
             {%  for r in result %}
             <li><p>{{ r }} </p></li>
 {#       <li><p>{{ r }} <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:tournament_calculate' group_id fight_id %}"> dodaj starcia </a></button></p></li>#}
         {% endfor %}
+
+                       {%  for f in random_first_fighters%}
+{#                           {% for o in random_opponents %}#}
+{#                           {% if random_object.name != random_object.name %}#}
+
+            <li><p>{{ f.name }} walczy z {{ random_opponent.name }} </p></li>
+{#                           {% endif %}#}
+{#       <li><p>{{ r }} <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:tournament_calculate' group_id fight_id %}"> dodaj starcia </a></button></p></li>#}
+        {% endfor %}
+
+              {%  for c in cos%}
+            <li><p>{{ c}} </p></li>
+           {% endfor %}
+
+
         </ol>
-            {% for f in fights %}
-                <p> nowe próby {{ f }}</p>
-            {% endfor %}
+{#            {% for f in fights %}#}
+{#                <p> nowe próby {{ f }}</p>#}
+{#            {% endfor %}#}
 {#            <p> nowe próby {{ second_fighter }}</p>#}
 
 {#             <p>{{ my_li }} to jest my_li</p>#}
