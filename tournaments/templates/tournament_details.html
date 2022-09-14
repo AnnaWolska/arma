@@ -54,7 +54,8 @@
 
             {% for group in groups %}
 
-            <li> <a style="color:blue" href = "{% url 'tournament_calculating:group_details' group.id %}" > grupa {{ group.number }}{{ first_particpant }}  </a> <button id="delete_tournament" type="button" style="background-color:limegreen; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournament_calculating:draw_fights' group.id  %}"> Wylosuj walki w grupie {{ group.number }}</a> </button> </li>
+{#            <li> <a style="color:blue" href = "{% url 'tournament_calculating:group_details' group.id %}" > grupa {{ group.number }}{{ first_particpant }}  </a> <button id="delete_tournament" type="button" style="background-color:limegreen; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournament_calculating:draw_fights' group.id  %}"> Wylosuj walki w grupie {{ group.number }}</a> </button> </li>#}
+                 <li> <a style="color:blue" href = "{% url 'tournament_calculating:group_details' group.id %}" > grupa {{ group.number }}{{ first_particpant }}  </a> <button id="delete_tournament" type="button" style="background-color:limegreen; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournament_calculating:add_fights' group.id  %}"> Wylosuj walki w grupie {{ group.number }}</a> </button> </li>
 
 {#                </a>      <button id="delete_tournament" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournament_calculating:delete_group' tournament_id group.id  %}"> Usuń grupę </a> </button>#}
                <ol>

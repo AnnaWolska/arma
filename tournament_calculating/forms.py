@@ -87,6 +87,8 @@ class SortGroupForm(forms.ModelForm):
             )
 
 
+
+
 class DrawFightsForm(forms.ModelForm):
 
     class Meta:
@@ -127,6 +129,30 @@ class AddGroupForm(forms.ModelForm):
                 Fieldset(
                     'Dodaj grupę',
                     'numer',
+                ),
+                ButtonHolder(
+                    Submit('submit', 'Dodaj', css_class='btn btn-primary'),
+                    css_class="d-flex justify-content-end"
+                )
+            )
+
+
+class AddFightsForm(forms.ModelForm):
+
+    class Meta:
+        model = Fight
+        fields = ['rounds']
+        labels = {"rounds": 'rundy'}
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.form_method = 'post'
+            self.helper.form_action = 'tournament_calculating: add_fights'
+            self.helper.layout = Layout(
+                Fieldset(
+                    'Dodaj walki',
+                    'rundy',
                 ),
                 ButtonHolder(
                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),

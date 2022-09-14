@@ -6,7 +6,7 @@ from tournaments.models import Tournament
 from django.template import loader
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import AnonymousUser
-from tournament_calculating.forms import AddParticipantForm, SortGroupForm, AddGroupForm, DrawFightsForm, CalculateFightForm
+from tournament_calculating.forms import AddParticipantForm, SortGroupForm, AddGroupForm, DrawFightsForm, CalculateFightForm, AddFightsForm
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from tournaments.views import tournament_details
@@ -104,6 +104,54 @@ def add_group(request, tournament_id):
                 render(request, "add_group.html", context={
                     'form': form,
                     'tournament_id': tournament_id,
+                })
+            )
+
+
+def add_fights(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    tournament = group.tournament
+    participants = group.participants.all()
+    participants_ids = participants.values('id')
+    only_ids_ls = [i.get('id', 0) for i in participants_ids]
+    participants_pairs = list(itertools.combinations(only_ids_ls, 2))
+    group.fighters_one =[p[0] for p in participants_pairs]
+    group.fighters_two = [p[1] for p in participants_pairs]
+    print(group.fighters_one)
+    print(group.fighters_two)
+    fights = group.fights.all()
+    if request.user.is_authenticated:
+        # for round in rounds:
+        # for fight in fights:
+        #     for e in group.fighters_one:
+        #         for s in group.fighters_two:
+        #
+        #             fighter_one = group.participants.get(id=e)
+        #             fighter_two = group.participants.get(id=s)
+        #             fights.create(group=group, rounds=rounds, tournament=tournament, fighter_one=fighter_one,
+        #                           fighter_two=fighter_two)
+        #             return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[group_id]))
+        for fight in fights:
+            form = AddFightsForm(request.POST, instance=fight)
+            fights = group.fights.all()
+            if request.method == "POST" and form.is_valid():
+                rounds = form.cleaned_data['rounds']
+                # for round in rounds:
+                obj = form.save(commit=False)
+                obj.group = group
+                obj.rounds.add(round)
+                obj.tournament = tournament
+                obj.fighter_one =
+                obj.fighter_two =
+                obj.save()
+                fights.create(rounds=rounds, group=group)
+                return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[group_id]))
+        else:
+            form = AddFightsForm
+            return (
+                render(request, "add_fights.html", context={
+                    'form': form,
+                    'group_id': group_id,
                 })
             )
 
@@ -277,6 +325,12 @@ def delete_group(request, tournament_id, group_id):
 #         "fights": fights
 #     })
 
+# od nowa z group
+
+
+
+
+
 # teraz z values
 def draw_fights(request, group_id):
     group = Group.objects.get(pk=group_id)
@@ -284,10 +338,7 @@ def draw_fights(request, group_id):
     tournament = group.tournament
     participants = group.participants.all()
     participants_ids = participants.values('id')
-    print("participants_ids")
-    print(participants_ids)
     only_ids_ls = [i.get('id', 0) for i in participants_ids]
-    print(only_ids_ls)
     fights = group.fights.all()
     rounds = 5
     first_participant = Participant.objects.first()
@@ -295,21 +346,12 @@ def draw_fights(request, group_id):
     participants_pairs = list(itertools.combinations(only_ids_ls, 2))
     group.fighters_one =[p[0] for p in participants_pairs]
     group.fighters_two = [p[1] for p in participants_pairs]
-    for e in group.fighters_one:
-        for s in group.fighters_two:
-            fighter_one = group.participants.get(id=e)
-            figher_two = group.participants.get(id=s)
-            fights.create(group=group, rounds= rounds, tournament=tournament,fighter_one=fighter_one, fighter_two=figher_two)
-
-    fights_list = []
-    # fight =[]
-    # for id_element in group.fighters_one:
-    #     for fight in fights:
-        # fights
-    #         fight.fighter_one.get(id=id_element)
-    # print("fight.fighter_one")
-    # print(fight.fighter_one)
-
+    for fight in fights:
+        for e in group.fighters_one:
+            for s in group.fighters_two:
+                fighter_one = group.participants.get(id=e)
+                fighter_two = group.participants.get(id=s)
+                fights.create(group=group, rounds=rounds, tournament=tournament, fighter_one=fighter_one, fighter_two=fighter_two)
     # for id_element in only_ids_ls:
     #     fight = {
     #         "group": group,
