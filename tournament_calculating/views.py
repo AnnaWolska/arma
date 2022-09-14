@@ -277,9 +277,109 @@ def delete_group(request, tournament_id, group_id):
 #         "fights": fights
 #     })
 
-# nowe
+# teraz z values
+def draw_fights(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    number = group.number
+    tournament = group.tournament
+    participants = group.participants.all()
+    participants_ids = participants.values('id')
+    print("participants_ids")
+    print(participants_ids)
+    only_ids_ls = [i.get('id', 0) for i in participants_ids]
+    print(only_ids_ls)
+    fights = group.fights.all()
+    rounds = 5
+    first_participant = Participant.objects.first()
+    last_participant = Participant.objects.last()
+    participants_pairs = list(itertools.combinations(only_ids_ls, 2))
+    group.fighters_one =[p[0] for p in participants_pairs]
+    group.fighters_two = [p[1] for p in participants_pairs]
+    for e in group.fighters_one:
+        for s in group.fighters_two:
+            fighter_one = group.participants.get(id=e)
+            figher_two = group.participants.get(id=s)
+            fights.create(group=group, rounds= rounds, tournament=tournament,fighter_one=fighter_one, fighter_two=figher_two)
+
+    fights_list = []
+    # fight =[]
+    # for id_element in group.fighters_one:
+    #     for fight in fights:
+        # fights
+    #         fight.fighter_one.get(id=id_element)
+    # print("fight.fighter_one")
+    # print(fight.fighter_one)
+
+    # for id_element in only_ids_ls:
+    #     fight = {
+    #         "group": group,
+    #         "rounds": rounds,
+    #         "tournament": tournament,
+    #         "fighter_one": fighter_one(id=id_element[0]),
+    #         "fighter_two": fighter_two(id=id_element[1]),
+    #     }
+    # fights_list.append(fight)
+    # Fight.objects.bulk_create(fights_list)
+    return render(request, "group_sorted.html", context={
+        "number": number,
+        "tournament": tournament,
+        "group_id": group_id,
+        "participants": participants,
+        "first_participant": first_participant,
+        "last_participant": last_participant,
+        "fights": fights,
+        "participants_pairs": participants_pairs
+    })
 
 
+# jak wyświetlić
+# def draw_fights(request, group_id):
+#     group = Group.objects.get(pk=group_id)
+#     number = group.number
+#     tournament = group.tournament
+#     participants = group.participants.all()
+#     fights = group.fights.all()
+#     rounds = 5
+#     first_participant = Participant.objects.first()
+#     last_participant = Participant.objects.last()
+#     participants_pairs= list(itertools.combinations(participants, 2))
+#     first_fighters = []
+#     for ff in participants_pairs:
+#         first_fighters.append(ff[0])
+#     second_fighters = []
+#     for sf in participants_pairs:
+#         second_fighters.append(sf[1])
+#     f_one = first_fighters[0]
+#     f_two = second_fighters[0]
+#     fights_list = []
+#     for e in fights:
+#         fight = {
+#             "group": e.group,
+#             "rounds": e.rounds,
+#             "tournament": e.tournament,
+#             "fighter_one": e.f_one,
+#             "fighter_two": e.f_two,
+#         }
+#         fights_list.append(fight)
+#     Fight.objects.bulk_create(fights_list)
+#     return render(request, "group_sorted.html", context={
+#         "number": number,
+#         "tournament": tournament,
+#         "group_id": group_id,
+#         "participants": participants,
+#         "first_participant": first_participant,
+#         "last_participant": last_participant,
+#         "fights": fights,
+#         "first_fighters": first_fighters,
+#         "second_fighters":second_fighters,
+#         "participants_pairs": participants_pairs
+#     })
+
+
+
+# batch = [CounterFileData(date=row['date'], value=['value'] for row in parsed_data)]
+# CounterFileData.objects.bulk_create(batch)
+# # nowe z jednym wynikiem ładnym
 # def draw_fights(request, group_id):
 #     group = Group.objects.get(pk=group_id)
 #     number = group.number
@@ -291,6 +391,7 @@ def delete_group(request, tournament_id, group_id):
 #     last_participant = Participant.objects.last()
 #     count = participants.count()
 #     # print(count)
+#     print("participants:")
 #     print(participants)
 #     # print(participants[0])
 #     # print(participants[-1])
@@ -300,17 +401,62 @@ def delete_group(request, tournament_id, group_id):
 #     # print(random_opponent)
 #     random_opponents = []
 #     random_first_fighters = []
+#
 #     # for i in range(count):
-#     for p in participants:
-#         if first_random_fighter not in random_opponents:
-#             if random_opponent not in random_first_fighters:
-#                 if random_first_fighters not in random_first_fighters:
-#                     if random_opponent not in random_opponents:
-#                         if first_random_fighter != random_opponent:
-#                             random_first_fighters.append(first_random_fighter)
-#                             random_opponents.append(random_opponent)
+#
+#     # result = []
+#     # for p in participants:
+#         # result.append(list(itertools.combinations([range(len(participants))], 2)))
+#         # result.append(list(itertools.combinations([participants_ids], 2)))
+#         # if first_random_fighter not in random_opponents:
+#         #     if random_opponent not in random_first_fighters:
+#         #         if random_first_fighters not in random_first_fighters:
+#         #             if random_opponent not in random_opponents:
+#         #                 if first_random_fighter != random_opponent:
+#         #                     random_first_fighters.append(first_random_fighter)
+#         #                     random_opponents.append(random_opponent)
 #     # print(random_first_fighters)
 #     # print(random_opponents)
+#     # print("result:")
+#     # print(result)
+#
+#     participants_ids = []
+#     for p in participants:
+#         participants_ids.append(p.id)
+#     print("participants_ids:")
+#     print(participants_ids)
+#     # example = list(itertools.combinations([1, 2, 3, 4, 5, 6, 7, 8], 2))
+#     example = list(itertools.combinations(participants, 2))
+#     print("example")
+#     print(example)
+#     ff = []
+#     for f in example:
+#         ff.append(f[0])
+#     print("ffaaaaaaaaaaaaaaaaaaaaa")
+#     print("ff")
+#     print(ff)
+#     print("ff[0]")
+#     print(ff[0])
+#     sf = []
+#     for f in example:
+#         sf.append(f[1])
+#     print("sf")
+#     print(sf)
+#     print("sf[0]")
+#     print(sf[0])
+#
+#     # fighters_pairs = []
+#     # for f in ff:
+#     #     for s in sf:
+#     #         fighters_pairs.append(zip(f,s))
+#     # print("fighters_pairs:")
+#     # print(fighters_pairs)
+#
+#
+#     participants_pairs = list(itertools.combinations([participants_ids], 2))
+#
+#     print("participants_pairs:")
+#     print(participants_pairs)
 #     return render(request, "group_sorted.html", context={
 #         "number": number,
 #         "tournament": tournament,
@@ -323,60 +469,88 @@ def delete_group(request, tournament_id, group_id):
 #         "random_first_fighters": random_first_fighters,
 #         "random_opponent": random_opponent,
 #         "random_opponents": random_opponents,
+#         "exemple": example,
+#         "ff": ff,
+#         "sf":sf
 #     })
 
+# @dataclass(frozen=True)
+# class Fighter:
+#     id: int
+
+
 # najnowsze
-def draw_fights(request, group_id):
-    group = Group.objects.get(pk=group_id)
-    number = group.number
-    tournament = group.tournament
-    participants = group.participants.all()
-    fights = group.fights.all()
-    rounds = 5
-    first_participant = Participant.objects.first()
-    last_participant = Participant.objects.last()
-    count = participants.count()
-    # print(participants)
-    first_random_fighter = participants[randint(0, count - 1)]
-    random_opponent = participants[randint(0, count -1)]
-    random_opponents = []
-    random_first_fighters = []
-    # for p in participants:
-    #     if first_random_fighter not in random_opponents:
-    #         if random_opponent not in random_first_fighters:
-    #             if random_first_fighters not in random_first_fighters:
-    #                 if random_opponent not in random_opponents:
-    #                     if first_random_fighter != random_opponent:
-    #                         random_first_fighters.append(first_random_fighter)
-    #
-    #                        random_opponents.append(random_opponent)
-    participant_indexes = []
-    # for e in participants:
-    #     participant_indexes.append((e[i]))
-
-    # print(list(itertools.combinations([1, 2, 3, 4, 5, 6, 7, 8], 2)))
-    print(itertools.combinations(participants, 2))
-    cos = (itertools.combinations(participants, 2))
-    # print(len(count))
-    # print(range(count))
-    return render(request, "group_sorted.html", context={
-        "number": number,
-        "tournament": tournament,
-        "group_id": group_id,
-        "participants": participants,
-        "first_participant": first_participant,
-        "last_participant": last_participant,
-        "fights": fights,
-        "first_random_fighter": first_random_fighter,
-        "random_first_fighters": random_first_fighters,
-        "random_opponent": random_opponent,
-        "random_opponents": random_opponents,
-        "cos":cos
-    })
-
-
-
-
+# def draw_fights(request, group_id):
+#     group = Group.objects.get(pk=group_id)
+#     number = group.number
+#     tournament = group.tournament
+#     participants = group.participants.all()
+#     fights = group.fights.all()
+#     rounds = 5
+#     first_participant = Participant.objects.first()
+#     last_participant = Participant.objects.last()
+#     count = participants.count()
+#     # print(participants)
+#     first_random_fighter = participants[randint(0, count - 1)]
+#     random_opponent = participants[randint(0, count -1)]
+#     random_opponents = []
+#     random_first_fighters = []
+#     pairs = []
+#     i, j = list(random.sample(range(len(participants)), 2))
+#     pairs.append(
+#         (
+#             participants[i],
+#             participants[j],
+#         )
+#     )
+#     # # Remove used fighter instances or ids from fighters list
+#     # for k in sorted([i, j], reverse=True):
+#     #     del participants[k]
+#     #
+#     # # End loop if list is empty
+#     #     if not participants:
+#     #         break
+#
+#     # fighters = [Fighter(id=i) for i in range(1, 9)]
+#
+# # Show results
+#     print(pairs)
+#     print(("teraz"))
+#     print(pairs[0])
+#     # for p in participants:
+#     #     if first_random_fighter not in random_opponents:
+#     #         if random_opponent not in random_first_fighters:
+#     #             if random_first_fighters not in random_first_fighters:
+#     #                 if random_opponent not in random_opponents:
+#     #                     if first_random_fighter != random_opponent:
+#     #                         random_first_fighters.append(first_random_fighter)
+#     #
+#     #                        random_opponents.append(random_opponent)
+#     participant_indexes = []
+#     # for e in participants:
+#     #     participant_indexes.append((e[i]))
+#
+#     # print(list(itertools.combinations([1, 2, 3, 4, 5, 6, 7, 8], 2)))
+#     print(itertools.combinations(participants, 2))
+#     cos = (itertools.combinations(participants, 2))
+#     # print(len(count))
+#     # print(range(count))
+#     return render(request, "group_sorted.html", context={
+#         "number": number,
+#         "tournament": tournament,
+#         "group_id": group_id,
+#         "participants": participants,
+#         "first_participant": first_participant,
+#         "last_participant": last_participant,
+#         "fights": fights,
+#         "first_random_fighter": first_random_fighter,
+#         "random_first_fighters": random_first_fighters,
+#         "random_opponent": random_opponent,
+#         "random_opponents": random_opponents,
+#         "cos":cos,
+#         "pairs": pairs
+#     })
+#
 
 #
 # # próbuję łaczyć
@@ -439,8 +613,6 @@ def draw_fights(request, group_id):
 #         "last_participant": last_participant,
 #         "result": result,
 #     })
-
-
 #
 #     participants_names = []
 #     for p in participants:
