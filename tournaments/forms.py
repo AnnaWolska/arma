@@ -22,7 +22,7 @@ class OrganizerForm(forms.ModelForm):
 
 OrganizerFormSet = forms.modelformset_factory(Organizer, form=OrganizerForm)
 
-#
+
 class TournamentForm(forms.ModelForm):
     # tournaments = forms.ModelMultipleChoiceField(
     #     queryset=Tournament.objects.all(),
@@ -32,7 +32,7 @@ class TournamentForm(forms.ModelForm):
 
     class Meta:
         model = Tournament
-        # fields = ["title", "description", "organizers" ]
+        # fields = ["title", "description", "image", "organizers" ]
         fields = "__all__"
         labels = {
             "title": "tytuł:",

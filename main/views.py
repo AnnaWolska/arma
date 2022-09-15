@@ -26,8 +26,8 @@ def contact(request):
 def user_profile(request, user_id):
     user = get_object_or_404(get_user_model(), id=user_id)
     if request.method == "POST":
-        # profile = user.userprofile
-        # form = UserProfileForm(request.POST, instance=profile)
+        profile = user.userprofile
+        form = UserProfileForm(request.POST, instance=profile)
         try:
             profile = user.userprofile
             form = UserProfileForm(request.POST, instance=profile)

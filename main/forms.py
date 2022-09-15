@@ -42,6 +42,11 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ['user', "bio"]
 
+    labels = {
+        "user": "nazwa użytkownika:",
+        "bio": "o sobie:",
+    }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()

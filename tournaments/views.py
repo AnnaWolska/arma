@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from tournaments.models import Tournament, Organizer
+from main.models import UserProfile
 from django.template import loader
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import AnonymousUser
@@ -49,7 +50,6 @@ def tournament_details(request, tournament_id):
         # "group_id
     })
 
-
 def add_tournament(request):
     if request.user.is_authenticated:
         formset = OrganizerFormSet(queryset=Organizer.objects.none())
@@ -77,6 +77,35 @@ def add_tournament(request):
         )
     else:
         return redirect(reverse('login'))
+# def add_tournament(request):
+#     if request.user.is_authenticated:
+#         formset = OrganizerFormSet(queryset=Organizer.objects.none())
+#         if request.method == "POST":
+#             form = TournamentForm(request.POST, request.FILES)
+#             formset = OrganizerFormSet(request.POST)
+#             form.user = request.user
+#             print(form.user)
+#             if formset.is_valid():
+#                 instance = form.save()
+#                 # instance.user = request.user
+#                 # instance.user = UserProfile.objects.get(user=request.user)
+#                 instance.save()
+#                 for f in formset.cleaned_data:
+#                     if f:
+#                         orgaznier, _ = Organizer.objects.get_or_create(**f)
+#                         orgaznier.user = request.user
+#                         if orgaznier not in instance.organizers.all():
+#                             instance.organizers.add(orgaznier)
+#                         # instance.user.id = request.user.id
+#                 instance.save()
+#             return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
+#         else:
+#             form = TournamentForm()
+#         return(
+#             render(request, "add_tournament.html", {"form": form, "formset": formset })
+#         )
+#     else:
+#         return redirect(reverse('login'))
 
 
 def edit_tournament(request, tournament_id):
