@@ -92,9 +92,9 @@ WSGI_APPLICATION = 'arma.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'arma_db',
-        'USER': 'postgres',
-        'PASSWORD': 'haslo123',
+        'NAME': 'arma_app_db',
+        'USER': 'arma_app_db',
+        'PASSWORD': 'arma2022',
         'HOST': 'localhost',
         'PORT': '5432'
     }

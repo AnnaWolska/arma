@@ -117,35 +117,39 @@ def add_fights(request, group_id):
     participants_pairs = list(itertools.combinations(only_ids_ls, 2))
     group.fighters_one =[p[0] for p in participants_pairs]
     group.fighters_two = [p[1] for p in participants_pairs]
-    print(group.fighters_one)
-    print(group.fighters_two)
     fights = group.fights.all()
     if request.user.is_authenticated:
+        form = AddGroupForm(request.POST)
+        if request.method == "POST" and form.is_valid():
+            rounds = form.cleaned_data['rounds']
+            obj = form.save(commit=False)
+            obj.save()
+            group.fights.create(rounds=rounds, group=group)
+            return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[group_id]))
         # for round in rounds:
+        #     for fight in fights:
+        #         for e in group.fighters_one:
+        #             for s in group.fighters_two:
+        #                 fighter_one = group.participants.get(id=e)
+        #                 fighter_two = group.participants.get(id=s)
+        #                 fights.create(group=group, rounds=rounds, tournament=tournament, fighter_one=fighter_one,
+        #                               fighter_two=fighter_two)
+        #                 return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[group_id]))
         # for fight in fights:
-        #     for e in group.fighters_one:
-        #         for s in group.fighters_two:
-        #
-        #             fighter_one = group.participants.get(id=e)
-        #             fighter_two = group.participants.get(id=s)
-        #             fights.create(group=group, rounds=rounds, tournament=tournament, fighter_one=fighter_one,
-        #                           fighter_two=fighter_two)
-        #             return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[group_id]))
-        for fight in fights:
-            form = AddFightsForm(request.POST, instance=fight)
-            fights = group.fights.all()
-            if request.method == "POST" and form.is_valid():
-                rounds = form.cleaned_data['rounds']
-                # for round in rounds:
-                obj = form.save(commit=False)
-                obj.group = group
-                obj.rounds.add(round)
-                obj.tournament = tournament
-                obj.fighter_one =
-                obj.fighter_two =
-                obj.save()
-                fights.create(rounds=rounds, group=group)
-                return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[group_id]))
+        #     form = AddFightsForm(request.POST, instance=fight)
+        #     fights = group.fights.all()
+        #     if request.method == "POST" and form.is_valid():
+        #         rounds = form.cleaned_data['rounds']
+        #         # for round in rounds:
+        #         obj = form.save(commit=False)
+        #         obj.group = group
+        #         obj.rounds.add(round)
+        #         obj.tournament = tournament
+        #         obj.fighter_one =
+        #         obj.fighter_two =
+        #         obj.save()
+        #         fights.create(rounds=rounds, group=group)
+
         else:
             form = AddFightsForm
             return (
