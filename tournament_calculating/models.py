@@ -65,19 +65,15 @@ class Round(models.Model):
         verbose_name = "Runda"
         verbose_name_plural = "Rundy"
 
-
-
-
-
-
-    ## class FightersPairs(models.Model):
-    # class Fighters_pair(models.Model):
-    #     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_one", default=[0])
-    #     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_two", default=[0])
-    #
-    #     def __str__(self):
-    #         return f" {self.fighter_one } {self.fighter_two }"
-    #
-    #     class Meta:
-    #         verbose_name = "Walka"
-    #         verbose_name_plural = "Walki"
+#
+# class FightersPairs(models.Model):
+#     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_one", default=[0])
+#     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_two", default=[0])
+#     fight = models.ForeignKey('Fight', on_delete=models.CASCADE, related_name="fighters_pairs")
+#
+#     def __str__(self):
+#         return f" {self.fighter_one } {self.fighter_two }{self.fight } "
+#
+#     class Meta:
+#         verbose_name = "Para_walcząca"
+#         verbose_name_plural = "Pary_walczące"

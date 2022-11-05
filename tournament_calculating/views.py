@@ -1,31 +1,24 @@
-from django.http import HttpResponse
+import itertools
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from tournament_calculating.models import Group, Fight, Round, Participant
-from tournaments.models import Tournament
-from django.template import loader
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.models import AnonymousUser
-from tournament_calculating.forms import AddParticipantForm, SortGroupForm, AddGroupForm, DrawFightsForm, CalculateFightForm, AddFightsForm
 from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
-from tournaments.views import tournament_details
-import random
-# import itertools
-from itertools import *
-from django.db.models.aggregates import Count
-from random import randint
-import itertools
-import random
-from dataclasses import dataclass
+from django.shortcuts import render
+from tournaments.models import Tournament
+from tournament_calculating.models import Group, Fight, Participant
+from tournament_calculating.forms import (
+    AddParticipantForm,
+    AddGroupForm,
+    CalculateFightForm,
+    AddFightsForm
+    )
 
 
 def participants_list(request):
     participants = Participant.objects.all().order_by('name')
     paginator = Paginator(participants, 20)
     page_number = request.GET.get('page')
-    participants_list = paginator.get_page(page_number)
-    context = {'participants_list': participants_list}
+    participants_register= paginator.get_page(page_number)
+    context = {'participants_register': participants_register}
     return render(request, "participants_list.html", context)
 
 
@@ -51,7 +44,7 @@ def group_details(request, group_id):
     number = group.number
     tournament = group.tournament
     participants = group.participants.all()
-    return render(request, "group_detials.html", context={
+    return render(request, "group_details.html", context={
         "number": number,
         "tournament": tournament,
         "group_id": group_id,
@@ -72,14 +65,17 @@ def add_participant(request, tournament_id, group_id):
                 instance.tournaments.add(tournament)
                 instance.save()
 
-            return HttpResponseRedirect(reverse("tournament_calculating:group_details", args=[group_id]))
+            return HttpResponseRedirect(reverse(
+                "tournament_calculating:group_details",
+                args=[group_id])
+                )
         else:
             form = AddParticipantForm
         return (
             render(request, "add_participant.html", context={
-                'form':form,
-                'tournament_id':tournament_id,
-                'group_id':group_id,
+                'form': form,
+                'tournament_id': tournament_id,
+                'group_id': group_id,
             })
         )
 
@@ -97,7 +93,10 @@ def add_group(request, tournament_id):
                     obj.number = number
                     obj.save()
                     groups.create(number=number, tournament=tournament)
-                    return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[tournament_id]))
+                    return HttpResponseRedirect(reverse(
+                        "tournaments:tournament_details",
+                        args=[tournament_id])
+                        )
         else:
             form = AddGroupForm
             return (
@@ -116,7 +115,14 @@ def add_group(request, tournament_id):
 # }
 # Teraz jakos w petli dodajesz tak tworzone slowniki do listy i nastepnie z lista robisz
 # Fight.objects.bulk_create(lista_slownikow)
+
+
+# tylko podzielić zawodników
+
+
+# nie działa
 def add_fights(request, group_id):
+    # pass
     group = Group.objects.get(pk=group_id)
     tournament = group.tournament
     participants = group.participants.all()
@@ -125,24 +131,25 @@ def add_fights(request, group_id):
     participants_pairs = list(itertools.combinations(only_ids_ls, 2))
     group.fighters_one = [p[0] for p in participants_pairs]
     group.fighters_two = [p[1] for p in participants_pairs]
-    print(participants_pairs)
     if request.user.is_authenticated:
         form = AddGroupForm(request.POST)
         if request.method == "POST" and form.is_valid():
             rounds = form.cleaned_data['rounds']
-            obj = form.save(commit=False)
-            # if obj:
-            for p in participants_pairs:
-                obj.group = group
-                obj.rounds = rounds
-                obj.tournament = tournament
-                obj.fighter_one = group.participants.get(id=p[0])
-                obj.fighter_two = group.participants.get(id=p[1])
-                obj.save()
-                print("obj")
-                print(obj)
-                group.fights.create(group=group, rounds=rounds, tournament=tournament, fighter_one=obj.fighter_one, fighter_two=obj.fighter_two)
+            rounds.save()
+            print(rounds)
+            for participant_pair in participants_pairs:
+                fights_dict_list = []
+                fight = {
+                    "group": group,
+                    "rounds": rounds,
+                    "tournament": tournament,
+                    "fighter_one": group.participants.get(id=participant_pair[0]),
+                    "fighter_two": group.participants.get(id=participant_pair[1]),
+                    }
+                fights_dict_list.append(fight)
+                Fight.objects.bulk_create(fights_dict_list)
             return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[group_id]))
+
         else:
             form = AddFightsForm
             return (
@@ -170,8 +177,8 @@ def delete_group_participant(request, tournament_id, group_id, participant_id):
                                                         args=[tournament_id]))
         else:
             if user.is_authenticated:
-                return render(request, "delete_group_participant.html", context=
-                {"tournament": tournament,
+                return render(request, "delete_group_participant.html", context={
+                 "tournament": tournament,
                  "group": group,
                  "participant": participant,
                  'tournament_id': tournament_id,
@@ -190,11 +197,14 @@ def delete_group(request, tournament_id, group_id):
             group = Group.objects.get(pk=group_id)
             if request.user == tournament.user:
                 group.delete()
-                return HttpResponseRedirect(reverse("tournaments:tournament_details", args=[tournament_id]))
+                return HttpResponseRedirect(reverse(
+                    "tournaments:tournament_details",
+                    args=[tournament_id])
+                    )
         else:
             if user.is_authenticated:
-                return render(request, "delete_group.html", context=
-                {"tournament": tournament,
+                return render(request, "delete_group.html", context={
+                 "tournament": tournament,
                  "group": group,
                  'tournament_id': tournament_id,
                  'group_id': group_id,
@@ -244,7 +254,10 @@ def delete_group(request, tournament_id, group_id):
 #     Fight.objects.bulk_create(fights_list)
 #     print(fight)
 #     print(f_two)
-#     # fights.create(group=group, tournament=tournament, fighter_one=first_fighter, fighter_two=second_fighter)
+#     # fights.create(group=group,
+#     tournament=tournament,
+#     fighter_one=first_fighter,
+#     fighter_two=second_fighter)
 #     return render(request, "group_sorted.html", context={
 #         "number": number,
 #         "tournament": tournament,
@@ -304,7 +317,10 @@ def delete_group(request, tournament_id, group_id):
 #     # print(fight)
 #     # print(e)
 #     # print(result)
-#     # fights.create(group=group, tournament=tournament, fighter_one=first_fighter, fighter_two=second_fighter)
+#     # fights.create(group=group,
+#     tournament=tournament,
+#     fighter_one=first_fighter,
+#     fighter_two=second_fighter)
 #     # print(e)
 #     print(x)
 #     # print(result[0][0])
@@ -325,9 +341,6 @@ def delete_group(request, tournament_id, group_id):
 # od nowa z group
 
 
-
-
-
 # teraz z values
 def draw_fights(request, group_id):
     group = Group.objects.get(pk=group_id)
@@ -341,14 +354,20 @@ def draw_fights(request, group_id):
     first_participant = Participant.objects.first()
     last_participant = Participant.objects.last()
     participants_pairs = list(itertools.combinations(only_ids_ls, 2))
-    group.fighters_one =[p[0] for p in participants_pairs]
+    group.fighters_one = [p[0] for p in participants_pairs]
     group.fighters_two = [p[1] for p in participants_pairs]
     for fight in fights:
-        for e in group.fighters_one:
-            for s in group.fighters_two:
-                fighter_one = group.participants.get(id=e)
-                fighter_two = group.participants.get(id=s)
-                fights.create(group=group, rounds=rounds, tournament=tournament, fighter_one=fighter_one, fighter_two=fighter_two)
+        for first in group.fighters_one:
+            for second in group.fighters_two:
+                fighter_one = group.participants.get(id=first)
+                fighter_two = group.participants.get(id=second)
+                fights.create(
+                    group=group,
+                    rounds=rounds,
+                    tournament=tournament,
+                    fighter_one=fighter_one,
+                    fighter_two=fighter_two
+                )
     # for id_element in only_ids_ls:
     #     fight = {
     #         "group": group,
@@ -413,7 +432,6 @@ def draw_fights(request, group_id):
 #         "second_fighters":second_fighters,
 #         "participants_pairs": participants_pairs
 #     })
-
 
 
 # batch = [CounterFileData(date=row['date'], value=['value'] for row in parsed_data)]
@@ -632,7 +650,6 @@ def draw_fights(request, group_id):
 #     })
 
 
-
 # def draw_fights(request, group_id):
 #     group = Group.objects.get(pk=group_id)
 #     fights = group.fights.all()
@@ -746,12 +763,3 @@ def tournament_calculate(request, group_id, fight_id):
                     "participants_names": participants_names,
                 })
             )
-
-
-
-
-
-
-
-
-
