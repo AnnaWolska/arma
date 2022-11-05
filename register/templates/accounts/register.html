@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
-
 {% block content %}
-
-      <img src="/static/drzwi.jpg" width="134" height="200" alt="zdj">
+<img src="/static/drzwi.jpg" width="134" height="200" alt="zdj">
 <hr>
-    <h3>Rejestracja:</h3>
+<h3>
+    Rejestracja:
+</h3>
 <form method="POST" class="form-group">
     {% csrf_token %}
     {{ form|crispy }}
-    <button type="submit" class="btn btn-success">Zarejestruj</button>
+    <button type="submit" class="btn btn-success">
+        Zarejestruj
+    </button>
 </form>
 {% endblock %}

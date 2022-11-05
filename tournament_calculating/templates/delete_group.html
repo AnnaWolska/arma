@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-  <div class="container">
-    <h4>Czy na pewno chcesz usunąć grupę {{ group.number}} z turnieju: {{ tournament.title }} ? </h4>
+<div class="container">
+    <h4>
+        Czy na pewno chcesz usunąć grupę {{ group.number}} z turnieju: {{ tournament.title }} ?
+    </h4>
     <form method="POST">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="btn btn-danger"> Usuń  </button>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-danger">
+            Usuń
+        </button>
     </form>
-  </div>
+</div>
 {% endblock %}

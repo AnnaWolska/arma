@@ -2,113 +2,57 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
-
 {% block style %}
-    <link href ="{% static "organizers/css/style.css" %}" rel = "stylesheet">
+<link href ="{% static "organizers/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
-
 {% block content %}
-    <h3><a style="text-decoration: none;" href = "{% url 'organizers:organizers_list' %}"> <-Powrót do listy organizatorów </a></h3>
-
-     <h2> Szczegóły organizatora : </h2>
-     <div>
-         <ul>
-             <li>
-                 informację o organizatorze tworzy: <p style="font-family: luminari fantasy;"> {{ user }} </p>
-             </li>
-             <li>
-                 nazwa: <p style="font-family: luminari fantasy;">  {{ name }} </p>
-             </li>
-             <li>
-                 opis: <p style="font-family: luminari fantasy;">  {{ description }} </p>
-             </li>
-
-         </ul>
-     </div>
-
-     {% if user == request.user %}
-    <button id="delete_organizer" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'organizers:delete_organizer' organizer_id %}"> Usuń organizatora </a></button>
-      <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'organizers:edit_organizer' organizer_id %}"> Edytuj organizatora </a></button>
-         <p>
-     {% endif %}
-
-     <div>
-         {% if image %}
-             {% thumbnail image "300x300" as im %}
-              <img src="{{ im.url }}" alt="zdj">
-             {% endthumbnail %}
-         {% endif %}
-     </div>
-
-{#     <h3>Przejdź do galerii</h3>#}
-{#    <h3>Dyskusja:</h3>#}
-{##}
-{#     <h2>  <a href = "{% url 'tournaments:add_post' tournament_id %}"> Dodaj post </a>  </h2>#}
-{##}
-{##}
-{#    <div class="pagination">#}
-{#        <span class = "step-links">#}
-{#        {% if posts.has_previous %}#}
-{#            <a href="?page=1">&laquo; pierwsza</a>#}
-{#            <a href="?page={{ posts.previous_page_number }}">poprzednia</a>#}
-{#        {% endif %}#}
-{#            <span class="current">#}
-{#                strona {{ posts.number}}  z {{ posts.paginator.num_pages }}.#}
-{#            </span>#}
-{#        {% if posts.has_next %}#}
-{#            <a href="?page={{ posts.next_page_number }}">następna</a>#}
-{#            <a href="?page={{ posts.end_index }}">ostatnia</a>#}
-{#        {% endif %}#}
-{#        {% if posts.end_index %}#}
-{#        {% endif %}#}
-{#        </span>#}
-{#    </div>#}
-{##}
-{##}
-{##}
-{#    <ul>#}
-{#    {%  for post in posts %}#}
-{#        <div class="list-group">#}
-{#            <ol>#}
-{#                <li class="list-group-item">#}
-{#                    <ul>#}
-{#                        <li> {{ post.user }}, {{ post.title}} - {{ post.created }}:#}
-{#                     </li>#}
-{#                        <li>{{ post.content }}</li>#}
-{#                    </ul>#}
-{##}
-{#                    {% if post.image %}#}
-{#                    {% thumbnail post.image "300x300" as im %}#}
-{#                      <img src="{{ im.url }}" alt="zdj">#}
-{#                     {% endthumbnail %}#}
-{#                    {% endif %}#}
-{#                       {% if post.user == request.user %}#}
-{#                     <p> <a href = "{% url 'tournaments:edit_post' tournament_id post.id  %}">  Edytuj post </a>   </p>#}
-{#                      <p> <a href = "{% url 'tournaments:delete_post' tournament_id post.id %}">  Usuń post </a>   </p>#}
-{#                     {% endif %}#}
-{#                </li>#}
-{#            </ol>#}
-{#        </div>#}
-{#    {% endfor %}#}
-{##}
-{#   </ul>#}
-{#    <div class="pagination">#}
-{#        <span class = "step-links">#}
-{#        {% if posts.has_previous %}#}
-{#            <a href="?page=1">&laquo; pierwsza</a>#}
-{#            <a href="?page={{ posts.previous_page_number }}">poprzednia</a>#}
-{#        {% endif %}#}
-{#            <span class="current">#}
-{#                strona {{ posts.number}}  z {{ posts.paginator.num_pages }}.#}
-{#            </span>#}
-{#        {% if posts.has_next %}#}
-{#            <a href="?page={{ posts.next_page_number }}">następna</a>#}
-{#            <a href="?page={{ posts.end_index }}">ostatnia</a>#}
-{#        {% endif %}#}
-{#        {% if posts.end_index %}#}
-{#        {% endif %}#}
-{#        </span>#}
-{#    </div>#}
-
-{% endblock %}
-
+<h3>
+    <a style="text-decoration: none;" href = "{% url 'organizers:organizers_list' %}">
+        <-Powrót do listy organizatorów </a>
+    </h3>
+    <h2>
+        Szczegóły organizatora :
+    </h2>
+    <div>
+        <ul>
+            <li>
+                informację o organizatorze tworzy:
+                <p style="font-family: luminari fantasy;">
+                    {{ user }}
+                </p>
+            </li>
+            <li>
+                nazwa:
+                <p style="font-family: luminari fantasy;">
+                    {{ name }}
+                </p>
+            </li>
+            <li>
+                opis:
+                <p style="font-family: luminari fantasy;">
+                    {{ description }}
+                </p>
+            </li>
+        </ul>
+    </div>
+    {% if user == request.user %}
+    <button id="delete_organizer" type="button" style="background-color:Tomato; "  class="btn btn-primary">
+        <a style="color:white;" href = "{% url 'organizers:delete_organizer' organizer_id %}">
+            Usuń organizatora
+        </a>
+    </button>
+    <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary">
+        <a style="color:white;" href = "{% url 'organizers:edit_organizer' organizer_id %}">
+            Edytuj organizatora
+        </a>
+    </button>
+    <p>
+        {% endif %}
+        <div>
+            {% if image %}
+            {% thumbnail image "300x300" as im %}
+            <img src="{{ im.url }}" alt="zdj">
+            {% endthumbnail %}
+            {% endif %}
+        </div>
+        {% endblock %}

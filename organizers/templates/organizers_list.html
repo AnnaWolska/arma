@@ -1,88 +1,94 @@
 {% extends "base.html" %}
-
 {% block header %}
 {% endblock %}
-
 {% block content %}
-       <img src="/static/czytaja.jpg" width="360" height="250" alt="zdj">
-
-{#    <p><h2>  <a style="text-decoration: none;"href = "{% url 'organizers:add_organizer' %}"> Dodaj organizatora</a>  </h2></p>#}
-         <button id="delete_tournament" type="button" style="background-color:lightseagreen; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'organizers:add_organizer' %}"> Dodaj organizatora </a></button>
-
- <hr>
- <h3>Lista organizatorów:</h3>
-
-     <div class="pagination">
-        <span class = "step-links">
+<img src="/static/czytaja.jpg" width="360" height="250" alt="zdj">
+<button id="delete_tournament" type="button" style="background-color:lightseagreen; "  class="btn btn-primary">
+    <a style="color:white;" href = "{% url 'organizers:add_organizer' %}">
+        Dodaj organizatora
+    </a>
+</button>
+<hr>
+<h3>
+    Lista organizatorów:
+</h3>
+<div class="pagination">
+    <span class = "step-links">
         {% if organizers_list.has_previous %}
-            <a style="text-decoration: none;" href="?page=1">&laquo; pierwsza</a>
-            <a style="text-decoration: none;" href="?page={{ organizers_list.previous_page_number }}">poprzednia</a>
+        <a style="text-decoration: none;" href="?page=1">
+            &laquo; pierwsza
+        </a>
+        <a style="text-decoration: none;" href="?page={{ organizers_list.previous_page_number }}">
+            poprzednia
+        </a>
         {% endif %}
         <span class="current">
             strona {{ organizers_list.number}}  z {{ organizers_list.paginator.num_pages }}
         </span>
         {% if organizers_list.has_next %}
-            <a style="text-decoration: none;" href="?page={{ organizers_list.next_page_number }}">następna</a>
-            <a style="text-decoration: none;" href="?page={{ organizers_list.end_index }}">ostatnia</a>
+        <a style="text-decoration: none;" href="?page={{ organizers_list.next_page_number }}">
+            następna
+        </a>
+        <a style="text-decoration: none;" href="?page={{ organizers_list.end_index }}">
+            ostatnia
+        </a>
         {% endif %}
         {% if organizers_list.end_index %}
         {% endif %}
-        </span>
-    </div>
-
-
+    </span>
+</div>
 {% for organizer in organizers_list  %}
-        <div class="list-group">
-        <ol>
-            <li class="list-group-item" >
-              <p style="font-family: cursive; "> <a style="text-decoration: none;" href = "{% url 'organizers:organizer_details' organizer.id %}" >{{ organizer.name}} </a></p>
-               <p> {{ organizer.description}}</p>
-
-                 przez: {{ organizer.user }}
-
-{#                {{  organizer.user }} ,#}
-{#                {% for organizer in organizers %}#}
-{#                {{  organizer }}#}
-{#                {% endfor %}#}
-{#                {{  tournament.description }} ,#}
-{#                 <a href = "{% url 'organizers:organizer_details' organizer.id %}" > szczegóły</a>#}
-
-{#                     {% if user == request.user %}#}
-              {% if organizer.user == request.user %}
-    <button id="delete_organizer" type="button" style="background-color:Tomato; "  class="btn btn-primary"><a style="color:white;" href = "{% url 'organizers:delete_organizer' organizer.id %}"> Usuń organizatora </a></button>
-         <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'organizers:edit_organizer' organizer.id %}"> Edytuj organizatora </a></button>
-                {% endif %}
-{#      <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary"><a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}"> Edytuj turniej </a></button>#}
-{#         <p>#}
-
-
-
-            </li>
-        </ol>
-        </div>
-    {% endfor %}
-
-    <div class="pagination">
-        <span class = "step-links">
-
+<div class="list-group">
+    <ol>
+        <li class="list-group-item" >
+            <p style="font-family: cursive; ">
+                <a style="text-decoration: none;" href = "{% url 'organizers:organizer_details' organizer.id %}" >
+                    {{ organizer.name}}
+                </a>
+            </p>
+            <p>
+                {{ organizer.description}}
+            </p>
+            przez: {{ organizer.user }}
+            {% if organizer.user == request.user %}
+            <button id="delete_organizer" type="button" style="background-color:Tomato; "  class="btn btn-primary">
+                <a style="color:white;" href = "{% url 'organizers:delete_organizer' organizer.id %}">
+                    Usuń organizatora
+                </a>
+            </button>
+            <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary">
+                <a style="color:white;" href = "{% url 'organizers:edit_organizer' organizer.id %}">
+                    Edytuj organizatora
+                </a>
+            </button>
+            {% endif %}
+        </li>
+    </ol>
+</div>
+{% endfor %}
+<div class="pagination">
+    <span class = "step-links">
         {% if organizers_list.has_previous %}
-            <a style="text-decoration: none;" href="?page=1">&laquo; pierwsza</a>
-            <a style="text-decoration: none;" href="?page={{ organizers_list.previous_page_number }}">poprzednia</a>
+        <a style="text-decoration: none;" href="?page=1">
+            &laquo; pierwsza
+        </a>
+        <a style="text-decoration: none;" href="?page={{ organizers_list.previous_page_number }}">
+            poprzednia
+        </a>
         {% endif %}
-
         <span class="current">
             strona {{ organizers_list.number}}  z {{ organizers_list.paginator.num_pages }}
         </span>
-
         {% if organizers_list.has_next %}
-            <a style="text-decoration: none;" href="?page={{ organizers_list.next_page_number }}">następna</a>
-            <a style="text-decoration: none;" href="?page={{ organizers_list.end_index }}">ostatnia</a>
+        <a style="text-decoration: none;" href="?page={{ organizers_list.next_page_number }}">
+            następna
+        </a>
+        <a style="text-decoration: none;" href="?page={{ organizers_list.end_index }}">
+            ostatnia
+        </a>
         {% endif %}
-
         {% if organizers_list.end_index %}
         {% endif %}
-        </span>
-    </div>
-
+    </span>
+</div>
 {% endblock %}
-

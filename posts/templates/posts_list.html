@@ -1,86 +1,90 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block style %}
-    <link href ="{% static "posts/css/style.css" %}" rel = "stylesheet">
+<link href ="{% static "posts/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
-
 {% block header %}
 {% endblock %}
-
 {% block content %}
-
-{#    <img src="/static/main/img/czytanie.jpeg" alt="czytanie">#}
-    <h2>  <a href = "{% url 'tournaments:add_post' %}"> Dodaj post </a>  </h2>
-
-    <div class="pagination">
-        <span class = "step-links">
-
+<h2>
+    <a href = "{% url 'tournaments:add_post' %}">
+        Dodaj post
+    </a>
+</h2>
+<div class="pagination">
+    <span class = "step-links">
         {% if posts_list.has_previous %}
-            <a href="?page=1">&laquo; pierwsza</a>
-            <a href="?page={{ posts_list.previous_page_number }}">poprzednia</a>
+        <a href="?page=1">
+            &laquo; pierwsza
+        </a>
+        <a href="?page={{ posts_list.previous_page_number }}">
+            poprzednia
+        </a>
         {% endif %}
-
-            <span class="current">
-                strona {{ posts_list.number}}  z {{ posts_list.paginator.num_pages }}.
-            </span>
-
+        <span class="current">
+            strona {{ posts_list.number}}  z {{ posts_list.paginator.num_pages }}.
+        </span>
         {% if posts_list.has_next %}
-            <a href="?page={{ posts_list.next_page_number }}">następna</a>
-            <a href="?page={{ posts_list.end_index }}">ostatnia</a>
+        <a href="?page={{ posts_list.next_page_number }}">
+            następna
+        </a>
+        <a href="?page={{ posts_list.end_index }}">
+            ostatnia
+        </a>
         {% endif %}
-
         {% if posts_list.end_index %}
         {% endif %}
-        </span>
-    </div>
-
-
-    <h1>Lista postów:</h1>
-
-    <ul>
+    </span>
+</div>
+<h1>
+    Lista postów:
+</h1>
+<ul>
     {%  for post in posts_list %}
-        <div class="list-group">
-            <ol>
-
-                <li class="list-group-item">
-                    {{ post.id}}  {{ post.user }}  {{ post.title }} , {{  post.content }}  ,
-
-                     <p> <a href = "{% url 'posts:post_details' post.id %}" > Szczegóły  </a>   </p>
-
-                       {% if post.user == request.user %}
-                     <p> <a href = "{% url 'tournaments:edit_post' post.id %}">  Edytuj post </a>   </p>
-
-                     {% endif %}
-
-                </li>
-            </ol>
-            </div>
+    <div class="list-group">
+        <ol>
+            <li class="list-group-item">
+                {{ post.id}}  {{ post.user }}  {{ post.title }} , {{  post.content }}  ,
+                <p>
+                    <a href = "{% url 'posts:post_details' post.id %}" >
+                        Szczegóły
+                    </a>
+                </p>
+                {% if post.user == request.user %}
+                <p>
+                    <a href = "{% url 'tournaments:edit_post' post.id %}">
+                        Edytuj post
+                    </a>
+                </p>
+                {% endif %}
+            </li>
+        </ol>
+    </div>
     {% endfor %}
-   </ul>
-
-    <div class="pagination">
-        <span class = "step-links">
-
+</ul>
+<div class="pagination">
+    <span class = "step-links">
         {% if posts_list.has_previous %}
-            <a href="?page=1">&laquo; pierwsza</a>
-            <a href="?page={{ posts_list.previous_page_number }}">poprzednia</a>
+        <a href="?page=1">
+            &laquo; pierwsza
+        </a>
+        <a href="?page={{ posts_list.previous_page_number }}">
+            poprzednia
+        </a>
         {% endif %}
-
-            <span class="current">
-                strona {{ posts_list.number}}  z {{ posts_list.paginator.num_pages }}.
-            </span>
-
+        <span class="current">
+            strona {{ posts_list.number}}  z {{ posts_list.paginator.num_pages }}.
+        </span>
         {% if posts_list.has_next %}
-            <a href="?page={{ posts_list.next_page_number }}">następna</a>
-            <a href="?page={{ posts_list.end_index }}">ostatnia</a>
+        <a href="?page={{ posts_list.next_page_number }}">
+            następna
+        </a>
+        <a href="?page={{ posts_list.end_index }}">
+            ostatnia
+        </a>
         {% endif %}
-
         {% if posts_list.end_index %}
         {% endif %}
-        </span>
-    </div>
-
+    </span>
+</div>
 {% endblock %}
-
-
