@@ -87,13 +87,22 @@ def add_group(request, tournament_id):
     if request.user.is_authenticated:
         form = AddGroupForm(request.POST, instance=tournament)
         groups = tournament.groups.all()
+        print("groups")
+        print(groups)
+        many_group_numbers = []
+        for g in groups:
+            print(g.number)
+            many_group_numbers.append(g.number)
+            print(many_group_numbers)
         # groups_numbers_objects = []
         # for group in groups:
             # groups_numbers_objects.append(group.number)
         # groups_numbers = groups.number.all()
         if request.method == "POST" and form.is_valid():
             number = form.cleaned_data['number']
-            if groups:
+
+            if number not in many_group_numbers:
+
                 # for group in groups:
                     # print("numer grupy:")
                     # print(group.number)
@@ -110,14 +119,22 @@ def add_group(request, tournament_id):
                 )
             # else:
             #     messages.info(request, 'grupa się powtarza, wybierz inną cyfrę.')
+            # else:
+            #     obj = form.save(commit=False)
+            #     obj.number = number
+            #     obj.save()
+            #     groups.create(number=number, tournament=tournament)
+            #     return HttpResponseRedirect(reverse(
+            #         "tournaments:tournament_details",
+            #         args=[tournament_id])
+            #     )
             else:
-                obj = form.save(commit=False)
-                obj.number = number
-                obj.save()
-                groups.create(number=number, tournament=tournament)
-                return HttpResponseRedirect(reverse(
-                    "tournaments:tournament_details",
-                    args=[tournament_id])
+                form = AddGroupForm
+                return (
+                    render(request, "add_group.html", context={
+                        'form': form,
+                        'tournament_id': tournament_id,
+                    })
                 )
 
         else:
