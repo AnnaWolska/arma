@@ -35,61 +35,92 @@
 
             walki:
              <br/>
-{#                <p> {{ first_participant.name }}  <-pierwszy </p>#}
-{#        <p>{{ last_participant.name }} <-ostatni</p>#}
-            {% for list_name in listed_names %}
- <br/>
-                <p>{{ listed_names }} listed_names</p>
-            {% endfor %}
+
            <ol>
             <br/>
-            {%  for r in result %}
-            <li><p>{{ r }} </p></li>
+{#            {%  for r in result %}#}
+{#            <li><p> {{r}} </p></li>#}
+
 {#       <li><p>{{ r }} <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:tournament_calculate' group_id fight_id %}"> dodaj starcia </a></button></p></li>#}
-        {% endfor %}
+{#        {% endfor %}#}
 
-                       {%  for f in random_first_fighters%}
-{#                           {% for o in random_opponents %}#}
-{#                           {% if random_object.name != random_object.name %}#}
+{#            {% for f in name_to_show1%}#}
+{#                    <li><p> {{f}}  walczy z {{ n }} </p></li>#}
+{#           {% endfor %}#}
 
-            <li><p>{{ f.name }} walczy z {{ random_opponent.name }} </p></li>
-{#                           {% endif %}#}
-{#       <li><p>{{ r }} <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:tournament_calculate' group_id fight_id %}"> dodaj starcia </a></button></p></li>#}
-        {% endfor %}
 
-              {%  for c in cos%}
-            <li><p>{{ c}} </p></li>
-           {% endfor %}
-
-            {%  for p in pairs%}
-            <li><p>{{ p}} </p></li>
-           {% endfor %}
-
-{#                {% for f in ff%}#}
-{#              <li><p>  {{ f}}</p></li>#}
+{#                    {%  for l in left_participant %}#}
+{#                                <li><p>{{ l }}</p></li>#}
 {#                {% endfor %}#}
+{##}
+{#           {% for el in left_names  %}#}
+{#           <li><p> {{ el }}   walczy z: </p></li>#}
+{#           {% endfor %}#}
 
-               {% for pp in participants_pairs%}
-              <li><p>  {{ pp}}</p></li>
-                {% endfor %}
+
+
+<style> td, th { border: 1px solid black; } </style>
+           <table BORDER CELLSPACING=5 CELLPADDING=15>
+
+ <tr> {% for i in fights_numbers %}
+        <td> {{ i }}</td>
+           {% endfor %}
+</tr>
+   <tr>
+        {% for el in left_names  %}
+      <td> {{ el }}</td>
+       {% endfor %}
+</tr>
+
+   <tr>
+       {% for rn in right_names  %}
+      <td>{{ rn }}</td>
+        {% endfor %}
+   </tr>
+
+</table>
 
 
 
+
+
+{#                <table>#}
+{#          {% for el in left_names  %}#}
+{#   <tr>#}
+{# {{ el }}#}
+{#   </tr>#}
+{# {% endfor %}#}
+{##}
+{#   <tr>#}
+{#       {% for rn in right_names  %}#}
+{#{{ rn }}#}
+{#        {% endfor %}#}
+{#   </tr>#}
+{##}
+{#</table>#}
+
+
+<style> td, th { border: 1px solid black; } </style>
+<!-- ustawienie czarnego obramowania tabeli w CSS -->
+
+{#<table BORDER CELLSPACING=5 CELLPADDING=15>#}
+{#   <thead>#}
+{#      <tr> <th> Pierwszy zawodnik <th> Drugi zawodnik#}
+{#   <tbody>#}
+{#      <tr> <td> Historia <td> Nowak#}
+{#      <tr> <td> Historia <td> Mazur#}
+{#      <tr> <td> Fizyka   <td> Nowak#}
+{#      <tr>  Fizyka   <td> Mazur#}
+{##}
+{#{% for el in left_names  %}#}
+{#     <tr><td>   {{ el }} </tr>{% endfor %}   {% for rn in right_names  %}<tr> {{ rn }}   {% endfor %}#}
+{##}
+{##}
+{#</table>#}
 
 
         </ol>
-{#            {% for f in fights %}#}
-{#                <p> nowe próby {{ f }}</p>#}
-{#            {% endfor %}#}
-{#            <p> nowe próby {{ second_fighter }}</p>#}
 
-{#             <p>{{ my_li }} to jest my_li</p>#}
-{#             {% for pn in participants %}#}
-{#         <p>{{ pn.name }} to jest pn.name</p>#}
-
-{#                 {% for index, first_fighter in enumerate(participants) %} #}
-
-{# {% endfor %}#}
   </div>
 
 <hr>
