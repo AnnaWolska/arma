@@ -1,4 +1,5 @@
 import itertools
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.paginator import Paginator
@@ -82,21 +83,43 @@ def add_participant(request, tournament_id, group_id):
 
 def add_group(request, tournament_id):
     tournament = Tournament.objects.get(pk=tournament_id)
+
     if request.user.is_authenticated:
         form = AddGroupForm(request.POST, instance=tournament)
         groups = tournament.groups.all()
+        # groups_numbers_objects = []
+        # for group in groups:
+            # groups_numbers_objects.append(group.number)
+        # groups_numbers = groups.number.all()
         if request.method == "POST" and form.is_valid():
             number = form.cleaned_data['number']
-            for group in groups:
-                if number != group.number:
-                    obj = form.save(commit=False)
-                    obj.number = number
-                    obj.save()
-                    groups.create(number=number, tournament=tournament)
-                    return HttpResponseRedirect(reverse(
-                        "tournaments:tournament_details",
-                        args=[tournament_id])
-                        )
+            if groups:
+                # for group in groups:
+                    # print("numer grupy:")
+                    # print(group.number)
+                    # if number != group.number:
+                # if number not in groups_numbers_objects:
+                obj = form.save(commit=False)
+                obj.number = number
+                obj.save()
+                groups.create(number=number, tournament=tournament)
+                messages.success(request, 'grupa dodana.')
+                return HttpResponseRedirect(reverse(
+                    "tournaments:tournament_details",
+                    args=[tournament_id])
+                )
+            # else:
+            #     messages.info(request, 'grupa się powtarza, wybierz inną cyfrę.')
+            else:
+                obj = form.save(commit=False)
+                obj.number = number
+                obj.save()
+                groups.create(number=number, tournament=tournament)
+                return HttpResponseRedirect(reverse(
+                    "tournaments:tournament_details",
+                    args=[tournament_id])
+                )
+
         else:
             form = AddGroupForm
             return (
@@ -106,18 +129,8 @@ def add_group(request, tournament_id):
                 })
             )
 
-# fight = {
-# "group":wylosowana_grupa,
-# "fighter_one":pierwszy_fighter,
-# "fighter_two" :drugi_fighter,
-# "tournament" : tournament ,
-# "rounds" : rounds
-# }
-# Teraz jakos w petli dodajesz tak tworzone slowniki do listy i nastepnie z lista robisz
-# Fight.objects.bulk_create(lista_slownikow)
 
-
-# result to lista tupli z imionami graczy jako stringi, dobrze generuje pary
+# dziala tabelka problem z kasowaniem w bazie danych
 def draw_fights(request, group_id):
     group = Group.objects.get(pk=group_id)
     number = group.number
@@ -127,44 +140,29 @@ def draw_fights(request, group_id):
     participants_names = []
     participants_ids = []
 
-    for participant in participants:
-        participants_names.append(participant.name)
+    if participants:
+        for participant in participants:
+            participants_names.append(participant.name)
+        for participant in participants:
+            participants_ids.append(participant.id)
 
-    for participant in participants:
-        participants_ids.append(participant.id)
-    print("participants_ids:")
-    print(participants_ids)
-
-    first_participant = participants[0]
-    print("first_participant:")
-    print(first_participant.id)
-    after_replace = participants.order_by('-id')
-    last_participant = after_replace[0]
-    listed_participants = list(participants)
-
-    # participants_pairs = list(itertools.combinations(only_ids_ls, 2))
-    # participants_pairs_objects = []
-    # for pair in participants_pairs:
-    #     participants_pairs_objects.append(Participant.objects.filter(pk__in=pair))
+    if participants:
+        first_participant = participants[0]
+        after_replace = participants.order_by('-id')
+        last_participant = after_replace[0]
+        listed_participants = list(participants)
 
     listed_names = []
     my_li = []
     a = []
     result = []
 
-    # participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(participants_names, r) for r in range(2, 2 + 1)))
     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(participants_ids, r) for r in range(2, 2 + 1)))
-    print("participants_pairs:")
-    print(participants_pairs)
 
     participants_pairs_objects = []
-    for pair in participants_pairs:
-        print("pair:")
-        print(pair)
-        participants_pairs_objects.append(Participant.objects.filter(pk__in=pair))
 
-    print("participants_pairs_ojects:ooooooooooooooooooooooooo")
-    print(participants_pairs_objects)
+    for pair in participants_pairs:
+        participants_pairs_objects.append(Participant.objects.filter(pk__in=pair))
 
     name_to_show1 = []
     name_to_show2 = []
@@ -180,60 +178,36 @@ def draw_fights(request, group_id):
 
     left_names = []
     right_names = []
-    print("left))))))))))))))))))))))):")
+
     for l in left_participant:
-        print(l.name)
         left_names.append(l.name)
-    print(right_participant)
-    print("right))))))))))))))))))))))):")
+
     for r in right_participant:
-        print(r.name)
         right_names.append(r.name)
+
     for r in result:
-        print("r")
-        print(r[0])
         name_to_show1.append(r[0])
         name_to_show2.append(r[1])
-    # print(participants_pairs)
-    # list(participant_pair)
-                    # print(type(participant_pair))
-                    # print(participant_pair[0])
-
-    print("name_to_show1")
-    print(name_to_show1)
-    print("result:!!!!!!!!")
-    print(result)
-    print("result[0]")
-    print(result[0])
-    print(result[0][0])
-    print(result[0][0].name)
 
     rounds = 0
-    fights_dict_list = []
 
-    for r in result:
-        fights.create(
-            group=group,
-            rounds=rounds,
-            tournament=tournament,
-            fighter_one=group.participants.get(id=result[0][0].id),
-            fighter_two=group.participants.get(id=result[0][1].id)
-        )
-        print("DONE")
-        # fight = {
-        #     "group": group,
-        #     "rounds": rounds,
-        #     "tournament": tournament,
-        #     "fighter_one": group.participants.get(id=result[0][0].id),
-        #     "fighter_two": group.participants.get(id=result[0][1].id),
-        #     }
-        # fights_dict_list.append(fight)
-        # Fight.objects.bulk_create(fights_dict_list)
+    if participants:
+        for r in result:
+            print(r[0])
+            if fights.filter(fighter_one=r[0]).exists():
+                fights.filter(fighter_one=r[0]).delete()
+            else:
+                fights.create(
+                    group=group,
+                    rounds=rounds,
+                    tournament=tournament,
+                    fighter_one=group.participants.get(id=result[0][0].id),
+                    fighter_two=group.participants.get(id=result[0][1].id)
+                )
 
     fights_numbers = []
     for i in range(1,len(left_names) + 1):
         fights_numbers.append(i)
-
 
     return render(request, "group_sorted.html", context={
         "number": number,
@@ -255,6 +229,9 @@ def draw_fights(request, group_id):
         "right_names":right_names,
         "fights_numbers":fights_numbers
     })
+
+
+
 
 # def draw_fights(group_id):
 #     group = Group.objects.get(pk=group_id)

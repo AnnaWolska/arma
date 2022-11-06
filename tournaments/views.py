@@ -31,7 +31,6 @@ def tournament_details(request, tournament_id):
     user = tournament.user
     created = tournament.created
     participants = tournament.participants.all()
-    # group_participants =
     groups = tournament.groups.all()
     paginator = Paginator(posts, 20)
     page_number = request.GET.get('page')
@@ -47,8 +46,8 @@ def tournament_details(request, tournament_id):
         "created": created,
         "participants": participants,
         "groups":groups,
-        # "group_id
     })
+
 
 def add_tournament(request):
     if request.user.is_authenticated:
@@ -59,7 +58,6 @@ def add_tournament(request):
             form.user = request.user
             if formset.is_valid():
                 instance = form.save()
-                # instance.user.id = request.user
                 instance.user = request.user
                 instance.save()
                 for f in formset.cleaned_data:
@@ -77,35 +75,6 @@ def add_tournament(request):
         )
     else:
         return redirect(reverse('login'))
-# def add_tournament(request):
-#     if request.user.is_authenticated:
-#         formset = OrganizerFormSet(queryset=Organizer.objects.none())
-#         if request.method == "POST":
-#             form = TournamentForm(request.POST, request.FILES)
-#             formset = OrganizerFormSet(request.POST)
-#             form.user = request.user
-#             print(form.user)
-#             if formset.is_valid():
-#                 instance = form.save()
-#                 # instance.user = request.user
-#                 # instance.user = UserProfile.objects.get(user=request.user)
-#                 instance.save()
-#                 for f in formset.cleaned_data:
-#                     if f:
-#                         orgaznier, _ = Organizer.objects.get_or_create(**f)
-#                         orgaznier.user = request.user
-#                         if orgaznier not in instance.organizers.all():
-#                             instance.organizers.add(orgaznier)
-#                         # instance.user.id = request.user.id
-#                 instance.save()
-#             return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
-#         else:
-#             form = TournamentForm()
-#         return(
-#             render(request, "add_tournament.html", {"form": form, "formset": formset })
-#         )
-#     else:
-#         return redirect(reverse('login'))
 
 
 def edit_tournament(request, tournament_id):
