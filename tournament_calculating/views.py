@@ -163,12 +163,6 @@ def draw_fights(request, group_id):
         for participant in participants:
             participants_ids.append(participant.id)
 
-    if participants:
-        first_participant = participants[0]
-        after_replace = participants.order_by('-id')
-        last_participant = after_replace[0]
-        listed_participants = list(participants)
-
     listed_names = []
     my_li = []
     a = []
@@ -210,7 +204,6 @@ def draw_fights(request, group_id):
 
     if participants:
         for r in result:
-            print(r[0])
             if fights.filter(fighter_one=r[0]).exists():
                 fights.filter(fighter_one=r[0]).delete()
             else:
@@ -231,11 +224,8 @@ def draw_fights(request, group_id):
         "tournament": tournament,
         "group_id": group_id,
         "participants": participants,
-        "first_participant": first_participant,
-        "last_participant": last_participant,
         "result": result,
         "listed_names":listed_names,
-        "listed_participants": listed_participants,
         "participants_names": participants_names,
         "my_li":my_li,
         "name_to_show1":name_to_show1,
