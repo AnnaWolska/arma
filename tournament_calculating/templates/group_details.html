@@ -8,11 +8,11 @@
 {% block content %}
 <div class="list-group">
     <ol>
-        <li class="list-group-item">
+        <br class="list-group-item">
             <p>
                 <h5>
                     grupa {{  number }} turnieju:
-                    <a <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >
+                    <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >
                         {{  tournament.title }}
                     </a>
                 </h5>
@@ -27,21 +27,22 @@
                         Usuń grupę
                     </a>
                 </button>
-
-{#                <button id="delete_tournament" type="button" style="background-color:orange "  class="btn btn-primary">#}
-{#                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:draw_fights:' tournament.id group_id%}">#}
-{#                        wylosuj walki w grupie #}
-{#                    </a>#}
-{#                </button>#}
-
+                    <button id="delete_tournament" type="button" style="background-color:limegreen"  class="btn btn-primary">
+                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:draw_fights' group_id %}">
+                        Losuj walki
+                    </a>
+                </button>
                 {% endif %}
+                </br>
+                </br>
                 uczestnicy:
+                </br>
                 {% for participant in participants %}
                 <ul>
                     <li>
                         <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
                             {{  participant.name }}
-                        <a/>
+                        </a>
                         {% if tournament.user == request.user %}
                         <a style="color: red" href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >
                             usuń
@@ -50,13 +51,15 @@
                     {% endif %}
                 </ul>
                 {% endfor %}
-            </div>
-            <hr>
-            <div>
-                {% if image %}
-                {% thumbnail image "300x300" as im %}
-                <img src="{{ im.url }}" alt="zdj">
-                {% endthumbnail %}
-                {% endif %}
-            </div>
-            {% endblock %}
+            </ol>
+        </ol>
+    </div>
+    <hr>
+    <div>
+        {% if image %}
+        {% thumbnail image "300x300" as im %}
+        <img src="{{ im.url }}" alt="zdj">
+        {% endthumbnail %}
+        {% endif %}
+    </div>
+    {% endblock %}

@@ -2,135 +2,95 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
-
 {% block style %}
-    <link href ="{% static "tournaments_calculating/css/style.css" %}" rel = "stylesheet">
+<link href ="{% static "tournaments_calculating/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
-
 {% block content %}
-
-  <div class="list-group">
-        <ol>
-            <li class="list-group-item">
-            <p>  <h5> grupa {{  number }} turnieju:  <a <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >{{  tournament.title }} </a> </h5>
+<div class="list-group">
+    <ol>
+        <br class="list-group-item">
+            <p>
+                <h5>
+                    grupa {{  number }} turnieju:
+                    <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >
+                        {{  tournament.title }}
+                    </a>
+                </h5>
                 {% if tournament.user == request.user %}
-         <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}"> Dodaj uczestnika </a></button>
-                      <button id="delete_tournament" type="button" style="background-color:red"  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_group' group_id tournament.id %}"> Usuń grupę </a></button>
-{#                     <button id="delete_tournament" type="button" style="background-color:orange "  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:draw_fights:' tournament.id group_id%}"> wylosuj walki w grupie </a></button>#}
+                <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
+                    <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}">
+                        Dodaj uczestnika
+                    </a>
+                </button>
+                <button id="delete_tournament" type="button" style="background-color:red"  class="btn btn-primary">
+                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_group' group_id tournament.id %}">
+                        Usuń grupę
+                    </a>
+                </button>
                 {% endif %}
-            uczestnicy:
-             <br/>
-            <ol>
-             <br/>
-            {% for participant in participants %}
-
-                 <li> <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >{{  participant.name }} </a>
-                      {% if tournament.user == request.user %}
-                     <a style="color: red" href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >  usuń </a> </li>
-                 {% endif %}
-
-            {% endfor %}
-             <br/>
- </ol>
-
-            walki:
-             <br/>
-
-           <ol>
-            <br/>
-{#            {%  for r in result %}#}
-{#            <li><p> {{r}} </p></li>#}
-
-{#       <li><p>{{ r }} <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary"><a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:tournament_calculate' group_id fight_id %}"> dodaj starcia </a></button></p></li>#}
-{#        {% endfor %}#}
-
-{#            {% for f in name_to_show1%}#}
-{#                    <li><p> {{f}}  walczy z {{ n }} </p></li>#}
-{#           {% endfor %}#}
-
-
-{#                    {%  for l in left_participant %}#}
-{#                                <li><p>{{ l }}</p></li>#}
-{#                {% endfor %}#}
-{##}
-{#           {% for el in left_names  %}#}
-{#           <li><p> {{ el }}   walczy z: </p></li>#}
-{#           {% endfor %}#}
-
-
-
-<style> td, th { border: 1px solid black; } </style>
-           <table BORDER CELLSPACING=5 CELLPADDING=15>
-
- <tr> {% for i in fights_numbers %}
-        <td> {{ i }}</td>
-           {% endfor %}
-</tr>
-   <tr>
-        {% for el in left_names  %}
-      <td> {{ el }}</td>
-       {% endfor %}
-</tr>
-
-   <tr>
-       {% for rn in right_names  %}
-      <td>{{ rn }}</td>
-        {% endfor %}
-   </tr>
-
-</table>
-
-
-
-
-
-{#                <table>#}
-{#          {% for el in left_names  %}#}
-{#   <tr>#}
-{# {{ el }}#}
-{#   </tr>#}
-{# {% endfor %}#}
-{##}
-{#   <tr>#}
-{#       {% for rn in right_names  %}#}
-{#{{ rn }}#}
-{#        {% endfor %}#}
-{#   </tr>#}
-{##}
-{#</table>#}
-
-
-<style> td, th { border: 1px solid black; } </style>
-<!-- ustawienie czarnego obramowania tabeli w CSS -->
-
-{#<table BORDER CELLSPACING=5 CELLPADDING=15>#}
-{#   <thead>#}
-{#      <tr> <th> Pierwszy zawodnik <th> Drugi zawodnik#}
-{#   <tbody>#}
-{#      <tr> <td> Historia <td> Nowak#}
-{#      <tr> <td> Historia <td> Mazur#}
-{#      <tr> <td> Fizyka   <td> Nowak#}
-{#      <tr>  Fizyka   <td> Mazur#}
-{##}
-{#{% for el in left_names  %}#}
-{#     <tr><td>   {{ el }} </tr>{% endfor %}   {% for rn in right_names  %}<tr> {{ rn }}   {% endfor %}#}
-{##}
-{##}
-{#</table>#}
-
-
-        </ol>
-
-  </div>
-
-<hr>
-     <div>
+                </br>
+                </br>
+                uczestnicy:
+                <br/>
+                <ol>
+                    <br/>
+                    {% for participant in participants %}
+                    <li>
+                        <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
+                            {{  participant.name }}
+                        </a>
+                        {% if tournament.user == request.user %}
+                        <a style="color: red" href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >
+                            usuń
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    <br/>
+                </ol>
+                walki:
+                <br/>
+                <ol>
+                    <br/>
+                    <style>
+                        td, th { border: 1px solid black; }
+                    </style>
+                    <table BORDER CELLSPACING=5 CELLPADDING=15>
+                        <tr>
+                            {% for i in fights_numbers %}
+                            <td>
+                                {{ i }}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            {% for el in left_names  %}
+                            <td>
+                            {{ el }}
+{#                                <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >#}
+{#                             {{ el }} </a>#}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            {% for rn in right_names  %}
+                            <td>
+                                {{ rn }}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                    </table>
+                    <style>
+                        td, th { border: 1px solid black; }
+                    </style>
+                </ol>
+            </div>
+            <hr>
+            <div>
                 {% if image %}
-                    {% thumbnail image "300x300" as im %}
-                      <img src="{{ im.url }}" alt="zdj">
-                     {% endthumbnail %}
-             {% endif %}
-     </div>
-
-{% endblock %}
-
+                {% thumbnail image "300x300" as im %}
+                <img src="{{ im.url }}" alt="zdj">
+                {% endthumbnail %}
+                {% endif %}
+            </div>
+            {% endblock %}

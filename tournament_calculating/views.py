@@ -154,6 +154,7 @@ def draw_fights(request, group_id):
     tournament = group.tournament
     fights = Fight.objects.all()
     participants = group.participants.all()
+
     participants_names = []
     participants_ids = []
 
@@ -196,6 +197,11 @@ def draw_fights(request, group_id):
     for r in right_participant:
         right_names.append(r.name)
 
+
+    # for participant in participants:
+    #     if participant.name in left_names:
+    #         participant.name =
+
     for r in result:
         name_to_show1.append(r[0])
         name_to_show2.append(r[1])
@@ -218,6 +224,8 @@ def draw_fights(request, group_id):
     fights_numbers = []
     for i in range(1,len(left_names) + 1):
         fights_numbers.append(i)
+
+
 
     return render(request, "group_sorted.html", context={
         "number": number,
