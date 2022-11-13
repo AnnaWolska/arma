@@ -2,42 +2,52 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
-
 {% block style %}
-    <link href ="{% static "tournaments_calculating/css/style.css" %}" rel = "stylesheet">
+<link href ="{% static "tournaments_calculating/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
-
 {% block content %}
-    <h3><a style="text-decoration: none;" href = "{% url 'tournament_calculating:participants_list' %}"> <-Powrót do listy uczestników </a></h3>
-
-  <div class="list-group">
+<h3>
+    <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participants_list' %}">
+        <-Powrót do listy uczestników </a>
+    </h3>
+    <div class="list-group">
         <ol>
             <li class="list-group-item">
-            <p>  <h5>{{  name }} z {{ school }}</h5>
-
-            turnieje:
-            {% for tournament in tournaments %}
-                 <ul>
-                 <li><a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >{{  tournament.title }} </a></li>
-                 </ul>
-            {% endfor %}
-
-            grupy:
-             {% for group in groups %}
-                 <ul>
-                 <li> <a style="text-decoration: none; color:blue;" href = "{% url 'tournament_calculating:group_details' group.id %}" > {{ group.number }} </a>   w <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' group.tournament.id %}" >{{  group.tournament.title }} </a></li>
-                 </ul>
-            {% endfor %}
-  </div>
-
-<hr>
-     <div>
-        {% if image %}
-                {% thumbnail image "300x300" as im %}
-                  <img src="{{ im.url }}" alt="zdj">
-                 {% endthumbnail %}
-         {% endif %}
-     </div>
-
-{% endblock %}
-
+                <p>
+                    <h5>
+                        {{  name }} z {{ school }}
+                    </h5>
+                    turnieje:
+                    {% for tournament in tournaments %}
+                    <ul>
+                        <li>
+                            <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >
+                                {{  tournament.title }}
+                            </a>
+                        </li>
+                    </ul>
+                    {% endfor %}
+                    grupy:
+                    {% for group in groups %}
+                    <ul>
+                        <li>
+                            <a style="text-decoration: none; color:blue;" href = "{% url 'tournament_calculating:group_details' group.id %}" >
+                                {{ group.number }}
+                            </a>
+                            w
+                            <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' group.tournament.id %}" >
+                                {{  group.tournament.title }}
+                            </a>
+                        </li>
+                    </ul>
+                    {% endfor %}
+                </div>
+                <hr>
+                <div>
+                    {% if image %}
+                    {% thumbnail image "300x300" as im %}
+                    <img src="{{ im.url }}" alt="zdj">
+                    {% endthumbnail %}
+                    {% endif %}
+                </div>
+                {% endblock %}

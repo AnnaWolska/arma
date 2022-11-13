@@ -64,11 +64,19 @@
                             {% endfor %}
                         </tr>
                         <tr>
-                            {% for el in left_names  %}
+{#                            {% for el in left_names  %}#}
+                                {% for fight in fights_to_show %}
+{#                                    {% for prp in prtcp_to_show %}#}
+{#                                {% for fight in fights %}#}
                             <td>
-                            {{ el }}
-{#                                <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >#}
-{#                             {{ el }} </a>#}
+{#                            {{ el }}#}
+                                {{ fight.fighter_one.name }}
+{#                                {{ prp.name }}#}
+
+{#                            <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant_id %}" >#}
+{#                             {{ fight.fighter_one.name }}#}
+{#                                </a>#}
+
                             </td>
                             {% endfor %}
                         </tr>

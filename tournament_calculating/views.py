@@ -127,6 +127,7 @@ def draw_fights(request, group_id):
     number = group.number
     tournament = group.tournament
     fights = Fight.objects.all()
+    # fights = Fight.objects.filter(pk=group_id)
     participants = group.participants.all()
 
     participants_names = []
@@ -199,13 +200,24 @@ def draw_fights(request, group_id):
                 tournament=tournament,
                 # fighter_one=group.participants.get(id=result[0][0].id),
                 # fighter_two=group.participants.get(id=result[0][1].id)
-                fighter_one = group.participants.get(id=r[0].id),
-                fighter_two = group.participants.get(id=r[1].id)
+                fighter_one=group.participants.get(id=r[0].id),
+                fighter_two=group.participants.get(id=r[1].id)
             )
 
     fights_numbers = []
     for i in range(1,len(left_names) + 1):
         fights_numbers.append(i)
+
+    fights_to_show = fights.filter(group_id=group_id)
+
+
+    # prtcp_to_show = participants.filter(group_id=group_id)
+    # prtcp_to_show = Group.group_participants.objects.get(pk=group_id)
+    # jak się wyciagnąć qs z tabeli group_participants ????
+    # prtcp_to_show = Participant.objects.select_related(groups__fights).all()
+    # prtcp_to_show = Participant.objects.select_related('fighters_one').all()
+    prtcp_to_show = Participant.objects.fighters_one.all()
+    print(prtcp_to_show)
 
     return render(request, "group_sorted.html", context={
         "number": number,
@@ -213,16 +225,19 @@ def draw_fights(request, group_id):
         "group_id": group_id,
         "participants": participants,
         "result": result,
-        "listed_names":listed_names,
+        "listed_names": listed_names,
         "participants_names": participants_names,
-        "my_li":my_li,
-        "name_to_show1":name_to_show1,
+        "my_li": my_li,
+        "name_to_show1": name_to_show1,
         "name_to_show2": name_to_show2,
-        "left_participant":left_participant,
+        "left_participant": left_participant,
         "right_participant": right_participant,
-        "left_names":left_names,
-        "right_names":right_names,
-        "fights_numbers":fights_numbers
+        "left_names": left_names,
+        "right_names": right_names,
+        "fights_numbers": fights_numbers,
+        "fights": fights,
+        "fights_to_show": fights_to_show,
+        # "prtcp_to_show": prtcp_to_show
     })
 
 
