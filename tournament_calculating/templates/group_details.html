@@ -55,6 +55,55 @@
         </ol>
     </div>
     <hr>
+
+
+     walki:
+                <br/>
+                <ol>
+                    <br/>
+                    <style>
+                        td, th { border: 1px solid black; }
+                    </style>
+                    <table BORDER CELLSPACING=5 CELLPADDING=15>
+                        <tr>
+                            {% for i in fights_numbers %}
+                            <td>
+                                {{ i }}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                                {% for fighter in fighters_one_names %}
+                            <td>
+                                {{ fighter.name }}
+{#                        <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >#}
+
+                                </a>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            {% for fighter in fighters_two_names  %}
+                            <td>
+                                {{ fighter.name }}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                                            </tr>
+
+                    </table>
+                    <style>
+                        td, th { border: 1px solid black; }
+                    </style>
+                </ol>
+            </div>
+            <hr>
+
+
+
+
+
+
     <div>
         {% if image %}
         {% thumbnail image "300x300" as im %}

@@ -45,11 +45,39 @@ def group_details(request, group_id):
     number = group.number
     tournament = group.tournament
     participants = group.participants.all()
+    participants_ids = []
+    for p in participants:
+        participants_ids.append(p.id)
+    fights = group.fights.all()
+
+    fighter_one_ids = []
+    for f in fights:
+        fighter_one_ids.append(f.fighter_one_id)
+
+    fighter_two_ids = []
+    for f in fights:
+        fighter_two_ids.append((f.fighter_two_id))
+
+    fighters_one_names = []
+    for el in fighter_one_ids:
+        fighters_one_names.append(participants.get(id=el))
+
+    fighters_two_names = []
+    for el in fighter_two_ids:
+        fighters_two_names.append(participants.get(id=el))
+
+    fights_numbers = []
+    for i in range(1,len(fighters_one_names) + 1):
+        fights_numbers.append(i)
+
     return render(request, "group_details.html", context={
         "number": number,
         "tournament": tournament,
         "group_id": group_id,
         "participants": participants,
+        "fighters_one_names": fighters_one_names,
+        "fights_numbers": fights_numbers,
+        "fighters_two_names": fighters_two_names
     })
 
 
@@ -127,12 +155,10 @@ def draw_fights(request, group_id):
     number = group.number
     tournament = group.tournament
     fights = Fight.objects.all()
-    # fights = Fight.objects.filter(pk=group_id)
     participants = group.participants.all()
 
     participants_names = []
     participants_ids = []
-
     if participants:
         for participant in participants:
             participants_names.append(participant.name)
@@ -143,11 +169,9 @@ def draw_fights(request, group_id):
     my_li = []
     a = []
     result = []
-
     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(participants_ids, r) for r in range(2, 2 + 1)))
 
     participants_pairs_objects = []
-
     for pair in participants_pairs:
         participants_pairs_objects.append(Participant.objects.filter(pk__in=pair))
 
@@ -165,41 +189,23 @@ def draw_fights(request, group_id):
 
     left_names = []
     right_names = []
-
     for l in left_participant:
         left_names.append(l.name)
-
     for r in right_participant:
         right_names.append(r.name)
-
-
-    # for participant in participants:
-    #     if participant.name in left_names:
-    #         participant.name =
-
     for r in result:
         name_to_show1.append(r[0])
         name_to_show2.append(r[1])
 
     rounds = 0
-
     if participants:
         print("result:")
         print(result)
         for r in result:
-            # if r:
-
-            print("r")
-            print(r)
-            # if fights.filter(fighter_one=r[0]).exists():
-            #     fights.filter(fighter_one=r[0]).delete()
-            # else:
             fights.get_or_create(
                 group=group,
                 rounds=rounds,
                 tournament=tournament,
-                # fighter_one=group.participants.get(id=result[0][0].id),
-                # fighter_two=group.participants.get(id=result[0][1].id)
                 fighter_one=group.participants.get(id=r[0].id),
                 fighter_two=group.participants.get(id=r[1].id)
             )
@@ -209,15 +215,6 @@ def draw_fights(request, group_id):
         fights_numbers.append(i)
 
     fights_to_show = fights.filter(group_id=group_id)
-
-
-    # prtcp_to_show = participants.filter(group_id=group_id)
-    # prtcp_to_show = Group.group_participants.objects.get(pk=group_id)
-    # jak się wyciagnąć qs z tabeli group_participants ????
-    # prtcp_to_show = Participant.objects.select_related(groups__fights).all()
-    # prtcp_to_show = Participant.objects.select_related('fighters_one').all()
-    prtcp_to_show = Participant.objects.fighters_one.all()
-    print(prtcp_to_show)
 
     return render(request, "group_sorted.html", context={
         "number": number,
@@ -237,7 +234,6 @@ def draw_fights(request, group_id):
         "fights_numbers": fights_numbers,
         "fights": fights,
         "fights_to_show": fights_to_show,
-        # "prtcp_to_show": prtcp_to_show
     })
 
 
