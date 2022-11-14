@@ -75,9 +75,8 @@
                         <tr>
                                 {% for fighter in fighters_one_names %}
                             <td>
-                                {{ fighter.name }}
-{#                        <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >#}
-
+                                <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
+                            {{ fighter.name }}
                                 </a>
                             </td>
                             {% endfor %}
@@ -85,22 +84,13 @@
                         <tr>
                             {% for fighter in fighters_two_names  %}
                             <td>
+                     <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                                 {{ fighter.name }}
                             </td>
                             {% endfor %}
                         </tr>
-
                                            <tr>
-                            {% for p in prtcp  %}
-                            <td>
-
-{#                    <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >#}
-                        {{ p }}
-                            </td>
-                            {% endfor %}
                         </tr>
-
-
                                             </tr>
 
                     </table>
