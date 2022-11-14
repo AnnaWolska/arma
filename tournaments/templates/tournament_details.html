@@ -44,30 +44,21 @@
                             Edytuj turniej
                         </a>
                     </button>
-                    <p>
-                        {% endif %}
-                        <hr>
-                        wszyscy uczestnicy:
-                        <br>
-                        <ol>
-                            {% for participant in participants %}
-                            <li>
-                                <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
-                                    {{ participant.name }}
-                                </a>
-                            </li>
-                            {% endfor %}
-                        </ol>
-                        <hr>
-                        {% if user == request.user %}
-                        <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
+
+                                                <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
                             <a style="color:white;" href = "{% url 'tournaments:add_group' tournament_id%}">
                                 dodaj grupę
                             </a>
                         </button>
-                        <p>
-                            {% endif %}
+
+
+                        {% endif %}
+
+{#                        {% if user == request.user %}#}
+{##}
+{#                            {% endif %}#}
                             <br>
+             <hr>
                             grupy:
                             <ul>
                                 {% for group in groups %}
@@ -95,6 +86,22 @@
                             <br>
                         </div>
                         <hr>
+
+
+                        wszyscy uczestnicy:
+     <br>
+                        <br>
+                        <ol>
+                            {% for participant in participants %}
+                            <li>
+                                <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
+                                    {{ participant.name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ol>
+                        <hr>
+
                         <div>
                             {% if image %}
                             {% thumbnail image "300x300" as im %}

@@ -70,6 +70,31 @@ def group_details(request, group_id):
     for i in range(1,len(fighters_one_names) + 1):
         fights_numbers.append(i)
 
+    print(participants_ids)
+    print(fights)
+    print(fighter_one_ids)
+    print("fighters_one_names")
+    print(fighters_one_names)
+    print(fights_numbers)
+
+    prtcp_to_show = []
+    for p in participants:
+        if p in fighters_one_names:
+            prtcp_to_show.append(p)
+    print("prtcp_to_show")
+    print(prtcp_to_show)
+    for p in prtcp_to_show:
+        print(p)
+
+    prtcp = []
+    # for i in range(1, len(fighters_one_names) + 1):
+    for element in fighters_one_names:
+        prtcp.append(participants.filter(name=element.name))
+    print("prtcp")
+    print(prtcp)
+    for p in prtcp:
+        print(p)
+
     return render(request, "group_details.html", context={
         "number": number,
         "tournament": tournament,
@@ -77,7 +102,8 @@ def group_details(request, group_id):
         "participants": participants,
         "fighters_one_names": fighters_one_names,
         "fights_numbers": fights_numbers,
-        "fighters_two_names": fighters_two_names
+        "fighters_two_names": fighters_two_names,
+        "prtcp": prtcp
     })
 
 
@@ -117,9 +143,7 @@ def add_group(request, tournament_id):
         groups = tournament.groups.all()
         many_group_numbers = []
         for g in groups:
-            print(g.number)
             many_group_numbers.append(g.number)
-            print(many_group_numbers)
         if request.method == "POST" and form.is_valid():
             number = form.cleaned_data['number']
             if number not in many_group_numbers:
@@ -199,8 +223,6 @@ def draw_fights(request, group_id):
 
     rounds = 0
     if participants:
-        print("result:")
-        print(result)
         for r in result:
             fights.get_or_create(
                 group=group,
@@ -216,7 +238,8 @@ def draw_fights(request, group_id):
 
     fights_to_show = fights.filter(group_id=group_id)
 
-    return render(request, "group_sorted.html", context={
+    # return render(request, "group_sorted.html", context={
+    return render(request, "group_details.html", context={
         "number": number,
         "tournament": tournament,
         "group_id": group_id,
@@ -234,6 +257,7 @@ def draw_fights(request, group_id):
         "fights_numbers": fights_numbers,
         "fights": fights,
         "fights_to_show": fights_to_show,
+        # "drew_fights": draw_fights(request,group_id)
     })
 
 

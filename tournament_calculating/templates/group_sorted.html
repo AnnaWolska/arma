@@ -48,6 +48,8 @@
                     {% endfor %}
                     <br/>
                 </ol>
+
+
                 walki:
                 <br/>
                 <ol>
@@ -56,6 +58,7 @@
                         td, th { border: 1px solid black; }
                     </style>
                     <table BORDER CELLSPACING=5 CELLPADDING=15>
+
                         <tr>
                             {% for i in fights_numbers %}
                             <td>
@@ -64,22 +67,9 @@
                             {% endfor %}
                         </tr>
                         <tr>
-{#                            {% for el in left_names  %}#}
                                 {% for fight in fights_to_show %}
-{#                                    {% for prp in prtcp_to_show %}#}
-{#                                {% for fight in fights %}#}
-
-
-
                             <td>
-{#                            {{ el }}#}
                                 {{ fight.fighter_one.name }}
-{#                                {{ prp.name }}#}
-
-{#                            <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant_id %}" >#}
-{#                             {{ fight.fighter_one.name }}#}
-{#                                </a>#}
-
                             </td>
                             {% endfor %}
                         </tr>
@@ -90,23 +80,9 @@
                             </td>
                             {% endfor %}
                         </tr>
-
                                             </tr>
-{#                        <tr>#}
-{#                            {% for f in  fights %}#}
-{#                            <td>#}
-{#                                {{ f.fighter_one_id }}#}
-{#                            #}
-{#                            </td>#}
-{#                            {% endfor %}#}
-{#                        </tr>#}
-
-
-
-
-
-
                     </table>
+
                     <style>
                         td, th { border: 1px solid black; }
                     </style>
@@ -114,6 +90,9 @@
             </div>
             <hr>
             <div>
+
+
+
                 {% if image %}
                 {% thumbnail image "300x300" as im %}
                 <img src="{{ im.url }}" alt="zdj">
