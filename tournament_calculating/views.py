@@ -1,4 +1,5 @@
 import itertools
+import random
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -189,8 +190,6 @@ def draw_fights(request, group_id):
         for participant in participants:
             participants_ids.append(participant.id)
 
-    listed_names = []
-    my_li = []
     a = []
     result = []
     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(participants_ids, r) for r in range(2, 2 + 1)))
@@ -221,9 +220,16 @@ def draw_fights(request, group_id):
         name_to_show1.append(r[0])
         name_to_show2.append(r[1])
 
+    # n = 0
+    # while result[n] != result[n+1]:
+    #     random.shuffle(result)
+    #     n += 1
+
     rounds = 0
     if participants:
         for r in result:
+            print("r")
+            print(r)
             fights.get_or_create(
                 group=group,
                 rounds=rounds,
@@ -238,16 +244,25 @@ def draw_fights(request, group_id):
 
     fights_to_show = fights.filter(group_id=group_id)
 
-    # return render(request, "group_sorted.html", context={
+    print("fights")
+    print(fights[0])
+    print("participants_names")
+    print(participants_names[0])
+    print("result")
+    print(result)
+    print("name_to_show1")
+    print(name_to_show1[0])
+    print("participant_pairs_objects")
+    print(participants_pairs_objects[0])
+
+
     return render(request, "group_details.html", context={
         "number": number,
         "tournament": tournament,
         "group_id": group_id,
         "participants": participants,
         "result": result,
-        "listed_names": listed_names,
         "participants_names": participants_names,
-        "my_li": my_li,
         "name_to_show1": name_to_show1,
         "name_to_show2": name_to_show2,
         "left_participant": left_participant,
@@ -257,7 +272,6 @@ def draw_fights(request, group_id):
         "fights_numbers": fights_numbers,
         "fights": fights,
         "fights_to_show": fights_to_show,
-        # "drew_fights": draw_fights(request,group_id)
     })
 
 

@@ -11,7 +11,7 @@ from django.contrib.auth import get_user_model
 def home_view(request):
     return render(request, 'home.html')
 
-
+# jeden return?
 def contact(request):
     if request.method == "POST":
         form = ContactForm(data=request.POST)
@@ -46,7 +46,7 @@ def user_profile(request, user_id):
     return render(request, 'userprofile.html', {'form':form})
 
 
-
+# user_profile_exists = UserProfile.objects.filter(user=user).exists()
 
 
 #
