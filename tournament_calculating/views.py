@@ -220,16 +220,24 @@ def draw_fights(request, group_id):
         name_to_show1.append(r[0])
         name_to_show2.append(r[1])
 
-    # n = 0
-    # while result[n] != result[n+1]:
-    #     random.shuffle(result)
-    #     n += 1
+    result_to_show = []
+    result_to_show.append(result[0])
+    y = result_to_show[-1]
+
+    n = 1
+    while len(result_to_show) != len(result):
+        if result_to_show[n - 1][0] != result[n][0]:
+            result_to_show.append(result[n])
+            n += 1
+        else:
+            random.shuffle(result)
+    print("newlisvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvt")
+    for f in result_to_show:
+        print(f)
 
     rounds = 0
     if participants:
-        for r in result:
-            print("r")
-            print(r)
+        for r in result_to_show:
             fights.get_or_create(
                 group=group,
                 rounds=rounds,
@@ -243,18 +251,6 @@ def draw_fights(request, group_id):
         fights_numbers.append(i)
 
     fights_to_show = fights.filter(group_id=group_id)
-
-    print("fights")
-    print(fights[0])
-    print("participants_names")
-    print(participants_names[0])
-    print("result")
-    print(result)
-    print("name_to_show1")
-    print(name_to_show1[0])
-    print("participant_pairs_objects")
-    print(participants_pairs_objects[0])
-
 
     return render(request, "group_details.html", context={
         "number": number,
