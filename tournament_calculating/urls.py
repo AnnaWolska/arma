@@ -1,7 +1,7 @@
 from django.urls import path
 from tournament_calculating.views import participants_list, participant_details, group_details, add_participant, \
     delete_group_participant, draw_fights, \
-    tournament_calculate, delete_group
+    tournament_calculate, delete_group, delete_fights
 
 app_name = "tournament_calculating"
 urlpatterns = [
@@ -13,5 +13,7 @@ urlpatterns = [
     path('<int:group_id>/<int:fight_id>/add_rounds/', tournament_calculate, name="tournament_calculate"),
     path('<int:group_id>/<int:tournament_id>/<int:participant_id>/delete_group_participant/', delete_group_participant,
          name="delete_group_participant"),
-    path('<int:group_id>/<int:tournament_id>/delete_group/', delete_group, name="delete_group")
+    path('<int:group_id>/<int:tournament_id>/delete_group/', delete_group, name="delete_group"),
+    path('<int:group_id>/<int:tournament_id>/delete_fights/', delete_fights, name="delete_fights"),
+    # path('<int:tournament_id>/<int:group_id>/delete_fights/', delete_fights, name="delete_fights")
 ]

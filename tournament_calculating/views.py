@@ -77,7 +77,6 @@ def group_details(request, group_id):
             prtcp_to_show.append(p)
 
     prtcp = []
-    # for i in range(1, len(fighters_one_names) + 1):
     for element in fighters_one_names:
         prtcp.append(participants.filter(name=element.name))
 
@@ -211,7 +210,6 @@ def draw_fights(request, group_id):
     n = 1
     while len(result_to_show) != len(result):
         if result_to_show[n - 1][0] != result[n][0] and result_to_show[n - 1][1] != result[n][1] and result[n] not in result_to_show:
-            # elif result[n] not in result_to_show:
             result_to_show.append(result[n])
             n += 1
         else:
@@ -351,3 +349,55 @@ def tournament_calculate(request, group_id, fight_id):
                     "participants_names": participants_names,
                 })
             )
+
+
+# def delete_fights(request, group_id):
+#     user = request.user
+#     tournament = Tournament.objects.get(pk=tournament_id)
+#     group = Group.objects.get(pk=group_id)
+#     if request.user.is_authenticated:
+#         if request.method == "POST":
+#             tournament = Tournament.objects.get(pk=tournament_id)
+#             group = Group.objects.get(pk=group_id)
+#             if request.user == tournament.user:
+#                 group.delete()
+#                 return HttpResponseRedirect(reverse(
+#                     "tournaments:tournament_details",
+#                     args=[tournament_id])
+#                     )
+#         else:
+#             if user.is_authenticated:
+#                 return render(request, "delete_group.html", context={
+#                  "tournament": tournament,
+#                  "group": group,
+#                  'tournament_id': tournament_id,
+#                  'group_id': group_id,
+#                  })
+
+def delete_fights(request, tournament_id, group_id):
+    user = request.user
+    tournament = Tournament.objects.get(pk=tournament_id)
+    group = Group.objects.get(pk=group_id)
+    fights = group.fights.all()
+    print(fights)
+
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            tournament = Tournament.objects.get(pk=tournament_id)
+            group = Group.objects.get(pk=group_id)
+            # fights =.filter(pk=group_id)
+            if request.user == tournament.user:
+                    fights.delete()
+                    # return HttpResponseRedirect(reverse("tournaments:tournament_details",
+                    #                                     args=[tournament_id]))
+                    return HttpResponseRedirect(reverse("tournament_calculating:group_details",
+                                                        args=[group_id]))
+        else:
+            if user.is_authenticated:
+                return render(request, "delete_fights.html", context={
+                 "tournament": tournament,
+                 "group": group,
+                 "fights": fights,
+                 'tournament_id': tournament_id,
+                 'group_id': group_id,
+                 })

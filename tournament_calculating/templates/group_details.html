@@ -32,6 +32,13 @@
                         Losuj walki
                     </a>
                 </button>
+                    <button id="delete_tournament" type="button" style="background-color:darkred"  class="btn btn-primary">
+                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_fights' group_id tournament.id   %}">
+                    usuń walki
+                    </a>
+                </button>
+
+
                 {% endif %}
                 </br>
                 </br>
