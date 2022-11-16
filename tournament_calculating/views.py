@@ -71,30 +71,15 @@ def group_details(request, group_id):
     for i in range(1,len(fighters_one_names) + 1):
         fights_numbers.append(i)
 
-    print(participants_ids)
-    print(fights)
-    print(fighter_one_ids)
-    print("fighters_one_names")
-    print(fighters_one_names)
-    print(fights_numbers)
-
     prtcp_to_show = []
     for p in participants:
         if p in fighters_one_names:
             prtcp_to_show.append(p)
-    print("prtcp_to_show")
-    print(prtcp_to_show)
-    for p in prtcp_to_show:
-        print(p)
 
     prtcp = []
     # for i in range(1, len(fighters_one_names) + 1):
     for element in fighters_one_names:
         prtcp.append(participants.filter(name=element.name))
-    print("prtcp")
-    print(prtcp)
-    for p in prtcp:
-        print(p)
 
     return render(request, "group_details.html", context={
         "number": number,
@@ -223,21 +208,24 @@ def draw_fights(request, group_id):
     result_to_show = []
     result_to_show.append(result[0])
     y = result_to_show[-1]
-
     n = 1
     while len(result_to_show) != len(result):
-        if result_to_show[n - 1][0] != result[n][0]:
+        if result_to_show[n - 1][0] != result[n][0] and result_to_show[n - 1][1] != result[n][1] and result[n] not in result_to_show:
+            # elif result[n] not in result_to_show:
             result_to_show.append(result[n])
             n += 1
         else:
             random.shuffle(result)
-    print("newlisvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvt")
-    for f in result_to_show:
-        print(f)
 
+    print("result_to_show")
+    for el in result_to_show:
+        print(el)
     rounds = 0
     if participants:
         for r in result_to_show:
+            print(r)
+            print(r[0])
+            print(r[1])
             fights.get_or_create(
                 group=group,
                 rounds=rounds,
