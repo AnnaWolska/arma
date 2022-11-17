@@ -65,6 +65,14 @@
 
 
      walki:
+    <center>starcia:
+                        <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
+                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_rounds' group_id   %}">
+                    ile starć:
+                    </a>
+                </button>
+    {{ rounds }}
+    </center>
                 <br/>
                 <ol>
                     <br/>
@@ -103,7 +111,7 @@
                             <td>
 
                     <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
-                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_fights' group_id tournament.id   %}">
+                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_rounds' group_id   %}">
                     walka
                     </a>
                 </button>
