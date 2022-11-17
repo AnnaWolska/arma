@@ -10,6 +10,11 @@
     <ol>
         <br class="list-group-item">
             <p>
+                    <button id="delete_tournament" type="button" style="background-color:red"  class="btn btn-primary">
+                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_group' group_id tournament.id %}">
+                        Usuń grupę
+                    </a>
+                </button>
                 <h5>
                     grupa {{  number }} turnieju:
                     <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >
@@ -22,19 +27,14 @@
                         Dodaj uczestnika
                     </a>
                 </button>
-                <button id="delete_tournament" type="button" style="background-color:red"  class="btn btn-primary">
-                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_group' group_id tournament.id %}">
-                        Usuń grupę
-                    </a>
-                </button>
-                    <button id="delete_tournament" type="button" style="background-color:limegreen"  class="btn btn-primary">
+                    <button id="delete_tournament" type="button" style="background-color:green"  class="btn btn-primary">
                     <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:draw_fights' group_id %}">
                         Losuj walki
                     </a>
                 </button>
                     <button id="delete_tournament" type="button" style="background-color:darkred"  class="btn btn-primary">
                     <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_fights' group_id tournament.id   %}">
-                    usuń walki
+                    Usuń walki
                     </a>
                 </button>
 
@@ -51,7 +51,7 @@
                             {{  participant.name }}
                         </a>
                         {% if tournament.user == request.user %}
-                        <a style="color: red" href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >
+                        <a style="color:red;  column-count: 2;"   href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >
                             usuń
                         </a>
                     </li>
@@ -88,6 +88,7 @@
                             </td>
                             {% endfor %}
                         </tr>
+
                         <tr>
                             {% for fighter in fighters_two_names  %}
                             <td>
@@ -96,9 +97,20 @@
                             </td>
                             {% endfor %}
                         </tr>
-                                           <tr>
+
+                        <tr>
+                          {% for fighter in fighters_one_names %}
+                            <td>
+
+                    <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
+                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_fights' group_id tournament.id   %}">
+                    walka
+                    </a>
+                </button>
+                      </td>
+                                {% endfor %}
                         </tr>
-                                            </tr>
+
 
                     </table>
                     <style>
@@ -107,12 +119,6 @@
                 </ol>
             </div>
             <hr>
-
-
-
-
-
-
     <div>
         {% if image %}
         {% thumbnail image "300x300" as im %}

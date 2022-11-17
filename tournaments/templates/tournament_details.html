@@ -14,31 +14,40 @@
         <ol >
             <li class="list-group-item">
                 <p>
+
                     <h5>
-                        {{  title }}
-                    </h5>
-                    organizatorzy turnieju:
+                       turniej: {{  title }}
+
+
+             organizauje:
                     {% for organizer in organizers %}
-                    <ul>
-                        <li>
                             <a style="color:blue; text-decoration: none;" href = "{% url 'organizers:organizer_details' organizer.id %}" >
                                 {{  organizer.name }}
                             </a>
-                        </li>
-                    </ul>
-                    {% endfor %} wydarzenie utworzył użytkownik:
-                    <ul>
-                        <li>
-                            {{  user }} w dniu {{ created}}
-                        </li>
-                    </ul>
-                    <br>
-                    {% if user == request.user %}
-                    <button id="delete_tournament" type="button" style=" text-decoration: none; background-color:Tomato; "  class="btn btn-primary">
+                    {% endfor %}
+             {% if user == request.user %}
+                            <button id="delete_tournament" type="button" style=" text-decoration: none; background-color:Tomato; "  class="btn btn-primary">
                         <a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}">
                             Usuń turniej
                         </a>
                     </button>
+                {% endif %}
+                                        <div>
+                            {% if image %}
+                            {% thumbnail image "300x300" as im %}
+                            <img src="{{ im.url }}" alt="zdj">
+                            {% endthumbnail %}
+                            {% endif %}
+                        </div>
+
+                    </h5>
+
+                wydarzenie utworzył użytkownik:
+
+                            {{  user }} w dniu {{ created}}
+                    <br>
+                    <br>
+                    {% if user == request.user %}
                     <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary">
                         <a style="color:white;" href = "{% url 'tournaments:edit_tournament' tournament_id %}">
                             Edytuj turniej
@@ -47,28 +56,25 @@
 
                                                 <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
                             <a style="color:white;" href = "{% url 'tournaments:add_group' tournament_id%}">
-                                dodaj grupę
+                                Dodaj grupę
                             </a>
                         </button>
 
 
                         {% endif %}
-
-{#                        {% if user == request.user %}#}
-{##}
-{#                            {% endif %}#}
                             <br>
              <hr>
                             grupy:
-                            <ul>
+                            <ul style="column-count: 2;">
+{#                            <ul>#}
                                 {% for group in groups %}
                                 <li>
                                     <a style="color:blue" href = "{% url 'tournament_calculating:group_details' group.id %}" >
                                         grupa {{ group.number }}{{ first_particpant }}
                                     </a>
-                                    <button id="delete_tournament" type="button" style="background-color:limegreen; "  class="btn btn-primary">
+                                    <button id="delete_tournament" type="button" style="background-color:green; "  class="btn btn-primary">
                                         <a style="color:white;" href = "{% url 'tournament_calculating:draw_fights' group.id  %}">
-                                            Wylosuj walki w grupie {{ group.number }}
+                                            Losuj walki
                                         </a>
                                     </button>
                                 </li>
@@ -91,7 +97,7 @@
                         wszyscy uczestnicy:
      <br>
                         <br>
-                        <ol>
+                        <ol style="column-count: 3;">
                             {% for participant in participants %}
                             <li>
                                 <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
@@ -102,13 +108,7 @@
                         </ol>
                         <hr>
 
-                        <div>
-                            {% if image %}
-                            {% thumbnail image "300x300" as im %}
-                            <img src="{{ im.url }}" alt="zdj">
-                            {% endthumbnail %}
-                            {% endif %}
-                        </div>
+
                         <hr>
                         <h3>
                             Przejdź do galerii ->
