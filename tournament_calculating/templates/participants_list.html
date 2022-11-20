@@ -2,87 +2,78 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
-
 {% block content %}
-    <img src="/static/rycerz2.jpg" width="250" height="276" alt="zdj">
-{#        <p><h2>  <a href = "{% url 'tournament_calculating:add_participant' %}"> Zapsz się na turniej: </a>  </h2></p>#}
+<img src="/static/rycerz2.jpg" width="250" height="276" alt="zdj">
 <hr>
-        <h3>Lista uczestników turniejów:</h3>
-
-     <div class="pagination">
-        <span class = "step-links">
+<h3>
+    Lista uczestników turniejów:
+</h3>
+<div class="pagination">
+    <span class = "step-links">
         {% if participants_list.has_previous %}
-            <a style="text-decoration: none;" href="?page=1">&laquo; pierwsza</a>
-            <a style="text-decoration: none;" href="?page={{participants_list.previous_page_number }}">poprzednia</a>
+        <a style="text-decoration: none;" href="?page=1">
+            &laquo; pierwsza
+        </a>
+        <a style="text-decoration: none;" href="?page={{participants_list.previous_page_number }}">
+            poprzednia
+        </a>
         {% endif %}
         <span class="current">
             strona {{ participants_list.number}}  z {{ participants_list.paginator.num_pages }}
         </span>
         {% if participants_list.has_next %}
-            <a style="text-decoration: none;" href="?page={{ participants_list.next_page_number }}">następna</a>
-            <a style="text-decoration: none;" href="?page={{ participants_list.end_index }}">ostatnia</a>
+        <a style="text-decoration: none;" href="?page={{ participants_list.next_page_number }}">
+            następna
+        </a>
+        <a style="text-decoration: none;" href="?page={{ participants_list.end_index }}">
+            ostatnia
+        </a>
         {% endif %}
         {% if participants_list.end_index %}
         {% endif %}
-        </span>
-    </div>
-
-
+    </span>
+</div>
 {% for participant in participants_list  %}
-        <div class="list-group">
-        <ol>
-            <li class="list-group-item" >
-              <p style="font-family: cursive " > <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >{{ participant.name}} z {{ participant.school}} </a></p>
-
-                {% if participant.image %}
-                    {% thumbnail participant.image "300x300" as im %}
-                      <img src="{{ im.url }}" alt="zdj">
-                     {% endthumbnail %}
-             {% endif %}
-
-{#            {% if participant.tournaments %}#}
-{#            turnieje:#}
-{#            {% for tournament in tournaments %}#}
-{#            <li> {{ tournament.title }}</li>#}
-{#            {% endfor %}#}
-{#            {%  for participant in participants%}#}
-{#                 {{ participant.tournaments.title  }}#}
-{#            {% endfor %}#}
-{#            {% endif %}#}
-
-{#                         turnieje:#}
-{#                 {% for organizer in organizers %}#}
-{#                     <ul>#}
-{#                     <li>{{  organizer.name }}</li>#}
-{#                     </ul>#}
-{#                {% endfor %}#}
-
-
-
-
-            </li>
-        </ol>
-        </div>
-    {% endfor %}
-
-     <div class="pagination">
-        <span class = "step-links">
+<div class="list-group">
+    <ol>
+        <li class="list-group-item" >
+            <p style="font-family: cursive " >
+                <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
+                    {{ participant.name}} z {{ participant.school}}
+                </a>
+            </p>
+            {% if participant.image %}
+            {% thumbnail participant.image "300x300" as im %}
+            <img src="{{ im.url }}" alt="zdj">
+            {% endthumbnail %}
+            {% endif %}
+        </li>
+    </ol>
+</div>
+{% endfor %}
+<div class="pagination">
+    <span class = "step-links">
         {% if participants_list.has_previous %}
-            <a style="text-decoration: none;" href="?page=1">&laquo; pierwsza</a>
-            <a style="text-decoration: none;" href="?page={{participants_list.previous_page_number }}">poprzednia</a>
+        <a style="text-decoration: none;" href="?page=1">
+            &laquo; pierwsza
+        </a>
+        <a style="text-decoration: none;" href="?page={{participants_list.previous_page_number }}">
+            poprzednia
+        </a>
         {% endif %}
         <span class="current">
             strona {{ participants_list.number}}  z {{ participants_list.paginator.num_pages }}
         </span>
         {% if participants_list.has_next %}
-            <a style="text-decoration: none;" href="?page={{ participants_list.next_page_number }}">następna</a>
-            <a style="text-decoration: none;" href="?page={{ participants_list.end_index }}">ostatnia</a>
+        <a style="text-decoration: none;" href="?page={{ participants_list.next_page_number }}">
+            następna
+        </a>
+        <a style="text-decoration: none;" href="?page={{ participants_list.end_index }}">
+            ostatnia
+        </a>
         {% endif %}
         {% if participants_list.end_index %}
         {% endif %}
-        </span>
-    </div>
-
-
+    </span>
+</div>
 {% endblock %}
-

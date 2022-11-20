@@ -52,10 +52,24 @@ def group_details(request, group_id):
         participants_ids.append(p.id)
     fights = group.fights.all()
     first_fight = fights.first()
+    ff = fights.filter(pk=group_id)
+    print(ff)
     print("first_fight")
     print(first_fight)
-    print(first_fight.rounds)
-    rounds = first_fight.rounds
+    print(type(first_fight))
+    rounds = 0
+    # rounds_obj = first_fight.rounds_of_fight.all()
+    # print(rounds_obj)
+    # rounds_obj = Fight.objects.get(pk=first_fight)
+    # print(rounds_obj)
+    iter_rounds = []
+    print("range(rounds)")
+    print(range(rounds))
+    for i in range(rounds):
+        iter_rounds.append(i)
+    print(iter_rounds)
+    if first_fight:
+        rounds = first_fight.rounds
 
     fighter_one_ids = []
     for f in fights:
@@ -171,7 +185,6 @@ def draw_fights(request, group_id):
     number = group.number
     tournament = group.tournament
     fights = Fight.objects.all()
-    # rounds = fights.get(pk=group_id)
     rounds = None
     participants = group.participants.all()
 
@@ -224,7 +237,6 @@ def draw_fights(request, group_id):
         else:
             random.shuffle(result)
 
-    # rounds = 0
     if participants:
         for r in result_to_show:
             fights.get_or_create(
@@ -237,11 +249,18 @@ def draw_fights(request, group_id):
 
     fights_to_show = fights.filter(group_id=group_id)
 
+    rounds = rounds = fights.first().rounds
+    iter_rounds = []
+    for i in range(rounds):
+        iter_rounds.append(i)
+    print("iter_rounds")
+    print(iter_rounds)
+
     fights_numbers = []
     for i in range(1,len(left_names) + 1):
         fights_numbers.append(i)
-
-    # group_details(request,group.id)
+    print("range(rounds)")
+    print(range(rounds))
 
     return render(request, "group_details.html", context={
         "number": number,
@@ -259,6 +278,8 @@ def draw_fights(request, group_id):
         "fights_numbers": fights_numbers,
         "fights": fights,
         "fights_to_show": fights_to_show,
+        "rounds": rounds,
+        "iter_rounds": iter_rounds
     })
 
 
@@ -391,7 +412,6 @@ def add_rounds(request, group_id):
         fights = group.fights.all()
         if request.method == "POST" and form.is_valid():
             rounds = form.cleaned_data['rounds']
-            # fights.delete()
             obj = form.save(commit=False)
             obj.rounds = rounds
             obj.save()
@@ -417,5 +437,9 @@ def add_rounds(request, group_id):
                 'group_id': group_id
             })
         )
-
-
+#
+# def give_pints (request, group_id):
+#     group = Group.objects.get(pk=group_id)
+#
+#     if request.user.is_authenticated:
+#         form = AddPointsForm(request.POST, instance=group)

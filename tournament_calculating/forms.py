@@ -64,6 +64,36 @@ class AddRoundsForm(forms.ModelForm):
                 )
             )
 
+# class AddPointsForm(forms.ModelForm):
+#     class Meta:
+#         model = Round
+#         fields = ['rounds']
+#         labels = {"rounds": 'starcia'}
+#
+#         def __init__(self, *args, **kwargs):
+#             super().__init__(*args, **kwargs)
+#             self.helper = FormHelper()
+#             self.helper.form_method = 'post'
+#             self.helper.form_action = 'tournament_calculating:tournament_calculate'
+#             self.helper.layout = Layout(
+#                 Fieldset(
+#                     'Dodaj ilość starć',
+#                     'rounds',
+#                 ),
+#                 ButtonHolder(
+#                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),
+#                     css_class="d-flex justify-content-end"
+#                 )
+#             )
+
+
+
+
+
+
+
+
+
 
 # class SortGroupForm(forms.ModelForm):
 #

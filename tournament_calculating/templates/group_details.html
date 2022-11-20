@@ -63,16 +63,21 @@
     </div>
     <hr>
 
+{% if fighters_one_names %}
 
-     walki:
-    <center>starcia:
+     <center>starcia:
                         <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
                     <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_rounds' group_id   %}">
                     ile starć:
                     </a>
                 </button>
+        {% if rounds %}
     {{ rounds }}
+            {% else %}
+            dodaj ile starć ma mieć każda walka
+    {% endif %}
     </center>
+    walki:
                 <br/>
                 <ol>
                     <br/>
@@ -87,6 +92,9 @@
                             </td>
                             {% endfor %}
                         </tr>
+
+
+
                         <tr>
                                 {% for fighter in fighters_one_names %}
                             <td>
@@ -97,6 +105,8 @@
                             {% endfor %}
                         </tr>
 
+
+
                         <tr>
                             {% for fighter in fighters_two_names  %}
                             <td>
@@ -105,6 +115,8 @@
                             </td>
                             {% endfor %}
                         </tr>
+
+
 
                         <tr>
                           {% for fighter in fighters_one_names %}
@@ -120,6 +132,26 @@
                         </tr>
 
 
+
+
+{#                                {% for i in iter_rounds %}#}
+
+{#                    {% for i in rounds %}#}
+
+                            <tr>
+{#                            {% endfor %}#}
+                          {% for fighter in fighters_one_names %}
+
+                              {% if rounds %}
+                                  <td>
+                                  ?
+                              {% endif %}
+                              </td>
+                                 {% endfor %}
+
+                    </tr>
+
+
                     </table>
                     <style>
                         td, th { border: 1px solid black; }
@@ -127,6 +159,7 @@
                 </ol>
             </div>
             <hr>
+    {% endif %}
     <div>
         {% if image %}
         {% thumbnail image "300x300" as im %}
