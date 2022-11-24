@@ -180,6 +180,29 @@ def add_group(request, tournament_id):
             )
 
 
+def sorting(some_lst):
+    sorting_result = []
+    sorting_result.append(some_lst[0])
+    if some_lst:
+        iter_counter = 1
+        while len(sorting_result) != len(some_lst):
+            if sorting_result[iter_counter - 1][0] != some_lst[iter_counter][0] \
+                    and sorting_result[iter_counter - 1][1] != some_lst[iter_counter][1] \
+                    and some_lst[iter_counter] not in sorting_result:
+                sorting_result.append(some_lst[iter_counter])
+                print("printuję n:")
+                print(iter_counter)
+                iter_counter += 1
+                print("n+=1")
+                print(sorting_result)
+            else:
+                random.shuffle(some_lst)
+                print("shuffle")
+    print("printuję result_to_show:")
+    print(sorting_result)
+    return sorting_result
+
+
 def draw_fights(request, group_id):
     group = Group.objects.get(pk=group_id)
     number = group.number
@@ -187,7 +210,6 @@ def draw_fights(request, group_id):
     fights = Fight.objects.all()
     rounds = None
     participants = group.participants.all()
-
     participants_names = []
     participants_ids = []
     if participants:
@@ -196,10 +218,9 @@ def draw_fights(request, group_id):
         for participant in participants:
             participants_ids.append(participant.id)
 
-    a = []
+    # a = []
     result = []
     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(participants_ids, r) for r in range(2, 2 + 1)))
-
     participants_pairs_objects = []
     for pair in participants_pairs:
         participants_pairs_objects.append(Participant.objects.filter(pk__in=pair))
@@ -209,33 +230,49 @@ def draw_fights(request, group_id):
     left_participant = []
     right_participant = []
     for participant_pair in participants_pairs_objects:
-        if participant_pair not in a:
-            for f in participants_pairs_objects:
-                if len(set(participant_pair).union(set(f))) == 2:
-                    result.append(participant_pair)
-                    left_participant.append(participant_pair[0])
-                    right_participant.append(participant_pair[1])
+        # if participant_pair not in a:
+            # for f in participants_pairs_objects:
+            #    if len(set(participant_pair).union(set(f))) == 2:
+        result.append(participant_pair)
+        left_participant.append(participant_pair[0])
+        right_participant.append(participant_pair[1])
 
     left_names = []
     right_names = []
     for l in left_participant:
         left_names.append(l.name)
+
     for r in right_participant:
         right_names.append(r.name)
+
     for r in result:
         name_to_show1.append(r[0])
         name_to_show2.append(r[1])
 
-    result_to_show = []
-    result_to_show.append(result[0])
-    y = result_to_show[-1]
-    n = 1
-    while len(result_to_show) != len(result):
-        if result_to_show[n - 1][0] != result[n][0] and result_to_show[n - 1][1] != result[n][1] and result[n] not in result_to_show:
-            result_to_show.append(result[n])
-            n += 1
-        else:
-            random.shuffle(result)
+    # variable_y = result_to_show[-1]
+
+
+    # result_to_show = []
+    # result_to_show.append(result[0])
+    # print("printuję result:")
+    # print(result)
+    # if result:
+    #     n = 1
+    #     while len(result_to_show) != len(result):
+    #         if result_to_show[n - 1][0] != result[n][0] and result_to_show[n - 1][1] != result[n][1] and result[n] not in result_to_show:
+    #             result_to_show.append(result[n])
+    #             print("printuję n:")
+    #             print(n)
+    #             n += 1
+    #             print("n+=1")
+    #             print(result_to_show)
+    #         else:
+    #             random.shuffle(result)
+    #             print("shuffle")
+    # print("printuję result_to_show:")
+    # print(result_to_show)
+
+    result_to_show = sorting(result)
 
     if participants:
         for r in result_to_show:
@@ -246,21 +283,21 @@ def draw_fights(request, group_id):
                 fighter_one=group.participants.get(id=r[0].id),
                 fighter_two=group.participants.get(id=r[1].id)
             )
-
+    print(7)
     fights_to_show = fights.filter(group_id=group_id)
 
-    rounds = rounds = fights.first().rounds
-    iter_rounds = []
-    for i in range(rounds):
-        iter_rounds.append(i)
-    print("iter_rounds")
-    print(iter_rounds)
+    # rounds = rounds = fights.first().rounds
+    # iter_rounds = []
+    # for i in range(rounds):
+    #     iter_rounds.append(i)
+    # print("iter_rounds")
+    # print(iter_rounds)
 
     fights_numbers = []
     for i in range(1,len(left_names) + 1):
         fights_numbers.append(i)
     print("range(rounds)")
-    print(range(rounds))
+    # print(range(rounds))
 
     return render(request, "group_details.html", context={
         "number": number,
@@ -279,8 +316,98 @@ def draw_fights(request, group_id):
         "fights": fights,
         "fights_to_show": fights_to_show,
         "rounds": rounds,
-        "iter_rounds": iter_rounds
+        # "iter_rounds": iter_rounds
     })
+
+
+# def draw_fights(request, group_id):
+#     group = Group.objects.get(pk=group_id)
+#     number = group.number
+#     tournament = group.tournament
+#     fights = Fight.objects.all()
+#     participants = group.participants.all()
+#
+#     participants_names = []
+#     participants_ids = []
+#     if participants:
+#         for participant in participants:
+#             participants_names.append(participant.name)
+#         for participant in participants:
+#             participants_ids.append(participant.id)
+#
+#     listed_names = []
+#     my_li = []
+#     a = []
+#     result = []
+#     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(participants_ids, r) for r in range(2, 2 + 1)))
+#
+#     participants_pairs_objects = []
+#     for pair in participants_pairs:
+#         participants_pairs_objects.append(Participant.objects.filter(pk__in=pair))
+#
+#     name_to_show1 = []
+#     name_to_show2 = []
+#     left_participant = []
+#     right_participant = []
+#     for participant_pair in participants_pairs_objects:
+#         if participant_pair not in a:
+#             for f in participants_pairs_objects:
+#                 if len(set(participant_pair).union(set(f))) == 2:
+#                     result.append(participant_pair)
+#                     left_participant.append(participant_pair[0])
+#                     right_participant.append(participant_pair[1])
+#
+#     left_names = []
+#     right_names = []
+#     for l in left_participant:
+#         left_names.append(l.name)
+#     for r in right_participant:
+#         right_names.append(r.name)
+#     for r in result:
+#         name_to_show1.append(r[0])
+#         name_to_show2.append(r[1])
+#
+#     rounds = 0
+#     if participants:
+#         print("result:")
+#         print(result)
+#         for r in result:
+#             fights.get_or_create(
+#                 group=group,
+#                 rounds=rounds,
+#                 tournament=tournament,
+#                 fighter_one=group.participants.get(id=r[0].id),
+#                 fighter_two=group.participants.get(id=r[1].id)
+#             )
+#
+#     fights_numbers = []
+#     for i in range(1,len(left_names) + 1):
+#         fights_numbers.append(i)
+#
+#     fights_to_show = fights.filter(group_id=group_id)
+#
+#     return render(request, "group_sorted.html", context={
+#         "number": number,
+#         "tournament": tournament,
+#         "group_id": group_id,
+#         "participants": participants,
+#         "result": result,
+#         "listed_names": listed_names,
+#         "participants_names": participants_names,
+#         "my_li": my_li,
+#         "name_to_show1": name_to_show1,
+#         "name_to_show2": name_to_show2,
+#         "left_participant": left_participant,
+#         "right_participant": right_participant,
+#         "left_names": left_names,
+#         "right_names": right_names,
+#         "fights_numbers": fights_numbers,
+#         "fights": fights,
+#         "fights_to_show": fights_to_show,
+#     })
+
+
+
 
 
 def delete_group_participant(request, tournament_id, group_id, participant_id):
