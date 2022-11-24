@@ -230,21 +230,9 @@ def draw_fights(request, group_id):
                 fighter_one=group.participants.get(id=right_participant[0].id),
                 fighter_two=group.participants.get(id=right_participant[1].id)
             )
-    fights_to_show = fights.filter(group_id=group_id)
 
-    return render(request, "group_details.html", context={
-        "tournament": tournament,
-        "group_id": group_id,
-        "participants": participants,
-        "result": result,
-        "left_participant": left_participants,
-        "right_participant": right_participants,
-        "left_names": left_names,
-        "right_names": right_names,
-        "fights": fights,
-        "fights_to_show": fights_to_show,
-        "rounds": rounds,
-    })
+    return HttpResponseRedirect(reverse("tournament_calculating:group_details",
+                                        args=[group_id]))
 
 
 def delete_group_participant(request, tournament_id, group_id, participant_id):
@@ -298,49 +286,6 @@ def delete_group(request, tournament_id, group_id):
                  'tournament_id': tournament_id,
                  'group_id': group_id,
                  })
-
-
-# def tournament_calculate(request, group_id, fight_id):
-#     group = Group.objects.get(pk=group_id)
-#     number = group.number
-#     tournament = group.tournament
-#     fight = Fight.objects.get(pk=fight_id)
-#     participants = group.participants.all()
-#     participants_names = []
-#     fights = group.fights.all()
-#     for p in participants:
-#         participants_names.append(p.name)
-#     first_participant = participants[0]
-#     after_replace = participants.order_by('-id')
-#     last_participant = after_replace[0]
-#     listed_participants = list(participants)
-#     if request.user.is_authenticated:
-#         form = CalculateFightForm(request.POST, instance=fight)
-#         if request.method == "POST":
-#             if form.is_valid():
-#                 obj = form.save(commit=False)
-#                 obj.group = group
-#                 obj.fighter_one.name = first_participant
-#                 obj.fighter_two.name = last_participant
-#                 obj.save()
-#                 fights.create(group=group, tournament=tournament)
-#                 return HttpResponseRedirect(reverse("tournament_calculation.html", args=[group_id]))
-#         else:
-#             form = CalculateFightForm
-#             return (
-#                 render(request, "add_rounds.html", context={
-#                     'form': form,
-#                     "number": number,
-#                     "tournament": tournament,
-#                     "group_id": group_id,
-#                     "fight_id": fight_id,
-#                     "participants": participants,
-#                     "first_participant": first_participant,
-#                     "last_participant": last_participant,
-#                     "listed_participants": listed_participants,
-#                     "participants_names": participants_names,
-#                 })
-#             )
 
 
 def delete_fights(request, tournament_id, group_id):
