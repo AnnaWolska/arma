@@ -174,20 +174,26 @@ def add_group(request, tournament_id):
             )
 
 
-def sorting(some_lst):
+def sorting(some_list):
+    length = len(some_list)
     sorting_result = []
-    sorting_result.append(some_lst[0])
-    if some_lst:
-        iter_counter = 1
-        while len(sorting_result) != len(some_lst):
-            if sorting_result[iter_counter - 1][0] != some_lst[iter_counter][0] \
-                    and sorting_result[iter_counter - 1][1] != some_lst[iter_counter][1] \
-                    and some_lst[iter_counter] not in sorting_result:
-                sorting_result.append(some_lst[iter_counter])
-                iter_counter += 1
-            else:
-                random.shuffle(some_lst)
-    return sorting_result
+    if length > 2:
+        if length > 6:
+            sorting_result.append(some_list[0])
+            some_list.remove(some_list[0])
+            while len(sorting_result) != length:
+                condition_one = sorting_result[-1][0] != some_list[0][0] and sorting_result[-1][0] != some_list[0][1]
+                condition_two = sorting_result[-1][1] != some_list[0][1]and sorting_result[-1][1] != some_list[0][0]
+                if condition_one and condition_two:
+                    sorting_result.append(some_list[0])
+                    some_list.remove(some_list[0])
+                else:
+                    some_list.append(some_list[0])
+                    some_list.remove(some_list[0])
+        else:
+            random.shuffle(some_list)
+            sorting_result = some_list
+        return sorting_result
 
 
 def draw_fights(request, group_id):
@@ -195,40 +201,26 @@ def draw_fights(request, group_id):
     tournament = group.tournament
     fights = Fight.objects.all()
     rounds = None
-    participants = group.participants.all()
-    participants_ids = []
-    if participants:
-        for participant in participants:
-            participants_ids.append(participant.id)
-    participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(participants_ids, r)
+    participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(group.participants.all(), r)
                                                             for r in range(2, 2 + 1)))
-    participants_pairs_objects = []
-    for pair in participants_pairs:
-        participants_pairs_objects.append(Participant.objects.filter(pk__in=pair))
     left_participants = []
     right_participants = []
     result = []
-    for participant_pair in participants_pairs_objects:
+
+    for participant_pair in participants_pairs:
         result.append(participant_pair)
         left_participants.append(participant_pair[0])
         right_participants.append(participant_pair[1])
 
-    left_names = []
-    right_names = []
-    for left_participant in left_participants:
-        left_names.append(left_participant.name)
-    for right_participant in right_participants:
-        right_names.append(right_participant.name)
-
     result_to_show = sorting(result)
-    if participants:
+    if participants_pairs:
         for right_participant in result_to_show:
             fights.get_or_create(
                 group=group,
                 rounds=rounds,
                 tournament=tournament,
-                fighter_one=group.participants.get(id=right_participant[0].id),
-                fighter_two=group.participants.get(id=right_participant[1].id)
+                fighter_one=right_participant[0],
+                fighter_two=right_participant[1]
             )
 
     return HttpResponseRedirect(reverse("tournament_calculating:group_details",
@@ -347,7 +339,7 @@ def add_rounds(request, group_id):
             })
         )
 #
-# def give_pints (request, group_id):
+# def give_points (request, group_id):
 #     group = Group.objects.get(pk=group_id)
 #
 #     if request.user.is_authenticated:
