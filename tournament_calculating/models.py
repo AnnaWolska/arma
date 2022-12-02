@@ -39,7 +39,7 @@ class Fight(models.Model):
     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_two", null=True )
 
     def __str__(self):
-        return f"{self.group} {self.rounds} {self.fighter_one} {self.fighter_two}"
+        return f"{self.group} {self.rounds} {self.tournament} {self.fighter_one} {self.fighter_two}"
 
     class Meta:
         verbose_name = "Walka"
@@ -47,33 +47,23 @@ class Fight(models.Model):
 
 
 class Round(models.Model):
-    POINTS = (
-        ('a', '3'),
-        ('b', '4'),
-        ('c', '5'),
-        ('d', 'remis'),
-        ('e', '0')
+    STATUS = (
+        ('0', 'win'),
+        ('1', 'lose'),
+        ('2', 'remis'),
+        ('3', 'no result'),
+        ('4', 'no fight'),
     )
 
     fight = models.ForeignKey("Fight", on_delete=models.CASCADE, related_name="rounds_of_fight")
-    result = models.CharField(max_length=1, choices=POINTS, null=True)
+    result = models.CharField(max_length=1, choices=STATUS, null=True)
+    points = models.PositiveSmallIntegerField(null=True)
+    fighter = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighter", null=True )
 
     def __str__(self):
-        return f"{self.fight} {self.result}"
+        return f"{self.fight} {self.result} {self.points} {self.fighter}"
 
     class Meta:
         verbose_name = "Runda"
         verbose_name_plural = "Rundy"
 
-#
-# class FightersPairs(models.Model):
-#     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_one", default=[0])
-#     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_two", default=[0])
-#     fight = models.ForeignKey('Fight', on_delete=models.CASCADE, related_name="fighters_pairs")
-#
-#     def __str__(self):
-#         return f" {self.fighter_one } {self.fighter_two }{self.fight } "
-#
-#     class Meta:
-#         verbose_name = "Para_walcząca"
-#         verbose_name_plural = "Pary_walczące"

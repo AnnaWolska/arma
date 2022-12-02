@@ -15,20 +15,25 @@
             <li class="list-group-item">
                 <p>
                     <h5>
-                        turniej: {{  title }}
-                        organizauje:
-                        {% for organizer in organizers %}
-                        <a style="color:blue; text-decoration: none;" href = "{% url 'organizers:organizer_details' organizer.id %}" >
-                            {{  organizer.name }}
-                        </a>
-                        {% endfor %}
-                        {% if user == request.user %}
+                        {{  title   }}   -----
+
+                                    {% if user == request.user %}
                         <button id="delete_tournament" type="button" style=" text-decoration: none; background-color:Tomato; "  class="btn btn-primary">
                             <a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}">
                                 Usuń turniej
                             </a>
                         </button>
                         {% endif %}
+            </h5>
+
+            <br>
+                        organizauje:
+                        {% for organizer in organizers %}
+                        <a style="color:blue; text-decoration: none;" href = "{% url 'organizers:organizer_details' organizer.id %}" >
+                           <ul><li>{{  organizer.name }}</li></ul>
+                        </a>
+                        {% endfor %}
+
                         <div>
                             {% if image %}
                             {% thumbnail image "300x300" as im %}
@@ -36,7 +41,7 @@
                             {% endthumbnail %}
                             {% endif %}
                         </div>
-                    </h5>
+
                     wydarzenie utworzył użytkownik
                     {{  user }} w dniu {{ created}}
                     <br>
@@ -56,7 +61,7 @@
                     <br>
                     <hr>
                     grupy:
-                    <ul style="column-count: 2;">
+                    <ul style="column-count: 1;">
 
                         <ul>
 
@@ -93,6 +98,11 @@
                         <li>
                             <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
                                 {{ participant.name }}
+                                                           {% if participant.image %}
+                            {% thumbnail participant.image "100x100" as im %}
+                            <img src="{{ im.url }}" alt="zdj">
+                            {% endthumbnail %}
+                            {% endif %}
                             </a>
                         </li>
                         {% endfor %}
