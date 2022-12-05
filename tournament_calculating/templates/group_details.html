@@ -103,8 +103,6 @@
                             {% endfor %}
                         </tr>
 
-
-
                         <tr>
                                 {% for fighter in fighters_one_names %}
                             <td>
@@ -115,52 +113,30 @@
                             {% endfor %}
                         </tr>
 
-
-
                         <tr>
                             {% for fighter in fighters_two_names  %}
                             <td>
-                     <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
+                             <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                                 {{ fighter.name }}
                             </td>
                             {% endfor %}
                         </tr>
-
-
-
+                        {% for el in rounds_buttons %}
                         <tr>
                           {% for fighter in fighters_one_names %}
-                            <td>
 
+                    <td>
                     <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
                     <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_rounds' group_id   %}">
                     walka
                     </a>
-                </button>
-                      </td>
-                                {% endfor %}
+                    </button>
+                    </td>
+                            {% endfor %}
                         </tr>
-
-
-
-
-{#                                {% for i in iter_rounds %}#}
-
-{#                    {% for i in rounds %}#}
-
-                            <tr>
-{#                            {% endfor %}#}
-                          {% for fighter in fighters_one_names %}
-
-                              {% if rounds %}
-                                  <td>
-                                  ?
-                              {% endif %}
-                              </td>
-                                 {% endfor %}
-
+                            {% endfor %}
+                        <tr>
                     </tr>
-
 
                     </table>
                     <style>
@@ -177,4 +153,6 @@
         {% endthumbnail %}
         {% endif %}
     </div>
+
+
     {% endblock %}

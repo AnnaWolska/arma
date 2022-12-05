@@ -3,15 +3,15 @@ from .models import Participant, Group, Fight, Round
 
 
 @admin.register(Participant)
-class TournamentAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "school", "tournaments"]
+class ParticipantAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "school"]
 
-    search_fields = ["name", "school", "tournaments"]
-    list_filter = ["name", "school", "tournaments"]
+    search_fields = ["name", "school"]
+    list_filter = ["name", "school"]
 
 
 @admin.register(Group)
-class TournamentAdmin(admin.ModelAdmin):
+class GroupAdmin(admin.ModelAdmin):
     list_display = ["id", "number", "get_title"]
 
     def get_title(self, obj):
@@ -25,7 +25,7 @@ class TournamentAdmin(admin.ModelAdmin):
 
 
 @admin.register(Fight)
-class TournamentAdmin(admin.ModelAdmin):
+class FightAdmin(admin.ModelAdmin):
     list_display = ["id", "get_number", "rounds", "get_name", "get_name2", "get_tournament_name"]
 
     def get_number(self, obj):
@@ -55,8 +55,8 @@ class TournamentAdmin(admin.ModelAdmin):
 
 
 @admin.register(Round)
-class TournamentAdmin(admin.ModelAdmin):
-    list_display = ["id", "fight", "result", "points", "fighter"]
+class RoundAdmin(admin.ModelAdmin):
+    list_display = ["id", "fight", "result", "points","fighter"]
 
-    search_fields = ["id", "fight", "result", "points", "fighter"]
-    list_filter = ["id", "fight", "result", "points", "fighter"]
+    search_fields = ["id", "fight", "result", "points","fighter"]
+    list_filter = ["id", "fight", "result", "points"]

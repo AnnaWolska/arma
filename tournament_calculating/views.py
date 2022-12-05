@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from tournaments.models import Tournament
-from tournament_calculating.models import Group, Fight, Participant
+from tournament_calculating.models import Group, Fight, Participant, Round
 from tournament_calculating.forms import (
     AddParticipantForm,
     AddGroupForm,
@@ -53,6 +53,7 @@ def group_details(request, group_id):
     fights = group.fights.all()
     first_fight = fights.first()
     ff = fights.filter(pk=group_id)
+    # rounds_objects = Round.objects
     rounds = 0
     # rounds_obj = first_fight.rounds_of_fight.all()
     # print(rounds_obj)
@@ -61,14 +62,12 @@ def group_details(request, group_id):
     iter_rounds = []
     for i in range(rounds):
         iter_rounds.append(i)
-
     if first_fight:
         rounds = first_fight.rounds
 
     fighter_one_ids = []
     for f in fights:
         fighter_one_ids.append(f.fighter_one_id)
-
     fighter_two_ids = []
     for f in fights:
         fighter_two_ids.append(f.fighter_two_id)
@@ -76,7 +75,6 @@ def group_details(request, group_id):
     fighters_one_names = []
     for el in fighter_one_ids:
         fighters_one_names.append(participants.get(id=el))
-
     fighters_two_names = []
     for el in fighter_two_ids:
         fighters_two_names.append(participants.get(id=el))
@@ -84,6 +82,11 @@ def group_details(request, group_id):
     fights_numbers = []
     for i in range(1,len(fighters_one_names) + 1):
         fights_numbers.append(i)
+
+    rounds_buttons = []
+    if rounds:
+        for i in range(rounds):
+            rounds_buttons.append(i)
 
     prtcp_to_show = []
     for p in participants:
@@ -94,6 +97,8 @@ def group_details(request, group_id):
     for element in fighters_one_names:
         prtcp.append(participants.filter(name=element.name))
 
+    for fight in fights:
+        print(fight.rounds_of_fight.all)
     return render(request, "group_details.html", context={
         "number": number,
         "tournament": tournament,
@@ -103,7 +108,9 @@ def group_details(request, group_id):
         "fights_numbers": fights_numbers,
         "fighters_two_names": fighters_two_names,
         "prtcp": prtcp,
-        "rounds": rounds
+        "rounds": rounds,
+        "fights": fights,
+        "rounds_buttons": rounds_buttons
     })
 
 
@@ -318,6 +325,11 @@ def add_rounds(request, group_id):
             obj.save()
             fights.update(rounds=rounds, group=group)
             messages.success(request, 'rundy dodane')
+
+            for round in range(rounds):
+                rounds_object = Round(id = round)
+                rounds_object.save()
+
             return HttpResponseRedirect(reverse(
                 "tournament_calculating:group_details",
                 args=[group_id]
@@ -338,7 +350,9 @@ def add_rounds(request, group_id):
                 'group_id': group_id
             })
         )
-#
+
+
+
 # def give_points (request, group_id):
 #     group = Group.objects.get(pk=group_id)
 #

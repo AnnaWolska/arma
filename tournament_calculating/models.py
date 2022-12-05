@@ -32,6 +32,7 @@ class Group(models.Model):
 
 
 class Fight(models.Model):
+    # order = models.PositiveSmallIntegerField(null=True)
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="fights", null=True)
     rounds = models.PositiveSmallIntegerField(null=True)
     tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="fights", null=True)
@@ -53,9 +54,10 @@ class Round(models.Model):
         ('2', 'remis'),
         ('3', 'no result'),
         ('4', 'no fight'),
+        ('5', 'no status')
     )
 
-    fight = models.ForeignKey("Fight", on_delete=models.CASCADE, related_name="rounds_of_fight")
+    fight = models.ForeignKey("Fight", on_delete=models.CASCADE, related_name="rounds_of_fight", null=True)
     result = models.CharField(max_length=1, choices=STATUS, null=True)
     points = models.PositiveSmallIntegerField(null=True)
     fighter = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighter", null=True )
