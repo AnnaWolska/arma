@@ -327,7 +327,7 @@ def add_rounds(request, group_id):
             messages.success(request, 'rundy dodane')
 
             for round in range(rounds):
-                rounds_object = Round(id = round)
+                rounds_object = Round(group = group)
                 rounds_object.save()
 
             return HttpResponseRedirect(reverse(

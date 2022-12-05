@@ -60,6 +60,7 @@ class Round(models.Model):
     fight = models.ForeignKey("Fight", on_delete=models.CASCADE, related_name="rounds_of_fight", null=True)
     result = models.CharField(max_length=1, choices=STATUS, null=True)
     points = models.PositiveSmallIntegerField(null=True)
+    group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="rounds_of_group", null=True)
     fighter = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighter", null=True )
 
     def __str__(self):
