@@ -51,7 +51,7 @@ def group_details(request, group_id):
     participants_ids = []
     for p in participants:
         participants_ids.append(p.id)
-    fights = group.fights.all()
+    fights = group.fights.all().order_by('id')
     first_fight = fights.first()
     ff = fights.filter(pk=group_id)
     rounds = 0
@@ -260,12 +260,13 @@ def sorting(some_list):
             sorting_result = some_list
         return sorting_result
 
-
+#TODO: żeby kasowała rundy dla walki
 def draw_fights(request, group_id):
     group = Group.objects.get(pk=group_id)
     tournament = group.tournament
-    fights = Fight.objects.all()
-    rounds = None
+    fights = Fight.objects.all().order_by('id')
+    # group_fights = fights(pk=group_id)
+    # rounds =
     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(group.participants.all(), r)
                                                             for r in range(2, 2 + 1)))
     left_participants = []
@@ -276,17 +277,22 @@ def draw_fights(request, group_id):
         result.append(participant_pair)
         left_participants.append(participant_pair[0])
         right_participants.append(participant_pair[1])
-
+    #TODO: zrobić tak, by kasował wcześniejsze wylosowane walki po ponownym losowaniu
     order_number = 1
     result_to_show = sorting(result)
     # if not fights:
 
+    # group_fights.delete()
+    # print(group_fights)
     if participants_pairs:
+
+        # if rounds:
+        #     rounds.delete()
         for right_participant in result_to_show:
             fights.get_or_create(
                 order=order_number,
                 group=group,
-                rounds=rounds,
+                # rounds=rounds,
                 tournament=tournament,
                 fighter_one=right_participant[0],
                 fighter_two=right_participant[1]
@@ -396,6 +402,7 @@ def add_rounds(request, group_id):
                 obj = Round(group = group, order=round)
                 obj.save()
 
+            #TODO: dlaczego nie mogę dodać jednocześnie uczestników walki w rundzie
             return HttpResponseRedirect(reverse(
                 "tournament_calculating:group_details",
                 args=[group_id]
@@ -406,7 +413,6 @@ def add_rounds(request, group_id):
                 render(request, "add_rounds.html", context={
                     'form': form,
                     'group_id': group_id,
-                    # 'fight_id': fight_id
                 })
             )
     else:
@@ -422,9 +428,10 @@ def add_rounds(request, group_id):
 
 def add_points (request, group_id, fight_id):
     group = Group.objects.get(pk=group_id)
+    rounds = Round.objects.all()
+    print(rounds)
     fights = Fight.objects.all()
     fight = Fight.objects.get(pk=fight_id)
-    # rounds = Round.objects.get(pk=fight_id)
     fighter_one = fight.fighter_one
     fighter_two = fight.fighter_two
     fighter_one_points = fight.fighter_one_points
@@ -435,24 +442,12 @@ def add_points (request, group_id, fight_id):
         if request.method == "POST" and form.is_valid():
             fighter_one_points = form.cleaned_data['fighter_one_points']
             fighter_two_points = form.cleaned_data['fighter_two_points']
-            # fight.fighter_one_points =
-            # for fight in fights:
             instance = form.save(commit=False)
             instance.id = fight_id
             instance.fighter_one_points = fighter_one_points
             instance.fighter_two_points = fighter_two_points
-            # instance.tournaments.add(tournament)
             instance.save()
-            # for fight in fights:
-            #     fight.create(fighter_one_points = fighter_one_points, fighter_two_points = fighter_two_points, group=group)
-
-
-
-            # obj = form.save(commit=False)
-            # obj.fighter_one_points = fighter_one_points
-            # obj.fighter_two_points = fighter_two_points
-            # obj.save()
-            # messages.success(request, 'punkty dodane')
+            messages.success(request, 'punkty dodane')
 
             return HttpResponseRedirect(reverse(
                 "tournament_calculating:group_details",

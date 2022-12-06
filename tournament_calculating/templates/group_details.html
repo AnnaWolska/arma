@@ -96,9 +96,10 @@
                     </style>
                     <table BORDER CELLSPACING=5 CELLPADDING=15>
                         <tr>
-                            {% for i in fights_numbers %}
+{#                            {% for i in fights_numbers %}#}
+                                {% for fight in fights%}
                             <td>
-                                {{ i }}
+                                {{ fight.order}}
                             </td>
                             {% endfor %}
                         </tr>
@@ -122,18 +123,34 @@
                             {% endfor %}
                         </tr>
                              {% for r in rounds_obj %}
-                        <tr>
-{#                    {% for fighter in fighters_one_names %}#}
-                        {% for fight in fights %}
-                        <td>
-                        <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
-                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id   %}">
-                        walka {{ r.order }}
-                        </a>
-                        </button>
 
-                        </td>
+                        <tr>
+
+                        {% for fight in fights %}
+                            {% if fight.rounds %}
+
+                                 <td>
+                                    <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
+                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id   %}">
+                                         walka nr{{r.order}}
+                                     <br>
+{#                                {% for fight in fights %}#}
+                             {% if fight.fighter_one_points %}
+                             {{ fight.fighter_one_points }} :
+                            {% endif %}
+{#                        {% endfor %}#}
+
+                            {% if fight.fighter_two_points %}
+                            {{ fight.fighter_two_points }}
+                             {% endif %}
+
+                        </a>
+                                    </button>
+                                </td>
+                           {% endif %}
+
                     {% endfor %}
+
                         </tr>
                             {% endfor %}
                         <tr>
