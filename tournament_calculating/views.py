@@ -279,18 +279,19 @@ def draw_fights(request, group_id):
 
     order_number = 1
     result_to_show = sorting(result)
-    if not fights:
-        if participants_pairs:
-            for right_participant in result_to_show:
-                fights.get_or_create(
-                    order=order_number,
-                    group=group,
-                    rounds=rounds,
-                    tournament=tournament,
-                    fighter_one=right_participant[0],
-                    fighter_two=right_participant[1]
-                )
-                order_number +=1
+    # if not fights:
+
+    if participants_pairs:
+        for right_participant in result_to_show:
+            fights.get_or_create(
+                order=order_number,
+                group=group,
+                rounds=rounds,
+                tournament=tournament,
+                fighter_one=right_participant[0],
+                fighter_two=right_participant[1]
+            )
+            order_number +=1
 
 
     return HttpResponseRedirect(reverse("tournament_calculating:group_details",
@@ -421,6 +422,7 @@ def add_rounds(request, group_id):
 
 def add_points (request, group_id, fight_id):
     group = Group.objects.get(pk=group_id)
+    fights = Fight.objects.all()
     fight = Fight.objects.get(pk=fight_id)
     # rounds = Round.objects.get(pk=fight_id)
     fighter_one = fight.fighter_one
@@ -431,13 +433,18 @@ def add_points (request, group_id, fight_id):
         form = AddPointsForm(request.POST, instance=fight)
 
         if request.method == "POST" and form.is_valid():
+            fighter_one_points = form.cleaned_data['fighter_one_points']
+            fighter_two_points = form.cleaned_data['fighter_two_points']
             # fight.fighter_one_points =
-
+            # for fight in fights:
             instance = form.save(commit=False)
-            instance.fighter_one_points.add(fighter_one)
-            instance.fighter_two_points.add(fighter_two)
+            instance.id = fight_id
+            instance.fighter_one_points = fighter_one_points
+            instance.fighter_two_points = fighter_two_points
             # instance.tournaments.add(tournament)
             instance.save()
+            for fight in fights:
+                fight.update(fighter_one_points = fighter_one_points, fighter_two_points = fighter_two_points)
 
 
 
@@ -448,8 +455,8 @@ def add_points (request, group_id, fight_id):
             # messages.success(request, 'punkty dodane')
 
             return HttpResponseRedirect(reverse(
-                "tournament_calculating: deal_with_fight",
-                args=[group_id, fight_id]
+                "tournament_calculating:group_details",
+                args=[group_id]
             ))
         else:
             form = AddPointsForm

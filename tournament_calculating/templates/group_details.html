@@ -123,11 +123,11 @@
                         </tr>
                              {% for r in rounds_obj %}
                         <tr>
-                    {% for fighter in fighters_one_names %}
+{#                    {% for fighter in fighters_one_names %}#}
+                        {% for fight in fights %}
                         <td>
                         <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
-
-{#                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight_id   %}">#}
+                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id   %}">
                         walka {{ r.order }}
                         </a>
                         </button>
