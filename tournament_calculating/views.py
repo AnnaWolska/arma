@@ -443,8 +443,8 @@ def add_points (request, group_id, fight_id):
             instance.fighter_two_points = fighter_two_points
             # instance.tournaments.add(tournament)
             instance.save()
-            for fight in fights:
-                fight.update(fighter_one_points = fighter_one_points, fighter_two_points = fighter_two_points)
+            # for fight in fights:
+            #     fight.create(fighter_one_points = fighter_one_points, fighter_two_points = fighter_two_points, group=group)
 
 
 

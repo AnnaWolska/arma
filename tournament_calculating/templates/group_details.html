@@ -48,7 +48,7 @@
                 <ul>
                     <li>
                         <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
-                            {{  participant.name }}
+                            {{  participant.name }} z {{ participant.school  }}
 {#                                                    <div>#}
                             {% if participant.image %}
                             {% thumbnail participant.image "100x100" as im %}
