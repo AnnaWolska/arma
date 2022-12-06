@@ -47,6 +47,7 @@ def group_details(request, group_id):
     number = group.number
     tournament = group.tournament
     participants = group.participants.all()
+    # fights = group.fights.all()
     participants_ids = []
     for p in participants:
         participants_ids.append(p.id)
@@ -278,17 +279,18 @@ def draw_fights(request, group_id):
 
     order_number = 1
     result_to_show = sorting(result)
-    if participants_pairs:
-        for right_participant in result_to_show:
-            fights.get_or_create(
-                order=order_number,
-                group=group,
-                rounds=rounds,
-                tournament=tournament,
-                fighter_one=right_participant[0],
-                fighter_two=right_participant[1]
-            )
-            order_number +=1
+    if not fights:
+        if participants_pairs:
+            for right_participant in result_to_show:
+                fights.get_or_create(
+                    order=order_number,
+                    group=group,
+                    rounds=rounds,
+                    tournament=tournament,
+                    fighter_one=right_participant[0],
+                    fighter_two=right_participant[1]
+                )
+                order_number +=1
 
 
     return HttpResponseRedirect(reverse("tournament_calculating:group_details",
@@ -381,6 +383,7 @@ def add_rounds(request, group_id):
         fights = group.fights.all()
         rounds = group.rounds_of_group.all()
         if request.method == "POST" and form.is_valid():
+            rounds.delete()
             rounds = form.cleaned_data['rounds']
             obj = form.save(commit=False)
             obj.rounds = rounds
@@ -401,7 +404,8 @@ def add_rounds(request, group_id):
             return (
                 render(request, "add_rounds.html", context={
                     'form': form,
-                    'group_id': group_id
+                    'group_id': group_id,
+                    # 'fight_id': fight_id
                 })
             )
     else:
@@ -425,14 +429,24 @@ def add_points (request, group_id, fight_id):
     fighter_two_points = fight.fighter_two_points
     if request.user.is_authenticated:
         form = AddPointsForm(request.POST, instance=fight)
-        if request.method == "POST" and form.is_valid():
 
-            obj = form.save(commit=False)
-            obj.fighter_one_points = fighter_one_points
-            obj.fighter_two_points = fighter_two_points
-            obj.save()
-            messages.success(request, 'punkty dodane')
-            obj = form.save(commit=False)
+        if request.method == "POST" and form.is_valid():
+            # fight.fighter_one_points =
+
+            instance = form.save(commit=False)
+            instance.fighter_one_points.add(fighter_one)
+            instance.fighter_two_points.add(fighter_two)
+            # instance.tournaments.add(tournament)
+            instance.save()
+
+
+
+            # obj = form.save(commit=False)
+            # obj.fighter_one_points = fighter_one_points
+            # obj.fighter_two_points = fighter_two_points
+            # obj.save()
+            # messages.success(request, 'punkty dodane')
+
             return HttpResponseRedirect(reverse(
                 "tournament_calculating: deal_with_fight",
                 args=[group_id, fight_id]

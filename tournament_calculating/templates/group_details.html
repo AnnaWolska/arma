@@ -126,7 +126,8 @@
                     {% for fighter in fighters_one_names %}
                         <td>
                         <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
-                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight_id   %}">
+
+{#                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight_id   %}">#}
                         walka {{ r.order }}
                         </a>
                         </button>
@@ -154,5 +155,5 @@
         {% endif %}
     </div>
 
-
+{#<a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight_id   %}">#}
     {% endblock %}
