@@ -63,10 +63,10 @@ class Round(models.Model):
     result = models.CharField(max_length=1, choices=STATUS, null=True)
     points = models.PositiveSmallIntegerField(null=True)
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="rounds_of_group", null=True)
-    fighter = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighter", null=True )
+    fighter = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant", null=True )
 
     def __str__(self):
-        return f"{self.fight} {self.result} {self.points} {self.fighter}"
+        return f"{self.order} {self.fight} {self.result} {self.points} {self.group} {self.fighter}"
 
     class Meta:
         verbose_name = "Runda"

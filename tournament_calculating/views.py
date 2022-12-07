@@ -383,7 +383,9 @@ def delete_fights(request, tournament_id, group_id):
 
 
 def add_rounds(request, group_id):
+
     group = Group.objects.get(pk=group_id)
+    participants = Participant.objects.filter(groups=group_id)
 
     if request.user.is_authenticated:
         form = AddRoundsForm(request.POST, instance=group)
@@ -401,6 +403,14 @@ def add_rounds(request, group_id):
             for round in range(1, rounds + 1):
                 obj = Round(group = group, order=round)
                 obj.save()
+            for p in participants:
+                obj.fighter = p
+                obj.save()
+            for f in fights:
+                obj.fight = f
+                obj.save()
+
+
 
             #TODO: dlaczego nie mogę dodać jednocześnie uczestników walki w rundzie
             return HttpResponseRedirect(reverse(

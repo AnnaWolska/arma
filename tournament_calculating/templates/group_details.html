@@ -95,17 +95,19 @@
                         td, th { border: 1px solid black; }
                     </style>
                     <table BORDER CELLSPACING=5 CELLPADDING=15>
+
+
                         <tr>
-{#                            {% for i in fights_numbers %}#}
-                                {% for fight in fights%}
+                            {% for fight in fights%}
                             <td>
                                 {{ fight.order}}
                             </td>
                             {% endfor %}
                         </tr>
 
+
                         <tr>
-                                {% for fighter in fighters_one_names %}
+                            {% for fighter in fighters_one_names %}
                             <td>
                                 <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                             {{ fighter.name }}
@@ -113,6 +115,7 @@
                             </td>
                             {% endfor %}
                         </tr>
+
 
                         <tr>
                             {% for fighter in fighters_two_names  %}
@@ -122,39 +125,41 @@
                             </td>
                             {% endfor %}
                         </tr>
+
+
                              {% for r in rounds_obj %}
-
                         <tr>
-
                         {% for fight in fights %}
                             {% if fight.rounds %}
-
                                  <td>
                                     <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
-                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id   %}">
-                                         walka nr{{r.order}}
+                                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id   %}">
+                                        walka
+                            nr{{r.order}}
                                      <br>
-{#                                {% for fight in fights %}#}
-                             {% if fight.fighter_one_points %}
-                             {{ fight.fighter_one_points }} :
+                                    </a>
+                                    </button>
+                                </td>
                             {% endif %}
-{#                        {% endfor %}#}
+                            {% endfor %}
+
+                        <td>
+                            {% endfor %}
+                        <tr>
+                                                   {% for fight in fights %}
+                             <td>
+                             {% if fight.fighter_one_points %}
+                           {{ fight.fighter_one_points }} :
+                            {% endif %}
 
                             {% if fight.fighter_two_points %}
                             {{ fight.fighter_two_points }}
                              {% endif %}
-
-                        </a>
-                                    </button>
-                                </td>
-                           {% endif %}
-
-                    {% endfor %}
-
-                        </tr>
+                            </td>
                             {% endfor %}
-                        <tr>
-                    </tr>
+                        </td>
+                             </tr>
+
 
                     </table>
                     <style>
