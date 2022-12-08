@@ -69,12 +69,15 @@
                             <li>
                                 <a style="color:blue" href = "{% url 'tournament_calculating:group_details' group.id %}" >
                                     grupa {{ group.number }}{{ first_particpant }}
+
                                 </a>
+                                {% if user == request.user %}
                                 <button id="delete_tournament" type="button" style="background-color:green; "  class="btn btn-primary">
                                     <a style="color:white;" href = "{% url 'tournament_calculating:draw_fights' group.id  %}">
                                         Losuj walki
                                     </a>
                                 </button>
+                            {% endif %}
                             </li>
                             <ol>
                                 {% for participant in group.participants.all %}

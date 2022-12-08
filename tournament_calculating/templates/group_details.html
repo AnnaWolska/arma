@@ -10,11 +10,13 @@
     <ol>
         <br class="list-group-item">
             <p>
+                {% if tournament.user == request.user %}
                     <button id="delete_tournament" type="button" style="background-color:red"  class="btn btn-primary">
                     <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_group' group_id tournament.id %}">
                         Usuń grupę
                     </a>
                 </button>
+                {% endif %}
                 <h5>
                     grupa {{  number }} turnieju:
                     <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >

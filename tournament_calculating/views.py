@@ -17,6 +17,11 @@ from tournament_calculating.forms import (
 
 def participants_list(request):
     participants = Participant.objects.all().order_by('name')
+    # tournaments_titles =
+    # tournament_titles = []
+    # for p in participants:
+    #     tournament_titles.append(p.tournaments.all())
+    # print(tournament_titles)
     paginator = Paginator(participants, 20)
     page_number = request.GET.get('page')
     participants_register= paginator.get_page(page_number)

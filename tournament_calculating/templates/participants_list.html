@@ -33,17 +33,25 @@
         {% endif %}
     </span>
 </div>
-{% for participant in participants_list  %}
+
+{% for participant in participants_register  %}
 <div class="list-group">
     <ol>
         <li class="list-group-item" >
-            <p style="font-family: cursive " >
+{#            <p style="font-family: cursive " >#}
+            <p>
                 <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
-                    {{ participant.name}} z {{ participant.school}}
+                    {{ participant.name}} z {{ participant.school}},
+{#                    {% if participants.tournaments %}#}
+                    udział w
+{#                    {% for  %}#}
+{#
+                    {{ participant.tournaments.all }}
+{#                    {% endif %}#}
                 </a>
             </p>
             {% if participant.image %}
-            {% thumbnail participant.image "300x300" as im %}
+            {% thumbnail participant.image "100x100" as im %}
             <img src="{{ im.url }}" alt="zdj">
             {% endthumbnail %}
             {% endif %}
@@ -51,6 +59,7 @@
     </ol>
 </div>
 {% endfor %}
+
 <div class="pagination">
     <span class = "step-links">
         {% if participants_list.has_previous %}

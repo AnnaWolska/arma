@@ -10,6 +10,7 @@ class Participant(models.Model):
     image = ImageField(upload_to="tournament_calculating/images/%Y/%m/%d/", blank=True, null=True)
     tournaments = models.ManyToManyField('tournaments.Tournament', related_name='participants')
 
+
     def __str__(self):
         return f"{self.name} {self.school} {self.image} {self.tournaments}"
 
