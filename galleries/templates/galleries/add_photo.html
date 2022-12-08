@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load thumbnail %}
+{#from django import forms#}
+{#from django.forms import formset_factory#}
+
+{%  block style %}
+    <link href= "{% static "books/css/style.css" %}" rel=stylesheet">
+{% endblock %}
+
+{% block content %}
+    {%  if formset %}
+        <div class="row">
+            <h3>Dodaj zdjęcie do galerii {{ gallery.title }}</h3>
+            <div>
+                {% for photo in gallery.photos.all %}
+                    {% thumbnail photo.image "80" as im %}
+                        <img src="{{ im.url }}" alt=""/>
+                    {% endthumbnail %}
+                {% endfor %}
+            </div>
+            <div class="col-6 offset-md-3">
+{#                <form method = "POST" enctype="multipart/form-data">#}
+                <form id="form-container" method = "POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                {% for form in formset %}
+                    <div class="photo-form">
+                        {{ form|crispy }}
+                    </div>
+                {% endfor %}
+{#                <button type="submit"#}
+{#                class = "btn btn-primary">Wyślij</button>#}
+                <hr>
+                <button id="add-form" type="button" class="btn btn-primary">Dodaj jeszczcze jeden</button>
+                <hr>
+                <input type="submit" name="submit" value="Prześlij" class="btn btn-primary"/>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block additional_scripts %}
+    <script>
+        let form = document.querySelectorAll(".photo-form")
+        let container = document.querySelector("#form-container")
+        let addButton = document.querySelector("#add-form")
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+        let formNum = form.length - 1
+        addButton.addEventListener('click', addForm)
+        function addForm(e){
+            e.preventDefault()
+            let newForm = form[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+            totalForms.setAttribute(`value`, `${formNum + 1}`)
+        }
+    </script>
+
+{#    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>#}
+{#    {{ form.media }}#}
+{% endblock %}

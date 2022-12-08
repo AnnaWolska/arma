@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load thumbnail %}
+
+{% block content %}
+<h3>  <a href = "{% url 'galleries:add_gallery' %}"> Dodaj galerię </a>  </h3>
+{#    {%  if galleries_list %}#}
+
+    <div class="pagination">
+        <span class = "step-links">
+
+        {% if galleries_list.has_previous %}
+            <a href="?page=1">&laquo; pierwsza</a>
+            <a href="?page={{ galleries_list.previous_page_number }}">poprzednia</a>
+        {% endif %}
+
+            <span class="current">
+                strona {{ galleries_list.number}}  z {{ galleries_list.paginator.num_pages }}.
+            </span>
+
+        {% if galleries_list.has_next %}
+            <a href="?page={{ galleries_list.next_page_number }}">następna</a>
+            <a href="?page={{ galleries_list.end_index }}">ostatnia</a>
+        {% endif %}
+
+        {% if galleries_list.end_index %}
+        {% endif %}
+        </span>
+    </div>
+    <h4>Lista galerii:</h4>
+
+    <div class="row">
+            {%  for gallery in galleries_list %}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100">
+                        {% thumbnail gallery.photos.first.image "300x300" crop="center" as im %}
+                            <img class=card-img-top" src="{{  im.url }}" alt="">
+                        {% endthumbnail %}
+                        <div class="card-body">
+                            <h4 class="card-title text-center">{{ gallery.title }}</h4>
+                        </div>
+                            <div class="card-footer text-center">
+                                <a href= "{% url 'galleries:gallery_details' gallery.id %}" class="btn btn-primary">Pokaż</a>
+                            </div>
+
+                        </div>
+                    </div>
+            {% endfor %}
+
+    </div>
+
+    <div class="pagination">
+        <span class = "step-links">
+
+            {% if galleries_list.has_previous %}
+                <a href="?page=1">&laquo; pierwsza</a>
+                <a href="?page={{ galleries_list.previous_page_number }}">poprzednia</a>
+            {% endif %}
+
+            <span class="current">
+                strona {{ galleries_list.number}}  z {{ galleries_list.paginator.num_pages }}.
+            </span>
+
+            {% if galleries_list.has_next %}
+                <a href="?page={{ galleries_list.next_page_number }}">następna</a>
+                <a href="?page={{ galleries_list.end_index }}">ostatnia</a>
+            {% endif %}
+
+            {% if galleries_list.end_index %}
+            {% endif %}
+
+        </span>
+    </div>
+
+{#    <div class="col-6 offset-md-3">#}
+{#        <form id="form" method="post" action=".">#}
+{#            {% csrf_token %}#}
+{#            {{ form|crispy }}#}
+{#            <input type=submit" value="Submit" class="btn btn-primary"/>#}
+{#        </form>#}
+{#    </div>#}
+
+
+
+{% endblock %}
+
+{%  block additional_scripts %}
+{#    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>#}
+    {{ form.media }}
+{% endblock %}

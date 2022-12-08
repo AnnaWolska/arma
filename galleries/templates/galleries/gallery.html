@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block content %}
+    <h2> Szczegóły gallerii : </h2>
+      <div>
+        <h5>
+             <ol>
+                <li>id: {{ id }}</li>
+                 <li> tytuł: {{ title }}</li>
+                 <li> opis: {{ description }}</li>
+                 <li><div>utworzono: {{ created}}</div></li>
+                 <li>zmodyfikowano: {{ modified }}</li>
+                 <li>użytkownik: {{ user }}</li>
+            </ol>
+        </h5>
+
+        <div class="pagination">
+            <span class = "step-links">
+                {% if gallery_list.has_previous %}
+                    <a href="?page=1">&laquo; pierwsza</a>
+                    <a href="?page={{ gallery_list.previous_page_number }}">poprzednia</a>
+                {% endif %}
+                    <span class="current">
+                        strona {{ gallery_list.number}} z {{ gallery_list.paginator.num_pages }}.
+                    </span>
+                {% if gallery_list.has_next %}
+                    <a href="?page={{ gallery_list.next_page_number }}">następna</a>
+                    <a href="?page={{ gallery_list.end_index }}">ostatnia</a>
+                {% endif %}
+                {% if gallery_list.end_index %}
+                {% endif %}
+            </span>
+        </div>
+
+    <div class="row">
+        {% for photo in gallery_list %}
+                        {% if photo.is_published %}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100">
+                        {% thumbnail photo.image "300x300" crop="center" as im %}
+                            <a href="{{ photo.image.url }}">
+                            <img  class="card-img-top" src="{{  im.url }}" alt="">
+                            </a>
+                        {% endthumbnail %}
+                        <div class="card-body">
+                            <div class="card-title text-left">
+                                <h6>
+                                    <p>
+                                        {{ photo.title }}<br>
+                                        {{ photo.slug }}<br>
+                                        {{ photo.short_description }}<br>
+                                        {{ photo.image }}<br>
+                                        {{photo.source}}<br>
+                                        {{ photo.status }}<br>
+                                    </p>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <span class = "step-links">
+            {% if gallery_list.has_previous %}
+                <a href="?page=1">&laquo; pierwsza</a>
+                <a href="?page={{ gallery_list.previous_page_number }}">poprzednia</a>
+            {% endif %}
+                <span class="current">
+                    strona {{ gallery_list.number}} z {{ gallery_list.paginator.num_pages }}.
+                </span>
+            {% if gallery_list.has_next %}
+                <a href="?page={{ gallery_list.next_page_number }}">następna</a>
+                <a href="?page={{ gallery_list.end_index }}">ostatnia</a>
+            {% endif %}
+            {% if gallery_list.end_index %}
+            {% endif %}
+        </span>
+    </div>
+
+    <h5>
+        {% if user == request.user %}
+            <a href = "{% url 'galleries:add_photo' id %}"> Edytuj galerię (dodawaj zdjęcia) <br></a>
+            <a href = "{% url 'galleries:galleries_list' %}"> Powrót do listy galerii </a>
+        {% else %}
+            <p>tylko twórca galerii może ją edytować </p>
+        {% endif %}
+    </h5>
+  </div>
+{% endblock %}
+
+{%  block additional_scripts %}
+{#    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>#}
+    {{ form.media }}
+{% endblock %}
