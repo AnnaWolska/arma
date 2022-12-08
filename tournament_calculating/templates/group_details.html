@@ -127,26 +127,47 @@
                         </tr>
 
 
-                             {% for r in rounds_obj %}
-                        <tr>
-                        {% for fight in fights %}
-                            {% if fight.rounds %}
-                                 <td>
-                                    <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
-                                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id   %}">
-                                        walka
-                            nr{{r.order}}
-                                     <br>
-                                    </a>
-                                    </button>
-                                </td>
-                            {% endif %}
-                            {% endfor %}
 
+                        {% for r in rounds_obj %}
+                        <tr>
+                            {% for fight in fights %}
+                                {% if fight.rounds %}
+                                     <td>
+                                        <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
+                                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id   %}">
+                                        walka
+                                         nr{{r.order}}
+                                         <br>
+                                        </a>
+                                        </button>
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
                         <td>
                             {% endfor %}
                         <tr>
-                                                   {% for fight in fights %}
+                        </tr>
+
+
+
+
+
+
+{#
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            {% for fight in fights %}
                              <td>
                              {% if fight.fighter_one_points %}
                            {{ fight.fighter_one_points }} :

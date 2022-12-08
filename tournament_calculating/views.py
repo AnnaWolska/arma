@@ -44,6 +44,8 @@ def participant_details(request, participant_id):
 def group_details(request, group_id):
     group = Group.objects.get(pk=group_id)
     rounds_obj = group.rounds_of_group.all()
+
+
     number = group.number
     tournament = group.tournament
     participants = group.participants.all()
@@ -52,6 +54,9 @@ def group_details(request, group_id):
     for p in participants:
         participants_ids.append(p.id)
     fights = group.fights.all().order_by('id')
+    fight_rounds = []
+    for fight in fights:
+        fight_rounds.append(fight)
     first_fight = fights.first()
     ff = fights.filter(pk=group_id)
     rounds = 0
@@ -60,6 +65,7 @@ def group_details(request, group_id):
         iter_rounds.append(i)
     if first_fight:
         rounds = first_fight.rounds
+
 
     fighter_one_ids = []
     for f in fights:
@@ -74,7 +80,6 @@ def group_details(request, group_id):
     fighters_two_names = []
     for el in fighter_two_ids:
         fighters_two_names.append(participants.get(id=el))
-
     fights_numbers = []
     for i in range(1,len(fighters_one_names) + 1):
         fights_numbers.append(i)
@@ -92,6 +97,11 @@ def group_details(request, group_id):
     for element in fighters_one_names:
         prtcp.append(participants.filter(name=element.name))
 
+
+    rounds_to_show = []
+    for f in fights:
+        rounds_to_show.append(rounds_obj.filter(fight_id=f.id))
+
     return render(request, "group_details.html", context={
         "number": number,
         "tournament": tournament,
@@ -104,7 +114,10 @@ def group_details(request, group_id):
         "rounds": rounds,
         "fights": fights,
         # "rounds_buttons": rounds_buttons,
-        "rounds_obj": rounds_obj
+        "rounds_obj": rounds_obj,
+        "fight_rounds": fight_rounds,
+        "rounds_to_show": rounds_to_show
+        # "iter_rounds": iter_rounds
     })
 
 def fight_details(request, group_id, fight_id):
@@ -382,6 +395,7 @@ def delete_fights(request, tournament_id, group_id):
                  })
 
 
+# MyModel.objects.filter(pk=some_value).update(field1=F('field1') + 1)
 def add_rounds(request, group_id):
 
     group = Group.objects.get(pk=group_id)
@@ -390,25 +404,49 @@ def add_rounds(request, group_id):
     if request.user.is_authenticated:
         form = AddRoundsForm(request.POST, instance=group)
         fights = group.fights.all()
-        rounds = group.rounds_of_group.all()
+        rounds_of_group = group.rounds_of_group.all()
         if request.method == "POST" and form.is_valid():
-            rounds.delete()
+            # rounds_of_group.delete()
+
+
             rounds = form.cleaned_data['rounds']
             obj = form.save(commit=False)
             obj.rounds = rounds
             obj.save()
+            for p in participants:
+                obj = Round(fighter_id=p.id)
+            for fight in fights:
+                obj = Round(fight_id=fight.id)
+
+
+
+                for round in range(1, rounds + 1):
+                # for round in rounds_of_group:
+                    obj = Round(group = group, order=round,fighter_id=obj.fighter_id, fight_id=obj.fight_id)
+                    obj.save()
+
+
+
+                # obj.fighter = p
+                # obj.save()
+
+
+                # obj.fight = fight
+
             fights.update(rounds=rounds, group=group)
             messages.success(request, 'rundy dodane')
             obj = form.save(commit=False)
-            for round in range(1, rounds + 1):
-                obj = Round(group = group, order=round)
-                obj.save()
-            for p in participants:
-                obj.fighter = p
-                obj.save()
-            for f in fights:
-                obj.fight = f
-                obj.save()
+
+
+            # for round in range(1, rounds + 1):
+            #     obj = Round(group = group, order=round)
+            #     obj.save()
+            # for p in participants:
+            #     obj.fighter = p
+            #     obj.save()
+            # for f in fights:
+            #     obj.fight = f
+            #     obj.save()
 
 
 
