@@ -223,7 +223,7 @@ def add_group(request, tournament_id):
         for g in groups:
             many_group_numbers.append(g.number)
         if request.method == "POST" and form.is_valid():
-            number = form.cleaned_data['number']
+            number = form.number
             if number not in many_group_numbers:
                 obj = form.save(commit=False)
                 obj.number = number
