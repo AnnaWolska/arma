@@ -57,7 +57,7 @@ class HasPhotosFilter(admin.SimpleListFilter):
 
 @admin.register(Gallery)
 class GalleryAdmin(ExportMixin,admin.ModelAdmin):
-    list_display = ["id","title","photos_count","slug","description","created","modified","user","status"]
+    list_display = ["id","title","photos_count","description","created","modified","user"]
     # fields = ["title","slug","description","created","modified","user"]
     fieldsets = (
         ('', {
@@ -67,9 +67,7 @@ class GalleryAdmin(ExportMixin,admin.ModelAdmin):
             'fields': ('description',),
             'description': "Napisz parę słów o tej galerii"
         }),
-        ('Status', {
-            'fields': ('status',),
-        }),
+
     )
     search_fields = ["title","description","created","modified","user"]
     # list_filter = ["title","slug","description","created","modified","user"]

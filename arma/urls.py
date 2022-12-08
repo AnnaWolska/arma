@@ -29,7 +29,9 @@ urlpatterns = [
     # path('register', include('register.urls')),
     path('', include('register.urls')),
     path('organizers/', include('organizers.urls')),
+    path('galleries/', include('galleries.urls')),
     path('tournament_calculating/', include('tournament_calculating.urls'))
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 print(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))

@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from galleries.models import Status, Gallery, Photo
+from galleries.models import Gallery, Photo
 from django.core.paginator import Paginator
 from galleries.form import GalleryForm, PhotoForm
 from django.template import loader
@@ -13,10 +13,10 @@ from django.db.models import Count
 
 
 def show_galleries_list(request):
-    # galleries = Gallery.objects.filter(status=Status.PUBLISHED)
-    galleries = Gallery.objects.filter(status=Status.PUBLISHED).annotate(
-                p_count=Count('photos')
-             ).filter(p_count__gt=0)
+    galleries = Gallery.objects.all()
+    # galleries = Gallery.objects.filter(status=Status.PUBLISHED).annotate(
+    #             p_count=Count('photos')
+    #          ).filter(p_count__gt=0)
 
     # galleries = [g for g in galleries if g.photos.count() >0]
 
@@ -85,7 +85,8 @@ def add_photo(request, gallery_id):
             if formset.is_valid():
                 for f in formset.cleaned_data:
                     if f:
-                        Photo.objects.create(gallery=gallery, **f)
+                        # Photo.objects.create(gallery=gallery, **f)
+                        Photo.objects.create(gallery=gallery)
                         instance = formset.save(commit=False)
                         # instance.gallery = gallery
                         # instance.save()
