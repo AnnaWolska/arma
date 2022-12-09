@@ -5,7 +5,7 @@
 {% block content %}
     <h2> Szczegóły gallerii : </h2>
       <div>
-        <h5>
+{#        <h5>#}
              <ol>
                 <li>id: {{ id }}</li>
                  <li> tytuł: {{ title }}</li>
@@ -14,7 +14,7 @@
                  <li>zmodyfikowano: {{ modified }}</li>
                  <li>użytkownik: {{ user }}</li>
             </ol>
-        </h5>
+{#        </h5>#}
 
         <div class="pagination">
             <span class = "step-links">
@@ -35,10 +35,18 @@
         </div>
 
     <div class="row">
+{#    jhh#}
+{#    {% for photo in gallery_list %}#}
+{#        {{photo.image}}hh#}
+{#     {% endfor %}#}
+
+
         {% for photo in gallery_list %}
-                        {% if photo.is_published %}
+{#                        {% if photo.is_published %}#}
+{#    {% if photo%}#}
                 <div class="col-lg-3 col-md-6 mb-4">
                     <div class="card h-100">
+
                         {% thumbnail photo.image "300x300" crop="center" as im %}
                             <a href="{{ photo.image.url }}">
                             <img  class="card-img-top" src="{{  im.url }}" alt="">
@@ -60,7 +68,7 @@
                         </div>
                     </div>
                 </div>
-            {% endif %}
+{#            {% endif %}#}
         {% endfor %}
     </div>
 

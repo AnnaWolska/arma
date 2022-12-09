@@ -85,8 +85,8 @@ def add_photo(request, gallery_id):
             if formset.is_valid():
                 for f in formset.cleaned_data:
                     if f:
-                        # Photo.objects.create(gallery=gallery, **f)
-                        Photo.objects.create(gallery=gallery)
+                        Photo.objects.create(gallery=gallery, **f)
+                        # Photo.objects.create(gallery=gallery)
                         instance = formset.save(commit=False)
                         # instance.gallery = gallery
                         # instance.save()
