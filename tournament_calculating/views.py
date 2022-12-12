@@ -106,6 +106,75 @@ def group_details(request, group_id):
     rounds_to_show = []
     for f in fights:
         rounds_to_show.append(rounds_obj.filter(fight_id=f.id))
+    # print(rounds_to_show)
+    # ten_rounds = []
+    # for round in rounds_to_show:
+    # print("rounds_obj")
+    # print(rounds_obj)
+    ten_rounds = rounds_obj.filter(order=1)
+    # print("t")
+    # print(ten_rounds)
+    # for t in ten_rounds:
+    #     print("t")
+    #     print(t.id)
+
+    ob_ls = []
+    # for x in rounds_obj.order:
+    # for round in rounds_obj:
+    #     ob_ls.append(rounds_obj.filter(order=x))
+    # print(ob_ls)
+    # while i <
+
+    # print(rounds)
+
+
+    # print(rounds_obj.filter(order=1))
+
+    rounds_sorted = []
+    for rounds_index in range(rounds ):
+        print("rounds ghjgjgj")
+        print(rounds_obj.filter(order=rounds_index))
+        rounds_sorted.append(rounds_obj.filter(order=rounds_index))
+
+
+
+
+
+
+
+
+    # tt = rounds_to_show.filter(order=1)
+    # for r in rounds_to_show:
+    #     print(r)
+
+    # some_var = []
+    # for f in fights:
+    #     some_var.append(f.filter())
+
+        # print(f)
+
+    # fights_first_row = fights.filter(order=1)
+    # print("fights_first_row")
+    # for f in fights_first_row:
+    #     print(f)
+
+    # fights_table = []
+    # for fight in fights:
+    #     fights_table.append(fight.order=1)
+
+    # fights_table = [None] * len(fights)
+    # index = 0
+
+    # for f in fights:
+    #     print(f.rounds_of_fight.all())
+
+    # for fight in fights:
+    #     print(fight.rounds_of_fight.all()[index])
+
+        # fights_table[index].append(fight.rounds_of_fight.all()[index])
+
+
+
 
     return render(request, "group_details.html", context={
         "number": number,
@@ -121,8 +190,10 @@ def group_details(request, group_id):
         # "rounds_buttons": rounds_buttons,
         "rounds_obj": rounds_obj,
         "fight_rounds": fight_rounds,
-        "rounds_to_show": rounds_to_show
-        # "iter_rounds": iter_rounds
+        "rounds_to_show": rounds_to_show,
+        # "fights_table": fights_table,
+        # "iter_rounds": iter_rounds,
+        "rounds_sorted": rounds_sorted
     })
 
 def fight_details(request, group_id, fight_id):

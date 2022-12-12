@@ -128,34 +128,56 @@
                             {% endfor %}
                         </tr>
 
+{{ forloop.counter0 }}
+
+                        {#   for r in rounds_obj #}
+
+{#                        <tr>#}
+
+{#                            {% for elem in fights_table %}#}
+{#                                <td>ala</td>#}
+{#                                {% for round in elem %}#}
+{#                                    {{ round }}#}
+{#                                {% endfor %}#}
 
 
-                        {% for r in rounds_obj %}
-                        <tr>
-                            {% for fight in fights %}
-                                {% if fight.rounds %}
-                                     <td>
-                                        <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
-                                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id   %}">
-                                        walka
-                                         nr{{r.order}}
-                                         <br>
-                                        </a>
-                                        </button>
-                                    </td>
-                                {% endif %}
+{#                                     <td>#}
+{#                                        <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">#}
+{#                                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id   %}">#}
+{#                                        walka#}
+{#                                         nr {{ fight.rounds_of_fight[forloop.counter0] }}#}
+{#                                         <br>#}
+{#                                        </a>#}
+{#                                        </button>#}
+{#                                    </td>#}
+
+
+
+
+{#                    {% for fight in fight.rounds_of_fight.all %}#}
+                         {% for fight in fights %}
+                          <td>
+                    {% for elek in rounds_sorted %}
+
+                        <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
+                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id   %}">walka</a>
+{#                            nr{{  }}#}
+{#                         nr {{ fight.rounds_of_fight[forloop.counter0] }}#}
+{#                         <br>#}
+
+                                {% endfor %}
+
+
+
                             {% endfor %}
-                        <td>
-                            {% endfor %}
+
                         <tr>
-                        </tr>
+{#                        </tr>#}
 
 
 
 
 
-
-{#
 
 
 
