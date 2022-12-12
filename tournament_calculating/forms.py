@@ -64,39 +64,13 @@ class AddRoundsForm(forms.ModelForm):
                 )
             )
 
-# class AddRoundsForm(forms.ModelForm):
-#
-#     class Meta:
-#         model = Fight
-#         fields = ['rounds']
-#         labels = {"rounds": 'starcia'}
-#
-#         def __init__(self, *args, **kwargs):
-#             super().__init__(*args, **kwargs)
-#             self.helper = FormHelper()
-#             self.helper.form_method = 'post'
-#             self.helper.form_action = 'tournament_calculating:tournament_calculate'
-#             self.helper.layout = Layout(
-#                 Fieldset(
-#                     'Dodaj ilość starć',
-#                     'rounds',
-#                 ),
-#                 ButtonHolder(
-#                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),
-#                     css_class="d-flex justify-content-end"
-#                 )
-#             )
-
-
-
-
 
 class AddPointsForm(forms.ModelForm):
+
     class Meta:
         pass
-        model = Fight
-        fields = ["fighter_one_points","fighter_two_points"]
-        # fields = []
+        model = Round
+        fields = ["points_fighter_one", "points_fighter_two"]
         labels = {"points": 'punkty'}
 
         def __init__(self, *args, **kwargs):
@@ -106,13 +80,33 @@ class AddPointsForm(forms.ModelForm):
             self.helper.form_action = 'tournament_calculating:add_points'
             self.helper.layout = Layout(
                 Fieldset(
-                        "punkty"
+                    "punkty"
                 ),
                 ButtonHolder(
                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),
                     css_class="d-flex justify-content-end"
                 )
             )
+    # class Meta:
+    #     pass
+    #     model = Fight
+    #     fields = ["fighter_one_points","fighter_two_points"]
+    #     labels = {"points": 'punkty'}
+    #
+    #     def __init__(self, *args, **kwargs):
+    #         super().__init__(*args, **kwargs)
+    #         self.helper = FormHelper()
+    #         self.helper.form_method = 'post'
+    #         self.helper.form_action = 'tournament_calculating:add_points'
+    #         self.helper.layout = Layout(
+    #             Fieldset(
+    #                     "punkty"
+    #             ),
+    #             ButtonHolder(
+    #                 Submit('submit', 'Dodaj', css_class='btn btn-primary'),
+    #                 css_class="d-flex justify-content-end"
+    #             )
+    #         )
 
 
 class AddGroupForm(forms.ModelForm):

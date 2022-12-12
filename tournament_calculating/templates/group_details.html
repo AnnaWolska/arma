@@ -157,17 +157,32 @@
 {#                    {% for fight in fight.rounds_of_fight.all %}#}
                          {% for fight in fights %}
                           <td>
-                    {% for elek in rounds_sorted %}
+
+                        {% for round in rounds_sorted %}
 
                         <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
-                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id   %}">walka</a>
+-
+                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id round.id  %}">
+
+                            walka {{ round.id }}
+                        </a>
 {#                            nr{{  }}#}
 {#                         nr {{ fight.rounds_of_fight[forloop.counter0] }}#}
-{#                         <br>#}
+                         <br>
 
-                                {% endfor %}
+                             {% if fight.fighter_one_points %}
 
+                           {{ fight.fighter_one_points }} :
 
+                            {% endif %}
+
+                            {% if fight.fighter_two_points %}
+
+                            {{ fight.fighter_two_points }}
+
+                             {% endif %}
+
+                            {% endfor %}
 
                             {% endfor %}
 
@@ -178,30 +193,17 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            {% for fight in fights %}
-                             <td>
-                             {% if fight.fighter_one_points %}
-                           {{ fight.fighter_one_points }} :
-                            {% endif %}
-
-                            {% if fight.fighter_two_points %}
-                            {{ fight.fighter_two_points }}
-                             {% endif %}
-                            </td>
-                            {% endfor %}
+{#                            {% for fight in fights %}#}
+{#                             <td>#}
+{#                             {% if fight.fighter_one_points %}#}
+{#                           {{ fight.fighter_one_points }} :#}
+{#                            {% endif %}#}
+{##}
+{#                            {% if fight.fighter_two_points %}#}
+{#                            {{ fight.fighter_two_points }}#}
+{#                             {% endif %}#}
+{#                            </td>#}
+{#                            {% endfor %}#}
                         </td>
                              </tr>
 

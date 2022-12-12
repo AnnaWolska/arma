@@ -49,8 +49,6 @@ def participant_details(request, participant_id):
 def group_details(request, group_id):
     group = Group.objects.get(pk=group_id)
     rounds_obj = group.rounds_of_group.all()
-
-
     number = group.number
     tournament = group.tournament
     participants = group.participants.all()
@@ -71,7 +69,6 @@ def group_details(request, group_id):
     if first_fight:
         rounds = first_fight.rounds
 
-
     fighter_one_ids = []
     for f in fights:
         fighter_one_ids.append(f.fighter_one_id)
@@ -88,11 +85,6 @@ def group_details(request, group_id):
     fights_numbers = []
     for i in range(1,len(fighters_one_names) + 1):
         fights_numbers.append(i)
-    #
-    # rounds_buttons = []
-    # if rounds:
-    #     for i in range(rounds):
-    #         rounds_buttons.append(i)
 
     prtcp_to_show = []
     for p in participants:
@@ -101,7 +93,6 @@ def group_details(request, group_id):
     prtcp = []
     for element in fighters_one_names:
         prtcp.append(participants.filter(name=element.name))
-
 
     rounds_to_show = []
     for f in fights:
@@ -126,22 +117,13 @@ def group_details(request, group_id):
     # while i <
 
     # print(rounds)
-
-
     # print(rounds_obj.filter(order=1))
 
     rounds_sorted = []
-    for rounds_index in range(rounds ):
-        print("rounds ghjgjgj")
-        print(rounds_obj.filter(order=rounds_index))
-        rounds_sorted.append(rounds_obj.filter(order=rounds_index))
+    if rounds:
+        for rounds_index in range(rounds ):
 
-
-
-
-
-
-
+            rounds_sorted.append(rounds_obj.filter(order=rounds_index))
 
     # tt = rounds_to_show.filter(order=1)
     # for r in rounds_to_show:
@@ -173,9 +155,6 @@ def group_details(request, group_id):
 
         # fights_table[index].append(fight.rounds_of_fight.all()[index])
 
-
-
-
     return render(request, "group_details.html", context={
         "number": number,
         "tournament": tournament,
@@ -187,7 +166,6 @@ def group_details(request, group_id):
         "prtcp": prtcp,
         "rounds": rounds,
         "fights": fights,
-        # "rounds_buttons": rounds_buttons,
         "rounds_obj": rounds_obj,
         "fight_rounds": fight_rounds,
         "rounds_to_show": rounds_to_show,
@@ -195,6 +173,7 @@ def group_details(request, group_id):
         # "iter_rounds": iter_rounds,
         "rounds_sorted": rounds_sorted
     })
+
 
 def fight_details(request, group_id, fight_id):
     group = Group.objects.get(pk=group_id)
@@ -355,7 +334,7 @@ def draw_fights(request, group_id):
     tournament = group.tournament
     fights = Fight.objects.all().order_by('id')
     # group_fights = fights(pk=group_id)
-    # rounds =
+    # rounds = 0
     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(group.participants.all(), r)
                                                             for r in range(2, 2 + 1)))
     left_participants = []
@@ -550,27 +529,28 @@ def add_rounds(request, group_id):
 
 
 
-def add_points (request, group_id, fight_id):
+def add_points (request, group_id, fight_id, round_id):
     group = Group.objects.get(pk=group_id)
-    rounds = Round.objects.all()
-    print(rounds)
-    fights = Fight.objects.all()
+    # rounds = Round.objects.all()
+    fight_rounds = Round.objects.filter(fight_id=fight_id)
+    # fights = Fight.objects.all()
     fight = Fight.objects.get(pk=fight_id)
-    fighter_one = fight.fighter_one
-    fighter_two = fight.fighter_two
-    fighter_one_points = fight.fighter_one_points
-    fighter_two_points = fight.fighter_two_points
-    if request.user.is_authenticated:
-        form = AddPointsForm(request.POST, instance=fight)
+    # fighter_one = fight.fighter_one
+    # fighter_two = fight.fighter_two
+    # fighter_one_points = fight.fighter_one_points
+    # fighter_two_points = fight.fighter_two_points
 
-        if request.method == "POST" and form.is_valid():
-            fighter_one_points = form.cleaned_data['fighter_one_points']
-            fighter_two_points = form.cleaned_data['fighter_two_points']
-            instance = form.save(commit=False)
-            instance.id = fight_id
-            instance.fighter_one_points = fighter_one_points
-            instance.fighter_two_points = fighter_two_points
-            instance.save()
+    if request.user.is_authenticated:
+        form = AddPointsForm(request.POST, instance=round_id)
+        for r in fight_rounds:
+            if request.method == "POST" and form.is_valid():
+                points_fighter_one = form.cleaned_data['points_fighter_one']
+                points_fighter_two = form.cleaned_data['points_fighter_two']
+                instance = form.save(commit=False)
+                instance.id = r.id
+                instance.points_fighter_one = points_fighter_one
+                instance.points_fighter_two = points_fighter_two
+                instance.save()
             messages.success(request, 'punkty dodane')
 
             return HttpResponseRedirect(reverse(
@@ -585,9 +565,8 @@ def add_points (request, group_id, fight_id):
                     'group': group,
                     'fight': fight,
                     'group_id': group_id,
-                    'fighter_one_points': fighter_one_points,
-                    'fighter_two_points': fighter_two_points,
-                    'fight_id': fight_id
+                    'fight_id': fight_id,
+                    'round_id':round_id
                 })
             )
     else:
