@@ -157,15 +157,22 @@
 {#                    {% for fight in fight.rounds_of_fight.all %}#}
                          {% for fight in fights %}
                           <td>
-
-                        {% for round in rounds_sorted %}
+{#                            {% for round in fight.round_of_fights.all %}#}
+                                     {% for round in rounds_f %}
+{#                                         {% for fight in fights %}#}
+{#                        {% for round in rounds_sorted %}#}
+                                <table>
 
                         <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
--
-                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id round.id  %}">
 
-                            walka {{ round.id }}
+                        <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id round.id  %}">
+                            walka
+{#                            {{ round.order }}#}
+
+                        {{ round.id }}
+                        </table>
                         </a>
+{#                           ccc {{ round.id}}#}
 {#                            nr{{  }}#}
 {#                         nr {{ fight.rounds_of_fight[forloop.counter0] }}#}
                          <br>

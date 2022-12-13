@@ -94,9 +94,14 @@ def group_details(request, group_id):
     for element in fighters_one_names:
         prtcp.append(participants.filter(name=element.name))
 
+    rounds_sorted = []
     rounds_to_show = []
-    for f in fights:
-        rounds_to_show.append(rounds_obj.filter(fight_id=f.id))
+    if fights:
+        for f in fights:
+            rounds_to_show.append(rounds_obj.filter(fight_id=f.id))
+            rounds_sorted = (rounds_obj.filter(fight_id=f.id))
+            rounds_f = f.rounds_of_fight.all()
+    print(rounds_sorted)
     # print(rounds_to_show)
     # ten_rounds = []
     # for round in rounds_to_show:
@@ -118,13 +123,21 @@ def group_details(request, group_id):
 
     # print(rounds)
     # print(rounds_obj.filter(order=1))
+    # for round_index in rounds:
+    #     rounds_sorted = rounds_obj.filter(order=round_index)
+    # rounds_sorted = []
+    # if rounds:
+    #     rounds_sorted = (rounds_obj.filter(fight_id=))
+        # for round_index in rounds:
+        #     rounds_sorted.append(rounds_obj.filter(order=round_index))
 
-    rounds_sorted = []
-    if rounds:
-        for rounds_index in range(rounds ):
 
-            rounds_sorted.append(rounds_obj.filter(order=rounds_index))
 
+    #     for rounds_index in range(rounds ):
+    #
+    #         rounds_sorted = (rounds_obj.filter(order=rounds_index))
+
+    # rounds_new_ob = rounds_obj.filter(order = rounds_sorted.order)
     # tt = rounds_to_show.filter(order=1)
     # for r in rounds_to_show:
     #     print(r)
@@ -171,7 +184,8 @@ def group_details(request, group_id):
         "rounds_to_show": rounds_to_show,
         # "fights_table": fights_table,
         # "iter_rounds": iter_rounds,
-        "rounds_sorted": rounds_sorted
+        "rounds_sorted": rounds_sorted,
+        "rounds_f":rounds_f
     })
 
 
@@ -535,13 +549,14 @@ def add_points (request, group_id, fight_id, round_id):
     fight_rounds = Round.objects.filter(fight_id=fight_id)
     # fights = Fight.objects.all()
     fight = Fight.objects.get(pk=fight_id)
+    round = fight_rounds.get(pk=round_id)
     # fighter_one = fight.fighter_one
     # fighter_two = fight.fighter_two
     # fighter_one_points = fight.fighter_one_points
     # fighter_two_points = fight.fighter_two_points
 
     if request.user.is_authenticated:
-        form = AddPointsForm(request.POST, instance=round_id)
+        form = AddPointsForm(request.POST, instance=round)
         for r in fight_rounds:
             if request.method == "POST" and form.is_valid():
                 points_fighter_one = form.cleaned_data['points_fighter_one']
@@ -552,7 +567,8 @@ def add_points (request, group_id, fight_id, round_id):
                 instance.points_fighter_two = points_fighter_two
                 instance.save()
             messages.success(request, 'punkty dodane')
-
+            print("round_id")
+            print(round_id)
             return HttpResponseRedirect(reverse(
                 "tournament_calculating:group_details",
                 args=[group_id]
@@ -575,6 +591,7 @@ def add_points (request, group_id, fight_id, round_id):
             render(request, "add_rounds.html", context={
                 'form': form,
                 'group_id': group_id,
-                'fight_id': fight_id
+                'fight_id': fight_id,
+                'round_id': round_id
             })
         )
