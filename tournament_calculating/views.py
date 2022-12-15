@@ -57,6 +57,13 @@ def group_details(request, group_id):
     for p in participants:
         participants_ids.append(p.id)
     fights = group.fights.all().order_by('id')
+    rounds_fights = []
+    for f in fights:
+        rounds_fights = f.rounds_of_fight.all()
+    print("rounds_fights")
+    for ff in rounds_fights:
+        print(ff.id)
+    print(rounds_fights)
     fight_rounds = []
     for fight in fights:
         fight_rounds.append(fight)
@@ -93,21 +100,77 @@ def group_details(request, group_id):
     prtcp = []
     for element in fighters_one_names:
         prtcp.append(participants.filter(name=element.name))
-
+    rrr= []
+    rounds_ids =[]
     rounds_sorted = []
     rounds_to_show = []
+    rounds_of_fight = []
     if fights:
         for f in fights:
             rounds_to_show.append(rounds_obj.filter(fight_id=f.id))
-            rounds_sorted = (rounds_obj.filter(fight_id=f.id))
-            rounds_f = f.rounds_of_fight.all()
-    print(rounds_sorted)
+            rounds_sorted = rounds_obj.filter(fight_id=f.id)
+            rounds_of_fight = f.rounds_of_fight.all()
+            print("rounds_fffffffffffffffffffffffffffff")
+            print(rounds_of_fight)
+
+
+            print("NEEEEW")
+            for f in rounds_of_fight:
+                print("f.id")
+                print(f.id)
+                rounds_ids.append(f.id)
+
+    print("rounds_ids")
+    print(rounds_ids)
+    for id in rounds_ids:
+        print("id")
+        print(id)
+
+    # for id in rounds_ids:
+    #     rrr.append(rounds_obj.get(fight_id=id))
+    # print("rrrrrrr")
+    # print(rrr)
+
+
+    for fight in fights:
+        print("możę to:")
+        print(fight.rounds_of_fight.all())
+
+        rrr = fight.rounds_of_fight.all()
+
+
+    rerere = []
+    for r in rrr:
+        print(r)
+
+
+
+    # table = []
+    # for index in range(len(rounds_obj)):
+    #     for fight in fights:
+    #         table[index].append(fight.rounds_of_fight.all()[index])
+    #         print("table")
+    #         print(table)
+    #
+    # print("rounds")
+    # print(rounds)
+    table = []
+    for fight in fights:
+        # for round in rounds_obj:
+        table.append(fight.rounds_of_fight.all())
+    print("table")
+    print(table)
+
+
+
+
+
     # print(rounds_to_show)
     # ten_rounds = []
     # for round in rounds_to_show:
     # print("rounds_obj")
     # print(rounds_obj)
-    ten_rounds = rounds_obj.filter(order=1)
+    # ten_rounds = rounds_obj.filter(order=1)
     # print("t")
     # print(ten_rounds)
     # for t in ten_rounds:
@@ -131,8 +194,6 @@ def group_details(request, group_id):
         # for round_index in rounds:
         #     rounds_sorted.append(rounds_obj.filter(order=round_index))
 
-
-
     #     for rounds_index in range(rounds ):
     #
     #         rounds_sorted = (rounds_obj.filter(order=rounds_index))
@@ -145,7 +206,6 @@ def group_details(request, group_id):
     # some_var = []
     # for f in fights:
     #     some_var.append(f.filter())
-
         # print(f)
 
     # fights_first_row = fights.filter(order=1)
@@ -157,6 +217,9 @@ def group_details(request, group_id):
     # for fight in fights:
     #     fights_table.append(fight.order=1)
 
+
+
+    # NOWE
     # fights_table = [None] * len(fights)
     # index = 0
 
@@ -185,7 +248,10 @@ def group_details(request, group_id):
         # "fights_table": fights_table,
         # "iter_rounds": iter_rounds,
         "rounds_sorted": rounds_sorted,
-        "rounds_f":rounds_f
+        "rounds_of_fight":rounds_of_fight,
+        "rrr":rrr,
+        "rerere":rerere,
+        "table":table
     })
 
 
