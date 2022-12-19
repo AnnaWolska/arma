@@ -124,7 +124,7 @@
                             {% endfor %}
                         </tr>
 
-{{ forloop.counter0 }}
+
 
  {% for fight in fights %}
           <td>
@@ -134,7 +134,7 @@
                 <div id="clickable">
             <a id="clickable" href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id  %}">
 {#                {{ fight.id }}#}
-            walka  {{ r.order }}
+
 <br>
                              {% if r.points_fighter_one > 0 or  r.points_fighter_two == 0%}
                            {{ r.points_fighter_one }}:
@@ -142,10 +142,11 @@
 
                             {% if r.points_fighter_two > 0 or  r.points_fighter_two == 0%}
                             {{ r.points_fighter_two }}
-                             {% endif %}
+{#                             {% endif %}#}
 
-
-
+                                {% else %}
+             walka  {{ r.order }}
+{% endif %}
 
             <br>
             <br>
@@ -154,14 +155,11 @@
             {% endfor %}
 
                          <br>
-dddd
-                             {% if r.points_fighter_one %}
-                           {{ r.points_fighter_one }} :
-                            {% endif %}
-
-                            {% if r.points_fighter_two %}
-                            {{ r.points_fighter_two_ }}
-                             {% endif %}
+{#dddd {{ all_rounds_in_fight }} nn#}
+            {% for ru in all_rounds_in_fight %}
+                {{ ru.id }}
+                {{ ru.points_fighter_one }}
+                {% endfor %}
 
             {% endfor %}
 
