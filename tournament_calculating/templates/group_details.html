@@ -137,7 +137,7 @@
 
 <br>
                              {% if r.points_fighter_one > 0 or  r.points_fighter_two == 0%}
-                           {{ r.points_fighter_one }}:
+                           {{ r.points_fighter_one }}{{ r.name }}:
                             {% endif %}
 
                             {% if r.points_fighter_two > 0 or  r.points_fighter_two == 0%}
@@ -145,7 +145,7 @@
 {#                             {% endif %}#}
 
                                 {% else %}
-             walka  {{ r.order }}
+             starcie  {{ r.order }}
 {% endif %}
 
             <br>
@@ -160,7 +160,7 @@
                 {{ ru.id }}
                 {{ ru.points_fighter_one }}
                 {% endfor %}
-
+  tu będzie suma
             {% endfor %}
 
                     {% endif %}
