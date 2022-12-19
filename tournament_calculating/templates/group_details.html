@@ -128,71 +128,47 @@
 
  {% for fight in fights %}
           <td>
-{#        {% for round in rounds_of_fight %}#}
-{% for r in fight.rounds_of_fight.all %}
-            <table>
+{% for r in fight.rounds_of_fight.all%}
 
-{##}
 {#            <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">#}
-{##}
-{#            <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id round.id  %}">#}
-{#                            {{ fight.id }}#}
-
-            walka  {{ r.id }}
-{#            {% endfor %}#}
-            </table>
-            </a>
-
-
-{#                            {% for r in rrr %}#}
-{#                            {{ r.id }}jjjj#}
-{#                            {% endfor %}#}
-
-{#                            {% for t in table %}#}
-{#                          {{ t.id }}#}
-{#                            {% endfor %}#}
-
-
-{#                        {{ round.id }}#}
-
-
-{#                           ccc {{ round.id}}#}
-{#                            nr{{  }}#}
-{#                         nr {{ fight.rounds_of_fight[forloop.counter0] }}#}
-                         <br>
-
-{#                             {% for t in table %}#}
-{#                                 {{ t.id }}f#}
-{#                            {% endfor %}#}
-
-
-                             {% if fight.fighter_one_points %}
-
-                           {{ fight.fighter_one_points }} :
-
+                <div id="clickable">
+            <a id="clickable" href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id  %}">
+{#                {{ fight.id }}#}
+            walka  {{ r.order }}
+<br>
+                             {% if r.points_fighter_one > 0 or  r.points_fighter_two == 0%}
+                           {{ r.points_fighter_one }}:
                             {% endif %}
 
-                            {% if fight.fighter_two_points %}
-
-                            {{ fight.fighter_two_points }}
-
+                            {% if r.points_fighter_two > 0 or  r.points_fighter_two == 0%}
+                            {{ r.points_fighter_two }}
                              {% endif %}
 
-                            {% endfor %}
 
-                            {% endfor %}
 
+
+            <br>
+            <br>
+            </a>
+            </div>
+            {% endfor %}
+
+                         <br>
+dddd
+                             {% if r.points_fighter_one %}
+                           {{ r.points_fighter_one }} :
+                            {% endif %}
+
+                            {% if r.points_fighter_two %}
+                            {{ r.points_fighter_two_ }}
+                             {% endif %}
+
+            {% endfor %}
+
+                    {% endif %}
                         <tr>
-
                         </td>
                              </tr>
-{#{{ rrr }}#}
-               {% for r in rrr %}
-                            {{ r.id }}jjjj
-                            {% endfor %}
-
-
-
                     </table>
                     <style>
                         td, th { border: 1px solid black; }
@@ -200,7 +176,7 @@
                 </ol>
             </div>
             <hr>
-    {% endif %}
+
     <div>
         {% if image %}
         {% thumbnail image "300x300" as im %}
