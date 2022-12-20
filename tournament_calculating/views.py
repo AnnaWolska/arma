@@ -183,7 +183,6 @@ def fight_details(request, group_id, fight_id):
     })
 
 
-
 def add_participant(request, tournament_id, group_id):
     tournament = Tournament.objects.get(pk=tournament_id)
     if request.user.is_authenticated:
@@ -222,23 +221,71 @@ def add_group(request, tournament_id):
         for g in groups:
             many_group_numbers.append(g.number)
         if request.method == "POST" and form.is_valid():
-            number = form.number
-            if number not in many_group_numbers:
-                obj = form.save(commit=False)
-                obj.number = number
-                obj.save()
-                groups.create(number=number, tournament=tournament)
-                messages.success(request, 'grupa dodana.')
-                return HttpResponseRedirect(reverse(
-                    "tournaments:tournament_details",
-                    args=[tournament_id])
-                )
+            if request.method == "POST" and form.is_valid():
+                number = form.cleaned_data['number']
+                # if groups:
+                if number not in many_group_numbers:
+                    obj = form.save(commit=False)
+                    obj.number = number
+                    obj.save()
+                    groups.create(number=number, tournament=tournament)
+                    messages.success(request, 'grupa dodana.')
+                    return HttpResponseRedirect(reverse(
+                        "tournaments:tournament_details",
+                        args=[tournament_id]))
+        # if request.method == "POST":
+        #     form = AddGroupForm(request.POST, instance=tournament)
+        #
+        #     groups = tournament.groups.all()
+        #     many_group_numbers = []
+        #     for g in groups:
+        #         many_group_numbers.append(g.number)
+        #
+        #     if form.is_valid():
+        #         instance = form.save()
+        #         print("co to jest za instancja:")
+        #         print(instance)
+        #         instance.number = form.number
+        #         # instance.tournament =
+        #         instance.save()
+        #         groups.create(number=instance.number, tournament=tournament)
+        #         messages.success(request, 'grupa dodana.')
+
+    # if request.user.is_authenticated:
+    #     form = AddGroupForm(request.POST, instance=tournament)
+    #     groups = tournament.groups.all()
+    #     many_group_numbers = []
+    #     number = 0
+    #     for g in groups:
+    #         many_group_numbers.append(g.number)
+    #     print(many_group_numbers)
+    #     if request.method == "POST" and form.is_valid():
+    #         print("ghghghf")
+    #         print(form.is_valid())
+    #         print(number)
+    #         number = form.number
+    #         print("coś przed number")
+    #         print(number)
+    #         print("coś za number")
+    #         if number not in many_group_numbers:
+    #             obj = form.save(commit=False)
+    #             # obj.number = form.cleaned_data['number']
+    #             obj.number = number
+    #             obj.save()
+    #             groups.create(number=number, tournament=tournament)
+    #             messages.success(request, 'grupa dodana.')
+    #             return HttpResponseRedirect(reverse(
+    #                 "tournaments:tournament_details",
+    #                 args=[tournament_id])
+    #             )
             else:
                 form = AddGroupForm
                 return (
                     render(request, "add_group.html", context={
                         'form': form,
                         'tournament_id': tournament_id,
+                        # "number":number
+                        # "group_id": group_id
                     })
                 )
         else:

@@ -1,11 +1,9 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset, HTML, ButtonHolder
+from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder
 from django import forms
-from tournament_calculating.models import Participant, Group, Fight, Round
+
 from tournament_calculating.models import Group
-from dal import autocomplete
-from django.contrib import admin
-from django.contrib.admin.widgets import AutocompleteSelectMultiple
+from tournament_calculating.models import Participant, Fight, Round
 
 
 class AddParticipantForm(forms.ModelForm):
@@ -87,26 +85,6 @@ class AddPointsForm(forms.ModelForm):
                     css_class="d-flex justify-content-end"
                 )
             )
-    # class Meta:
-    #     pass
-    #     model = Fight
-    #     fields = ["fighter_one_points","fighter_two_points"]
-    #     labels = {"points": 'punkty'}
-    #
-    #     def __init__(self, *args, **kwargs):
-    #         super().__init__(*args, **kwargs)
-    #         self.helper = FormHelper()
-    #         self.helper.form_method = 'post'
-    #         self.helper.form_action = 'tournament_calculating:add_points'
-    #         self.helper.layout = Layout(
-    #             Fieldset(
-    #                     "punkty"
-    #             ),
-    #             ButtonHolder(
-    #                 Submit('submit', 'Dodaj', css_class='btn btn-primary'),
-    #                 css_class="d-flex justify-content-end"
-    #             )
-    #         )
 
 
 class AddGroupForm(forms.ModelForm):
@@ -114,7 +92,7 @@ class AddGroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = ['number']
-        labels = {"number": 'numer'}
+        labels = {"number": 'podaj numer grupy:'}
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -138,7 +116,7 @@ class AddFightsForm(forms.ModelForm):
     class Meta:
         model = Fight
         fields = ['rounds']
-        labels = {"rounds": 'rundy'}
+        labels = {"rounds": 'runndy'}
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)

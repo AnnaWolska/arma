@@ -9,49 +9,51 @@
 <div class="list-group">
     <ol>
         <br class="list-group-item">
-            <p>
-                {% if tournament.user == request.user %}
-                    <button id="delete_tournament" type="button" style="background-color:red"  class="btn btn-primary">
-                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_group' group_id tournament.id %}">
-                        Usuń grupę
-                    </a>
-                </button>
+        <p>
+            {% if tournament.user == request.user %}
+            <button id="delete_tournament" type="button" style="background-color:red"  class="btn btn-primary">
+                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_group' group_id tournament.id %}">
+                    Usuń grupę
+                </a>
+            </button>
+            {% endif %}
+            <h5>
+                grupa {{  number }} turnieju:
+                <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >
+                    {{  tournament.title }}
+                </a>
+                {% if tournament.image %}
+                {% thumbnail tournament.image "100x100" as im %}
+                <img src="{{ im.url }}" alt="zdj">
+                {% endthumbnail %}
                 {% endif %}
-                <h5>
-                    grupa {{  number }} turnieju:
-                    <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >
-                        {{  tournament.title }}
-                    </a>
-                </h5>
-                {% if tournament.user == request.user %}
-                <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
-                    <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}">
-                        Dodaj uczestnika
-                    </a>
-                </button>
-                    <button id="delete_tournament" type="button" style="background-color:green"  class="btn btn-primary">
-                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:draw_fights' group_id %}">
-                        Losuj walki
-                    </a>
-                </button>
-                    <button id="delete_tournament" type="button" style="background-color:darkred"  class="btn btn-primary">
-                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_fights' group_id tournament.id   %}">
+            </h5>
+            {% if tournament.user == request.user %}
+            <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
+                <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}">
+                    Dodaj uczestnika
+                </a>
+            </button>
+            <button id="delete_tournament" type="button" style="background-color:green"  class="btn btn-primary">
+                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:draw_fights' group_id %}">
+                    Losuj walki
+                </a>
+            </button>
+            <button id="delete_tournament" type="button" style="background-color:darkred"  class="btn btn-primary">
+                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_fights' group_id tournament.id   %}">
                     Usuń walki
-                    </a>
-                </button>
+                </a>
+            </button>
+            {% endif %}
+            uczestnicy:
+            {% for participant in participants %}
+            <ul>
+                <li>
+                    <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
+                        {{  participant.name }} z {{ participant.school  }}
 
+                        <div>
 
-                {% endif %}
-                </br>
-                </br>
-                uczestnicy:
-                </br>
-                {% for participant in participants %}
-                <ul>
-                    <li>
-                        <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
-                            {{  participant.name }} z {{ participant.school  }}
-{#                                                    <div>#}
                             {% if participant.image %}
                             {% thumbnail participant.image "100x100" as im %}
                             <img src="{{ im.url }}" alt="zdj">
@@ -67,121 +69,97 @@
                 </ul>
                 {% endfor %}
             </ol>
-        </ol>
-    </div>
-    <hr>
-
-{% if fighters_one_names %}
-
-     <center>starcia:
-                        <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
-                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_rounds' group_id   %}">
+        </div>
+        <hr>
+        {% if fighters_one_names %}
+        <center>
+            starcia:
+            <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
+                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_rounds' group_id   %}">
                     ile starć:
-                    </a>
-                </button>
-        {% if rounds %}
-    {{ rounds }}
+                </a>
+            </button>
+            {% if rounds %}
+            {{ rounds }}
             {% else %}
             dodaj ile starć ma mieć każda walka
-    {% endif %}
-    </center>
-    walki:
-                <br/>
-                <ol>
-                    <br/>
-                    <style>
-                        td, th { border: 1px solid black; }
-                    </style>
-                    <table BORDER CELLSPACING=5 CELLPADDING=15>
-
-
-                        <tr>
-                            {% for fight in fights%}
-                            <td>
-                                {{ fight.order}}
-                            </td>
-                            {% endfor %}
-                        </tr>
-
-
-                        <tr>
-                            {% for fighter in fighters_one_names %}
-                            <td>
-                                <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
+            {% endif %}
+        </center>
+        walki:
+        <br/>
+        <ol>
+            <br/>
+            <style>
+                td, th { border: 1px solid black; }
+            </style>
+            <table BORDER CELLSPACING=5 CELLPADDING=15>
+                <tr>
+                    {% for fight in fights%}
+                    <td>
+                        {{ fight.order}}
+                    </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for fighter in fighters_one_names %}
+                    <td>
+                        <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                             {{ fighter.name }}
-                                </a>
-                            </td>
-                            {% endfor %}
-                        </tr>
-
-
-                        <tr>
-                            {% for fighter in fighters_two_names  %}
-                            <td>
-                             <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
-                                {{ fighter.name }}
-                            </td>
-                            {% endfor %}
-                        </tr>
-
-
-
- {% for fight in fights %}
-          <td>
-{% for r in fight.rounds_of_fight.all%}
-
-{#            <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">#}
-                <div id="clickable">
-            <a id="clickable" href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id  %}">
-{#                {{ fight.id }}#}
-
-<br>
-                             {% if r.points_fighter_one > 0 or  r.points_fighter_two == 0%}
-                           {{ r.points_fighter_one }}{{ r.name }}:
-                            {% endif %}
-
-                            {% if r.points_fighter_two > 0 or  r.points_fighter_two == 0%}
-                            {{ r.points_fighter_two }}
-{#                             {% endif %}#}
-
-                                {% else %}
-             starcie  {{ r.order }}
-{% endif %}
-
-            <br>
-            <br>
-            </a>
-            </div>
-            {% endfor %}
-
-                         <br>
-{#dddd {{ all_rounds_in_fight }} nn#}
-            {% for ru in all_rounds_in_fight %}
-                {{ ru.id }}
-                {{ ru.points_fighter_one }}
-                {% endfor %}
-  tu będzie suma
-            {% endfor %}
-
-                    {% endif %}
-                        <tr>
+                        </a>
+                    </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for fighter in fighters_two_names  %}
+                    <td>
+                        <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
+                            {{ fighter.name }}
                         </td>
-                             </tr>
+                        {% endfor %}
+                    </tr>
+                    {% for fight in fights %}
+                    <td>
+                        {% for r in fight.rounds_of_fight.all|dictsort:"id" %}
+                        <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
+                            <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
+                                <br>
+                                <p style="text-align: center; ">
+                                    {% if r.points_fighter_one > 0 or  r.points_fighter_two == 0%}
+                                    wyniki :
+                                    <br>
+                                    {{ r.points_fighter_one }}{{ r.name }} :
+                                    {% endif %}
+                                    {% if r.points_fighter_two > 0 or  r.points_fighter_two == 0%}
+                                    {{ r.points_fighter_two }}
+                                </p>
+                                {% else %}
+                                starcie  {{ r.order }}
+                                {% endif %}
+                            </a>
+                        </button>
+                        <br>
+                        <br>
+                        {% endfor %}
+                        <br>
+                        {% for ru in all_rounds_in_fight %}
+                        {{ ru.id }}
+                        {{ ru.points_fighter_one }}
+                        {% endfor %}
+                        tu będzie suma
+                        {% endfor %}
+                        {% endif %}
+                        <tr>
+                        </tr>
                     </table>
                     <style>
                         td, th { border: 1px solid black; }
                     </style>
                 </ol>
-            </div>
-            <hr>
-
-    <div>
-        {% if image %}
-        {% thumbnail image "300x300" as im %}
-        <img src="{{ im.url }}" alt="zdj">
-        {% endthumbnail %}
-        {% endif %}
-    </div>
-
-{#<a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight_id   %}">#}
-    {% endblock %}
+                <div>
+                    {% if image %}
+                    {% thumbnail image "300x300" as im %}
+                    <img src="{{ im.url }}" alt="zdj">
+                    {% endthumbnail %}
+                    {% endif %}
+                </div>
+                {% endblock %}
