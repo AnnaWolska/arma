@@ -48,40 +48,19 @@ def group_details(request, group_id):
     tournament = group.tournament
     participants = group.participants.all()
     fights = group.fights.all().order_by('id')
-
-    #tymczas
-    # new_var = []
-    # all_rounds_in_fight = []
-    # for f in fights:
-    #     for r in f.rounds_of_fight.all():
-    #         all_rounds_in_fight = r.id
-    # print("ggggggggggggggg")
-    # print(all_rounds_in_fight)
-    #
-    # for ziu in all_rounds_in_fight:
-    #     print("all_rounds_in_fight")
-    #     print(ziu.id)
-    #     # new_var.append(ziu.points_fighter_one)
-    #     new_var = ziu.points_fighter_one
-
-
-
-    # for x in all_rounds_in_fight:
-    #     print(x.points_fighter_one)
-    #     new_var.append(x.points_fighter_one)
-    # print("new_var")
-    # print(new_var)
-
-    # points_f_one_sum = []
-    # for f in fights:
-    #     for r in f.rounds_of_fight.all():
-    #         if r.points_fighter_one:
-    #             points_f_one_sum.append(r.points_fighter_one)
-    # print(points_f_one_sum)
-    # sum_f1 = sum(points_f_one_sum)
-    # print(sum_f1)
-
-    #tymczas
+    sumka = []
+    ar = []
+    new = []
+    points_sum = []
+    for fight in fights:
+        ar = fight.rounds_of_fight.all()
+        for a in ar:
+            if len(sumka) < 4:
+                sumka.append(a.points_fighter_one)
+    for el in sumka:
+        if type(el) == int:
+            points_sum.append(el)
+    final_points= sum(points_sum)
 
     first_fight = fights.first()
     rounds = 0
@@ -116,7 +95,7 @@ def group_details(request, group_id):
         "rounds": rounds,
         "fights": fights,
         "rounds_obj": rounds_obj,
-        # "all_rounds_in_fight": all_rounds_in_fight
+        "final_points": final_points
     })
 
 

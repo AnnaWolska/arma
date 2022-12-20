@@ -59,7 +59,7 @@
                             <img src="{{ im.url }}" alt="zdj">
                             {% endthumbnail %}
                             {% endif %}
-                        </a>
+                    </a>
                         {% if tournament.user == request.user %}
                         <a style="color:red;  column-count: 2;"   href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >
                             usuń
@@ -146,6 +146,8 @@
                         {{ ru.points_fighter_one }}
                         {% endfor %}
                         tu będzie suma
+
+                        {{ final_points }}
                         {% endfor %}
                         {% endif %}
                         <tr>
