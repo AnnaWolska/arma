@@ -48,19 +48,19 @@ def group_details(request, group_id):
     tournament = group.tournament
     participants = group.participants.all()
     fights = group.fights.all().order_by('id')
-    sumka = []
-    ar = []
-    new = []
-    points_sum = []
-    for fight in fights:
-        ar = fight.rounds_of_fight.all()
-        for a in ar:
-            if len(sumka) < 4:
-                sumka.append(a.points_fighter_one)
-    for el in sumka:
-        if type(el) == int:
-            points_sum.append(el)
-    final_points= sum(points_sum)
+
+
+    # first_fighter_points = []
+    # points_sum = []
+    # for fight in fights:
+    #     ar = fight.rounds_of_fight.all()
+    #     for a in ar:
+    #         if len(first_fighter_points) < 4:
+    #             first_fighter_points.append(a.points_fighter_one)
+    # for el in first_fighter_points:
+    #     if type(el) == int:
+    #         points_sum.append(el)
+    # final_points= sum(points_sum)
 
     first_fight = fights.first()
     rounds = 0
@@ -95,7 +95,7 @@ def group_details(request, group_id):
         "rounds": rounds,
         "fights": fights,
         "rounds_obj": rounds_obj,
-        "final_points": final_points
+        # "final_points": final_points
     })
 
 
@@ -473,11 +473,37 @@ def add_points (request, group_id, fight_id, round_id):
     # print(points_f_one_sum)
     # sum_f1 = sum(points_f_one_sum)
     # print(sum_f1)
+    first_fighter_points = []
+    points_sum = []
+    second_fighter_points = []
+    second_points_sum = []
+    second_final_points = []
+
+    for round_in_fight in fight.rounds_of_fight.all():
+        if len(first_fighter_points) < 4:
+            first_fighter_points.append(round_in_fight.points_fighter_one)
+            second_fighter_points.append(round_in_fight.points_fighter_two)
+    for el in first_fighter_points:
+        if type(el) == int:
+            points_sum.append(el)
+    final_points= sum(points_sum)
+    print(final_points)
+
+    for el in second_fighter_points:
+        if type(el) == int:
+            second_points_sum.append(el)
+    second_final_points= sum(second_points_sum)
+    print(second_final_points)
+
+
 
     if request.user.is_authenticated:
         form = AddPointsForm(request.POST, instance=round)
         if request.method == "POST" and form.is_valid():
             form.save()
+            fight.fighter_one_points = final_points
+            fight.fighter_two_points = second_final_points
+            fight.save()
             messages.success(request, 'punkty dodane')
             return HttpResponseRedirect(reverse(
                 "tournament_calculating:group_details",
@@ -493,6 +519,7 @@ def add_points (request, group_id, fight_id, round_id):
                     'group_id': group_id,
                     'fight_id': fight_id,
                     'round_id':round_id,
+                    'final_points':final_points
                     # 'sum_f1': sum_f1
 
                 })

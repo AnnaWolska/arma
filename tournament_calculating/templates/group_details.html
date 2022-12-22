@@ -167,9 +167,20 @@
                         {{ ru.id }}
                         {{ ru.points_fighter_one }}
                         {% endfor %}
-                        tu będzie suma
+                         {{ fight.fighter_one.name }}:
+{#                            {% for fight in fights %}#}
+                        {% if fight.fighter_one_points %}
+                            {{ fight.fighter_one_points }}
 
-                        {{ final_points }}
+                        {% endif %}
+                          <br>
+                          {{ fight.fighter_two.name }}:
+
+                         {% if fight.fighter_two_points %}
+                        {{ fight.fighter_two_points }}
+                         {% endif %}
+{#                                {% endfor %}#}
+{#                        {{ final_points }}#}
                         {% endfor %}
                         {% endif %}
                         <tr>
