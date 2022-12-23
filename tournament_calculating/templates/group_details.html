@@ -92,7 +92,7 @@
             <style>
                 td, th { border: 1px solid black; }
             </style>
-            <table BORDER CELLSPACING=5 CELLPADDING=15>
+            <table  BORDER CELLSPACING=5 CELLPADDING=15>
                 <tr>
                     {% for fight in fights%}
                     <td>
@@ -139,16 +139,15 @@
 {#                        </button>#}
 
 
-                            <a id="delete_tournament" class="btn btn-primary" style="color:white; background-color:orange; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
-                                <br>
+                            <a id="delete_tournament" class="btn btn-primary" style="color:white; background-color:orange; text-decoration: none;   " href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
+{#                                <br>#}
 
-                                    {% if r.points_fighter_one > 0 or  r.points_fighter_two == 0%}
-                                    wyniki :
-                                    <br>
-                                    {{ r.points_fighter_one }}{{ r.name }} :
+                                    {% if r.points_fighter_one > 0 or r.points_fighter_one == 0%}
+                                         {{ fight.fighter_one.name }}: <b>{{ r.points_fighter_one }}</b>
+                                       <br>
                                     {% endif %}
-                                    {% if r.points_fighter_two > 0 or  r.points_fighter_two == 0%}
-                                    {{ r.points_fighter_two }}
+                                    {% if r.points_fighter_two > 0 or r.points_fighter_two == 0%}
+                                        {{ fight.fighter_two.name }}: <b>{{ r.points_fighter_two }}</b>
 
                                 {% else %}
                                 starcie  {{ r.order }}
