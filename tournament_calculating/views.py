@@ -48,7 +48,7 @@ def group_details(request, group_id):
     tournament = group.tournament
     participants = group.participants.all()
     fights = group.fights.all().order_by('id')
-
+    groups = Group.objects.filter(tournament=tournament)
     first_fight = fights.first()
     rounds = 0
     if first_fight:
@@ -82,15 +82,18 @@ def group_details(request, group_id):
         "rounds": rounds,
         "fights": fights,
         "rounds_obj": rounds_obj,
+        "groups":groups
     })
 
 
 def fight_details(request, group_id, fight_id):
+
     group = Group.objects.get(pk=group_id)
     fight = Fight.objects.get(pk=fight_id)
     rounds_obj = group.rounds_of_group.all()
     number = group.number
     tournament = group.tournament
+    grups = Group.objects.all(tournament=tournament)
     participants = group.participants.all()
     participants_ids = []
     for p in participants:
@@ -144,7 +147,8 @@ def fight_details(request, group_id, fight_id):
         "fights": fights,
         "fight_id":fight_id,
         "fight": fight,
-        "rounds_obj": rounds_obj
+        "rounds_obj": rounds_obj,
+        "grups": grups
     })
 
 

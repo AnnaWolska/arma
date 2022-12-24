@@ -73,7 +73,8 @@
         <hr>
         {% if fighters_one_names %}
         <center>
-            starcia:
+        FAZA GRUPOWA
+
             <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_rounds' group_id   %}">
                     ile starć:
@@ -196,4 +197,30 @@
                     {% endthumbnail %}
                     {% endif %}
                 </div>
+
+                        {% for gr in grups %}
+                    {% for participant in gr.participants %}
+{#{% for fight in fights %}#}
+{#                        {{ fight }}#}
+                      <li>{{ participant.name}}</li>
+                        {% for x in participant.fighters_one.all %}
+                            {{ x.fighter_one_points }}
+                            {% endfor %}
+{#                         <li>{{ participant.fighters_two}}</li>#}
+                            {% endfor %}
+                            {% endfor %}
+ {% for gr in groups %}
+    <li>{% for p in gr.participants.all %}
+
+    {{ p.name}}
+                                {% for x in p.fighters_one.all %}
+                            {{ x.fighter_one_points }}
+                            {% endfor %}
+
+
+
+    {% endfor %}</li>
+    {% endfor %}
+    {{ grups }}
+
                 {% endblock %}
