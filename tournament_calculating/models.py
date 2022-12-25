@@ -9,10 +9,11 @@ class Participant(models.Model):
     school = models.CharField(max_length=500)
     image = ImageField(upload_to="tournament_calculating/images/%Y/%m/%d/", blank=True, null=True)
     tournaments = models.ManyToManyField('tournaments.Tournament', related_name='participants')
+    group_points = models.PositiveSmallIntegerField(null=True)
 
 
     def __str__(self):
-        return f"{self.name} {self.school} {self.image} {self.tournaments}"
+        return f"{self.name} {self.school} {self.image} {self.tournaments} {self.group_points}  "
 
     class Meta:
         verbose_name = "Zawodnik"
