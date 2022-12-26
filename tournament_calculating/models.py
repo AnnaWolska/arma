@@ -9,7 +9,7 @@ class Participant(models.Model):
     school = models.CharField(max_length=500)
     image = ImageField(upload_to="tournament_calculating/images/%Y/%m/%d/", blank=True, null=True)
     tournaments = models.ManyToManyField('tournaments.Tournament', related_name='participants')
-    group_points = models.PositiveSmallIntegerField(null=True)
+    group_points = models.PositiveSmallIntegerField(null=True, default=0)
 
 
     def __str__(self):
@@ -40,8 +40,8 @@ class Fight(models.Model):
     tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="fights", null=True)
     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_one", null=True )
     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_two", null=True )
-    fighter_one_points = models.PositiveSmallIntegerField(null=True)
-    fighter_two_points = models.PositiveSmallIntegerField(null=True)
+    fighter_one_points = models.PositiveSmallIntegerField(null=True, default=0)
+    fighter_two_points = models.PositiveSmallIntegerField(null=True, default=0)
 
     def __str__(self):
         return f"{self.group} {self.rounds} {self.tournament} {self.fighter_one} {self.fighter_two}"

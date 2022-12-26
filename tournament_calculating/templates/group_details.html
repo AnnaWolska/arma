@@ -209,18 +209,31 @@
 {#                         <li>{{ participant.fighters_two}}</li>#}
                             {% endfor %}
                             {% endfor %}
+
+
+
+
+<table>
+<tr>
  {% for gr in groups %}
-    <li>{% for p in gr.participants.all %}
+<td>
+<table>
+<tr>
+    {% for participant in gr.participants.all %}
 
-    {{ p.name}}
-                                {% for x in p.fighters_one.all %}
-                            {{ x.fighter_one_points }}
-                            {% endfor %}
+       <td>
+      {{ participant.name }} -
+      {% if participant.group_points is not None %}
+      {{ participant.group_points }}
+      {% endif %}
+        </td>
+      </tr>
 
-
-
-    {% endfor %}</li>
+      {% endfor %}
+     </table>
     {% endfor %}
     {{ grups }}
+</tr>
 
+</table>
                 {% endblock %}

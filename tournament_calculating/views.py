@@ -333,6 +333,7 @@ def delete_fights(request, tournament_id, group_id):
     user = request.user
     tournament = Tournament.objects.get(pk=tournament_id)
     group = Group.objects.get(pk=group_id)
+    participants = group.participants.all()
     fights = group.fights.all()
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -340,6 +341,10 @@ def delete_fights(request, tournament_id, group_id):
             group = Group.objects.get(pk=group_id)
             if request.user == tournament.user:
                 fights.delete()
+                # for participant in participants:
+                #     participant.group_points = 0
+                #     participant.update()
+
                 return HttpResponseRedirect(reverse("tournament_calculating:group_details",
                                                     args=[group_id]))
         else:
@@ -409,6 +414,7 @@ def add_points (request, group_id, fight_id, round_id):
     group = Group.objects.get(pk=group_id)
     fight_rounds = Round.objects.filter(fight_id=fight_id)
     fight = Fight.objects.get(pk=fight_id)
+    fights = group.fights.all()
     round = fight_rounds.get(pk=round_id)
     first_fighter_points = []
     points_sum = []
@@ -416,14 +422,7 @@ def add_points (request, group_id, fight_id, round_id):
     second_final_points = []
     second_fighter_points = []
     second_points_sum = []
-
-
     participants = group.participants.all()
-    for participant in participants:
-        print(participant)
-
-
-
 
     if request.user.is_authenticated:
         form = AddPointsForm(request.POST, instance=round)
@@ -446,15 +445,27 @@ def add_points (request, group_id, fight_id, round_id):
             fight.save()
 
             for participant in participants:
-                if fight.fighter_one_id == participant.id:
-                    participant.group_points = fight.fighter_one_points
-                    participant.save()
-            # participant = None
-            # for participant in participants:
-            #     for fight in fight.rounds_of_fight.all():
-            #         if participant == fight.fighter:
-            #             participant.group_points = sum(fight.final_points)
-            # participant.save()
+                for fight in fights:
+                    if fight.fighter_one_id == participant.id:
+                        participant.group_points += fight.fighter_one_points
+                        participant.save()
+                    if fight.fighter_two_id == participant.id:
+                        participant.group_points += fight.fighter_two_points
+                        participant.save()
+                            # participant.save(update_fields=['group_points'])
+                            # participant.group_points.save()
+                        # obj = Participant(id=fight.fighter_two_id, group_points=participant.group_points)
+
+
+
+                        # obj = Participant(id=fight.fighter_two_id)
+                        # if participant.group_points is None:
+                        #     participant.group_points = 0
+                        # participant.group_points = participant.group_points + fight.fighter_one_points
+                        #
+                        # if fight.fighter_two_points is None:
+                        #     fight.fighter_two_points = 0
+                        # participant.group_points = participant.group_points + fight.fighter_two_points
 
 
 
