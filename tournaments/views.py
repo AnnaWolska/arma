@@ -49,7 +49,9 @@ def tournament_details(request, tournament_id):
     })
 
 
+# def add_tournament(request, user_id):
 def add_tournament(request):
+
     if request.user.is_authenticated:
         formset = OrganizerFormSet(queryset=Organizer.objects.none())
         if request.method == "POST":
@@ -67,6 +69,7 @@ def add_tournament(request):
                         if orgaznier not in instance.organizers.all():
                             instance.organizers.add(orgaznier)
                 instance.save()
+            # return HttpResponseRedirect(reverse("tournaments:tournaments_list", args=[user_id]))
             return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
         else:
             form = TournamentForm()
