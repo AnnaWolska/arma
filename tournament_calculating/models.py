@@ -10,10 +10,10 @@ class Participant(models.Model):
     image = ImageField(upload_to="tournament_calculating/images/%Y/%m/%d/", blank=True, null=True)
     tournaments = models.ManyToManyField('tournaments.Tournament', related_name='participants')
     group_points = models.PositiveSmallIntegerField(null=True, default=0)
-
+    points_average = models.PositiveSmallIntegerField(null=True, default=0)
 
     def __str__(self):
-        return f"{self.name} {self.school} {self.image} {self.tournaments} {self.group_points}  "
+        return f"{self.name} {self.school} {self.image} {self.tournaments} {self.group_points}  {self.points_average}"
 
     class Meta:
         verbose_name = "Zawodnik"

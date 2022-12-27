@@ -42,12 +42,22 @@
             <p>
                 <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
                     {{ participant.name}} z {{ participant.school}},
-{#                    {% if participants.tournaments %}#}
+
                     udział w
-{#                    {% for  %}#}
-{#
-                    {{ participant.tournaments.all }}
-{#                    {% endif %}#}
+
+{##}
+{#                        {% for p in participant.tournamntes.all %}#}
+{#                            {{ p.name }}#}
+{#                            {% endfor %}#}
+{##}
+{#                    {{ participant.tournaments.all }}#}
+
+
+                {% for p in participant.tournaments.all %}
+                    {{ p.title }}
+                    {% endfor %}
+
+
                 </a>
             </p>
             {% if participant.image %}
