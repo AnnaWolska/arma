@@ -208,4 +208,39 @@
                             {{ grups }}
                         </tr>
                     </table>
+
+
+     <table BORDER CELLSPACING=5 CELLPADDING=15 >
+                    <thead>
+                    <br>
+                    <tr><h5>punkty wyjściowe</h5></tr>
+                        <tr>
+                            {% for group in groups %}
+                            <th style="background: burlywood">
+                                grupa nr {{ group.number }}
+                                {% endfor %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        {% for gr in groups %}
+                        <td>
+                            <table BORDER CELLSPACING=5 CELLPADDING=15>
+                                <tr>
+                                    {% for participant in gr.participants.all %}
+                                    <td>
+                                        {{ participant.name }} -
+                                        {% if participant.points_average is not None %}
+                                        {{ participant.points_average }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                            {% endfor %}
+                            {{ grups }}
+                        </tr>
+                    </table>
+
+
                     {% endblock %}
