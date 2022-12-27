@@ -32,14 +32,14 @@ class TournamentForm(forms.ModelForm):
 
     class Meta:
         model = Tournament
-        # fields = ["title", "description", "image", "organizers" ]
-        fields = "__all__"
+        fields = ["title", "description", "organizers", "image" ]
+        # fields = "__all__"
         labels = {
             "title": "tytuł:",
             "description": "opis:",
             "image":"zdjęcie:",
             "organizers": "organizatorzy:",
-            "user": "użytkownik dodający turniej:"
+            # "user": "użytkownik dodający turniej:"
         }
 
         def __init__(self, *args, **kwargs):

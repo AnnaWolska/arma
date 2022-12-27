@@ -422,7 +422,7 @@ def add_points (request, group_id, fight_id, round_id):
     second_final_points = []
     second_fighter_points = []
     second_points_sum = []
-    participants = group.participants.all()
+    participants = group.participants.order_by('-group_points')
 
     if request.user.is_authenticated:
         form = AddPointsForm(request.POST, instance=round)
@@ -452,22 +452,6 @@ def add_points (request, group_id, fight_id, round_id):
                     if fight.fighter_two_id == participant.id:
                         participant.group_points += fight.fighter_two_points
                         participant.save()
-                            # participant.save(update_fields=['group_points'])
-                            # participant.group_points.save()
-                        # obj = Participant(id=fight.fighter_two_id, group_points=participant.group_points)
-
-
-
-                        # obj = Participant(id=fight.fighter_two_id)
-                        # if participant.group_points is None:
-                        #     participant.group_points = 0
-                        # participant.group_points = participant.group_points + fight.fighter_one_points
-                        #
-                        # if fight.fighter_two_points is None:
-                        #     fight.fighter_two_points = 0
-                        # participant.group_points = participant.group_points + fight.fighter_two_points
-
-
 
             messages.success(request, 'punkty dodane')
             return HttpResponseRedirect(reverse(

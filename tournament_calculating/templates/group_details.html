@@ -51,15 +51,13 @@
                 <li>
                     <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
                         {{  participant.name }} z {{ participant.school  }}
-
                         <div>
-
                             {% if participant.image %}
                             {% thumbnail participant.image "100x100" as im %}
                             <img src="{{ im.url }}" alt="zdj">
                             {% endthumbnail %}
                             {% endif %}
-                    </a>
+                        </a>
                         {% if tournament.user == request.user %}
                         <a style="color:red;  column-count: 2;"   href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >
                             usuń
@@ -73,8 +71,7 @@
         <hr>
         {% if fighters_one_names %}
         <center>
-        FAZA GRUPOWA
-
+            FAZA GRUPOWA
             <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_rounds' group_id   %}">
                     ile starć:
@@ -90,9 +87,10 @@
         <br/>
         <ol>
             <br/>
-            <style>
-                td, th { border: 1px solid black; }
-            </style>
+{#            <style>#}
+{#                #}
+                {#                td, th { border: 1px solid black; }#}
+{#            </style>#}
             <table  BORDER CELLSPACING=5 CELLPADDING=15>
                 <tr>
                     {% for fight in fights%}
@@ -121,44 +119,23 @@
                     {% for fight in fights %}
                     <td>
                         {% for r in fight.rounds_of_fight.all|dictsort:"id" %}
-{#                        <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">#}
-{#                            <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">#}
-{#                                <br>#}
-{#                                <p style="text-align: center; ">#}
-{#                                    {% if r.points_fighter_one > 0 or  r.points_fighter_two == 0%}#}
-{#                                    wyniki :#}
-{#                                    <br>#}
-{#                                    {{ r.points_fighter_one }}{{ r.name }} :#}
-{#                                    {% endif %}#}
-{#                                    {% if r.points_fighter_two > 0 or  r.points_fighter_two == 0%}#}
-{#                                    {{ r.points_fighter_two }}#}
-{#                                </p>#}
-{#                                {% else %}#}
-{#                                starcie  {{ r.order }}#}
-{#                                {% endif %}#}
-{#                            </a>#}
-{#                        </button>#}
-
-
-                            <a id="delete_tournament" class="btn btn-primary" style="color:white; background-color:orange; text-decoration: none;   " href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
-{#                                <br>#}
-
-                                    {% if r.points_fighter_one > 0 or r.points_fighter_one == 0%}
-                                         {{ fight.fighter_one.name }}: <b>{{ r.points_fighter_one }}</b>
-                                       <br>
-                                    {% endif %}
-                                    {% if r.points_fighter_two > 0 or r.points_fighter_two == 0%}
-                                        {{ fight.fighter_two.name }}: <b>{{ r.points_fighter_two }}</b>
-
-                                {% else %}
-                                starcie  {{ r.order }}
-                                {% endif %}
-                            </a>
-
-
-
-
-
+                        <a id="delete_tournament" class="btn btn-primary" style="color:white; background-color:orange; text-decoration: none;   " href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
+                            {% if r.points_fighter_one > 0 or r.points_fighter_one == 0%}
+                            {{ fight.fighter_one.name }}:
+                            <b>
+                                {{ r.points_fighter_one }}
+                            </b>
+                            <br>
+                            {% endif %}
+                            {% if r.points_fighter_two > 0 or r.points_fighter_two == 0%}
+                            {{ fight.fighter_two.name }}:
+                            <b>
+                                {{ r.points_fighter_two }}
+                            </b>
+                            {% else %}
+                            starcie  {{ r.order }}
+                            {% endif %}
+                        </a>
                         <br>
                         <br>
                         {% endfor %}
@@ -167,20 +144,15 @@
                         {{ ru.id }}
                         {{ ru.points_fighter_one }}
                         {% endfor %}
-                         {{ fight.fighter_one.name }}:
-{#                            {% for fight in fights %}#}
+                        {{ fight.fighter_one.name }}:
                         {% if fight.fighter_one_points %}
-                            {{ fight.fighter_one_points }}
-
+                        {{ fight.fighter_one_points }}
                         {% endif %}
-                          <br>
-                          {{ fight.fighter_two.name }}:
-
-                         {% if fight.fighter_two_points %}
+                        <br>
+                        {{ fight.fighter_two.name }}:
+                        {% if fight.fighter_two_points %}
                         {{ fight.fighter_two_points }}
-                         {% endif %}
-{#                                {% endfor %}#}
-{#                        {{ final_points }}#}
+                        {% endif %}
                         {% endfor %}
                         {% endif %}
                         <tr>
@@ -197,43 +169,43 @@
                     {% endthumbnail %}
                     {% endif %}
                 </div>
-
-                        {% for gr in grups %}
-                    {% for participant in gr.participants %}
-{#{% for fight in fights %}#}
-{#                        {{ fight }}#}
-                      <li>{{ participant.name}}</li>
-                        {% for x in participant.fighters_one.all %}
-                            {{ x.fighter_one_points }}
+                {% for gr in grups %}
+                {% for participant in gr.participants %}
+                <li>
+                    {{ participant.name}}
+                </li>
+                {% for x in participant.fighters_one.all %}
+                {{ x.fighter_one_points }}
+                {% endfor %}
+                {% endfor %}
+                {% endfor %}
+                <table BORDER CELLSPACING=5 CELLPADDING=15 >
+                    <thead>
+                        <tr>
+                            {% for group in groups %}
+                            <th style="background: bisque">
+                                grupa nr {{ group.number }}
+                                {% endfor %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        {% for gr in groups %}
+                        <td>
+                            <table BORDER CELLSPACING=5 CELLPADDING=15>
+                                <tr>
+                                    {% for participant in gr.participants.all %}
+                                    <td>
+                                        {{ participant.name }} -
+                                        {% if participant.group_points is not None %}
+                                        {{ participant.group_points }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
                             {% endfor %}
-{#                         <li>{{ participant.fighters_two}}</li>#}
-                            {% endfor %}
-                            {% endfor %}
-
-
-
-
-<table>
-<tr>
- {% for gr in groups %}
-<td>
-<table>
-<tr>
-    {% for participant in gr.participants.all %}
-
-       <td>
-      {{ participant.name }} -
-      {% if participant.group_points is not None %}
-      {{ participant.group_points }}
-      {% endif %}
-        </td>
-      </tr>
-
-      {% endfor %}
-     </table>
-    {% endfor %}
-    {{ grups }}
-</tr>
-
-</table>
-                {% endblock %}
+                            {{ grups }}
+                        </tr>
+                    </table>
+                    {% endblock %}
