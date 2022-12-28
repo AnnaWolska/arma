@@ -452,14 +452,18 @@ def add_points (request, group_id, fight_id, round_id):
             for tournament in tournaments:
                 if tournament.id == fight.tournament_id:
                     for tournament_fight in tournament.fights.all():
-                        if tournament_fight.fighter_one_points is None:
-                            tournament_fights_points.append(0)
-                        else:
+                        if tournament_fight.fighter_one_points is not None:
                             tournament_fights_points.append(tournament_fight.fighter_one_points)
-                        if tournament_fight.fighter_two_points is None:
-                            tournament_fights_points.append(0)
-                        else:
+                        if tournament_fight.fighter_two_points is not None:
                             tournament_fights_points.append(tournament_fight.fighter_two_points)
+                        # if tournament_fight.fighter_one_points is None:
+                        #     tournament_fights_points.append(0)
+                        # else:
+                        #     tournament_fights_points.append(tournament_fight.fighter_one_points)
+                        # if tournament_fight.fighter_two_points is None:
+                        #     tournament_fights_points.append(0)
+                        # else:
+                        #     tournament_fights_points.append(tournament_fight.fighter_two_points)
 
             tournaments_fighters_average = round(sum(tournament_fights_points) / len(tournament_fights_points), 2)
             print(tournaments_fighters_average)
@@ -470,16 +474,18 @@ def add_points (request, group_id, fight_id, round_id):
                     if round_in_fight.id == round_id:
                         print("round_in_fight", round_in_fight)
                         if fight.fighter_one_id == participant.id:
-                            print("participant.group_points", participant.group_points)
-                            print("round_in_fight.points_fighter_one", round_in_fight.points_fighter_one )
                             if round_in_fight.points_fighter_one is None:
                                 round_in_fight.points_fighter_one = 0
+                            # if round_in_fight.points_fighter_one is not None:
+                                # round_in_fight.points_fighter_one = 0
                             participant.group_points = participant.group_points + round_in_fight.points_fighter_one
                             participant.points_average = participant.group_points / tournaments_fighters_average
                         if fight.fighter_two_id == participant.id:
                             if round_in_fight.points_fighter_two is None:
+                            # if round_in_fight.points_fighter_two is not None:
                                 round_in_fight.points_fighter_two = 0
                             participant.group_points = round_in_fight.points_fighter_two + participant.group_points
+                            participant.points_average = participant.group_points / tournaments_fighters_average
                 participant.save()
 
             messages.success(request, 'punkty dodane')

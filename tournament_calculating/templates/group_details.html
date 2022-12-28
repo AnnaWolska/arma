@@ -49,8 +49,9 @@
             {% for participant in participants %}
             <ul>
                 <li>
+                <br>
                     <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
-                        {{  participant.name }} z {{ participant.school  }}
+                        <b>{{  participant.name }} z {{ participant.school  }} </b>
                         <div>
                             {% if participant.image %}
                             {% thumbnail participant.image "100x100" as im %}
@@ -103,7 +104,7 @@
                     {% for fighter in fighters_one_names %}
                     <td>
                         <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
-                            {{ fighter.name }}
+                          <b>{{ fighter.name }}</b>
                         </a>
                     </td>
                     {% endfor %}
@@ -112,7 +113,7 @@
                     {% for fighter in fighters_two_names  %}
                     <td>
                         <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
-                            {{ fighter.name }}
+                            <b>{{ fighter.name }}</b>
                         </td>
                         {% endfor %}
                     </tr>
@@ -121,25 +122,40 @@
                         {% for r in fight.rounds_of_fight.all|dictsort:"id" %}
                         <a id="delete_tournament" class="btn btn-primary" style="color:white; background-color:orange; text-decoration: none;   " href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
                             {% if r.points_fighter_one > 0 or r.points_fighter_one == 0%}
-                            {{ fight.fighter_one.name }}:
+
+                                <b>
+                            <span style=" color: white"> {{ fight.fighter_one.name }}:</span>
+                                </b>
                             <b>
-                                {{ r.points_fighter_one }}
+                                <span style=" color: black" > {{ r.points_fighter_one }}</span>
                             </b>
                             <br>
                             {% endif %}
+
+
+
                             {% if r.points_fighter_two > 0 or r.points_fighter_two == 0%}
-                            {{ fight.fighter_two.name }}:
+
+                                 <p>
+<hr style="color: black">
+                                <b>
+                             <span style=" color: white">{{ fight.fighter_two.name }}: </span>
+                                </b>
                             <b>
-                                {{ r.points_fighter_two }}
+                               <span style=" color: black"> {{ r.points_fighter_two }}</span>
                             </b>
+{#                                </p>#}
                             {% else %}
-                            starcie  {{ r.order }}
+                                <b>       starcie  {{ r.order }}</b>
+
                             {% endif %}
                         </a>
                         <br>
                         <br>
                         {% endfor %}
+{#                        <span style=" color: black">#}
                         <br>
+{#                        <div  style=" color: black">#}
                         {% for ru in all_rounds_in_fight %}
                         {{ ru.id }}
                         {{ ru.points_fighter_one }}
@@ -155,6 +171,7 @@
                         {% endif %}
                         {% endfor %}
                         {% endif %}
+    </span></div>
                         <tr>
                         </tr>
                     </table>
@@ -181,6 +198,7 @@
                 {% endfor %}
                 <table BORDER CELLSPACING=5 CELLPADDING=15 >
                     <thead>
+                    <tr><h5>punkty cząstkowe</h5></tr>
                         <tr>
                             {% for group in groups %}
                             <th style="background: bisque">
@@ -218,8 +236,8 @@
                             {% for group in groups %}
                             <th style="background: burlywood">
                                 grupa nr {{ group.number }}
-                                {% endfor %}django_migrations
-                            </th>django_content_type
+                                {% endfor %}
+                            </th>
                         </tr>
                     </thead>
                     <tr>
