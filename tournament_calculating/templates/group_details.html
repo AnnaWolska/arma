@@ -218,8 +218,8 @@
                             {% for group in groups %}
                             <th style="background: burlywood">
                                 grupa nr {{ group.number }}
-                                {% endfor %}
-                            </th>
+                                {% endfor %}django_migrations
+                            </th>django_content_type
                         </tr>
                     </thead>
                     <tr>
@@ -227,7 +227,7 @@
                         <td>
                             <table BORDER CELLSPACING=5 CELLPADDING=15>
                                 <tr>
-                                    {% for participant in gr.participants.all %}
+                                    {% for participant in gr.participants.all|dictsortreversed:"points_average" %}
                                     <td>
                                         {{ participant.name }} -
                                         {% if participant.points_average is not None %}

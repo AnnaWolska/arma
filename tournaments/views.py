@@ -57,11 +57,14 @@ def add_tournament(request):
         if request.method == "POST":
             form = TournamentForm(request.POST, request.FILES)
             formset = OrganizerFormSet(request.POST)
-            form.user = request.user
+            print("alama")
+            print(form)
+            form.instance.user = request.user
+            print(dir(form))
             if formset.is_valid():
                 instance = form.save()
-                instance.user = request.user
-                instance.save()
+                # instance.user = request.user
+                # instance.save()
                 for f in formset.cleaned_data:
                     if f:
                         orgaznier, _ = Organizer.objects.get_or_create(**f)
