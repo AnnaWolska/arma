@@ -86,12 +86,8 @@
         </center>
         walki:
         <br/>
-        <ol>
-            <br/>
-{#            <style>#}
-{#                #}
-                {#                td, th { border: 1px solid black; }#}
-{#            </style>#}
+
+
             <table  BORDER CELLSPACING=5 CELLPADDING=15>
                 <tr>
                     {% for fight in fights%}
@@ -102,8 +98,8 @@
                 </tr>
                 <tr>
                     {% for fighter in fighters_one_names %}
-                    <td>
-                        <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
+                    <td style=" background: yellow" >
+                        <a style="text-decoration: none" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                           <b>{{ fighter.name }}</b>
                         </a>
                     </td>
@@ -111,7 +107,7 @@
                 </tr>
                 <tr>
                     {% for fighter in fighters_two_names  %}
-                    <td>
+                    <td style=" background: deepskyblue">
                         <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                             <b>{{ fighter.name }}</b>
                         </td>
@@ -122,29 +118,24 @@
                         {% for r in fight.rounds_of_fight.all|dictsort:"id" %}
                         <a id="delete_tournament" class="btn btn-primary" style="color:white; background-color:orange; text-decoration: none;   " href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
                             {% if r.points_fighter_one > 0 or r.points_fighter_one == 0%}
-
                                 <b>
                             <span style=" color: white"> {{ fight.fighter_one.name }}:</span>
                                 </b>
                             <b>
                                 <span style=" color: black" > {{ r.points_fighter_one }}</span>
                             </b>
-                            <br>
                             {% endif %}
-
-
 
                             {% if r.points_fighter_two > 0 or r.points_fighter_two == 0%}
 
-                                 <p>
-<hr style="color: black">
+                            <hr style="color: black">
                                 <b>
                              <span style=" color: white">{{ fight.fighter_two.name }}: </span>
                                 </b>
                             <b>
                                <span style=" color: black"> {{ r.points_fighter_two }}</span>
                             </b>
-{#                                </p>#}
+
                             {% else %}
                                 <b>       starcie  {{ r.order }}</b>
 
@@ -153,52 +144,33 @@
                         <br>
                         <br>
                         {% endfor %}
-{#                        <span style=" color: black">#}
+
                         <br>
-{#                        <div  style=" color: black">#}
-                        {% for ru in all_rounds_in_fight %}
-                        {{ ru.id }}
-                        {{ ru.points_fighter_one }}
-                        {% endfor %}
+
                         {{ fight.fighter_one.name }}:
                         {% if fight.fighter_one_points %}
-                        {{ fight.fighter_one_points }}
+                       <b>{{ fight.fighter_one_points }}</b>
                         {% endif %}
                         <br>
                         {{ fight.fighter_two.name }}:
                         {% if fight.fighter_two_points %}
-                        {{ fight.fighter_two_points }}
+                        <b>{{ fight.fighter_two_points }}</b>
                         {% endif %}
                         {% endfor %}
                         {% endif %}
-    </span></div>
+
                         <tr>
                         </tr>
                     </table>
+
                     <style>
                         td, th { border: 1px solid black; }
                     </style>
-                </ol>
-                <div>
-                    {% if image %}
-                    {% thumbnail image "300x300" as im %}
-                    <img src="{{ im.url }}" alt="zdj">
-                    {% endthumbnail %}
-                    {% endif %}
-                </div>
-                {% for gr in grups %}
-                {% for participant in gr.participants %}
-                <li>
-                    {{ participant.name}}
-                </li>
-                {% for x in participant.fighters_one.all %}
-                {{ x.fighter_one_points }}
-                {% endfor %}
-                {% endfor %}
-                {% endfor %}
+
+<br>
                 <table BORDER CELLSPACING=5 CELLPADDING=15 >
                     <thead>
-                    <tr><h5>punkty cząstkowe</h5></tr>
+                    <tr><h5>punkty cząstkowe zebrane</h5></tr>
                         <tr>
                             {% for group in groups %}
                             <th style="background: bisque">
@@ -216,7 +188,7 @@
                                     <td>
                                         {{ participant.name }} -
                                         {% if participant.group_points is not None %}
-                                        {{ participant.group_points }}
+                                        <b>{{ participant.group_points }}</b>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -231,7 +203,7 @@
      <table BORDER CELLSPACING=5 CELLPADDING=15 >
                     <thead>
                     <br>
-                    <tr><h5>punkty wyjściowe</h5></tr>
+                    <tr><h5>punkty wyjściowe </h5>(średnia punktów w turnieju - {{ tournaments_fighters_average}} )</tr>
                         <tr>
                             {% for group in groups %}
                             <th style="background: burlywood">
@@ -249,7 +221,7 @@
                                     <td>
                                         {{ participant.name }} -
                                         {% if participant.points_average is not None %}
-                                        {{ participant.points_average }}
+                                       <b>{{ participant.points_average }}</b>
                                         {% endif %}
                                     </td>
                                 </tr>
