@@ -423,7 +423,8 @@ def add_points (request, group_id, fight_id, round_id):
     second_fighter_points = []
     second_points_sum = []
     participants = group.participants.order_by('-group_points')
-    participants_avarege = group.participants.order_by('-points_average')
+    participants_average = group.participants.order_by('-points_average')
+    tournaments_fighters_average = 0
 
     # dodawanie punktów każdemu z przeciwników w walce
     if request.user.is_authenticated:
@@ -451,28 +452,29 @@ def add_points (request, group_id, fight_id, round_id):
             for tournament in tournaments:
                 if tournament.id == fight.tournament_id:
                     for tournament_fight in tournament.fights.all():
-                        if tournament_fight.fighter_one_points is not None:
+                        if tournament_fight.fighter_one_points != 0:
                             tournament_fights_points.append(tournament_fight.fighter_one_points)
-                        if tournament_fight.fighter_two_points is not None:
+                        if tournament_fight.fighter_two_points != 0:
                             tournament_fights_points.append(tournament_fight.fighter_two_points)
 
-            # len_counter = 0
-            # if
             tournaments_fighters_average = round(sum(tournament_fights_points) / len(tournament_fights_points), 2)
             print(tournaments_fighters_average)
             print("tournament_fights_points", tournament_fights_points)
             print("round(sum(tournament_fights_points)", round(sum(tournament_fights_points)))
             print("len(tournament_fights_points), 2)", len(tournament_fights_points))
             print("tournaments_fighters_average", tournaments_fighters_average)
+            print("round_in_fight1", round_in_fight.points_fighter_one)
+            print("round_in_fight2", round_in_fight.points_fighter_two)
 
             # dodawanie punktów za całęgo turnieju (ze wszystkich walk) każdemu uczestnikowi turnieju
             for participant in participants:
                 for round_in_fight in fight.rounds_of_fight.all():
                     if round_in_fight.id == round_id:
-                        print("round_in_fight", round_in_fight)
+
                         if fight.fighter_one_id == participant.id:
                             if round_in_fight.points_fighter_one is None:
                                 round_in_fight.points_fighter_one = 0
+                            # TU NIE DZIAŁA:
                             participant.group_points = participant.group_points + round_in_fight.points_fighter_one
                             participant.save()
                             participant.points_average = participant.group_points / tournaments_fighters_average
@@ -504,7 +506,8 @@ def add_points (request, group_id, fight_id, round_id):
                     'round_id':round_id,
                     'final_points':final_points,
                     'second_final_points': second_final_points,
-                    'participants_avarege': participants_avarege
+                    'participants_average': participants_average,
+                    'tournaments_fighters_average': tournaments_fighters_average
                 })
             )
     else:
