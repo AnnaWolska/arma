@@ -51,6 +51,7 @@ def group_details(request, group_id):
     fights = group.fights.all().order_by('id')
     groups = Group.objects.filter(tournament=tournament)
     first_fight = fights.first()
+    tournaments_fighters_average = tournament.tournament_average
     rounds = 0
     if first_fight:
         rounds = first_fight.rounds
@@ -83,7 +84,8 @@ def group_details(request, group_id):
         "rounds": rounds,
         "fights": fights,
         "rounds_obj": rounds_obj,
-        "groups":groups
+        "groups": groups,
+        "tournaments_fighters_average": tournaments_fighters_average
     })
 
 
@@ -227,26 +229,27 @@ def sorting(some_list):
     length = len(some_list)
     sorting_result = []
     if length > 2:
-        if length > 6:
-            sorting_result.append(some_list[0])
-            some_list.remove(some_list[0])
-            while len(sorting_result) != length:
-                condition_one = sorting_result[-1][0] != some_list[0][0] and sorting_result[-1][0] != some_list[0][1]
-                condition_two = sorting_result[-1][1] != some_list[0][1]and sorting_result[-1][1] != some_list[0][0]
-                if condition_one and condition_two:
-                    sorting_result.append(some_list[0])
-                    some_list.remove(some_list[0])
-                else:
-                    some_list.append(some_list[0])
-                    some_list.remove(some_list[0])
-        else:
-            random.shuffle(some_list)
-            sorting_result = some_list
+        # if length > 6:
+        #     sorting_result.append(some_list[0])
+        #     some_list.remove(some_list[0])
+        #     while len(sorting_result) != length:
+        #         condition_one = sorting_result[-1][0] != some_list[0][0] and sorting_result[-1][0] != some_list[0][1]
+        #         condition_two = sorting_result[-1][1] != some_list[0][1]and sorting_result[-1][1] != some_list[0][0]
+        #         if condition_one and condition_two:
+        #             sorting_result.append(some_list[0])
+        #             some_list.remove(some_list[0])
+        #         else:
+        #             some_list.append(some_list[0])
+        #             some_list.remove(some_list[0])
+        # else:
+        random.shuffle(some_list)
+        sorting_result = some_list
         return sorting_result
 
-#TODO: żeby kasowała rundy dla walki
+
 def draw_fights(request, group_id):
     group = Group.objects.get(pk=group_id)
+    group_fights = group.fights.all()
     tournament = group.tournament
     fights = Fight.objects.all().order_by('id')
     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(group.participants.all(), r)
@@ -259,11 +262,11 @@ def draw_fights(request, group_id):
         result.append(participant_pair)
         left_participants.append(participant_pair[0])
         right_participants.append(participant_pair[1])
-    #TODO: zrobić tak, by kasował wcześniejsze wylosowane walki po ponownym losowaniu
+
     order_number = 1
     result_to_show = sorting(result)
     if participants_pairs:
-
+        group_fights.delete()
         for right_participant in result_to_show:
             fights.get_or_create(
                 order=order_number,
@@ -458,6 +461,9 @@ def add_points (request, group_id, fight_id, round_id):
                             tournament_fights_points.append(tournament_fight.fighter_two_points)
 
             tournaments_fighters_average = round(sum(tournament_fights_points) / len(tournament_fights_points), 2)
+            tournament.tournament_average = tournaments_fighters_average
+            tournament.save()
+
             print(tournaments_fighters_average)
             print("tournament_fights_points", tournament_fights_points)
             print("round(sum(tournament_fights_points)", round(sum(tournament_fights_points)))
@@ -468,15 +474,16 @@ def add_points (request, group_id, fight_id, round_id):
 
             # dodawanie punktów za całęgo turnieju (ze wszystkich walk) każdemu uczestnikowi turnieju
             for participant in participants:
+                participant.group_points = 0
                 for round_in_fight in fight.rounds_of_fight.all():
-                    if round_in_fight.id == round_id:
+                    # if round_in_fight.id == round_id:
 
                         if fight.fighter_one_id == participant.id:
                             if round_in_fight.points_fighter_one is None:
                                 round_in_fight.points_fighter_one = 0
                             # TU NIE DZIAŁA:
                             participant.group_points = participant.group_points + round_in_fight.points_fighter_one
-                            participant.save()
+                            # participant.save()
                             participant.points_average = participant.group_points / tournaments_fighters_average
                             participant.save()
                         if fight.fighter_two_id == participant.id:

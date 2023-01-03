@@ -26,6 +26,7 @@ class Tournament(models.Model):
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="tournaments_created")
     created = models.DateTimeField(auto_now=True, null=True)
     modified = models.DateTimeField(auto_now=True, null=True)
+    tournament_average = models.FloatField(null=True)
 
     def __str__(self):
         return f"{self.id} {self.title} {self.description} {self.image}"

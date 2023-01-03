@@ -55,7 +55,7 @@ class Round(models.Model):
     STATUS = (
         ('0', 'win'),
         ('1', 'lose'),
-        ('2', 'remis'),
+        ('2', 'draw'),
         ('3', 'no result'),
         ('4', 'no fight'),
         ('5', 'no status')
