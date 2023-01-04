@@ -34,12 +34,12 @@
                     Dodaj uczestnika
                 </a>
             </button>
-            <button id="delete_tournament" type="button" style="background-color:green"  class="btn btn-primary">
+            <button id="delete_tournament" type="button" style="background-color:plum"  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:draw_fights' group_id %}">
                     Losuj walki
                 </a>
             </button>
-            <button id="delete_tournament" type="button" style="background-color:darkred"  class="btn btn-primary">
+            <button id="delete_tournament" type="button" style="background-color:coral"  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_fights' group_id tournament.id   %}">
                     Usuń walki
                 </a>
@@ -98,8 +98,10 @@
                 </tr>
                 <tr>
                     {% for fighter in fighters_one_names %}
-                    <td style=" background: yellow" >
-                        <a style="text-decoration: none" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
+{#                    <td style=" background: {{ group.color_fighter_one}} ">#}
+                     <td style=" background: lightyellow ">
+
+                        <a style="text-decoration: none; color:black" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                           <b>{{ fighter.name }}</b>
                         </a>
                     </td>
@@ -108,7 +110,7 @@
                 <tr>
                     {% for fighter in fighters_two_names  %}
                     <td style=" background: deepskyblue">
-                        <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
+                        <a style="text-decoration: none; color:black" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                             <b>{{ fighter.name }}</b>
                         </td>
                         {% endfor %}

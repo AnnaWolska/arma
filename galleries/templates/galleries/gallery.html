@@ -89,7 +89,13 @@
 
     <h5>
         {% if user == request.user %}
-            <a href = "{% url 'galleries:add_photo' id %}"> Edytuj galerię (dodawaj zdjęcia) <br></a>
+{#            <a href = "{% url 'galleries:add_photo' id %}"> Edytuj galerię (dodawaj zdjęcia) <br></a>#}
+
+                <h3   id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary">
+        <a style="color:white; text-decoration: none;" href = "{% url 'galleries:add_photo' id %}"> Edytuj galerię </a>   </h3>
+
+<br>
+
             <a href = "{% url 'galleries:galleries_list' %}"> Powrót do listy galerii </a>
         {% else %}
             <p>tylko twórca galerii może ją edytować </p>

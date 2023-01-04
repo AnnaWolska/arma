@@ -28,6 +28,7 @@ class Tournament(models.Model):
     modified = models.DateTimeField(auto_now=True, null=True)
     tournament_average = models.FloatField(null=True)
 
+
     def __str__(self):
         return f"{self.id} {self.title} {self.description} {self.image}"
 

@@ -5,7 +5,16 @@
 {% load thumbnail %}
 
 {% block content %}
-<h3>  <a href = "{% url 'galleries:add_gallery' %}"> Dodaj galerię </a>  </h3>
+    <h3   id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
+        <a style="color:white; text-decoration: none;" href = "{% url 'galleries:add_gallery' %}"> Dodaj galerię </a>   </h3>
+{##}
+{#                <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">#}
+{#                <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}">#}
+{#                    Dodaj uczestnika#}
+{#                </a>#}
+
+
+
 {#    {%  if galleries_list %}#}
 
     <div class="pagination">
@@ -43,8 +52,8 @@
                         {% endthumbnail %}
                         <div class="card-body">
                             <h4 class="card-title text-center">{{ gallery.title }}</h4>
-                        </div>
-                            <div class="card-footer text-center">
+                        </div >
+                            <div  class="card-footer text-center"  >
                                 <a href= "{% url 'galleries:gallery_details' gallery.id %}" class="btn btn-primary">Pokaż</a>
                             </div>
 
