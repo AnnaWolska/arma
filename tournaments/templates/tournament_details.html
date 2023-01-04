@@ -114,6 +114,9 @@
                     <hr>
                     <h3>
                         Przejdź do galerii ->
+                            {% for gallery in galleries %}
+                                <a href = "{% url 'galleries:gallery_details' gallery.id %}">{{ gallery.title }}</a>
+                                    {% endfor %}
                     </h3>
                     <hr>
                     <h3>

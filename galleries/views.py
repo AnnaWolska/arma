@@ -36,6 +36,7 @@ def show_gallery_details(request, gallery_id):
     created = galleries.created
     modified = galleries.modified
     photos = galleries.photos.all()
+    tournament = galleries.tournament.title
     paginator = Paginator(photos, 8)
     page_number = request.GET.get('page')
     gallery_list = paginator.get_page(page_number)
@@ -48,7 +49,8 @@ def show_gallery_details(request, gallery_id):
         'user': user,
         'photos': photos,
         'created': created,
-        'modified': modified
+        'modified': modified,
+        'tournament': tournament
     }
     return render(request, "galleries/gallery.html", context)
 

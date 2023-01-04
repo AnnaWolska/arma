@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from tournaments.models import Tournament
 from django.utils.timezone import now, timedelta
 from sorl.thumbnail import ImageField
 from posts.models import Timestamped
@@ -26,6 +27,8 @@ class Gallery(Timestamped):
     # slug = models.SlugField(unique=True, max_length=100)
     # description = tinymce_models.HTMLField(null=True, blank=True)
     # status = models.CharField(default=Status.NEW, max_length=10, choices=Status.choices)
+    tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="galleries", null=True)
+
 
     def __str__(self):
         return self.title

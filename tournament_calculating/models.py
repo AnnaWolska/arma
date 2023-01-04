@@ -11,6 +11,7 @@ class Participant(models.Model):
     tournaments = models.ManyToManyField('tournaments.Tournament', related_name='participants')
     group_points = models.PositiveSmallIntegerField(null=True, default=0)
     points_average = models.PositiveSmallIntegerField(null=True, default=0)
+    # fights = models.ForeignKey("Fight", related_name=)
 
     def __str__(self):
         return f"{self.name} {self.school} {self.image} {self.tournaments} {self.group_points}  {self.points_average}"
