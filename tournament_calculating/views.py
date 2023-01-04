@@ -229,44 +229,47 @@ def add_group(request, tournament_id):
             )
 
 
-def sorting(some_list):
-    length = len(some_list)
-    final_list = []
-    sorting_result = []
-    if length > 2:
-        final_list.append(random.choice(some_list))
-        print("final_list", final_list)
-        print("len(final_list)", len(final_list))
-        if length > 6:
-            # sorting_result.append(some_list[0])
-            # some_list.remove(some_list[0])
-            # while len(sorting_result) != length:
-            #     condition_one = sorting_result[-1][0] != some_list[0][0] and sorting_result[-1][0] != some_list[0][1]
-            #     condition_two = sorting_result[-1][1] != some_list[0][1]and sorting_result[-1][1] != some_list[0][0]
-            #     if condition_one and condition_two:
-            #         sorting_result.append(some_list[0])
-            #         some_list.remove(some_list[0])
-            #     else:
-            #         some_list.append(some_list[0])
-            #         some_list.remove(some_list[0])
-            temp_var = random.choice(some_list)
-            temp_var2 = 0
-            final_list.append(temp_var)
-            some_list.remove(temp_var)
-            while len(some_list) > 0:
-                for el in some_list:
-                    if el[0] == final_list[-1][0] or el[1] == final_list[-1][1]:
-                        temp_var2 = random.choice(some_list)
-                        print("oj, powtarza się")
-                    else:
-                        print("oooo, nie powtarza się")
-                        final_list.append(temp_var2)
-                        print("final_list", final_list)
-                        sorting_result = final_list
-        else:
-            random.shuffle(some_list)
-            sorting_result = some_list
-        return sorting_result
+# def sorting(some_list):
+#     length = len(some_list)
+#     final_list = []
+#     sorting_result = []
+#     if length > 2:
+#         final_list.append(random.choice(some_list))
+#         print("final_list", final_list)
+#         print("len(final_list)", len(final_list))
+#         if length > 6:
+#             # sorting_result.append(some_list[0])
+#             # some_list.remove(some_list[0])
+#             # while len(sorting_result) != length:
+#             #     condition_one = sorting_result[-1][0] != some_list[0][0] and sorting_result[-1][0] != some_list[0][1]
+#             #     condition_two = sorting_result[-1][1] != some_list[0][1]and sorting_result[-1][1] != some_list[0][0]
+#             #     if condition_one and condition_two:
+#             #         sorting_result.append(some_list[0])
+#             #         some_list.remove(some_list[0])
+#             #     else:
+#             #         some_list.append(some_list[0])
+#             #         some_list.remove(some_list[0])
+#             temp_var = random.choice(some_list)
+#             temp_var2 = 0
+#             final_list.append(temp_var)
+#             some_list.remove(temp_var)
+#             while len(some_list) > 0:
+#                 if some_list[0][0] == final_list[-1][0] or some_list[0][1] == final_list[-1][1]:
+#                 # for el in some_list:
+#                 #     print("el")
+#                 #     if el[0] == final_list[-1][0] or el[1] == final_list[-1][1]:
+#                     temp_var2 = random.choice(some_list)
+#                     print("oj, powtarza się")
+#                 else:
+#                     print("oooo, nie powtarza się")
+#                     final_list.append(temp_var2)
+#                     some_list.remove(some_list[0])
+#                     # print("final_list", final_list)
+#                     sorting_result = final_list
+#         else:
+#             random.shuffle(some_list)
+#             sorting_result = some_list
+#         return sorting_result
 
 
 def draw_fights(request, group_id):
@@ -279,6 +282,9 @@ def draw_fights(request, group_id):
     left_participants = []
     right_participants = []
     result = []
+    result_to_show = []
+    var1 = []
+
 
     for participant_pair in participants_pairs:
         result.append(participant_pair)
@@ -286,8 +292,30 @@ def draw_fights(request, group_id):
         right_participants.append(participant_pair[1])
 
     order_number = 1
-    print("result", result)
-    result_to_show = sorting(result)
+    # print("result", result)
+    # result_to_show = sorting(result)
+    result_to_show.append(random.choice(result))
+
+    while result:
+        var1.append(random.choice(result))
+        print("var1", var1)
+        condition_one = var1[0][0] != result_to_show[-1][0] or var1[0][1] != result_to_show[-1][0]
+        condition_two = var1[0][0] != result_to_show[-1][1] or var1[0][1] != result_to_show[-1][1]
+        print(result[0][0])
+        print(result[0][1])
+        print(result_to_show[-1][0])
+        print(result_to_show[-1][1])
+        print(condition_one)
+        print(condition_two)
+        if condition_one and condition_two:
+            result_to_show.append(var1)
+            result.remove(result[0])
+
+        else:
+            # var1 = random.choice(result)
+            random.shuffle(result)
+
+    # print(result_to_show)
     if participants_pairs:
         group_fights.delete()
         for right_participant in result_to_show:
