@@ -1,6 +1,7 @@
 import itertools
 import random
 import math
+import time
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -295,14 +296,25 @@ def draw_fights(request, group_id):
     # print("result", result)
     # result_to_show = sorting(result)
     result_to_show.append(random.choice(result))
-
+    result.remove(result_to_show[0])
+    print(type(result_to_show))
+    print("g.p.a", type(group.participants.all()))
+    print("l,g,p,a", type(list(group.participants.all())))
+    xxx = list(group.participants.all())
+    for el in group.participants.all():
+        xxx.append(el)
+    print("xxx", xxx)
+    print("Leeeeeeeeeeeen wzór", (len(list(group.participants.all())) * (len(list(group.participants.all()))-1)) / 2)
     # while len(result) > 0:
-    while len(result_to_show) == len(list(group.participants)) * len(list(group.participants))-1 / 2:
-        var1 = random.choice(result)
-        for el in result:
-            if el == var1:
-                result.remove(el)
-        print("var1 lista a w niej jedna tupla", var1)
+
+    while len(result_to_show) < len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2:
+        print("to się ciągle pętluje")
+        if result:
+            var1 = random.choice(result)
+
+        print("result początek pętli", result)
+
+        print("var1 tupla", var1)
         print("Var[0]", var1[0].name)
         print("var[1]", var1[1].name)
         print("result_to_show[-1][0]", result_to_show[-1][0].name)
@@ -316,24 +328,51 @@ def draw_fights(request, group_id):
         print(result_to_show[-1][1])
         print(condition_one)
         print(condition_two)
+        time.sleep(1)
         if condition_one and condition_two and var1 not in result_to_show:
             print("oba warunki spełnione")
             result_to_show.append(var1)
+            result.remove(var1)
+            print("result to show po dodaniu var1", result_to_show)
+            # for el in result:
+            #     if el == var1:
+            if var1 in result:
+                print("tak el == var1 in result")
+                result.remove(var1)
             print("resultttt to show in pętla", result_to_show)
             # vvv =
             # result.remove(result[0])
             print("resulttttt in pętla", result)
             # return result_to_show
+            print("LLLLEEEENNNN len result i len result to show", len(result), len(result_to_show))
+            time.sleep(1)
         else:
-            var1 = random.choice(result)
-            # random.shuffle(result)
+            print("jednak warunek nie jest spełniony, będzie losować var1")
+            print("result to show po dodaniu var1", result_to_show)
+            print(len(result_to_show))
+            # if len(result_to_show) == len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2:
+                # if var1 in result:
+                #     print("tak el == var1 in result")
+                #     result.remove(var1)
+            random.shuffle(result)
+            print("result after shuffle", result)
+            print("LLLLEEEENNNN len result i len result to show", len(result), len(result_to_show))
+            if len(result_to_show) == len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2 -1:
+                result_to_show.insert(0,result[0])
+                break
+            if len(result_to_show) == len(list(group.participants.all())) * len(list(group.participants.all())) - 1 / 2:
+                break
 
-    print("TERAZ********************TERAZ", result_to_show)
+            time.sleep(1)
+    print("TERAZ********************TERAZ będzie dodawanie do bazy", result_to_show)
     if participants_pairs:
         group_fights.delete()
         print("delete done")
         for right_participant in result_to_show:
-            print("jijiijij", right_participant)
+            print("reslt to show", result_to_show)
+            for el in result_to_show:
+                print(el)
+            print("jjjjjjjright participant", right_participant)
             fights.get_or_create(
                 # id = right_participant[0][0],
                 order=order_number,
