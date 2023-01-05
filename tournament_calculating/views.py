@@ -277,6 +277,7 @@ def draw_fights(request, group_id):
     group_fights = group.fights.all()
     tournament = group.tournament
     fights = Fight.objects.all().order_by('id')
+    participants = group.participants.all()
     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(group.participants.all(), r)
                                                             for r in range(2, 2 + 1)))
     left_participants = []
@@ -284,7 +285,6 @@ def draw_fights(request, group_id):
     result = []
     result_to_show = []
     var1 = []
-
 
     for participant_pair in participants_pairs:
         result.append(participant_pair)
@@ -296,30 +296,46 @@ def draw_fights(request, group_id):
     # result_to_show = sorting(result)
     result_to_show.append(random.choice(result))
 
-    while result:
-        var1.append(random.choice(result))
-        print("var1", var1)
-        condition_one = var1[0][0] != result_to_show[-1][0] or var1[0][1] != result_to_show[-1][0]
-        condition_two = var1[0][0] != result_to_show[-1][1] or var1[0][1] != result_to_show[-1][1]
-        print(result[0][0])
-        print(result[0][1])
+    # while len(result) > 0:
+    while len(result_to_show) == len(list(group.participants)) * len(list(group.participants))-1 / 2:
+        var1 = random.choice(result)
+        for el in result:
+            if el == var1:
+                result.remove(el)
+        print("var1 lista a w niej jedna tupla", var1)
+        print("Var[0]", var1[0].name)
+        print("var[1]", var1[1].name)
+        print("result_to_show[-1][0]", result_to_show[-1][0].name)
+        print("result_to_show[-1][1]", result_to_show[-1][1].name)
+        condition_one = var1[0] != result_to_show[-1][0] and var1[1] != result_to_show[-1][0]
+        condition_two = var1[0] != result_to_show[-1][1] and var1[1] != result_to_show[-1][1]
+        print("RESULT", result)
+        # print(result[0][0])
+        # print(result[0][1])
         print(result_to_show[-1][0])
         print(result_to_show[-1][1])
         print(condition_one)
         print(condition_two)
-        if condition_one and condition_two:
+        if condition_one and condition_two and var1 not in result_to_show:
+            print("oba warunki spełnione")
             result_to_show.append(var1)
-            result.remove(result[0])
-
+            print("resultttt to show in pętla", result_to_show)
+            # vvv =
+            # result.remove(result[0])
+            print("resulttttt in pętla", result)
+            # return result_to_show
         else:
-            # var1 = random.choice(result)
-            random.shuffle(result)
+            var1 = random.choice(result)
+            # random.shuffle(result)
 
-    # print(result_to_show)
+    print("TERAZ********************TERAZ", result_to_show)
     if participants_pairs:
         group_fights.delete()
+        print("delete done")
         for right_participant in result_to_show:
+            print("jijiijij", right_participant)
             fights.get_or_create(
+                # id = right_participant[0][0],
                 order=order_number,
                 group=group,
                 tournament=tournament,
