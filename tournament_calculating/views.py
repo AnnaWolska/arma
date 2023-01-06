@@ -272,7 +272,7 @@ def add_group(request, tournament_id):
 #             sorting_result = some_list
 #         return sorting_result
 
-
+# TO DO:  jeszcze przestawianie gdy dwa el zostały i działanie dla 2,3, i 4, i warunek i for jeśli na początku jest taki sam co ostatni
 def draw_fights(request, group_id):
     group = Group.objects.get(pk=group_id)
     group_fights = group.fights.all()
@@ -297,90 +297,97 @@ def draw_fights(request, group_id):
     # result_to_show = sorting(result)
     result_to_show.append(random.choice(result))
     result.remove(result_to_show[0])
-    print(type(result_to_show))
-    print("g.p.a", type(group.participants.all()))
-    print("l,g,p,a", type(list(group.participants.all())))
+    # print("1type restosh", type(result_to_show))
+    # print("2g.p.a", type(group.participants.all()))
+    # print("3l,g,p,a", type(list(group.participants.all())))
     xxx = list(group.participants.all())
     for el in group.participants.all():
         xxx.append(el)
-    print("xxx", xxx)
-    print("Leeeeeeeeeeeen wzór", (len(list(group.participants.all())) * (len(list(group.participants.all()))-1)) / 2)
+    # print("4xxx", xxx)
+    # print("5Leeeeeeeeeeeen wzór", (len(list(group.participants.all())) * (len(list(group.participants.all()))-1)) / 2)
     # while len(result) > 0:
 
-    while len(result_to_show) != int(len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2):
-        print(len(result_to_show))
-        print(int(len(list(group.participants.all())) * (len(list(group.participants.all()))-1) / 2))
-        print("CZEMU TO JEST TAK", len(result_to_show) < len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2)
-        print("to się ciągle pętluje")
-        if result:
-            var1 = random.choice(result)
-        else:
-            break
+    if len(result) > 4:
+        while len(result_to_show) != int(len(list(group.participants.all())) * (len(list(group.participants.all()))-1) / 2):
+            print("6to co w warunku pętli", int(len(list(group.participants.all())) * (len(list(group.participants.all()))-1) / 2))
+            # print("7result   to    show", len(result_to_show))
+            # print("8TUUUUUUUU dł z nawiasem", int(len(list(group.participants.all())) * (len(list(group.participants.all()))-1) / 2))
+            # print("9CZEMU TO JEST TAK", len(result_to_show) < len(list(group.participants.all())) * (len(list(group.participants.all()))-1) / 2)
+            # print("10to się ciągle pętluje")
+            if result:
+                var1 = random.choice(result)
+            else:
+                break
 
-        print("result początek pętli", result)
+            # print("11result początek pętli", result)
 
-        print("var1 tupla", var1)
-        print("Var[0]", var1[0].name)
-        print("var[1]", var1[1].name)
-        print("result_to_show[-1][0]", result_to_show[-1][0].name)
-        print("result_to_show[-1][1]", result_to_show[-1][1].name)
-        condition_one = var1[0] != result_to_show[-1][0] and var1[1] != result_to_show[-1][0]
-        condition_two = var1[0] != result_to_show[-1][1] and var1[1] != result_to_show[-1][1]
-        print("RESULT", result)
-        # print(result[0][0])
-        # print(result[0][1])
-        print(result_to_show[-1][0])
-        print(result_to_show[-1][1])
-        print(condition_one)
-        print(condition_two)
-        # time.sleep(1)
-        if condition_one and condition_two and var1 not in result_to_show:
-            print("oba warunki spełnione")
-            result_to_show.append(var1)
-            result.remove(var1)
-            print("result to show po dodaniu var1")
-            for x in result_to_show:
-                print(x)
-            # for el in result:
-            #     if el == var1:
-            if var1 in result:
-                print("tak el == var1 in result")
+            # print("12var1 tupla", var1)
+            # print("13Var[0]", var1[0].name)
+            # print("14var[1]", var1[1].name)
+            # print("15result_to_show[-1][0]", result_to_show[-1][0].name)
+            # print("16result_to_show[-1][1]", result_to_show[-1][1].name)
+            condition_one = var1[0] != result_to_show[-1][0] and var1[1] != result_to_show[-1][0]
+            condition_two = var1[0] != result_to_show[-1][1] and var1[1] != result_to_show[-1][1]
+            # print("17RESULT", result)
+            # print(result[0][0])
+            # print(result[0][1])
+            # print(result_to_show[-1][0])
+            # print(result_to_show[-1][1])
+            # print(condition_one)
+            # print(condition_two)
+            # time.sleep(1)
+            if condition_one and condition_two and var1 not in result_to_show:
+                print("18oba warunki spełnione")
+                result_to_show.append(var1)
                 result.remove(var1)
-            print("resultttt to show in pętla", result_to_show)
-            # vvv =
-            # result.remove(result[0])
-            print("resulttttt in pętla", result)
-            # return result_to_show
-            print("LLLLEEEENNNN len result i len result to show", len(result), len(result_to_show))
-            # time.sleep(1)
-        else:
-            print("jednak warunek nie jest spełniony, będzie losować var1")
-            print("result to show po dodaniu var1", result_to_show)
-            print(len(result_to_show))
-            # if len(result_to_show) == len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2:
-                # if var1 in result:
-                #     print("tak el == var1 in result")
-                #     result.remove(var1)
-            random.shuffle(result)
-            print("result after shuffle", result)
-            print("LLLLEEEENNNN len result i len result to show", len(result), len(result_to_show))
-            if len(result_to_show) == ((len(list(group.participants.all())) * len(list(group.participants.all()))-1) / 2) -1:
-                print("wynik długość równa 21 -1",((len(list(group.participants.all())) * len(list(group.participants.all()))-1) / 2) -1 )
-                result_to_show.insert(0,result[0])
-                break
-            if len(result_to_show) == ((len(list(group.participants.all())) * len(list(group.participants.all()))) - 1) / 2:
-                break
+                # print("19result to show po dodaniu var1")
+                # for x in result_to_show:
+                #     print(x)
+                # for el in result:
+                #     if el == var1:
+                if var1 in result:
+                    # print("20tak el == var1 in result")
+                    result.remove(var1)
+                # print("21resultttt to show in pętla", result_to_show)
+                # vvv =
+                # result.remove(result[0])
+                # print("22resulttttt in pętla", result)
+                # return result_to_show
+                print("23LLLLEEEENNNN len result i len result to show", len(result), len(result_to_show))
+                # time.sleep(1)
+            else:
+                print("24jednak warunek nie jest spełniony, będzie losować var1")
+                # print("25result to show po dodaniu var1", result_to_show)
+                print("26len result to show", len(result_to_show))
+                # if len(result_to_show) == len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2:
+                    # if var1 in result:
+                    #     print("tak el == var1 in result")
+                    #     result.remove(var1)
+                random.shuffle(result)
+                # print("27result after shuffle", result)
+                print("28LLLLiiiiiiiNNNN len result i len result to show", len(result), len(result_to_show))
+                print("29warunek by ostatni poszedł na początek", len(result_to_show) == ((len(list(group.participants.all())) * len(list(group.participants.all()))-1) / 2) -1)
+                print("30result   to  show", len(result_to_show))
+                print("to co teraz w warunku ostatniego el:",int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 1) )
+                # if len(result_to_show) == len(    ((len(list(group.participants.all())))    *    (len(list(group.participants.all()))-1) / 2 )   )  -1:
+
+                if len(result_to_show) ==  int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 1):
+                    # print("31wynik długość równa 21 -1",((len(list(group.participants.all())) * len(list(group.participants.all()))-1) / 2) -1 )
+                    result_to_show.insert(0,result[0])
+                    break
+                if len(result_to_show) == ((len(list(group.participants.all())) * len(list(group.participants.all()))) - 1) / 2:
+                    break
 
             # time.sleep(1)
-    print("TERAZ********************TERAZ będzie dodawanie do bazy", result_to_show)
+    # print("32TERAZ********************TERAZ będzie dodawanie do bazy", result_to_show)
     if participants_pairs:
         group_fights.delete()
-        print("delete done")
+        # print("33delete done")
         for right_participant in result_to_show:
-            print("reslt to show", result_to_show)
-            for el in result_to_show:
-                print(el)
-            print("jjjjjjjright participant", right_participant)
+            # print("34reslt to show", result_to_show)
+            # for el in result_to_show:
+                # print("35el",el)
+            # print("36jjjjjjjright participant", right_participant)
             fights.get_or_create(
                 # id = right_participant[0][0],
                 order=order_number,
