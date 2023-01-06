@@ -307,10 +307,15 @@ def draw_fights(request, group_id):
     print("Leeeeeeeeeeeen wzór", (len(list(group.participants.all())) * (len(list(group.participants.all()))-1)) / 2)
     # while len(result) > 0:
 
-    while len(result_to_show) < len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2:
+    while len(result_to_show) != int(len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2):
+        print(len(result_to_show))
+        print(int(len(list(group.participants.all())) * (len(list(group.participants.all()))-1) / 2))
+        print("CZEMU TO JEST TAK", len(result_to_show) < len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2)
         print("to się ciągle pętluje")
         if result:
             var1 = random.choice(result)
+        else:
+            break
 
         print("result początek pętli", result)
 
@@ -328,12 +333,14 @@ def draw_fights(request, group_id):
         print(result_to_show[-1][1])
         print(condition_one)
         print(condition_two)
-        time.sleep(1)
+        # time.sleep(1)
         if condition_one and condition_two and var1 not in result_to_show:
             print("oba warunki spełnione")
             result_to_show.append(var1)
             result.remove(var1)
-            print("result to show po dodaniu var1", result_to_show)
+            print("result to show po dodaniu var1")
+            for x in result_to_show:
+                print(x)
             # for el in result:
             #     if el == var1:
             if var1 in result:
@@ -345,7 +352,7 @@ def draw_fights(request, group_id):
             print("resulttttt in pętla", result)
             # return result_to_show
             print("LLLLEEEENNNN len result i len result to show", len(result), len(result_to_show))
-            time.sleep(1)
+            # time.sleep(1)
         else:
             print("jednak warunek nie jest spełniony, będzie losować var1")
             print("result to show po dodaniu var1", result_to_show)
@@ -357,13 +364,14 @@ def draw_fights(request, group_id):
             random.shuffle(result)
             print("result after shuffle", result)
             print("LLLLEEEENNNN len result i len result to show", len(result), len(result_to_show))
-            if len(result_to_show) == len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2 -1:
+            if len(result_to_show) == ((len(list(group.participants.all())) * len(list(group.participants.all()))-1) / 2) -1:
+                print("wynik długość równa 21 -1",((len(list(group.participants.all())) * len(list(group.participants.all()))-1) / 2) -1 )
                 result_to_show.insert(0,result[0])
                 break
-            if len(result_to_show) == len(list(group.participants.all())) * len(list(group.participants.all())) - 1 / 2:
+            if len(result_to_show) == ((len(list(group.participants.all())) * len(list(group.participants.all()))) - 1) / 2:
                 break
 
-            time.sleep(1)
+            # time.sleep(1)
     print("TERAZ********************TERAZ będzie dodawanie do bazy", result_to_show)
     if participants_pairs:
         group_fights.delete()
