@@ -230,62 +230,18 @@ def add_group(request, tournament_id):
             )
 
 
-# def sorting(some_list):
-#     length = len(some_list)
-#     final_list = []
-#     sorting_result = []
-#     if length > 2:
-#         final_list.append(random.choice(some_list))
-#         print("final_list", final_list)
-#         print("len(final_list)", len(final_list))
-#         if length > 6:
-#             # sorting_result.append(some_list[0])
-#             # some_list.remove(some_list[0])
-#             # while len(sorting_result) != length:
-#             #     condition_one = sorting_result[-1][0] != some_list[0][0] and sorting_result[-1][0] != some_list[0][1]
-#             #     condition_two = sorting_result[-1][1] != some_list[0][1]and sorting_result[-1][1] != some_list[0][0]
-#             #     if condition_one and condition_two:
-#             #         sorting_result.append(some_list[0])
-#             #         some_list.remove(some_list[0])
-#             #     else:
-#             #         some_list.append(some_list[0])
-#             #         some_list.remove(some_list[0])
-#             temp_var = random.choice(some_list)
-#             temp_var2 = 0
-#             final_list.append(temp_var)
-#             some_list.remove(temp_var)
-#             while len(some_list) > 0:
-#                 if some_list[0][0] == final_list[-1][0] or some_list[0][1] == final_list[-1][1]:
-#                 # for el in some_list:
-#                 #     print("el")
-#                 #     if el[0] == final_list[-1][0] or el[1] == final_list[-1][1]:
-#                     temp_var2 = random.choice(some_list)
-#                     print("oj, powtarza się")
-#                 else:
-#                     print("oooo, nie powtarza się")
-#                     final_list.append(temp_var2)
-#                     some_list.remove(some_list[0])
-#                     # print("final_list", final_list)
-#                     sorting_result = final_list
-#         else:
-#             random.shuffle(some_list)
-#             sorting_result = some_list
-#         return sorting_result
-
-# TO DO:  jeszcze przestawianie gdy dwa el zostały i działanie dla 2,3, i 4, i warunek i for jeśli na początku jest taki sam co ostatni
+# TO DO:  jeszcze for jeśli na początku jest taki sam co ostatnie, bo czasem się powtorzy z przodu
 def draw_fights(request, group_id):
     group = Group.objects.get(pk=group_id)
     group_fights = group.fights.all()
     tournament = group.tournament
     fights = Fight.objects.all().order_by('id')
-    participants = group.participants.all()
     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(group.participants.all(), r)
                                                             for r in range(2, 2 + 1)))
     left_participants = []
     right_participants = []
     result = []
     result_to_show = []
-    var1 = []
 
     for participant_pair in participants_pairs:
         result.append(participant_pair)
@@ -293,103 +249,85 @@ def draw_fights(request, group_id):
         right_participants.append(participant_pair[1])
 
     order_number = 1
-    # print("result", result)
-    # result_to_show = sorting(result)
-    result_to_show.append(random.choice(result))
-    result.remove(result_to_show[0])
-    # print("1type restosh", type(result_to_show))
-    # print("2g.p.a", type(group.participants.all()))
-    # print("3l,g,p,a", type(list(group.participants.all())))
-    xxx = list(group.participants.all())
-    for el in group.participants.all():
-        xxx.append(el)
-    # print("4xxx", xxx)
-    # print("5Leeeeeeeeeeeen wzór", (len(list(group.participants.all())) * (len(list(group.participants.all()))-1)) / 2)
-    # while len(result) > 0:
-
-    if len(result) > 4:
+    # poniżej 4 nie ma możliwości bez powtórzeń więc:
+    print("if jaka długość", len(result))
+    print(result)
+    print("czy ten if prawdziwy", len(result) > 4)
+    if len(result) > 6:
+        result_to_show.append(random.choice(result))
+        result.remove(result_to_show[0])
+        print("warunek długości po 4 ruszył")
+        # time.sleep(1)
+        #dopóki lista resul to show nie jest odpowiednio długa:
         while len(result_to_show) != int(len(list(group.participants.all())) * (len(list(group.participants.all()))-1) / 2):
-            print("6to co w warunku pętli", int(len(list(group.participants.all())) * (len(list(group.participants.all()))-1) / 2))
-            # print("7result   to    show", len(result_to_show))
-            # print("8TUUUUUUUU dł z nawiasem", int(len(list(group.participants.all())) * (len(list(group.participants.all()))-1) / 2))
-            # print("9CZEMU TO JEST TAK", len(result_to_show) < len(list(group.participants.all())) * (len(list(group.participants.all()))-1) / 2)
-            # print("10to się ciągle pętluje")
             if result:
                 var1 = random.choice(result)
             else:
                 break
-
-            # print("11result początek pętli", result)
-
-            # print("12var1 tupla", var1)
-            # print("13Var[0]", var1[0].name)
-            # print("14var[1]", var1[1].name)
-            # print("15result_to_show[-1][0]", result_to_show[-1][0].name)
-            # print("16result_to_show[-1][1]", result_to_show[-1][1].name)
             condition_one = var1[0] != result_to_show[-1][0] and var1[1] != result_to_show[-1][0]
             condition_two = var1[0] != result_to_show[-1][1] and var1[1] != result_to_show[-1][1]
-            # print("17RESULT", result)
-            # print(result[0][0])
-            # print(result[0][1])
-            # print(result_to_show[-1][0])
-            # print(result_to_show[-1][1])
-            # print(condition_one)
-            # print(condition_two)
-            # time.sleep(1)
+            # jeżeli się nie powatarzaja zawodnicy to dodajemy:
             if condition_one and condition_two and var1 not in result_to_show:
-                print("18oba warunki spełnione")
                 result_to_show.append(var1)
                 result.remove(var1)
-                # print("19result to show po dodaniu var1")
-                # for x in result_to_show:
-                #     print(x)
-                # for el in result:
-                #     if el == var1:
                 if var1 in result:
-                    # print("20tak el == var1 in result")
                     result.remove(var1)
-                # print("21resultttt to show in pętla", result_to_show)
-                # vvv =
-                # result.remove(result[0])
-                # print("22resulttttt in pętla", result)
-                # return result_to_show
-                print("23LLLLEEEENNNN len result i len result to show", len(result), len(result_to_show))
-                # time.sleep(1)
+            # jak wylosowany w wyloswanym el jakiś zawodnik się powtarza, to mieszamy:
             else:
-                print("24jednak warunek nie jest spełniony, będzie losować var1")
-                # print("25result to show po dodaniu var1", result_to_show)
-                print("26len result to show", len(result_to_show))
-                # if len(result_to_show) == len(list(group.participants.all())) * len(list(group.participants.all()))-1 / 2:
-                    # if var1 in result:
-                    #     print("tak el == var1 in result")
-                    #     result.remove(var1)
                 random.shuffle(result)
-                # print("27result after shuffle", result)
-                print("28LLLLiiiiiiiNNNN len result i len result to show", len(result), len(result_to_show))
-                print("29warunek by ostatni poszedł na początek", len(result_to_show) == ((len(list(group.participants.all())) * len(list(group.participants.all()))-1) / 2) -1)
-                print("30result   to  show", len(result_to_show))
-                print("to co teraz w warunku ostatniego el:",int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 1) )
-                # if len(result_to_show) == len(    ((len(list(group.participants.all())))    *    (len(list(group.participants.all()))-1) / 2 )   )  -1:
+                # print("result", result)
+                print("result to show ostatni el", result_to_show[-1])
+                print(" długość result_to_show", len(result_to_show))
+                # print("długość o jeden mniej niż result to show",  int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 1))
+                # jeśli został jeden element to go wstawię na początek
+                print("if czy został jeden el", len(result_to_show) == int(
+                    ((len(list(group.participants.all())) * (len(list(group.participants.all())) - 1)) / 2) - 1))
 
                 if len(result_to_show) ==  int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 1):
-                    # print("31wynik długość równa 21 -1",((len(list(group.participants.all())) * len(list(group.participants.all()))-1) / 2) -1 )
-                    result_to_show.insert(0,result[0])
+                    print("result[0]",result[0])
+                    # print(result[1])
+                    print("result_to_show[0][0]",result_to_show[0][0])
+                    print("result_to_show[0][1]",result_to_show[0][1])
+                    # condition_one = result[0] != result_to_show[0][0] and result[1] != result_to_show[0][0]
+                    # condition_two = result[0] != result_to_show[0][1] and result[1] != result_to_show[0][1]
+                    condition_one = result[0] != result_to_show[0][0]
+                    condition_two = result[0] != result_to_show[0][1]
+                    # ale musi się nie powtarzać z tym początku żaden zawodnik w elemencie wciskanym:
+                    if condition_one and condition_two:
+                        result_to_show.insert(0,result[0])
+                        print("wstawilem na pierwsze")
+                    else:
+                        result_to_show.insert(1, result[0])
+                        print("WSATAWILEM NA DRUGIE :D")
                     break
-                if len(result_to_show) == ((len(list(group.participants.all())) * len(list(group.participants.all()))) - 1) / 2:
+                # jeśli zostały dwa elementy i w każdym jakiś zawodnik się powtarza:
+                print("ic czy zostały dwa el", len(result_to_show) ==  int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 2))
+                if len(result_to_show) ==  int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 2):
+                    print("NOOOOO trzeba dopisać, co jak zostaną dwa elementy")
+                #     result_to_show.insert(0,result[0])
+                #     result_to_show.insert(0,result[1])
+                #     break
+                    result_to_show.insert(0, result[0])
+                    result_to_show.insert(0, result[1])
                     break
 
-            # time.sleep(1)
-    # print("32TERAZ********************TERAZ będzie dodawanie do bazy", result_to_show)
+                # jeśli wszystkie się wstawiły dobrze i nic nie zostało:
+                if len(result_to_show) == ((len(list(group.participants.all())) * len(list(group.participants.all()))) - 1) / 2:
+                    print("nic nie wstawiałem wyszło za pierwszym razem")
+                    break
+    else:
+        print("warunek pow 4 nie ruszył")
+        for el in result:
+            result_to_show.append(el)
+            random.shuffle(result_to_show)
+            print("result", result)
+            print("rts", result_to_show)
+
+
     if participants_pairs:
         group_fights.delete()
-        # print("33delete done")
         for right_participant in result_to_show:
-            # print("34reslt to show", result_to_show)
-            # for el in result_to_show:
-                # print("35el",el)
-            # print("36jjjjjjjright participant", right_participant)
             fights.get_or_create(
-                # id = right_participant[0][0],
                 order=order_number,
                 group=group,
                 tournament=tournament,
@@ -399,62 +337,6 @@ def draw_fights(request, group_id):
             order_number +=1
     return HttpResponseRedirect(reverse("tournament_calculating:group_details",
                                         args=[group_id]))
-
-#
-
-
-# def sorting(some_list):
-#     length = len(some_list)
-#     sorting_result = []
-#     if length > 2:
-#         if length > 6:
-#             sorting_result.append(some_list[0])
-#             some_list.remove(some_list[0])
-#             while len(sorting_result) != length:
-#                 condition_one = sorting_result[-1][0] != some_list[0][0] and sorting_result[-1][0] != some_list[0][1]
-#                 condition_two = sorting_result[-1][1] != some_list[0][1]and sorting_result[-1][1] != some_list[0][0]
-#                 if condition_one and condition_two:
-#                     sorting_result.append(some_list[0])
-#                     some_list.remove(some_list[0])
-#                 else:
-#                     some_list.append(some_list[0])
-#                     some_list.remove(some_list[0])
-#         else:
-#             random.shuffle(some_list)
-#             sorting_result = some_list
-#         return sorting_result
-#
-#
-# def draw_fights(request, group_id):
-#     group = Group.objects.get(pk=group_id)
-#     tournament = group.tournament
-#     fights = Fight.objects.all()
-#     rounds = None
-#     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(group.participants.all(), r)
-#                                                             for r in range(2, 2 + 1)))
-#     left_participants = []
-#     right_participants = []
-#     result = []
-#
-#     for participant_pair in participants_pairs:
-#         result.append(participant_pair)
-#         left_participants.append(participant_pair[0])
-#         right_participants.append(participant_pair[1])
-#
-#     result_to_show = sorting(result)
-#     if participants_pairs:
-#         for right_participant in result_to_show:
-#             fights.get_or_create(
-#                 group=group,
-#                 rounds=rounds,
-#                 tournament=tournament,
-#                 fighter_one=right_participant[0],
-#                 fighter_two=right_participant[1]
-#             )
-#
-#     return HttpResponseRedirect(reverse("tournament_calculating:group_details",
-#                                         args=[group_id]))
-#
 
 
 
