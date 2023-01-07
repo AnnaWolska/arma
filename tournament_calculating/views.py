@@ -50,7 +50,7 @@ def group_details(request, group_id):
     tournament = group.tournament
     participants = group.participants.all()
     fights = group.fights.all().order_by('id')
-    groups = Group.objects.filter(tournament=tournament)
+    groups = Group.objects.filter(tournament=tournament).order_by("number")
     first_fight = fights.first()
     tournaments_fighters_average = tournament.tournament_average
     rounds = 0
@@ -230,10 +230,16 @@ def add_group(request, tournament_id):
             )
 
 
-# TO DO:  jeszcze for jeśli na początku jest taki sam co ostatnie, bo czasem się powtorzy z przodu
+# TODO:  jeszcze for jeśli na początku jest taki sam co ostatnie, bo czasem się powtorzy z przodu
 def draw_fights(request, group_id):
     group = Group.objects.get(pk=group_id)
     group_fights = group.fights.all()
+    if group_fights:
+        group_fights.delete()
+        group.save()
+        for participant in group.participants.all():
+            participant.group_points = 0
+            participant.save()
     tournament = group.tournament
     fights = Fight.objects.all().order_by('id')
     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(group.participants.all(), r)
@@ -242,22 +248,17 @@ def draw_fights(request, group_id):
     right_participants = []
     result = []
     result_to_show = []
-
     for participant_pair in participants_pairs:
         result.append(participant_pair)
         left_participants.append(participant_pair[0])
         right_participants.append(participant_pair[1])
-
     order_number = 1
-    # poniżej 4 nie ma możliwości bez powtórzeń więc:
-    print("if jaka długość", len(result))
-    print(result)
-    print("czy ten if prawdziwy", len(result) > 4)
+
+    # poniżej 6 walk nie ma możliwości bez powtórzeń więc:
     if len(result) > 6:
         result_to_show.append(random.choice(result))
         result.remove(result_to_show[0])
-        print("warunek długości po 4 ruszył")
-        # time.sleep(1)
+
         #dopóki lista resul to show nie jest odpowiednio długa:
         while len(result_to_show) != int(len(list(group.participants.all())) * (len(list(group.participants.all()))-1) / 2):
             if result:
@@ -275,21 +276,9 @@ def draw_fights(request, group_id):
             # jak wylosowany w wyloswanym el jakiś zawodnik się powtarza, to mieszamy:
             else:
                 random.shuffle(result)
-                # print("result", result)
-                print("result to show ostatni el", result_to_show[-1])
-                print(" długość result_to_show", len(result_to_show))
-                # print("długość o jeden mniej niż result to show",  int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 1))
                 # jeśli został jeden element to go wstawię na początek
-                print("if czy został jeden el", len(result_to_show) == int(
-                    ((len(list(group.participants.all())) * (len(list(group.participants.all())) - 1)) / 2) - 1))
-
+                print("wstawilem na początek")
                 if len(result_to_show) ==  int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 1):
-                    print("result[0]",result[0])
-                    # print(result[1])
-                    print("result_to_show[0][0]",result_to_show[0][0])
-                    print("result_to_show[0][1]",result_to_show[0][1])
-                    # condition_one = result[0] != result_to_show[0][0] and result[1] != result_to_show[0][0]
-                    # condition_two = result[0] != result_to_show[0][1] and result[1] != result_to_show[0][1]
                     condition_one = result[0] != result_to_show[0][0]
                     condition_two = result[0] != result_to_show[0][1]
                     # ale musi się nie powtarzać z tym początku żaden zawodnik w elemencie wciskanym:
@@ -301,28 +290,20 @@ def draw_fights(request, group_id):
                         print("WSATAWILEM NA DRUGIE :D")
                     break
                 # jeśli zostały dwa elementy i w każdym jakiś zawodnik się powtarza:
-                print("ic czy zostały dwa el", len(result_to_show) ==  int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 2))
                 if len(result_to_show) ==  int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 2):
                     print("NOOOOO trzeba dopisać, co jak zostaną dwa elementy")
-                #     result_to_show.insert(0,result[0])
-                #     result_to_show.insert(0,result[1])
-                #     break
                     result_to_show.insert(0, result[0])
                     result_to_show.insert(0, result[1])
                     break
-
                 # jeśli wszystkie się wstawiły dobrze i nic nie zostało:
                 if len(result_to_show) == ((len(list(group.participants.all())) * len(list(group.participants.all()))) - 1) / 2:
                     print("nic nie wstawiałem wyszło za pierwszym razem")
                     break
     else:
-        print("warunek pow 4 nie ruszył")
+        print("warunek że walk > 6 nie ruszył, nie da się zmieszać")
         for el in result:
             result_to_show.append(el)
             random.shuffle(result_to_show)
-            print("result", result)
-            print("rts", result_to_show)
-
 
     if participants_pairs:
         group_fights.delete()
@@ -472,8 +453,9 @@ def add_rounds(request, group_id):
             })
         )
 
-
+# pierwsi walczący mają za mało punktów
 def add_points (request, group_id, fight_id, round_id):
+    print("TRATATaaaaaaaaaaaaaaaaaaaA")
     group = Group.objects.get(pk=group_id)
     fight_rounds = Round.objects.filter(fight_id=fight_id)
     fight = Fight.objects.get(pk=fight_id)
@@ -491,7 +473,11 @@ def add_points (request, group_id, fight_id, round_id):
     prtcp_ls = []
     points_trnm_fights = []
     points_trnm_fights2 = []
-
+    fight_fighter_points = []
+    fight_fighter_points2 = []
+    gr_participant_points = []
+    gr_p_sum = []
+    gr_p_sum2 = []
     # dodawanie punktów każdemu z przeciwników w walce
     if request.user.is_authenticated:
         form = AddPointsForm(request.POST, instance=round_of_fight)
@@ -509,106 +495,171 @@ def add_points (request, group_id, fight_id, round_id):
             final_points = sum(points_sum)
             second_final_points = sum(second_points_sum)
             fight.fighter_one_points = final_points
-            # print("FINAL POINTS", final_points)
             fight.fighter_two_points = second_final_points
             fight.save()
+            for participant in participants:
+                print("participant przed dodaniem", participant)
+                if participant == fight.fighter_one:
+                    print("participant == fight.fighter_one", participant == fight.fighter_one)
+                    for fight in fights:
+                        if fight.fighter_one == participant:
+                            gr_p_sum.append(fight.fighter_one_points)
+                            print("gr_p_sum.append", gr_p_sum.append)
+                            participant.group_points = sum(gr_p_sum)
+                            participant.points_average = participant.group_points * tournaments_fighters_average
+                    participant.save()
+                print("participant po dodaniu", participant)
+                if participant == fight.fighter_two:
+                    for fight in fights:
+                        if fight.fighter_two == participant:
+                            gr_p_sum2.append(fight.fighter_two_points)
+                            participant.group_points = sum(gr_p_sum2)
+                            # participant.points_average = participant.group_points * tournaments_fighters_average
+                    participant.save()
+
+
 
             # sumowanie punktów dla wszystkich starć w walce?
-            # tournament_fights_points = []
-            # tournaments = Tournament.objects.all()
-            # for tournament in tournaments:
-            #     if tournament.id == fight.tournament_id:
-            #         for tournament_fight in tournament.fights.all():
-            #             if tournament_fight.fighter_one_points != 0:
-            #                 tournament_fights_points.append(tournament_fight.fighter_one_points)
-            #             if tournament_fight.fighter_two_points != 0:
-            #                 tournament_fights_points.append(tournament_fight.fighter_two_points)
-            #
-            # tournaments_fighters_average = round(sum(tournament_fights_points) / len(tournament_fights_points), 2)
-            # tournament.tournament_average = tournaments_fighters_average
-            # tournament.save()
-            #
-            # print(tournaments_fighters_average)
-            # print("tournament_fights_points", tournament_fights_points)
-            # print("round(sum(tournament_fights_points)", round(sum(tournament_fights_points)))
-            # print("len(tournament_fights_points), 2)", len(tournament_fights_points))
-            # print("tournaments_fighters_average", tournaments_fighters_average)
-            # print("round_in_fight1", round_in_fight.points_fighter_one)
-            # print("round_in_fight2", round_in_fight.points_fighter_two)
-            #
-            # for f in fights:
-            #     print("f.fighter_one.name", f.fighter_one.name)
-            #
-            # fight_fighter_points = []
-            # fight_fighter_points2 = []
+            tournament_fights_points = []
+            tournaments = Tournament.objects.all()
+
+
+        # dla każdego gr_prtcp dodać final points jeśli jest fighter albo two
+
             #
             # for participant in participants:
+            #     gr_p_sum.append
+            #     participant.group_points =
+
+            # TU BRAAAAKUUUUJEEEE POŁĄCZENIA WALK DO GRUPY!!!! ZEBY PO WALKACH W GRUPIE ITEROWAC
+            # gr_fights = fights.filter(group_id=group_id)
+            # print(gr_fights)
+            # print("co się wombat patrzysz")
+            # for f in gr_fights:
+            #     print("(*|*)")
+            #     gr_participant = participants.get(id=f.fighter_one.id)
+            #     print("CO TO ZA GOŚĆ????", gr_participant)
+            #     gr_participant_points.append(f.fighter_one_points)
+            #     gr_participant.group_points = sum(gr_participant_points)
+            #     print("CO TO ZA PUNKTY????", gr_participant.group_points)
+            #     # gr_participant.group_points = sum(gr_participant_points)
+            #     gr_participant.save()
+            #     print("Czy wyszlo zapisanie punktów", gr_participant.group_points)
+
+
+
+
+            # dla każdego turnieju z turniejów:
+            for tournament in tournaments:
+                print("for po turn do śr")
+                #jeśli jego id jest takie samo jak id turnieju walk:
+                if tournament.id == fight.tournament_id:
+                    # dla każdej walki w tego turnieju walkacj:
+                    for tournament_fight in tournament.fights.all():
+                        #jeśli w tej walce pierwszy zawodnik ma jakieś punkty:
+                        if tournament_fight.fighter_one_points != 0:
+                            #to dla tego turnieju punkty z walki powiększ o punkty tego zawodnika
+                            tournament_fights_points.append(tournament_fight.fighter_one_points)
+                            #jeśli drugi zawodnik ma jakieś punkty:
+                        if tournament_fight.fighter_two_points != 0:
+                            # to punkt dla tego turnieju powiększ o punkty tego zawodnika
+                            tournament_fights_points.append(tournament_fight.fighter_two_points)
+                    # TU WYLICZAM ŚREDNIĄ DO WYJSCIA
+                    if tournament_fights_points is not None:
+                        tournaments_fighters_average = round(sum(tournament_fights_points) / len(tournament_fights_points), 2)
+                        tournament.tournament_average = tournaments_fighters_average
+                        tournament.save()
+                        for participant in participants:
+                            participant.points_average = participant.group_points * tournaments_fighters_average
+                            participant.save()
+
+            # gr_fights = fights.filter(id=group_id)
+            # for f in gr_fights:
+            #     gr_participant = participants.get(id=f.fighter_one.id)
+            #     print("CO TO ZA GOŚĆ????", gr_participant)
+            #     gr_participant_points.append(f.fighter_one_points)
+            #     gr_participant.group_points = sum(gr_participant_points)
+            #     print("CO TO ZA PUNKTY????",  gr_participant.group_points)
+            #     # gr_participant.group_points = sum(gr_participant_points)
+            #     gr_participant.save()
+            #     print("Czy wyszlo zapisanie punktów", gr_participant.group_points)
+
+
+            fight_fighter_points = []
+            fight_fighter_points2 = []
+            # for participant in participants:
             #     prtcp_fights = fights.filter(fighter_one=participant)
-            #     for x in prtcp_fights:
-            #         print(x.fighter_one_id)
             #
             #     for fight in prtcp_fights:
-            #         # if participant.id == fight.fighter_one_id:
-            #         if participant.name == fight.fighter_one.name:
-            #             prtcp_ls.append(participant.name)
-            #             print(prtcp_ls)
-            #             print("partcipant.name", participant.name)
+            #         fight_fighter_points = []
+            #         fight_fighter_points2 = []
+            #         # if participant.name == fight.fighter_one.name:
+            #         #     print("warunek czy participant.name = fight.fighter_one.name", participant.name == fight.fighter_one.name)
+            #         #     prtcp_ls.append(participant.name)
+            #             # print("LISTA PARTICIPANTÓw", prtcp_ls)
             #
-            #
+            #         if participant.id == fight.fighter_one_id:
+            #             print("participant.id", participant.id)
+            #             print("fight_fighter_points", fight_fighter_points)
+            #             print("pierwszy if się robi")
+            #             # prtcp_ls.append(participant.name)
+            #             # print("LISTA PARTICIPANTÓw", prtcp_ls)
             #             fight_fighter_points.append(fight.fighter_one_points)
-            #
-            #
-            #             print("fight.fighter_one_points", fight.fighter_one_points)
-            #             print("fight_fighter_points",fight_fighter_points)
-            #
+            #             print("FIGHT FIGHTER POINT", fight.fighter_one_points)
             #             participant.group_points = sum(fight_fighter_points)
+            #             print("PARTICIPANR GRUP POINTS", participant.group_points)
             #             participant.save()
+            #             fight_fighter_points = 0
+            #
             #         if participant.id == fight.fighter_two_id:
+            #             print(participant.id)
+            #             print("drugi if się robi")
+            #             # prtcp_ls.append(participant.name)
+            #             # print("LISTA PARTICIPANTÓw", prtcp_ls)
             #             fight_fighter_points2.append(fight.fighter_two_points)
+            #             print("FIGHT FIGHTER POINT2", fight.fighter_one_points2)
             #             participant.group_points = sum(fight_fighter_points)
+            #             print("PARTICIPANR GRUP POINTS", participant.group_points)
             #             participant.save()
 
-            temp_var = []
-            var2 = {}
-            var3 = []
-            var4 = {}
-            var5 = []
-
-            for fight in fights:
-                print("fight", fight.fighter_one_points)
-                for participant in participants:
-                    print("participant", participant.name)
-
-                    if participant.id == fight.fighter_one_id:
-                        print("uuuuuuuuuuuuuuuuparticipant.name", participant.name)
-                        var2 = {participant.name: fight.fighter_one_points}
-                        var3.append(var2)
-                        print("var2",var2)
-                        print("var3", var3)
-                        for x in var3:
-                            print(x.keys())
-
-                    if participant.id == fight.fighter_two_id:
-                        print("uuuuuuuuuuuuuuuuparticipant.name", participant.name)
-                        var4 = {participant.name: fight.fighter_two_points}
-                        var5.append(var4)
-                        print("var4", var4)
-                        print("var5", var5)
 
 
-                        for p_round in participant.rounds_of_participant.all():
-                            print("p_round", p_round)
-                            if p_round.fight_id == fight_id:
-                                print("TAK")
-                                # if p_round.points_fighter_one is not None:
-                                temp_var.append(p_round.points_fighter_one)
 
-                                participant.group_points = sum(temp_var)
-                                print("p_round.points_fighter_one",p_round.points_fighter_one)
-                                print("temp_var",temp_var)
-                                print("participant.group_points",participant.group_points)
-                                participant.save()
-            messages.success(request, 'punkty dodane')
+
+            # temp_var = []
+            # var2 = {}
+            # var3 = []
+            # var4 = {}
+            # var5 = []
+            # for fight in fights:
+            #     print("fight", fight.fighter_one_points)
+            #     for participant in participants:
+            #         print("participant", participant.name)
+            #         if participant.id == fight.fighter_one_id:
+            #             print("uuuuuuuuuuuuuuuuparticipant.name", participant.name)
+            #             var2 = {participant.name: fight.fighter_one_points}
+            #             var3.append(var2)
+            #             print("var2",var2)
+            #             print("var3", var3)
+            #             for x in var3:
+            #                 print(x.keys())
+            #         if participant.id == fight.fighter_two_id:
+            #             print("uuuuuuuuuuuuuuuuparticipant.name", participant.name)
+            #             var4 = {participant.name: fight.fighter_two_points}
+            #             var5.append(var4)
+            #             print("var4", var4)
+            #             print("var5", var5)
+            #             for p_round in participant.rounds_of_participant.all():
+            #                 print("p_round", p_round)
+            #                 if p_round.fight_id == fight_id:
+            #                     print("TAK")
+            #                     temp_var.append(p_round.points_fighter_one)
+            #                     participant.group_points = sum(temp_var)
+            #                     print("p_round.points_fighter_one",p_round.points_fighter_one)
+            #                     print("temp_var",temp_var)
+            #                     print("participant.group_points",participant.group_points)
+            #                     participant.save()
+            # messages.success(request, 'punkty dodane')
 
             return HttpResponseRedirect(reverse(
                 "tournament_calculating:group_details",
@@ -627,7 +678,7 @@ def add_points (request, group_id, fight_id, round_id):
                     'final_points':final_points,
                     'second_final_points': second_final_points,
                     'participants_average': participants_average,
-                    'tournaments_fighters_average': tournaments_fighters_average
+                    # 'tournaments_fighters_average': tournaments_fighters_average
                 })
             )
     else:

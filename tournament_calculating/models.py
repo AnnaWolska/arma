@@ -42,6 +42,7 @@ class Group(models.Model):
     color_fighter_one = models.CharField(max_length=30, choices=COLOR, null=True)
     color_fighter_two = models.CharField(max_length=30, choices=COLOR, null=True)
 
+
     def __str__(self):
         return f"{self.number} {self.tournament} {self.participants} {self.color_fighter_one} {self.color_fighter_two}"
 

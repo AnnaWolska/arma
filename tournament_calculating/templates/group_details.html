@@ -51,7 +51,7 @@
                 <li>
                 <br>
                     <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
-                        <b>{{  participant.name }} z {{ participant.school  }} </b>
+                        <b>  {{  participant.name }} z {{ participant.school  }} </b>
                         <div>
                             {% if participant.image %}
                             {% thumbnail participant.image "100x100" as im %}
@@ -84,8 +84,8 @@
             dodaj ile starć ma mieć każda walka
             {% endif %}
         </center>
-        walki:
-        <br/>
+            <h5>walki grupa {{  number }} :</h5>
+{#        <br/>#}
 
 
             <table  BORDER CELLSPACING=5 CELLPADDING=15>
@@ -172,7 +172,7 @@
 <br>
                 <table BORDER CELLSPACING=5 CELLPADDING=15 >
                     <thead>
-                    <tr><h5>punkty cząstkowe zebrane</h5></tr>
+                    <tr><h5>punkty cząstkowe zebrane grupa {{  number }}  </h5></tr>
                         <tr>
                             {% for group in groups %}
                             <th style="background: bisque">
@@ -205,7 +205,7 @@
      <table BORDER CELLSPACING=5 CELLPADDING=15 >
                     <thead>
                     <br>
-                    <tr><h5>punkty wyjściowe </h5>(średnia punktów w turnieju - {{ tournaments_fighters_average}} )</tr>
+                    <tr><h5>punkty wyjściowe grupa {{  number }} </h5>(średnia punktów w turnieju z odbytych walk - <span style="color: crimson">{{ tournaments_fighters_average}}</span>)</tr>
                         <tr>
                             {% for group in groups %}
                             <th style="background: burlywood">
