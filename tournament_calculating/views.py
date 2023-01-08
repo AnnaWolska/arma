@@ -383,9 +383,15 @@ def delete_fights(request, tournament_id, group_id):
     if request.user.is_authenticated:
         if request.method == "POST":
             tournament = Tournament.objects.get(pk=tournament_id)
-            group = Group.objects.get(pk=group_id)
+            # group = Group.objects.get(pk=group_id)
             if request.user == tournament.user:
                 fights.delete()
+                for participant in participants:
+                    for fight in fights:
+                        if participant.id == fight.fighter_one_id or participant.id == fight.fighter_two_id:
+                            participant.group_points = 0
+                            participant.points_average = 0
+                            participant.save()
                 # for participant in participants:
                 #     participant.group_points = 0
                 #     participant.update()
@@ -412,6 +418,9 @@ def add_rounds(request, group_id):
         rounds_of_group = group.rounds_of_group.all()
         if request.method == "POST" and form.is_valid():
             rounds = form.cleaned_data['rounds']
+            if rounds_of_group:
+                for round in rounds_of_group:
+                    round.delete()
             obj = form.save(commit=False)
             obj.rounds = rounds
             obj.save()
@@ -570,7 +579,7 @@ def add_points (request, group_id, fight_id, round_id):
                         tournament.tournament_average = tournaments_fighters_average
                         tournament.save()
                         for participant in participants:
-                            participant.points_average = participant.group_points * tournaments_fighters_average
+                            participant.points_average = participant.group_points / tournaments_fighters_average
                             participant.save()
 
             # gr_fights = fights.filter(id=group_id)
