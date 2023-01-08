@@ -464,7 +464,7 @@ def add_rounds(request, group_id):
 
 # pierwsi walczący mają za mało punktów
 def add_points (request, group_id, fight_id, round_id):
-    print("TRATATaaaaaaaaaaaaaaaaaaaA")
+    print("początek funkcji add_points")
     group = Group.objects.get(pk=group_id)
     fight_rounds = Round.objects.filter(fight_id=fight_id)
     fight = Fight.objects.get(pk=fight_id)
@@ -513,10 +513,10 @@ def add_points (request, group_id, fight_id, round_id):
                     for fight in fights:
                         if fight.fighter_one == participant:
                             gr_p_sum.append(fight.fighter_one_points)
-                            print("gr_p_sum.append", gr_p_sum.append)
+                            print("gr_p_sum.append", gr_p_sum)
                             participant.group_points = sum(gr_p_sum)
                             participant.points_average = participant.group_points * tournaments_fighters_average
-                    participant.save()
+                            participant.save()
                 print("participant po dodaniu", participant)
                 if participant == fight.fighter_two:
                     for fight in fights:
@@ -524,7 +524,7 @@ def add_points (request, group_id, fight_id, round_id):
                             gr_p_sum2.append(fight.fighter_two_points)
                             participant.group_points = sum(gr_p_sum2)
                             # participant.points_average = participant.group_points * tournaments_fighters_average
-                    participant.save()
+                            participant.save()
 
 
 
