@@ -56,7 +56,7 @@ class FightAdmin(admin.ModelAdmin):
 
 @admin.register(Round)
 class RoundAdmin(admin.ModelAdmin):
-    list_display = ["id", "fight", "result_figter_one", "result_figter_two", "points_fighter_one", "points_fighter_two", "fighter"]
+    list_display = ["id", "fight", "result_figter_one", "result_figter_two", "points_fighter_one", "points_fighter_two", "fighter_one", "fighter_two"]
 
-    search_fields = ["id", "fight", "result_figter_one", "result_figter_two", "fighter"]
+    search_fields = ["id", "fight", "result_figter_one", "result_figter_two"]
     list_filter = ["id", "fight", "result_figter_one", "result_figter_two"]

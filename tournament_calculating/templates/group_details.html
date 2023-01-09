@@ -34,10 +34,12 @@
                     Dodaj uczestnika
                 </a>
             </button>
+                {% if not rounds %}
             <button id="delete_tournament" type="button" style="background-color:plum"  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:draw_fights' group_id %}">
                     Losuj walki
                 </a>
+                {% endif %}
             </button>
             <button id="delete_tournament" type="button" style="background-color:coral"  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_fights' group_id tournament.id   %}">
@@ -49,9 +51,11 @@
             {% for participant in participants %}
             <ul>
                 <li>
-                <br>
+                    <br>
                     <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
-                        <b>  {{  participant.name }} z {{ participant.school  }} </b>
+                        <b>
+                            {{  participant.name }} z {{ participant.school  }}
+                        </b>
                         <div>
                             {% if participant.image %}
                             {% thumbnail participant.image "100x100" as im %}
@@ -73,36 +77,37 @@
         {% if fighters_one_names %}
         <center>
             FAZA GRUPOWA
-            <button id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
+            {% if rounds %}
+           ilość starć: {{ rounds }}
+            {% else %}
+                         <span id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:add_rounds' group_id   %}">
                     ile starć:
                 </a>
-            </button>
-            {% if rounds %}
-            {{ rounds }}
-            {% else %}
+            </span>
             dodaj ile starć ma mieć każda walka
             {% endif %}
         </center>
-            <h5>walki grupa {{  number }} :</h5>
-{#        <br/>#}
+        <h5>
+            walki grupa {{  number }} :
+        </h5>
+        <table  BORDER CELLSPACING=5 CELLPADDING=15>
+            <tr>
+                {% for fight in fights%}
+                <td>
+                    {{ fight.order}}
+                </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for fighter in fighters_one_names %}
+{#                <td style=" background: {{ group.color_fighter_one}} ">#}
 
-
-            <table  BORDER CELLSPACING=5 CELLPADDING=15>
-                <tr>
-                    {% for fight in fights%}
-                    <td>
-                        {{ fight.order}}
-                    </td>
-                    {% endfor %}
-                </tr>
-                <tr>
-                    {% for fighter in fighters_one_names %}
-{#                    <td style=" background: {{ group.color_fighter_one}} ">#}
-                     <td style=" background: lightyellow ">
-
+                    <td style=" background: lightyellow ">
                         <a style="text-decoration: none; color:black" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
-                          <b>{{ fighter.name }}</b>
+                            <b>
+                                {{ fighter.name }}
+                            </b>
                         </a>
                     </td>
                     {% endfor %}
@@ -111,7 +116,9 @@
                     {% for fighter in fighters_two_names  %}
                     <td style=" background: deepskyblue">
                         <a style="text-decoration: none; color:black" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
-                            <b>{{ fighter.name }}</b>
+                            <b>
+                                {{ fighter.name }}
+                            </b>
                         </td>
                         {% endfor %}
                     </tr>
@@ -120,119 +127,134 @@
                         {% for r in fight.rounds_of_fight.all|dictsort:"id" %}
                         <a id="delete_tournament" class="btn btn-primary" style="color:white; background-color:orange; text-decoration: none;   " href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
                             {% if r.points_fighter_one > 0 or r.points_fighter_one == 0%}
-                                <b>
-                            <span style=" color: white"> {{ fight.fighter_one.name }}:</span>
-                                </b>
                             <b>
-                                <span style=" color: black" > {{ r.points_fighter_one }}</span>
+                                <span style=" color: white">
+                                    {{ fight.fighter_one.name }}:
+                                </span>
+                            </b>
+                            <b>
+                                <span style=" color: black" >
+                                    {{ r.points_fighter_one }}
+                                </span>
                             </b>
                             {% endif %}
-
                             {% if r.points_fighter_two > 0 or r.points_fighter_two == 0%}
-
                             <hr style="color: black">
-                                <b>
-                             <span style=" color: white">{{ fight.fighter_two.name }}: </span>
-                                </b>
                             <b>
-                               <span style=" color: black"> {{ r.points_fighter_two }}</span>
+                                <span style=" color: white">
+                                    {{ fight.fighter_two.name }}:
+                                </span>
                             </b>
-
+                            <b>
+                                <span style=" color: black">
+                                    {{ r.points_fighter_two }}
+                                </span>
+                            </b>
                             {% else %}
-                                <b>       starcie  {{ r.order }}</b>
-
+                            <b>
+                                starcie  {{ r.order }}
+                            </b>
                             {% endif %}
                         </a>
                         <br>
                         <br>
                         {% endfor %}
-
                         <br>
-
                         {{ fight.fighter_one.name }}:
                         {% if fight.fighter_one_points %}
-                       <b>{{ fight.fighter_one_points }}</b>
+                        <b>
+                            {{ fight.fighter_one_points }}
+                        </b>
                         {% endif %}
                         <br>
                         {{ fight.fighter_two.name }}:
                         {% if fight.fighter_two_points %}
-                        <b>{{ fight.fighter_two_points }}</b>
+                        <b>
+                            {{ fight.fighter_two_points }}
+                        </b>
                         {% endif %}
                         {% endfor %}
                         {% endif %}
-
                         <tr>
                         </tr>
                     </table>
-
                     <style>
                         td, th { border: 1px solid black; }
                     </style>
-
-<br>
-                <table BORDER CELLSPACING=5 CELLPADDING=15 >
-                    <thead>
-                    <tr><h5>punkty cząstkowe zebrane grupa {{  number }}  </h5></tr>
-                        <tr>
-                            {% for group in groups %}
-                            <th style="background: bisque">
-                                grupa nr {{ group.number }}
-                                {% endfor %}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tr>
-                        {% for gr in groups %}
-                        <td>
-                            <table BORDER CELLSPACING=5 CELLPADDING=15>
-                                <tr>
-                                    {% for participant in gr.participants.all %}
-                                    <td>
-                                        {{ participant.name }} -
-                                        {% if participant.group_points is not None %}
-                                        <b>{{ participant.group_points }}</b>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </table>
-                            {% endfor %}
-{#                            {{ grups }}#}
-                        </tr>
-                    </table>
-
-
-     <table BORDER CELLSPACING=5 CELLPADDING=15 >
-                    <thead>
                     <br>
-                    <tr><h5>punkty wyjściowe grupa   {{  number }} ( średnia punktów w turnieju z odbytych walk - <span style="color: crimson">{{ tournaments_fighters_average}}</span> )</h5></tr>
+                    <table BORDER CELLSPACING=5 CELLPADDING=15 >
+                        <thead>
+                            <tr>
+                                <h5>
+                                    punkty cząstkowe zebrane grupa {{  number }}
+                                </h5>
+                            </tr>
+                            <tr>
+                                {% for group in groups %}
+                                <th style="background: bisque">
+                                    grupa nr {{ group.number }}
+                                    {% endfor %}
+                                </th>
+                            </tr>
+                        </thead>
                         <tr>
-                            {% for group in groups %}
-                            <th style="background: burlywood">
-                                grupa nr {{ group.number }}
+                            {% for gr in groups %}
+                            <td>
+                                <table BORDER CELLSPACING=5 CELLPADDING=15>
+                                    <tr>
+                                        {% for participant in gr.participants.all %}
+                                        <td>
+                                            {{ participant.name }} -
+                                            {% if participant.group_points is not None %}
+                                            <b>
+                                                {{ participant.group_points }}
+                                            </b>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
                                 {% endfor %}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tr>
-                        {% for gr in groups %}
-                        <td>
-                            <table BORDER CELLSPACING=5 CELLPADDING=15>
+                            </tr>
+                        </table>
+                        <table BORDER CELLSPACING=5 CELLPADDING=15 >
+                            <thead>
+                                <br>
                                 <tr>
-                                    {% for participant in gr.participants.all|dictsortreversed:"points_average" %}
-                                    <td>
-                                        {{ participant.name }} -
-                                        {% if participant.points_average is not None %}
-                                       <b>{{ participant.points_average }}</b>
-                                        {% endif %}
-                                    </td>
+                                    <h5>
+                                        punkty wyjściowe grupa   {{  number }} ( średnia punktów w turnieju z odbytych walk -
+                                        <span style="color: crimson">
+                                            {{ tournaments_fighters_average}}
+                                        </span>
+                                        )
+                                    </h5>
                                 </tr>
-                                {% endfor %}
+                                <tr>
+                                    {% for group in groups %}
+                                    <th style="background: burlywood">
+                                        grupa nr {{ group.number }}
+                                        {% endfor %}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                {% for gr in groups %}
+                                <td>
+                                    <table BORDER CELLSPACING=5 CELLPADDING=15>
+                                        <tr>
+                                            {% for participant in gr.participants.all|dictsortreversed:"points_average" %}
+                                            <td>
+                                                {{ participant.name }} -
+                                                {% if participant.points_average is not None %}
+                                                <b>
+                                                    {{ participant.points_average }}
+                                                </b>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                    {% endfor %}
+                                </tr>
                             </table>
-                            {% endfor %}
-{#                            {{ grups }}#}
-                        </tr>
-                    </table>
-
-
-                    {% endblock %}
+                            {% endblock %}

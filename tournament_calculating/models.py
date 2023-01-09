@@ -61,6 +61,7 @@ class Fight(models.Model):
     fighter_one_points = models.PositiveSmallIntegerField(null=True, default=0)
     fighter_two_points = models.PositiveSmallIntegerField(null=True, default=0)
 
+
     def __str__(self):
         return f"{self.group} {self.rounds} {self.tournament} {self.fighter_one} {self.fighter_two}"
 
@@ -85,11 +86,12 @@ class Round(models.Model):
     points_fighter_one = models.PositiveSmallIntegerField(null=True)
     points_fighter_two = models.PositiveSmallIntegerField(null=True)
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="rounds_of_group", null=True)
-    fighter = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant", null=True )
+    fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_one", null=True )
+    fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_two", null=True )
 
     def __str__(self):
         return f"{self.order} {self.fight} {self.result_figter_one} {self.result_figter_two} \
-        {self.group} {self.fighter} {self.points_fighter_one} {self.points_fighter_two}"
+        {self.group} {self.fighter_one} {self.fighter_one} {self.points_fighter_one} {self.points_fighter_two}"
 
     class Meta:
         verbose_name = "Runda"
