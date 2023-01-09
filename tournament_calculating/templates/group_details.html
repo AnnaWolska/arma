@@ -202,18 +202,24 @@
                         </thead>
                         <tr>
                             {% for gr in groups %}
-                            <td>
-                                <table BORDER CELLSPACING=5 CELLPADDING=15>
+                            <td >
+                                <table BORDER CELLSPACING=5 CELLPADDING=15  >
                                     <tr>
-                                        {% for participant in gr.participants.all %}
-                                        <td>
+                                        {% for participant in gr.participants.all|dictsortreversed:"points_average" %}
+                                            {%  if gr.id == group_id %}
+
+                                            <td style="background-color: plum">
+                                            {% endif %}
+                                            <td style="width:100%;table-layout:fixed;">
                                             {{ participant.name }} -
                                             {% if participant.group_points is not None %}
                                             <b>
                                                 {{ participant.group_points }} x <span style="color: crimson"> {{ tournaments_fighters_average}} </span> = <span style="color: darkblue"> {{ participant.points_average }}   </span>
                                             </b>
                                             {% endif %}
-                                        </td>
+                                            </td>
+
+
                                     </tr>
                                     {% endfor %}
                                 </table>
