@@ -186,7 +186,10 @@
                         <thead>
                             <tr>
                                 <h5>
-                                    punkty cząstkowe zebrane grupa {{  number }}
+                                    punkty cząstkowe zebrane i <span style="color: darkblue"> wyjściowe </span> grupa {{  number }} ( średnia punktów w turnieju z odbytych walk - {{ participant.points_average }}
+                                        <span style="color: crimson">
+                                            {{ tournaments_fighters_average}}
+                                        </span>)
                                 </h5>
                             </tr>
                             <tr>
@@ -207,7 +210,7 @@
                                             {{ participant.name }} -
                                             {% if participant.group_points is not None %}
                                             <b>
-                                                {{ participant.group_points }}
+                                                {{ participant.group_points }} x <span style="color: crimson"> {{ tournaments_fighters_average}} </span> = <span style="color: darkblue"> {{ participant.points_average }}   </span>
                                             </b>
                                             {% endif %}
                                         </td>
@@ -217,44 +220,44 @@
                                 {% endfor %}
                             </tr>
                         </table>
-                        <table BORDER CELLSPACING=5 CELLPADDING=15 >
-                            <thead>
-                                <br>
-                                <tr>
-                                    <h5>
-                                        punkty wyjściowe grupa   {{  number }} ( średnia punktów w turnieju z odbytych walk -
-                                        <span style="color: crimson">
-                                            {{ tournaments_fighters_average}}
-                                        </span>
-                                        )
-                                    </h5>
-                                </tr>
-                                <tr>
-                                    {% for group in groups %}
-                                    <th style="background: burlywood">
-                                        grupa nr {{ group.number }}
-                                        {% endfor %}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tr>
-                                {% for gr in groups %}
-                                <td>
-                                    <table BORDER CELLSPACING=5 CELLPADDING=15>
-                                        <tr>
-                                            {% for participant in gr.participants.all|dictsortreversed:"points_average" %}
-                                            <td>
-                                                {{ participant.name }} -
-                                                {% if participant.points_average is not None %}
-                                                <b>
-                                                    {{ participant.points_average }}
-                                                </b>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-                                    </table>
-                                    {% endfor %}
-                                </tr>
-                            </table>
+{#                        <table BORDER CELLSPACING=5 CELLPADDING=15 >#}
+{#                            <thead>#}
+{#                                <br>#}
+{#                                <tr>#}
+{#                                    <h5>#}
+{#                                        punkty wyjściowe grupa   {{  number }} ( średnia punktów w turnieju z odbytych walk - {{ participant.points_average }}#}
+{#                                        <span style="color: crimson">#}
+{#                                            {{ tournaments_fighters_average}}#}
+{#                                        </span>#}
+{#                                        )#}
+{#                                    </h5>#}
+{#                                </tr>#}
+{#                                <tr>#}
+{#                                    {% for group in groups %}#}
+{#                                    <th style="background: burlywood">#}
+{#                                        grupa nr {{ group.number }}#}
+{#                                        {% endfor %}#}
+{#                                    </th>#}
+{#                                </tr>#}
+{#                            </thead>#}
+{#                            <tr>#}
+{#                                {% for gr in groups %}#}
+{#                                <td>#}
+{#                                    <table BORDER CELLSPACING=5 CELLPADDING=15>#}
+{#                                        <tr>#}
+{#                                            {% for participant in gr.participants.all|dictsortreversed:"points_average" %}#}
+{#                                            <td>#}
+{#                                                {{ participant.name }} -#}
+{#                                                {% if participant.points_average is not None %}#}
+{#                                                <b>#}
+{#                                                    {{ participant.points_average }}#}
+{#                                                </b>#}
+{#                                                {% endif %}#}
+{#                                            </td>#}
+{#                                        </tr>#}
+{#                                        {% endfor %}#}
+{#                                    </table>#}
+{#                                    {% endfor %}#}
+{#                                </tr>#}
+{#                            </table>#}
                             {% endblock %}
