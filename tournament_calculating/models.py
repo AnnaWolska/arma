@@ -41,6 +41,7 @@ class Group(models.Model):
     participants = models.ManyToManyField('Participant', related_name='groups')
     color_fighter_one = models.CharField(max_length=30, choices=COLOR, null=True)
     color_fighter_two = models.CharField(max_length=30, choices=COLOR, null=True)
+    number_outgoing = models.PositiveSmallIntegerField(null=True, default=0)
 
 
     def __str__(self):

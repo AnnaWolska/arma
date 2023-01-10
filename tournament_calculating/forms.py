@@ -62,28 +62,6 @@ class AddRoundsForm(forms.ModelForm):
                 )
             )
 
-# class AddResolvedForm(forms.ModelForm):
-#
-#     class Meta:
-#         pass
-#         model = Fight
-#         fields = ["resolved"]
-#         def __init__(self, *args, **kwargs):
-#             super().__init__(*args, **kwargs)
-#             self.helper = FormHelper()
-#             self.helper.form_method = 'post'
-#             self.helper.form_action = 'tournament_calculating:add_points'
-#             self.helper.layout = Layout(
-#                 Fieldset(
-#                     "rozstrzygnięcie"
-#                 ),
-#                 ButtonHolder(
-#                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),
-#                     css_class="d-flex justify-content-end"
-#                 )
-#             )
-
-
 
 
 class AddPointsForm(forms.ModelForm):
@@ -168,3 +146,25 @@ class AddFightsForm(forms.ModelForm):
                 )
             )
 
+
+class GroupSummaryForm(forms.ModelForm):
+
+    class Meta:
+        model = Group
+        fields = ['number_outgoing']
+        labels = {'number_outgoing': 'ilość wychodzących z grupy'}
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.form_method = 'post'
+            self.helper.form_action = 'tournament_calculating: group_summary'
+            self.helper.layout = Layout(
+                Fieldset(
+                    'wychodzący z grupy'
+                ),
+                ButtonHolder(
+                    Submit('submit', 'Dodaj', css_class='btn btn-primary'),
+                    css_class="d-flex justify-content-end"
+                )
+            )

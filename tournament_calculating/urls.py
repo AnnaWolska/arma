@@ -3,7 +3,7 @@ from tournament_calculating.views import participants_list, participant_details,
     delete_group_participant, draw_fights, \
     delete_group, \
     delete_fights, add_rounds, add_points,\
-    fight_details
+    fight_details, group_summary
 
 app_name = "tournament_calculating"
 urlpatterns = [
@@ -20,7 +20,8 @@ urlpatterns = [
     path('<int:group_id>/<int:tournament_id>/delete_fights/', delete_fights, name="delete_fights"),
 
     path('<int:group_id>/add_rounds/', add_rounds, name="add_rounds"),
-    path('<int:group_id>/<int:fight_id>/<int:round_id>/add_points/', add_points, name="add_points")
+    path('<int:group_id>/<int:fight_id>/<int:round_id>/add_points/', add_points, name="add_points"),
+    path('<int:group_id>/', group_summary, name="group_summary"),
 
 
 ]

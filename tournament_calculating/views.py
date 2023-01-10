@@ -13,7 +13,8 @@ from tournament_calculating.forms import (
     AddParticipantForm,
     AddGroupForm,
     AddRoundsForm,
-    AddPointsForm
+    AddPointsForm,
+    GroupSummaryForm
     )
 
 
@@ -56,7 +57,6 @@ def group_details(request, group_id):
     rounds = 0
     if first_fight:
         rounds = first_fight.rounds
-
     fighter_one_ids = []
     for f in fights:
         fighter_one_ids.append(f.fighter_one_id)
@@ -69,7 +69,6 @@ def group_details(request, group_id):
     fighters_two_names = []
     for el in fighter_two_ids:
         fighters_two_names.append(participants.get(id=el))
-
     fights_numbers = []
     for i in range(1,len(fighters_one_names) + 1):
         fights_numbers.append(i)
@@ -91,7 +90,6 @@ def group_details(request, group_id):
 
 
 def fight_details(request, group_id, fight_id):
-
     group = Group.objects.get(pk=group_id)
     fight = Fight.objects.get(pk=fight_id)
     rounds_obj = group.rounds_of_group.all()
@@ -104,7 +102,7 @@ def fight_details(request, group_id, fight_id):
         participants_ids.append(p.id)
     fights = group.fights.all()
     first_fight = fights.first()
-    ff = fights.filter(pk=group_id)
+    # ff = fights.filter(pk=group_id)
     rounds = 0
     iter_rounds = []
     for i in range(rounds):
@@ -468,12 +466,12 @@ def add_points (request, group_id, fight_id, round_id):
     round_of_fight = fight_rounds.get(pk=round_id)
     first_fighter_points = []
     points_sum = []
-    final_points = []
-    second_final_points = []
+    # final_points = []
+    # second_final_points = []
     second_fighter_points = []
     second_points_sum = []
     participants = group.participants.order_by('-group_points')
-    participants_average = group.participants.order_by('-points_average')
+    # participants_average = group.participants.order_by('-points_average')
     points_result_ls = ["0","1","2","3","4","5","6","7","8","9","10","11"]
 
     # dodawanie punktów każdemu z przeciwników w walce
@@ -481,10 +479,6 @@ def add_points (request, group_id, fight_id, round_id):
         form = AddPointsForm(request.POST, instance=round_of_fight)
         if request.method == "POST" and form.is_valid():
             form.save()
-            # if round_of_fight.resolved_fighter_one == True:
-            #     round_of_fight.points_fighter_one = round_of_fight.points_fighter_one
-            # if round_of_fight.resolved_fighter_two == True:
-            #     round_of_fight.points_fighter_two = round_of_fight.points_fighter_two
 
             for round_in_fight in fight.rounds_of_fight.all():
                 if round_in_fight.points_fighter_one in points_result_ls:
@@ -562,9 +556,6 @@ def add_points (request, group_id, fight_id, round_id):
                     'group_id': group_id,
                     'fight_id': fight_id,
                     'round_id':round_id,
-                    # 'final_points':final_points,
-                    # 'second_final_points': second_final_points,
-                    # 'participants_average': participants_average,
                 })
             )
     else:
@@ -580,3 +571,47 @@ def add_points (request, group_id, fight_id, round_id):
 
 
 
+def group_summary(request, group_id):
+    print("cokolwiek")
+    group = Group.objects.get(pk=group_id)
+    # fight_rounds = Round.objects.filter(fight_id=fight_id)
+
+
+    if request.user.is_authenticated:
+        print("dalej")
+        form = GroupSummaryForm(request.POST, instance=group)
+        print("jest form")
+        if request.method == "POST" and form.is_valid():
+            print("jeszcze dalej")
+            isinstance = form.save(commit=False)
+            print(isinstance)
+            group.number_outgoing = isinstance.number_outgoing
+            print(isinstance)
+            print(group.number_outgoing)
+            isinstance.save()
+
+            # instance = form.save()
+            # instance.groups.add(group)
+            # instance.tournaments.add(tournament)
+            # instance.save()
+            return HttpResponseRedirect(reverse(
+                "tournament_calculating:group_details",
+                args=[group_id],
+            ))
+        else:
+            form = GroupSummaryForm(instance=group)
+            return (
+                render(request, "group_summary.html", context={
+                    'form': form,
+                    'group': group,
+                })
+            )
+    # else:
+    #     form = GroupSummaryForm
+    #     return (
+    #         render(request, "group_summary.html", context={
+    #             'form': form,
+    #             'group_id': group_id,
+    #
+    #         })
+    #     )

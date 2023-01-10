@@ -102,15 +102,24 @@
             <tr>
                 {% for fighter in fighters_one_names %}
 
-{#                <td style=" background: {{ group.color_fighter_one}} ">#}
+{#                   {% if group.color_fighter_one == "pink"%}#}
+{#                      <td style=" background: pink  ">#}
+{#                    {% else %}#}
+{#                      <td style=" background: lightyellow ">#}
+{#                   {% endif %}#}
 
                     <td style=" background: lightyellow ">
+
+{#                     <td style=" background: {% if  group.color_fighter_one == "pink" %} 'pink'{% endif %} ">#}
+
+
                         <a style="text-decoration: none; color:black" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                             <b>
-                                {{ fighter.name }}
+                                {{ fighter.name }} {{ group.color_fighter_one }}
                             </b>
                         </a>
                     </td>
+
                     {% endfor %}
                 </tr>
                 <tr>
@@ -190,9 +199,17 @@
                             <tr>
                                 <h5>
                                     punkty cząstkowe zebrane i <span style="color: darkblue"> wyjściowe </span> grupa {{  number }} ( średnia punktów w turnieju z odbytych walk - {{ participant.points_average }}
-                                        <span style="color: crimson">
+                                                                    <span style="color: crimson">
                                             {{ tournaments_fighters_average}}
                                         </span>)
+
+
+                                    <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
+                                    <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:group_summary' group_id %}">
+                                        podsumowanie grupy
+                                    </a>
+{#                                        tournament.id#}
+                                        </span>
                                 </h5>
                             </tr>
                             <tr>
