@@ -61,6 +61,8 @@ class Fight(models.Model):
     fighter_one_points = models.PositiveSmallIntegerField(null=True, default=0)
     fighter_two_points = models.PositiveSmallIntegerField(null=True, default=0)
 
+    resolved = models.BooleanField(default=False , null=True)
+
 
     def __str__(self):
         return f"{self.group} {self.rounds} {self.tournament} {self.fighter_one} {self.fighter_two}"
@@ -72,25 +74,45 @@ class Fight(models.Model):
 
 class Round(models.Model):
     STATUS = (
-        ('0', 'win'),
-        ('1', 'lose'),
-        ('2', 'draw'),
-        ('3', 'no result'),
-        ('4', 'no fight'),
-        ('5', 'no status')
+        ('0', '0'),
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
+        ('6', '6'),
+        ('7', '7'),
+        ('8', '8'),
+        ('9', '9'),
+        ('10', '10'),
+        ('11', '11'),
+        ('draw','remis' ),
+        ('brak rezultatu','brak rezultatu' ),
+        ('nie było walki','nie było walki' ),
+        ('brak statusu','brak statusu' ),
+        ('dyskwalifikacja','dyskwalifikacja' ),
+        ('kontuzja','kontuzja' ),
+        ('nieobecność','nieobecność'),
+        ('inne','inne' ),
+        ('poddanie', 'poddanie')
     )
     order = models.PositiveSmallIntegerField(null=True)
     fight = models.ForeignKey("Fight", on_delete=models.CASCADE, related_name="rounds_of_fight", null=True)
-    result_figter_one = models.CharField(max_length=1, choices=STATUS, null=True)
-    result_figter_two = models.CharField(max_length=1, choices=STATUS, null=True)
-    points_fighter_one = models.PositiveSmallIntegerField(null=True)
-    points_fighter_two = models.PositiveSmallIntegerField(null=True)
+    # result_fighter_one = models.CharField(max_length=1, choices=STATUS, null=True)
+    # result_fighter_two = models.CharField(max_length=1, choices=STATUS, null=True)
+    # points_fighter_one = models.PositiveSmallIntegerField(null=True)
+    # points_fighter_two = models.PositiveSmallIntegerField(null=True)
+    points_fighter_one = models.CharField(max_length=20, choices=STATUS, null=True)
+    points_fighter_two = models.CharField(max_length=20, choices=STATUS, null=True)
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="rounds_of_group", null=True)
     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_one", null=True )
     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_two", null=True )
+    # resolved_fighter_one = models.BooleanField(default=False, null=True)
+    # resolved_fighter_two = models.BooleanField(default=False, null=True)
+
 
     def __str__(self):
-        return f"{self.order} {self.fight} {self.result_figter_one} {self.result_figter_two} \
+        return f"{self.order} {self.fight} \
         {self.group} {self.fighter_one} {self.fighter_one} {self.points_fighter_one} {self.points_fighter_two}"
 
     class Meta:

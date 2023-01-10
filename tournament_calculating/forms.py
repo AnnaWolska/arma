@@ -62,14 +62,47 @@ class AddRoundsForm(forms.ModelForm):
                 )
             )
 
+# class AddResolvedForm(forms.ModelForm):
+#
+#     class Meta:
+#         pass
+#         model = Fight
+#         fields = ["resolved"]
+#         def __init__(self, *args, **kwargs):
+#             super().__init__(*args, **kwargs)
+#             self.helper = FormHelper()
+#             self.helper.form_method = 'post'
+#             self.helper.form_action = 'tournament_calculating:add_points'
+#             self.helper.layout = Layout(
+#                 Fieldset(
+#                     "rozstrzygnięcie"
+#                 ),
+#                 ButtonHolder(
+#                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),
+#                     css_class="d-flex justify-content-end"
+#                 )
+#             )
+
+
+
 
 class AddPointsForm(forms.ModelForm):
 
     class Meta:
-        pass
         model = Round
-        fields = ["points_fighter_one", "points_fighter_two"]
-        labels = {"points": 'punkty'}
+
+        fields = [
+            # "resolved_fighter_one",
+                  "points_fighter_one",
+                  # "resolved_fighter_two",
+                  "points_fighter_two"
+                  ]
+
+        labels = {"points_fighter_one": 'punkty pierwszego zawodnika',
+                  "points_fighter_two":'punkty drugiego zawodnika',
+                  # "resolved_fighter_one":"czy jest rozstrzygnięcie?",
+                  # "resolved_fighter_two":"czy jest rozstrzygnięcie?"
+                  }
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -85,6 +118,7 @@ class AddPointsForm(forms.ModelForm):
                     css_class="d-flex justify-content-end"
                 )
             )
+
 
 
 class AddGroupForm(forms.ModelForm):
@@ -116,7 +150,7 @@ class AddFightsForm(forms.ModelForm):
     class Meta:
         model = Fight
         fields = ['rounds']
-        labels = {"rounds": 'runndy'}
+        labels = {"rounds": 'rundy'}
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)

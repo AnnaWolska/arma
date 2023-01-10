@@ -474,15 +474,25 @@ def add_points (request, group_id, fight_id, round_id):
     second_points_sum = []
     participants = group.participants.order_by('-group_points')
     participants_average = group.participants.order_by('-points_average')
+    points_result_ls = ["0","1","2","3","4","5","6","7","8","9","10","11"]
 
     # dodawanie punktów każdemu z przeciwników w walce
     if request.user.is_authenticated:
         form = AddPointsForm(request.POST, instance=round_of_fight)
         if request.method == "POST" and form.is_valid():
             form.save()
+            # if round_of_fight.resolved_fighter_one == True:
+            #     round_of_fight.points_fighter_one = round_of_fight.points_fighter_one
+            # if round_of_fight.resolved_fighter_two == True:
+            #     round_of_fight.points_fighter_two = round_of_fight.points_fighter_two
+
             for round_in_fight in fight.rounds_of_fight.all():
-                first_fighter_points.append(round_in_fight.points_fighter_one)
-                second_fighter_points.append(round_in_fight.points_fighter_two)
+                if round_in_fight.points_fighter_one in points_result_ls:
+                # if round_in_fight.resolved_fighter_one == True:
+                    first_fighter_points.append(int(round_in_fight.points_fighter_one))
+                # if round_in_fight.resolved_fighter_two == True:
+                if round_in_fight.points_fighter_two in points_result_ls:
+                    second_fighter_points.append(int(round_in_fight.points_fighter_two))
             # tu zbieram punkty ze wszystkich rund w danej walce dla pierwszego zawodnika
             for el in first_fighter_points:
                 if type(el) == int:
@@ -505,10 +515,10 @@ def add_points (request, group_id, fight_id, round_id):
                     print("fight", fight.id)
                     if p.id == fight.fighter_one_id:
                         print("p", p.name)
-                        one_more_ls_to_append.append(fight.fighter_one_points)
+                        one_more_ls_to_append.append(int(fight.fighter_one_points))
                         print("&&&&&&one_more_ls_to_append", one_more_ls_to_append, p.name)
                     if p.id == fight.fighter_two_id:
-                        one_more_ls_to_append.append(fight.fighter_two_points)
+                        one_more_ls_to_append.append(int(fight.fighter_two_points))
                         print("druga&&&&&&one_more_ls_to_append", one_more_ls_to_append, p.name)
                     p.group_points = sum(one_more_ls_to_append)
                     p.save()
