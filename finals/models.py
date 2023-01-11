@@ -16,6 +16,7 @@ class Finalist(models.Model):
 
     def __str__(self):
         return f" {self.participant} {self.final_points} {self.final_points_average}"
+    group =  models.ForeignKey("tournament_calculating.Group", on_delete=models.CASCADE, related_name="finalists", null=True)
 
 
 class Stage(models.Model):
@@ -124,3 +125,8 @@ class FinalRound(models.Model):
 
         def __str__(self):
             return f"{self.participant} {self.tournament} {self.medal}"
+
+
+    # class Draw(models.Model):
+    #     draw_fighter_one =
+    #     draw_fighter_two =

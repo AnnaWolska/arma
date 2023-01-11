@@ -7,6 +7,7 @@ from django.urls import reverse
 # from django.core.paginator import Paginator
 from django.shortcuts import render
 from tournaments.models import Tournament
+from finals.models import Finalist
 from tournament_calculating.models import Group, Fight, Participant, Round
 # from tournament_calculating.forms import (
 #     AddParticipantForm,
@@ -21,6 +22,7 @@ def finals(request, group_id):
     group = Group.objects.get(pk=group_id)
     tournament = group.tournament
     participants = group.participants.all()
+    finalists = Finalist.objects.all(group = group)
     # rounds_obj = group.rounds_of_group.all()
     # number = group.number
     # tournament = group.tournament
@@ -71,8 +73,8 @@ def finals(request, group_id):
         print(el.points_average)
 
 
-
-
+    finalists = finalists_list
+    finalists.save()
 
 
     return render(request, "final.html", context={
