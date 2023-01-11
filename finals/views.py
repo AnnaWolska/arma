@@ -31,28 +31,44 @@ def finals(request, group_id):
     temporary_list = []
     group_average_points = []
     finalists_list = []
+    draw_list = []
+    counter= group.number_outgoing
     for participant in participants:
         group_average_points.append(participant.points_average)
 
     # for participant in tournament.participants.all():
         print("group_average_points", group_average_points)
     for participant in participants:
-        while len(finalists_list) < group.number_outgoing:
+        while len(finalists_list) < counter:
+            print("counter",counter)
             # print("(((((((((((((((())))))))))))))))")
             # print("group_average_points", group_average_points)
             # print("group.number_outgoing", group.number_outgoing)
             # print("len(finalists_list)",len(finalists_list))
             # print("len(finalists_list) < group.number_outgoing + 1", len(finalists_list) < group.number_outgoing + 1)
-            if participant.points_average == max(group_average_points):
-                print("participant.points_average == max(tournament_average_points) and participant not in finalists_list",participant.points_average == max(group_average_points) and participant not in finalists_list)
-                finalists_list.append(participant)
-                # time.sleep(1)
-                print("finalists_list", finalists_list)
-                group_average_points.remove(max(group_average_points))
-                print("tournament_average_points po usunieciu",group_average_points)
+            if group_average_points:
+                if participant.points_average == max(group_average_points):
+                    print("participant.points_average == max(tournament_average_points) and participant not in finalists_list",participant.points_average == max(group_average_points) and participant not in finalists_list)
+                    finalists_list.append(participant)
+                    # time.sleep(1)
+                    print("finalists_list", finalists_list)
+                    group_average_points.remove(max(group_average_points))
+                    print("tournament_average_points po usunieciu",group_average_points)
+                    if group_average_points:
+                        if group_average_points[0] == finalists_list[-1].points_average:
+                            print("participant.points_average",participant.points_average)
+                            print("finalists_list[-1].points_average",finalists_list[-1].points_average)
+                            print("participant.points_average == finalists_list[-1].points_average",participant.points_average == finalists_list[-1].points_average)
+                            counter +=1
+                    else:
+                        break
+                else:
+                    break
             else:
                 break
     print("finalists_list",finalists_list)
+    for el in finalists_list:
+        print(el.points_average)
 
 
 
