@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'organizers.apps.OrganizersConfig',
     'tournament_calculating.apps.TournamentCalculatingConfig',
     'galleries.apps.GalleriesConfig',
+    'finals.apps.FinalsConfig',
     'main.apps.MainConfig',
 ]
 

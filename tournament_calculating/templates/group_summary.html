@@ -5,12 +5,15 @@
 {%  block style %}
 <link href="{% static "tournaments_calculating/css/style.css" %}" rel=stylesheet">
 {% endblock %}
-{% block title %}  Podsumowanie fazy grupowej,
-    dodanie punktów za walki, które nie mogły się odbyć, ilu zawodników z grupy przechodzi do finału?
+{% block title %}
 
 
 {% endblock %}
 {% block content %}
+
+    Podsumowanie fazy grupowej,
+    dodanie punktów za walki, które nie mogły się odbyć, ilu zawodników z grupy przechodzi do finału?
+
 <form method = "POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}

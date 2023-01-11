@@ -30,7 +30,8 @@ urlpatterns = [
     path('', include('register.urls')),
     path('organizers/', include('organizers.urls')),
     path('galleries/', include('galleries.urls')),
-    path('tournament_calculating/', include('tournament_calculating.urls'))
+    path('tournament_calculating/', include('tournament_calculating.urls')),
+    path('finals/', include('finals.urls'))
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

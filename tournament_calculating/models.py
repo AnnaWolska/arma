@@ -3,12 +3,13 @@ from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 from tournaments.models import Tournament
 
-
+#dodać relację do user
 class Participant(models.Model):
     name = models.CharField(max_length=255)
     school = models.CharField(max_length=500)
     image = ImageField(upload_to="tournament_calculating/images/%Y/%m/%d/", blank=True, null=True)
     tournaments = models.ManyToManyField('tournaments.Tournament', related_name='participants')
+    #tych punktów musi być wiele
     group_points = models.PositiveSmallIntegerField(null=True, default=0)
     points_average = models.PositiveSmallIntegerField(null=True, default=0)
     # fights = models.ForeignKey("Fight", related_name=)
@@ -119,4 +120,8 @@ class Round(models.Model):
     class Meta:
         verbose_name = "Runda"
         verbose_name_plural = "Rundy"
+
+
+
+
 

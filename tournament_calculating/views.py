@@ -574,8 +574,7 @@ def add_points (request, group_id, fight_id, round_id):
 def group_summary(request, group_id):
     print("cokolwiek")
     group = Group.objects.get(pk=group_id)
-    # fight_rounds = Round.objects.filter(fight_id=fight_id)
-
+    tournament_id = group.tournament_id
 
     if request.user.is_authenticated:
         print("dalej")
@@ -583,20 +582,18 @@ def group_summary(request, group_id):
         print("jest form")
         if request.method == "POST" and form.is_valid():
             print("jeszcze dalej")
-            isinstance = form.save(commit=False)
-            print(isinstance)
-            group.number_outgoing = isinstance.number_outgoing
-            print(isinstance)
+            instance = form.save(commit=False)
+            print(instance)
+            group.number_outgoing = instance.number_outgoing
+            print(instance)
             print(group.number_outgoing)
-            isinstance.save()
+            instance.save()
 
-            # instance = form.save()
-            # instance.groups.add(group)
-            # instance.tournaments.add(tournament)
-            # instance.save()
+
+
             return HttpResponseRedirect(reverse(
-                "tournament_calculating:group_details",
-                args=[group_id],
+                "finals:finals",
+                args=[group_id]
             ))
         else:
             form = GroupSummaryForm(instance=group)

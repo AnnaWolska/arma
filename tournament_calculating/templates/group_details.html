@@ -48,8 +48,10 @@
             </button>
             {% endif %}
             uczestnicy:
-            {% for participant in participants %}
-            <ul>
+
+          {% for participant in participants|dictsortreversed:"points_average" %}
+         <ul>
+
                 <li>
                     <br>
                     <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
@@ -67,11 +69,12 @@
                         <a style="color:red;  column-count: 2;"   href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >
                             usuń
                         </a>
+                        {% endif %}
                     </li>
-                    {% endif %}
-                </ul>
+
+            </ul>
                 {% endfor %}
-            </ol>
+{#            </ol>#}
         </div>
         <hr>
         {% if fighters_one_names %}
@@ -246,44 +249,5 @@
                                 {% endfor %}
                             </tr>
                         </table>
-{#                        <table BORDER CELLSPACING=5 CELLPADDING=15 >#}
-{#                            <thead>#}
-{#                                <br>#}
-{#                                <tr>#}
-{#                                    <h5>#}
-{#                                        punkty wyjściowe grupa   {{  number }} ( średnia punktów w turnieju z odbytych walk - {{ participant.points_average }}#}
-{#                                        <span style="color: crimson">#}
-{#                                            {{ tournaments_fighters_average}}#}
-{#                                        </span>#}
-{#                                        )#}
-{#                                    </h5>#}
-{#                                </tr>#}
-{#                                <tr>#}
-{#                                    {% for group in groups %}#}
-{#                                    <th style="background: burlywood">#}
-{#                                        grupa nr {{ group.number }}#}
-{#                                        {% endfor %}#}
-{#                                    </th>#}
-{#                                </tr>#}
-{#                            </thead>#}
-{#                            <tr>#}
-{#                                {% for gr in groups %}#}
-{#                                <td>#}
-{#                                    <table BORDER CELLSPACING=5 CELLPADDING=15>#}
-{#                                        <tr>#}
-{#                                            {% for participant in gr.participants.all|dictsortreversed:"points_average" %}#}
-{#                                            <td>#}
-{#                                                {{ participant.name }} -#}
-{#                                                {% if participant.points_average is not None %}#}
-{#                                                <b>#}
-{#                                                    {{ participant.points_average }}#}
-{#                                                </b>#}
-{#                                                {% endif %}#}
-{#                                            </td>#}
-{#                                        </tr>#}
-{#                                        {% endfor %}#}
-{#                                    </table>#}
-{#                                    {% endfor %}#}
-{#                                </tr>#}
-{#                            </table>#}
+
                             {% endblock %}
