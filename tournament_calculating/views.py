@@ -16,6 +16,7 @@ from tournament_calculating.forms import (
     AddPointsForm,
     GroupSummaryForm
     )
+from finals.models import Finalist
 
 
 def participants_list(request):
@@ -458,7 +459,6 @@ def add_rounds(request, group_id):
 
 # pierwsi walczący mają za mało punktów
 def add_points (request, group_id, fight_id, round_id):
-    print("początek funkcji add_points")
     group = Group.objects.get(pk=group_id)
     fight_rounds = Round.objects.filter(fight_id=fight_id)
     fight = Fight.objects.get(pk=fight_id)
@@ -503,17 +503,12 @@ def add_points (request, group_id, fight_id, round_id):
             fight.save()
 
             for p in participants:
-                print("p", p.name)
                 one_more_ls_to_append = []
                 for fight in fights:
-                    print("fight", fight.id)
                     if p.id == fight.fighter_one_id:
-                        print("p", p.name)
                         one_more_ls_to_append.append(int(fight.fighter_one_points))
-                        print("&&&&&&one_more_ls_to_append", one_more_ls_to_append, p.name)
                     if p.id == fight.fighter_two_id:
                         one_more_ls_to_append.append(int(fight.fighter_two_points))
-                        print("druga&&&&&&one_more_ls_to_append", one_more_ls_to_append, p.name)
                     p.group_points = sum(one_more_ls_to_append)
                     p.save()
 
@@ -570,26 +565,73 @@ def add_points (request, group_id, fight_id, round_id):
         )
 
 
-
+# dodać dodatkowe punkty dla tych co nie walczyli z kontuzjowanymi i zdyskwalifikowanymi i poddanymi i nieobecnymi
 def group_summary(request, group_id):
-    print("cokolwiek")
     group = Group.objects.get(pk=group_id)
-    tournament_id = group.tournament_id
+    participants = group.participants.all()
+    group_average_points = []
+    finalists_list = []
+    counter = group.number_outgoing
+    for participant in participants:
+        group_average_points.append(participant.points_average)
+    for f in group.finalists.all():
+        f.delete()
 
+    for participant in participants:
+        print("counter",counter)
+        while len(finalists_list) < counter:
+            print("final list",finalists_list)
+            print("punkty",group_average_points)
+            print("counter",counter)
+
+            if group_average_points:
+                print("są jekieś punkty")
+                if participant.points_average == max(group_average_points):
+                    print("punkty takie jak maksymal")
+                    if len(finalists_list) > 0:
+                        print("final list nie pusta")
+                        if participant != finalists_list[-1]:
+                            print(finalists_list[-1])
+                            print(participant != finalists_list[-1])
+                            finalists_list.append(participant)
+                            group_average_points.remove(max(group_average_points))
+                        else:
+                            break
+                    else:
+                        print("appenduje i usuwam")
+                        finalists_list.append(participant)
+                        group_average_points.remove(max(group_average_points))
+                        # if group_average_points:
+                        print("dodaje counter")
+                        if group_average_points[0] == finalists_list[-1].points_average:
+                            counter += 1
+                        else:
+                            print("break2 ")
+                            break
+                else:
+                    print("break1 punkty gościa nie są maksymalne")
+                    break
+            else:
+                print("break3 nie ma punktów")
+                break
+        else:
+            print("break4 koniec pętli")
+            break
+
+    print("po pętli", finalists_list)
     if request.user.is_authenticated:
-        print("dalej")
         form = GroupSummaryForm(request.POST, instance=group)
-        print("jest form")
         if request.method == "POST" and form.is_valid():
-            print("jeszcze dalej")
             instance = form.save(commit=False)
-            print(instance)
+            if group.finalists:
+                for f in group.finalists.all():
+                    f.delete()
             group.number_outgoing = instance.number_outgoing
-            print(instance)
-            print(group.number_outgoing)
             instance.save()
-
-
+            finalists = finalists_list
+            for f in finalists:
+                group.finalists.create(participant=f)
+            group.save()
 
             return HttpResponseRedirect(reverse(
                 "finals:finals",
@@ -603,12 +645,3 @@ def group_summary(request, group_id):
                     'group': group,
                 })
             )
-    # else:
-    #     form = GroupSummaryForm
-    #     return (
-    #         render(request, "group_summary.html", context={
-    #             'form': form,
-    #             'group_id': group_id,
-    #
-    #         })
-    #     )

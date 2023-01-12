@@ -10,6 +10,7 @@
     <ol>
         <br class="list-group-item">
         <p>
+
 {#            {% if tournament.user == request.user %}#}
 {#            <button id="delete_tournament" type="button" style="background-color:red"  class="btn btn-primary">#}
 {#                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:delete_group' group_id tournament.id %}">#}
@@ -50,13 +51,15 @@
             uczestnicy:
 {##}
 {#          {% for participant in participants|dictsortreversed:"points_average" %}#}
-{#         <ul>#}
-{#                <li>#}
+            {% for f in finalists %}
+         <ul>
+                <li>
 {#                    <br>#}
 {#                    <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >#}
 {#                        <b>#}
-{#                            {{  participant.name }} z {{ participant.school  }}#}
-{#                        </b>#}
+                            {{  f.name }} z {{ f.school  }} {{ f.points_average }}
+                        </b>
+
 {#                        <div>#}
 {#                            {% if participant.image %}#}
 {#                            {% thumbnail participant.image "100x100" as im %}#}
@@ -71,8 +74,8 @@
 {#                        {% endif %}#}
 {#                    </li>#}
 {##}
-{#            </ul>#}
-{#                {% endfor %}#}
+            </ul>
+                {% endfor %}
         </div>
         <hr>
 {#        {% if fighters_one_names %}#}
