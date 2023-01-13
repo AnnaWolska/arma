@@ -109,22 +109,22 @@ class FinalRound(models.Model):
 
 
 
-    class Winner(models.Model):
-        MEDALS = (
-        ('złoto','złoto' ),
-        ('srebro','srebro' ),
-        ('brąz','brąz' ),
-        )
-        participant = models.OneToOneField(
-        Participant,
-        on_delete=models.CASCADE,
-        primary_key=True,
+class Winner(models.Model):
+    MEDALS = (
+    ('złoto','złoto' ),
+    ('srebro','srebro' ),
+    ('brąz','brąz' ),
     )
-        tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="winners")
-        medal = models.CharField(max_length=20, choices=MEDALS, null=True)
+    participant = models.OneToOneField(
+    Participant,
+    on_delete=models.CASCADE,
+    primary_key=True,
+    )
+    tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="winners")
+    medal = models.CharField(max_length=20, choices=MEDALS, null=True)
 
-        def __str__(self):
-            return f"{self.participant} {self.tournament} {self.medal}"
+    def __str__(self):
+        return f"{self.participant} {self.tournament} {self.medal}"
 
 
     # class Draw(models.Model):

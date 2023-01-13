@@ -564,8 +564,14 @@ def add_points (request, group_id, fight_id, round_id):
             })
         )
 
+"""
+jeśli remis jest gdzieś na początku lub w środku,
+to przechodzi i nie zwiększa countera, jeśli remis jest na końcu do zwiększa,
 
-# dodać dodatkowe punkty dla tych co nie walczyli z kontuzjowanymi i zdyskwalifikowanymi i poddanymi i nieobecnymi
+dodać dodatkowe punkty dla tych co nie walczyli z kontuzjowanymi 
+i zdyskwalifikowanymi i poddanymi i nieobecnymi
+"""
+
 def group_summary(request, group_id):
     group = Group.objects.get(pk=group_id)
     participants = group.participants.all()
@@ -577,57 +583,143 @@ def group_summary(request, group_id):
     for f in group.finalists.all():
         f.delete()
 
-    for participant in participants:
-        print("counter",counter)
-        while len(finalists_list) < counter:
-            print("final list",finalists_list)
-            print("punkty",group_average_points)
-            print("counter",counter)
+    """
+    po participantach
+    
+    lista participantów
+    i lista punktów
+    jeśli pierwszy z listy prtcp ma tyle punktów co max z listy punktów:
+    ładuję go do fianl list
+    jeśli nie to następny
+    """
+    list_of_participants = []
+    for p in participants:
+        list_of_participants.append(p)
+        # print("0counter",counter)
+    print("list_of_participants",list_of_participants)
 
-            if group_average_points:
-                print("są jekieś punkty")
-                if participant.points_average == max(group_average_points):
-                    print("punkty takie jak maksymal")
-                    if len(finalists_list) > 0:
-                        print("final list nie pusta")
-                        if participant != finalists_list[-1]:
-                            print(finalists_list[-1])
-                            print(participant != finalists_list[-1])
-                            finalists_list.append(participant)
-                            group_average_points.remove(max(group_average_points))
-                        else:
-                            break
-                    else:
-                        print("appenduje i usuwam")
-                        finalists_list.append(participant)
-                        group_average_points.remove(max(group_average_points))
-                        # if group_average_points:
-                        print("dodaje counter")
-                        if group_average_points[0] == finalists_list[-1].points_average:
-                            counter += 1
-                        else:
-                            print("break2 ")
-                            break
-                else:
-                    print("break1 punkty gościa nie są maksymalne")
-                    break
-            else:
-                print("break3 nie ma punktów")
-                break
-        else:
-            print("break4 koniec pętli")
-            break
+    # i = 0
+    # print("", )
+    # print("01len(finalists_list) < counter:",len(finalists_list) < counter)
+    # while len(finalists_list) < counter:
+    #     print("", )
+    #     # print("1i:",i)
+    #     print("1group_average_points:", group_average_points)
+    #     print("1finalists_list:", finalists_list)
+    #     print("1list_of_participants",list_of_participants)
+    #     if finalists_list:
+    #         print("pierwszy if")
+    #         if list_of_participants[i] not in finalists_list:
+    #             if list_of_participants[i].points_average == max(group_average_points):
+    #                 finalists_list.append(list_of_participants[i])
+    #                 list_of_participants.remove(list_of_participants[i])
+    #                 group_average_points.remove(max(group_average_points))
+    #                 random.shuffle(list_of_participants)
+    #             else:
+    #                 random.shuffle(list_of_participants)
+    #     else:
+    #         print("drugi else" )
+    #         if list_of_participants[i].points_average == max(group_average_points):
+    #             print("list_of_participants[i].points_average == max(group_average_points):",list_of_participants[i].points_average == max(group_average_points))
+    #             finalists_list.append(list_of_participants[i])
+    #             list_of_participants.remove(list_of_participants[i])
+    #             group_average_points.remove(max(group_average_points))
+    #             random.shuffle(list_of_participants)
+    #         else:
+    #             random.shuffle(list_of_participants)
 
-    print("po pętli", finalists_list)
+
+    # for participant in participants:
+    #     print("counter",counter)
+    #     while len(finalists_list) < counter:
+    #         print("final list",finalists_list)
+    #         print("punkty",group_average_points)
+    #         print("counter",counter)
+    #         if group_average_points:
+    #             print("są jekieś punkty")
+    #             if participant.points_average == max(group_average_points):
+    #                 print("punkty takie jak maksymal")
+    #                 if len(finalists_list) > 0:
+    #                     print("final list nie pusta")
+    #                     if participant != finalists_list[-1]:
+    #                         print(finalists_list[-1])
+    #                         print(participant != finalists_list[-1])
+    #                         finalists_list.append(participant)
+    #                         group_average_points.remove(max(group_average_points))
+    #                     else:
+    #                         break
+    #                 else:
+    #                     print("appenduje i usuwam")
+    #                     finalists_list.append(participant)
+    #                     group_average_points.remove(max(group_average_points))
+    #                     # if group_average_points:
+    #                     print("dodaje counter")
+    #                     if group_average_points[0] == finalists_list[-1].points_average:
+    #                         counter += 1
+    #                     else:
+    #                         print("break2 ")
+    #                         break
+    #             else:
+    #                 print("break1 punkty gościa nie są maksymalne")
+    #                 break
+    #         else:
+    #             print("break3 nie ma punktów")
+    #             break
+    #     else:
+    #         print("break4 koniec pętli")
+    #         break
+
+
+
+    print("",)
+    print("przed formularzem finalists_list", finalists_list)
     if request.user.is_authenticated:
         form = GroupSummaryForm(request.POST, instance=group)
         if request.method == "POST" and form.is_valid():
             instance = form.save(commit=False)
-            if group.finalists:
+            print("group.finalists", group.finalists)
+            if group.finalists.all():
+                # print("group.nr",group.number)
+                print("group.finalists",group.finalists)
                 for f in group.finalists.all():
+                    print("f",f)
+                    # print("czy usuwa f")
                     f.delete()
             group.number_outgoing = instance.number_outgoing
             instance.save()
+
+
+            i = 0
+            print("", )
+            # print("01len(finalists_list) < counter:", len(finalists_list) < counter)
+            while len(finalists_list) < counter:
+                print("", )
+                # print("1i:",i)
+                # print("1group_average_points:", group_average_points)
+                print("1finalists_list:", finalists_list)
+                # print("1list_of_participants", list_of_participants)
+                if finalists_list:
+                    # print("pierwszy if")
+                    if list_of_participants[i] not in finalists_list:
+                        if list_of_participants[i].points_average == max(group_average_points):
+                            finalists_list.append(list_of_participants[i])
+                            list_of_participants.remove(list_of_participants[i])
+                            group_average_points.remove(max(group_average_points))
+                            random.shuffle(list_of_participants)
+                        else:
+                            random.shuffle(list_of_participants)
+                else:
+                    # print("drugi else")
+                    if list_of_participants[i].points_average == max(group_average_points):
+                        # print("list_of_participants[i].points_average == max(group_average_points):",
+                        #       list_of_participants[i].points_average == max(group_average_points))
+                        finalists_list.append(list_of_participants[i])
+                        list_of_participants.remove(list_of_participants[i])
+                        group_average_points.remove(max(group_average_points))
+                        random.shuffle(list_of_participants)
+                    else:
+                        random.shuffle(list_of_participants)
+
             finalists = finalists_list
             for f in finalists:
                 group.finalists.create(participant=f)

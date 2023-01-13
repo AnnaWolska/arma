@@ -51,13 +51,14 @@
             uczestnicy:
 {##}
 {#          {% for participant in participants|dictsortreversed:"points_average" %}#}
-            {% for f in finalists %}
+{#            {% for f in finalists %}#}
+                {% for p in prtcp_ls %}
          <ul>
                 <li>
 {#                    <br>#}
 {#                    <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >#}
 {#                        <b>#}
-                            {{  f.name }} z {{ f.school  }} {{ f.points_average }}
+                            {{  p.name }} z {{ p.school  }} {{ p.points_average }}
                         </b>
 
 {#                        <div>#}
