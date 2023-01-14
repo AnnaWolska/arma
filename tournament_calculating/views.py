@@ -596,7 +596,7 @@ def group_summary(request, group_id):
     for p in participants:
         list_of_participants.append(p)
         # print("0counter",counter)
-    print("list_of_participants",list_of_participants)
+    # print("list_of_participants",list_of_participants)
 
     # i = 0
     # print("", )
@@ -676,9 +676,12 @@ def group_summary(request, group_id):
     if request.user.is_authenticated:
         form = GroupSummaryForm(request.POST, instance=group)
         if request.method == "POST" and form.is_valid():
+
             instance = form.save(commit=False)
+            print("tu zapisuję z formularza rzeczy", counter)
+
             print("group.finalists", group.finalists)
-            if group.finalists.all():
+            if group.finalists:
                 # print("group.nr",group.number)
                 print("group.finalists",group.finalists)
                 for f in group.finalists.all():
