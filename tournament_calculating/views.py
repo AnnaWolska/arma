@@ -672,8 +672,11 @@ def group_summary(request, group_id):
     print("",)
     print("przed formularzem finalists_list", finalists_list)
     if request.user.is_authenticated:
+        print("użytkonik zarejestrowany")
         form = GroupSummaryForm(request.POST, instance=group)
+        print("formularz zapisujący w grupie")
         if request.method == "POST" and form.is_valid():
+            print("metoda jest POST",request.method == "POST" and form.is_valid())
             instance = form.save(commit=False)
             print("tu zapisuję z formularza rzeczy", counter)
             print("group.finalists", group.finalists)
@@ -689,9 +692,17 @@ def group_summary(request, group_id):
             print("", )
             # print("01len(finalists_list) < counter:", len(finalists_list) < counter)
             """
-            dopóki ilość fonalistów jest mniejsza niż ilość uczestników przechodzących do fianału,
+            dopóki ilość foinalistów jest mniejsza niż ilość uczestników przechodzących do finału,
             podana w formularzu 
             """
+            print("counter przed while", counter)
+
+            # if len(finalists_list) == counter:
+            #     if  group_average_points and finalists_list[-1].points_average == max(group_average_points):
+            #         "czwarty if"
+            #         counter += 1
+            #
+            # else:
             while len(finalists_list) < counter:
                 print("", )
                 # print("1i:",i)
@@ -699,19 +710,21 @@ def group_summary(request, group_id):
                 print("1finalists_list:", finalists_list)
                 # print("1list_of_participants", list_of_participants)
                 """
-                jeśli są już wytypowanie wcześniej finaliści:
+                jeśli są już wytypowani wcześniej finaliści:
                 """
-                if finalists_list:
+                if finalists_list and list_of_participants:
                     print("pierwszy if")
                     """
                     jeśli pierwszy z uczetsników w grupie nie jest na liście finalistów:
                     """
-                    if list_of_participants[i] not in finalists_list:
+                    if list_of_participants and list_of_participants[i] not in finalists_list:
+                        print("drugi if")
                         """
                         jeśli punkty wyjściowe pierwszego z uczestników są takie same jak
                         najwyższe punkty wyjściowe w grupie:
                         """
                         if list_of_participants[i].points_average == max(group_average_points):
+                            print("trzeci if")
                             """
                             to ten uczestnik pojawia w się w liście finalistów
                             """
@@ -726,28 +739,49 @@ def group_summary(request, group_id):
                             """
                             group_average_points.remove(max(group_average_points))
                             random.shuffle(list_of_participants)
+                            if  len(finalists_list) == counter and group_average_points and finalists_list[-1].points_average == max(group_average_points):
+                                "czwarty if"
+                                counter += 1
                         else:
+                            print("else")
                             """
                             jeśli punkty wyjściowe pierwszego z zawodników nie są takie same jak 
                             najwyższe punkty wyjściowe w grupie:
                             """
                             random.shuffle(list_of_participants)
-
                 else:
                     """
                     jeśli nie ma listy wylosowanych już finalistów
                     """
                     print("drugi else")
+                    """
+                    jeśli uczestnik ma takie punkty wyjściowe jak najwyższe z pozostałych z listy punktów w grupie
+                    """
                     if list_of_participants[i].points_average == max(group_average_points):
                         # print("list_of_participants[i].points_average == max(group_average_points):",
                         #       list_of_participants[i].points_average == max(group_average_points))
                         finalists_list.append(list_of_participants[i])
                         list_of_participants.remove(list_of_participants[i])
                         group_average_points.remove(max(group_average_points))
+                        if  len(finalists_list) == counter and group_average_points and finalists_list[-1].points_average == max(group_average_points):
+                            counter += 1
                         random.shuffle(list_of_participants)
+
+                        """
+                        jeśli uczestnik ma inne punkty wyjściowe niż najwyższe z listy punktów w grupie
+                        """
                     else:
                         random.shuffle(list_of_participants)
+
+
+            print("na koniec finalists_list",finalists_list)
             finalists = finalists_list
+            print("na koniec finalists", finalists)
+            """
+            jeśli jest remis na końcu, counter (ilość finalistów) musi się zwiększyć 
+            o tyle ile jest uczestników z tym samym wynikiem
+            """
+
             for f in finalists:
                 group.finalists.create(participant=f)
             group.save()
