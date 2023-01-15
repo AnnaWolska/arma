@@ -72,11 +72,15 @@
 
                                 </a>
                                 {% if user == request.user %}
+                                    {%  for f in fights %}
+                                    {% if not f.rounds %}
                                 <button id="delete_tournament" type="button" style="background-color:plum; "  class="btn btn-primary">
                                     <a style="color:white;" href = "{% url 'tournament_calculating:draw_fights' group.id  %}">
                                         Losuj walki
                                     </a>
                                 </button>
+                                        {% endif %}
+                                    {% endfor %}
                             {% endif %}
                             </li>
                             <ol>

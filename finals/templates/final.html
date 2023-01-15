@@ -52,7 +52,7 @@
 {##}
 {#          {% for participant in participants|dictsortreversed:"points_average" %}#}
 {#            {% for f in finalists %}#}
-                {% for p in prtcp_ls %}
+                {% for p in prtcp_ls|dictsortreversed:"points_average" %}
          <ul>
                 <li>
 {#                    <br>#}
