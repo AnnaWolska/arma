@@ -37,12 +37,25 @@ class Group(models.Model):
         ('pink','różowy' ),
         ('darkgrey','szary' )
     )
+    NUMBER = (
+        ('0', '0'),
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
+        ('6', '6'),
+        ('7', '7'),
+        ('8', '8'),
+        ('9', '9'),
+        ('10', '10'),
+    )
     number = models.PositiveSmallIntegerField(null=False)
     tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="groups")
     participants = models.ManyToManyField('Participant', related_name='groups')
     color_fighter_one = models.CharField(max_length=30, choices=COLOR, null=True)
     color_fighter_two = models.CharField(max_length=30, choices=COLOR, null=True)
-    number_outgoing = models.PositiveSmallIntegerField(null=True, default=0)
+    number_outgoing = models.CharField(max_length=2, choices=NUMBER, null=True, default=0)
 
 
     def __str__(self):
@@ -88,15 +101,12 @@ class Round(models.Model):
         ('9', '9'),
         ('10', '10'),
         ('11', '11'),
-        ('draw','remis' ),
-        ('brak rezultatu','brak rezultatu' ),
-        ('nie było walki','nie było walki' ),
-        ('brak statusu','brak statusu' ),
-        ('dyskwalifikacja','dyskwalifikacja' ),
-        ('kontuzja','kontuzja' ),
-        ('nieobecność','nieobecność'),
-        ('inne','inne' ),
-        ('poddanie', 'poddanie')
+        ('kontuzja', 'kontuzja'),
+        ('dyskwalifikacja', 'dyskwalifikacja'),
+        ('poddanie', 'poddanie'),
+        ('wycofanie', 'wycofanie'),
+        ('brak rezultatu', 'brak rezultatu')
+
     )
     order = models.PositiveSmallIntegerField(null=True)
     fight = models.ForeignKey("Fight", on_delete=models.CASCADE, related_name="rounds_of_fight", null=True)

@@ -15,6 +15,7 @@
     dodanie punktów za walki, które nie mogły się odbyć, ilu zawodników z grupy przechodzi do finału?
 
 <form method = "POST" action="" enctype="multipart/form-data">
+
     {% csrf_token %}
     {{ form|crispy }}
     <button type="submit"
