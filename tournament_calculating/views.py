@@ -466,12 +466,9 @@ def add_points (request, group_id, fight_id, round_id):
     round_of_fight = fight_rounds.get(pk=round_id)
     first_fighter_points = []
     points_sum = []
-    # final_points = []
-    # second_final_points = []
     second_fighter_points = []
     second_points_sum = []
     participants = group.participants.order_by('-group_points')
-    # participants_average = group.participants.order_by('-points_average')
     points_result_ls = ["0","1","2","3","4","5","6","7","8","9","10","11"]
 
     # dodawanie punktów każdemu z przeciwników w walce
@@ -563,16 +560,43 @@ def add_points (request, group_id, fight_id, round_id):
             })
         )
 
+"""
+jeśli któryś z uczestników jest walczącym jeden w rundzie, gdzie walczącym dwa jest uczestnik,
+który ma w jakiejś rundzie: kontuzję, dyskwalifikację lub wycofanie, to wtedy ten uczestnik ma punkty średnie 
+równe tym ze wzoru
+"""
+# def filling_gaps(request, group_id):
+#     group = Group.objects.get(pk=group_id)
+#     participants = group.participants.all()
+#     rounds = group.rounds_of_group.all()
+#     fights = group.fights.all()
+#     amount_tournament_fights = len(fights)
+#     amount_participant_fights = []
+#     group_average_points = []
+#     for participant in participants:
+#         group_average_points.append(participant.points_average)
+#
+#     for participant in participants:
+#         for rnd in rounds:
+#             condition_1 = rnd.points_fighter_two == "kontuzja"
+#             condition_2 = rnd.points_fighter_two == "dyskwalifikacja"
+#             condition_3 = rnd.points_fighter_two == "wycofanie"
+#             condition_4 = rnd.points_fighter_two == "kontuzja"
+#             condition_5 = rnd.points_fighter_two == "dyskwalifikacja"
+#             condition_6 = rnd.points_fighter_two == "wycofanie"
+#             if participant == rnd.fighter_one or participant == rnd.fighter_two:
+#                 amount_participant_fights.append(rnd.id)
+#             if participant == rnd.fighter_one and condition_1 or condition_2 or condition_3:
+#                 participant.points_average = (amount_tournament_fights / len(amount_participant_fights)) * sum(group_average_points)
+#                 participant.save()
+#             if participant == rnd.fighter_two and condition_4 or condition_5 or condition_6:
+#                 participant.points_average = (amount_tournament_fights / len(amount_participant_fights)) * sum(group_average_points)
+#                 participant.save()
 
-def fullfill_gaps(request, group_id):
-    group = Group.objects.get(pk=group_id)
-    participants = group.participants.all()
-    rounds = group.rounds_of_group.all()
-
-    for participant in participants:
-        for round in rounds:
-            if round.points_fighter_one == "kontuzja":
-                round.points_fighter_two = "brak rezultatu"
+    # return HttpResponseRedirect(reverse(
+    #     "tournament_calculating:group_details",
+    #     args=[group_id],
+    # ))
 
 
 
@@ -592,46 +616,183 @@ def group_summary(request, group_id):
     group_average_points = []
     # save_counter = 0
     finalists_list = []
-    for participant in participants:
-        group_average_points.append(participant.points_average)
+    # for participant in participants:
     for f in group.finalists.all():
         f.delete()
+    rounds = group.rounds_of_group.all()
+    fights = group.fights.all()
+    amount_prtcp_tournament_rounds = []
+    for participant in participants:
+        for round in rounds:
+            if participant.id == round.fighter_one_id or participant.id == round.fighter_two_id:
+                amount_prtcp_tournament_rounds.append(participant)
+
+    amount_prtcp_tournament_rounds = len(amount_prtcp_tournament_rounds) / len(participants)
+    print("amount_prtcp_tournament_rounds",amount_prtcp_tournament_rounds)
+    list_of_participants = []
+    for p in participants:
+        list_of_participants.append(p)
+    """
+    dodaję punkty uzupełniające
+    """
+
+    # for participant in participants:
+    #     amount_participant_rounds = []
+    #     print("participant.name",participant.name)
+    #     group_average_points.append(participant.points_average)
+    #     print("grupowe punkty wyjściowe:", group_average_points)
+    #     print("for rnd in rounds:")
+    #     for rnd in rounds:
+    #         condition_1 = rnd.points_fighter_two == "kontuzja"
+    #         condition_2 = rnd.points_fighter_two == "dyskwalifikacja"
+    #         condition_3 = rnd.points_fighter_two == "wycofanie"
+    #         condition_4 = rnd.points_fighter_two == "kontuzja"
+    #         condition_5 = rnd.points_fighter_two == "dyskwalifikacja"
+    #         condition_6 = rnd.points_fighter_two == "wycofanie"
+    #
+    #         print("")
+    #         print("pierwszy if do sprawdzenia")
+    #         if participant == rnd.fighter_one and rnd.points_fighter_one is not None or participant == rnd.fighter_two and rnd.points_fighter_two is not None:
+    #             print("jeśli uczestnik nie miał walki bez starcia", participant == rnd.fighter_one and rnd.points_fighter_one is not None or participant == rnd.fighter_two and rnd.points_fighter_two is not None)
+    #             amount_participant_rounds.append(rnd.id)
+    #             print("ilość odbyta rund uczestnika", amount_participant_rounds)
+    #             # print(participant.name, "tyle miał walk:", len(amount_participant_rounds))
+    #             print("fighter one i warnki")
+    #
+    #             if participant == rnd.fighter_one and condition_1 or condition_2 or condition_3:
+    #                 print("pierwszy if",participant == rnd.fighter_one and condition_1 or condition_2 or condition_3)
+    #                 print("sum(amount_participant_rounds)",sum(amount_participant_rounds))
+    #                 print("amount_prtcp_tournament_rounds / len(amount_participant_rounds)", amount_prtcp_tournament_rounds / len(amount_participant_rounds))
+    #                 print("(amount_prtcp_tournament_rounds / len(amount_participant_rounds)) * sum(group_average_points)", (amount_prtcp_tournament_rounds / len(amount_participant_rounds)) * sum(group_average_points))
+    #                 rnd.points_fighter_one = (amount_prtcp_tournament_rounds / len(amount_participant_rounds)) * participant.group_points
+    #                 # print("participant.points_average",participant.name, participant.points_average)
+    #                 print("AAAAAAArnd.points_fighter_one",rnd.points_fighter_one)
+    #                 participant.round_average = rnd.points_fighter_one
+    #                 participant.save()
+    #
+    #             print("fighter two i warunki")
+    #             if participant == rnd.fighter_two and condition_4 or condition_5 or condition_6:
+    #                 print("drugi if",participant == rnd.fighter_two and condition_4 or condition_5 or condition_6)
+    #                 print(sum(amount_participant_rounds))
+    #                 print((amount_prtcp_tournament_rounds / len(amount_participant_rounds)))
+    #                 print((amount_prtcp_tournament_rounds / len(amount_participant_rounds)) * sum(group_average_points))
+    #                 rnd.points_fighter_two = (amount_prtcp_tournament_rounds / len(amount_participant_rounds)) * participant.group_points
+    #                 print("AAAAAAArnd.points_fighter_two", rnd.points_fighter_two)
+    #                 # print("participant.points_average",participant.name, participant.points_average)
+    #                 participant.round_average = rnd.points_fighter_two
+    #                 rnd.save()
+    #                 participant.save()
+    #         # print(participant.name, "tyle miał walk:", len(amount_participant_rounds))
+    # for p in participants:
+    #     print("p.group_points",p.group_points)
+    # for r in rounds:
+    #     print(r.points_fighter_one)
+    #     print(r.points_fighter_two)
     """
     po participantach
     lista participantów i lista punktów
     jeśli pierwszy z listy prtcp ma tyle punktów co max z listy punktów:
     ładuję go do fianl list, jeśli nie sprawdzam to następny
     """
-    list_of_participants = []
-    for p in participants:
-        list_of_participants.append(p)
+
     """
     pobiera z formualrza ile uczetników z grupy ma przejść do finału, 
     kasuje tych, co już byli wytopowani, jeśli jest powtórzone działanie
     """
 
     if request.user.is_authenticated:
-        form = GroupSummaryForm(request.POST, instance=group)
+        # form = GroupSummaryForm(request.POST, instance=group)
         # post = get_object_or_404(Group, pk=group_id)
         if request.user.is_authenticated:
             form = GroupSummaryForm(request.POST, instance=group)
             if request.method == "POST" and form.is_valid():
                 instance = form.save()
-                # print("counter",counter)
-                print("aaaagroup.number_outgoing",group.number_outgoing)
+
+                for participant in participants:
+                    print("")
+                    amount_participant_rounds = []
+                    print("participant.name", participant.name)
+                    group_average_points.append(participant.points_average)
+
+                    print("for rnd in rounds:")
+                    for rnd in rounds:
+                        condition_1 = rnd.points_fighter_two == "kontuzja"
+                        condition_2 = rnd.points_fighter_two == "dyskwalifikacja"
+                        condition_3 = rnd.points_fighter_two == "wycofanie"
+                        condition_4 = rnd.points_fighter_one == "kontuzja"
+                        condition_5 = rnd.points_fighter_one == "dyskwalifikacja"
+                        condition_6 = rnd.points_fighter_one == "wycofanie"
+                        print("condition_1",condition_1)
+                        print("condition_2",condition_2)
+                        print("condition_3",condition_3)
+                        print("condition_4",condition_4)
+                        print("condition_5",condition_5)
+                        print("condition_6",condition_6)
+                        print("prtcp=f1",participant == rnd.fighter_one)
+                        print("prtcp=f2",participant == rnd.fighter_two)
+
+                        if participant == rnd.fighter_one and rnd.points_fighter_one is not None or participant == rnd.fighter_two and rnd.points_fighter_two is not None:
+                            amount_participant_rounds.append(rnd.id)
+                            participant.amount_rounds = len(amount_participant_rounds)
+                            participant.save()
+                            print("ilość odbyta rund uczestnika", amount_participant_rounds)
+
+                            print(participant == rnd.fighter_one and condition_1 or condition_2 or condition_3)
+                            if participant == rnd.fighter_one and condition_1 or condition_2 or condition_3:
+                                print("WIELKIE COŚ !1")
+                                print("fighter one i warnki", )
+                                print("pierwszy if",
+                                      participant == rnd.fighter_one and condition_1 or condition_2 or condition_3)
+                                print("sum(amount_participant_rounds)", sum(amount_participant_rounds))
+                                print("amount_prtcp_tournament_rounds / len(amount_participant_rounds)",
+                                      amount_prtcp_tournament_rounds / len(amount_participant_rounds))
+                                print(
+                                    "(amount_prtcp_tournament_rounds / len(amount_participant_rounds)) * sum(group_average_points)",
+                                    (amount_prtcp_tournament_rounds / len(amount_participant_rounds)) * sum(
+                                        group_average_points))
+                                rnd.points_fighter_one = (amount_prtcp_tournament_rounds / len(
+                                    amount_participant_rounds)) * participant.group_points
+                                print("AAAAAAArnd.points_fighter_one", rnd.points_fighter_one)
+                                participant.round_average = rnd.points_fighter_one
+                                participant.save()
+
+                            print(participant == rnd.fighter_two and condition_4 or condition_5 or condition_6)
+                            if participant == rnd.fighter_two and condition_4 or condition_5 or condition_6:
+                                print("WIELKIE COŚ !2")
+                                print("fighter two i warunki")
+                                print("drugi if",
+                                      participant == rnd.fighter_two and condition_4 or condition_5 or condition_6)
+                                print(sum(amount_participant_rounds))
+                                print((amount_prtcp_tournament_rounds / len(amount_participant_rounds)))
+                                print((amount_prtcp_tournament_rounds / len(amount_participant_rounds)) * sum(
+                                    group_average_points))
+                                rnd.points_fighter_two = (amount_prtcp_tournament_rounds / len(
+                                    amount_participant_rounds)) * participant.group_points
+                                print("AAAAAAArnd.points_fighter_two", rnd.points_fighter_two)
+                                participant.round_average = rnd.points_fighter_two
+                                rnd.save()
+                                participant.save()
+
+                print("")
+                for p in participants:
+                    print("p.group_points", p.group_points)
+                print("")
+                for r in rounds:
+                    print(r.points_fighter_one)
+                    print(r.points_fighter_two)
+                print("")
+                print("grupowe punkty wyjściowe:", group_average_points)
+
+
+
                 counter = 0
-                # variable_to_comapre = len(list_of_participants)
-                # print("variable_to_comapre",variable_to_comapre)
-                print("len(list_of_participants)", len(list_of_participants))
-                # if not group_average_points > len(list_of_participants)):
-                # DLACZEGO TU NIE DZIAŁA < > ??????????
                 counter = group.number_outgoing
                 group.refresh_from_db()
                 group.number_outgoing = instance.number_outgoing
                 instance.save()
                 group.refresh_from_db()
                 if group.finalists:
-                    print("group.finalists", group.finalists)
+                    # print("group.finalists", group.finalists)
                     for f in group.finalists.all():
                         f.delete()
 
@@ -641,25 +802,22 @@ def group_summary(request, group_id):
                 podana w formularzu 
                 """
                 while len(finalists_list) < int(counter):
-                    print("list_of_participants",list_of_participants)
-                    print("finalists_list",finalists_list)
-                    print("group_average_points",group_average_points)
                     """
                     jeśli są już wytypowani wcześniej finaliści:
                     """
                     if finalists_list and list_of_participants:
-                        print("pierwszy if")
+                        # print("pierwszy if")
                         """
                         jeśli pierwszy z uczetsników w grupie nie jest na liście finalistów:
                         """
                         if list_of_participants and list_of_participants[i] not in finalists_list:
-                            print("drugi if")
+                            # print("drugi if")
                             """
                             jeśli punkty wyjściowe pierwszego z uczestników są takie same jak
                             najwyższe punkty wyjściowe w grupie:
                             """
                             if list_of_participants[i].points_average == max(group_average_points):
-                                print("trzeci if")
+                                # print("trzeci if")
                                 """
                                 to ten uczestnik pojawia w się w liście finalistów
                                 """
@@ -678,7 +836,7 @@ def group_summary(request, group_id):
                                     "czwarty if"
                                     counter += 1
                             else:
-                                print("else")
+                                # print("else")
                                 """
                                 jeśli punkty wyjściowe pierwszego z zawodników nie są takie same jak
                                 najwyższe punkty wyjściowe w grupie:
@@ -688,13 +846,10 @@ def group_summary(request, group_id):
                         """
                         jeśli nie ma listy wylosowanych już finalistów
                         """
-                        print("drugi else")
+                        # print("drugi else")
                         """
                         jeśli uczestnik ma takie punkty wyjściowe jak najwyższe z pozostałych z listy punktów w grupie
                         """
-                        print("list_of_participants",list_of_participants)
-                        print("counter",counter)
-                        print("group_average_points", group_average_points)
                         if list_of_participants[i].points_average == max(group_average_points):
                             finalists_list.append(list_of_participants[i])
                             list_of_participants.remove(list_of_participants[i])

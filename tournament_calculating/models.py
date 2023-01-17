@@ -12,10 +12,12 @@ class Participant(models.Model):
     #tych punktów musi być wiele
     group_points = models.PositiveSmallIntegerField(null=True, default=0)
     points_average = models.PositiveSmallIntegerField(null=True, default=0)
+    round_average = models.PositiveSmallIntegerField(null=True, default=0)
+    amount_rounds = models.PositiveSmallIntegerField(null=True, default=0)
     # fights = models.ForeignKey("Fight", related_name=)
 
     def __str__(self):
-        return f"{self.name} {self.school} {self.image} {self.tournaments} {self.group_points}  {self.points_average}"
+        return f"{self.name} {self.school} {self.image} {self.tournaments} {self.group_points}  {self.points_average} {self.round_average} {self.amount_rounds}"
 
     class Meta:
         verbose_name = "Zawodnik"

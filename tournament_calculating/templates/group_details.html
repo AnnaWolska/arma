@@ -52,13 +52,24 @@
                 </a>
             </button>
             {% endif %}
+
+{#                                {% if rounds %}#}
+{#            <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">#}
+{#                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:' group_id %}">#}
+{#                    uzupełnienie punktów#}
+{#                </a>#}
+{#            </span>#}
+{#                    {% endif %}#}
+
+
                 {% if rounds %}
             <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:group_summary' group_id %}">
                     podsumowanie grupy
                 </a>
             </span>
-                    {% endif %}
+                {% endif %}
+
             {% endif %}
         </div>
         <hr>
