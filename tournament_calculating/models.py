@@ -11,8 +11,8 @@ class Participant(models.Model):
     tournaments = models.ManyToManyField('tournaments.Tournament', related_name='participants')
     #tych punktów musi być wiele
     group_points = models.PositiveSmallIntegerField(null=True, default=0)
-    points_average = models.PositiveSmallIntegerField(null=True, default=0)
-    round_average = models.PositiveSmallIntegerField(null=True, default=0)
+    points_average = models.FloatField(null=True, default=0)
+    round_average = models.FloatField(null=True, default=0)
     amount_rounds = models.PositiveSmallIntegerField(null=True, default=0)
     # fights = models.ForeignKey("Fight", related_name=)
 
@@ -102,12 +102,13 @@ class Round(models.Model):
         ('8', '8'),
         ('9', '9'),
         ('10', '10'),
-        ('11', '11'),
+        ('0 dubl', "0 dubl"),
         ('kontuzja', 'kontuzja'),
         ('dyskwalifikacja', 'dyskwalifikacja'),
         ('poddanie', 'poddanie'),
         ('wycofanie', 'wycofanie'),
-        ('brak rezultatu', 'brak rezultatu')
+        ('średnia', 'średnia'),
+
 
     )
     order = models.PositiveSmallIntegerField(null=True)
