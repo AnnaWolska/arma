@@ -610,19 +610,11 @@ def group_summary(request, group_id):
                 for participant in participants:
                     print("")
                     list_participant_rounds = []
-                    # amount_participant_rounds = 0
-
                     group_average_points.append(participant.points_average)
 
                     for rnd in rounds:
                         cond1 = len(str(rnd.points_fighter_one))  < 3
-                        # cond2 = rnd.points_fighter_one is not "średnia"
                         cond2 = len(str(rnd.points_fighter_two)) < 3
-                        # cond4 = rnd.points_fighter_two is not "średnia"
-                        # print("cond1",cond1)
-                        # print("cond2", cond2)
-                        # print("cond3",cond3 )
-                        # print("cond4",cond4 )
                         # jeśli uczestnik jest wlczącym pierwszym w rundzie i ma jakieś punkty w tej rundzie i nie ma średniej do wstawienia
                         # albo jest walczącym drugim i ma jakieś punkty
                         if participant == rnd.fighter_one and cond1 and cond2 or \
@@ -631,7 +623,7 @@ def group_summary(request, group_id):
                             # print("list_participant_rounds",list_participant_rounds)
                             # print("len(list_participant_rounds)",len(list_participant_rounds))
                             participant.amount_rounds = len(list_participant_rounds)
-                            print("participant.amount_rounds",participant.amount_rounds)
+                            # print("participant.amount_rounds",participant.amount_rounds)
                             participant.save()
                     # print("ilość rund uczestnika", participant.name, participant.amount_rounds)
                     for rnd in rounds:
@@ -682,11 +674,20 @@ def group_summary(request, group_id):
                             # participant.save()
                             temporary_var2.append(participant.round_average)
                         if participant == rnd.fighter_one and rnd.points_fighter_one is None:
+                            print("participant.round_average",participant.round_average)
+                            participant.round_average = round(round(((round((maximum_amount_prtcp_rounds / participant.amount_rounds),2)) * participant.group_points), 2) / maximum_amount_prtcp_rounds, 2)
+                            participant.save()
                             rnd.points_fighter_one = participant.round_average
                             rnd.save()
                         if participant == rnd.fighter_two and rnd.points_fighter_two is None:
+                            participant.round_average = round(round(((round((maximum_amount_prtcp_rounds / participant.amount_rounds),2)) * participant.group_points), 2) / maximum_amount_prtcp_rounds, 2)
+                            participant.save()
                             rnd.points_fighter_two = participant.round_average
+                            print("participant.round_average", participant.round_average)
                             rnd.save()
+                            """
+                            może to musi być zamienione na jeden warunek po participant albo walczy jako drugi albo jako pierwszy...
+                            """
 
                         # jeśli uczestnik jest walczącym pierwszym i jego oponent nie ma punktów i ten uczestnik ma już jakieś punkty w turnieju
                         # if participant == rnd.fighter_one and rnd.points_fighter_two is None and participant.group_points is not None:
