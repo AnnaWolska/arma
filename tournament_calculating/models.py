@@ -52,7 +52,21 @@ class Group(models.Model):
         ('9', '9'),
         ('10', '10'),
     )
-    number = models.PositiveSmallIntegerField(null=False)
+    GR_NUMBER = (
+        (0, '0'),
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+        (6, '6'),
+        (7, '7'),
+        (8, '8'),
+        (9, '9'),
+        (10, '10'),
+    )
+
+    number = models.PositiveSmallIntegerField( choices=GR_NUMBER, null=False, default=0)
     tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="groups")
     participants = models.ManyToManyField('Participant', related_name='groups')
     color_fighter_one = models.CharField(max_length=30, choices=COLOR, null=True)

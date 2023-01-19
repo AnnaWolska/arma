@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
+{#{% load util %}#}
 {% block style %}
 <link href ="{% static "tournaments_calculating/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
@@ -132,7 +133,11 @@
                         </b>
                         <b>
                             <span style=" color: black" >
-                                {{ r.points_fighter_one }}
+                                 {% if r.points_fighter_one|floatformat %}
+                                {{ r.points_fighter_one|floatformat:"-2" }}
+                                                                         {% else %}
+                                    {{ r.points_fighter_one}}
+                                    {% endif %}
                             </span>
                         </b>
                         {% endif %}
@@ -145,7 +150,11 @@
                         </b>
                         <b>
                             <span style=" color: black">
-                                {{ r.points_fighter_two }}
+                                {% if r.points_fighter_two|floatformat %}
+                                {{ r.points_fighter_two|floatformat:"-2" }}
+                                    {% else %}
+                                    {{ r.points_fighter_two}}
+                                    {% endif %}
                             </span>
                         </b>
                         {% else %}
