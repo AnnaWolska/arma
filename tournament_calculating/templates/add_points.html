@@ -5,11 +5,37 @@
 {%  block style %}
 <link href="{% static "tournaments_calculating/css/style.css" %}" rel=stylesheet">
 {% endblock %}
-{% block title %}  Dodaj punkty {% endblock %}
+
 {% block content %}
+   pierwszy zawodnik -
+    {% for p in participants %}
+        {% for round in rounds %}
+            {% if p.id == round.fighter_one_id %}
+    {{ p.name}}
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+
+<br>
+               drugi zawodnik -
+    {% for p in participants %}
+        {% for round in rounds %}
+            {% if p.id == round.fighter_two_id %}
+    {{ p.name}}
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+
+
+
 <form method = "POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}
+
+
+
+
+
     <button type="submit"
     class = "btn btn-primary">Wyślij
 </button>

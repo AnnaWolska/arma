@@ -83,9 +83,24 @@ class Group(models.Model):
 
 
 class Fight(models.Model):
+    ROUNDS_NUMBER = (
+        (0, '0'),
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+        (6, '6'),
+        (7, '7'),
+        (8, '8'),
+        (9, '9'),
+        (10, '10'),
+    )
+
     order = models.PositiveSmallIntegerField(null=True)
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="fights", null=True)
-    rounds = models.PositiveSmallIntegerField(null=True)
+    # rounds = models.PositiveSmallIntegerField(null=True)
+    rounds = models.PositiveSmallIntegerField(choices=ROUNDS_NUMBER, null=False, default=0)
     tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="fights", null=True)
     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_one", null=True )
     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_two", null=True )
@@ -116,7 +131,7 @@ class Round(models.Model):
         ('8', '8'),
         ('9', '9'),
         ('10', '10'),
-        ('0 dubl', "0 dubl"),
+        # ('0 dubl', "0 dubl"),
         ('kontuzja', 'kontuzja'),
         ('dyskwalifikacja', 'dyskwalifikacja'),
         ('poddanie', 'poddanie'),
@@ -136,6 +151,7 @@ class Round(models.Model):
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="rounds_of_group", null=True)
     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_one", null=True )
     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_two", null=True )
+    # numberfield , postsave
     # resolved_fighter_one = models.BooleanField(default=False, null=True)
     # resolved_fighter_two = models.BooleanField(default=False, null=True)
 
