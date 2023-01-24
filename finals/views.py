@@ -20,7 +20,9 @@ from tournament_calculating.models import Group, Fight, Participant, Round
 def finals(request, group_id):
     prtcp_ls = []
     group = Group.objects.get(pk=group_id)
+
     tournament = group.tournament
+    groups = tournament.groups.all()
     participants = group.participants.all()
     finalists = Finalist.objects.filter(group = group)
     # for f in finalists:
@@ -28,6 +30,11 @@ def finals(request, group_id):
     #     prtcp_ls.append( Finalist.objects.get(participant_id=p.id))
     # finalists = prtcp_ls
     # print(prtcp_ls)
+
+
+
+
+
     for p in participants:
         for f in finalists:
             if p.id == f.participant_id:
@@ -36,5 +43,6 @@ def finals(request, group_id):
 
     return render(request, "final.html", context={
         "finalists": finalists,
-        "prtcp_ls": prtcp_ls
+        "prtcp_ls": prtcp_ls,
+        "groups": groups
     })

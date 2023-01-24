@@ -259,11 +259,15 @@
                                         {% endthumbnail %}
                                         {% endif %}
                                     </a>
+
                                     {% if tournament.user == request.user %}
+                                   {% if not rounds %}
                                     <a style="color:red;  column-count: 2;"   href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >
                                         usuń
                                     </a>
                                     {% endif %}
+                                      {% endif %}
+
                                 </li>
                             </ul>
                             {% endfor %}

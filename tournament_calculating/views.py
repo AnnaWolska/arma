@@ -182,54 +182,64 @@ def add_participant(request, tournament_id, group_id):
             })
         )
 
-#TODO: powtórzenie nr grupy wywołuje błąd
+#TODO: dodać edycję grupy
 def add_group(request, tournament_id):
     tournament = Tournament.objects.get(pk=tournament_id)
+    number = 0
 
-    if request.user.is_authenticated:
-        form = AddGroupForm(request.POST, instance=tournament)
-        groups = tournament.groups.all()
-        many_group_numbers = []
-        for g in groups:
-            many_group_numbers.append(g.number)
-        if request.method == "POST" and form.is_valid():
+    while number < 16:
+        if request.user.is_authenticated:
+            form = AddGroupForm(request.POST, instance=tournament)
+            groups = tournament.groups.all()
+            num_list = []
+            # many_group_numbers = []
+            # for g in groups:
+            #     many_group_numbers.append(g.number)
+
             if request.method == "POST" and form.is_valid():
-                number = form.cleaned_data['number']
-                color_fighter_one = form.cleaned_data['color_fighter_one']
-                color_fighter_two = form.cleaned_data['color_fighter_two']
-                # if groups:
-                if number not in many_group_numbers:
+                if request.method == "POST" and form.is_valid():
+                    # number = form.cleaned_data['number']
+
+                    color_fighter_one = form.cleaned_data['color_fighter_one']
+                    color_fighter_two = form.cleaned_data['color_fighter_two']
+                    # if groups:
+                    # if number not in many_group_numbers:
+                    for n in tournament.groups.all():
+                        num_list.append(n.number)
+                    number = max(num_list)
                     obj = form.save(commit=False)
-                    obj.number = number
+                    # obj.number += 1
                     obj.color_fighter_one = color_fighter_one
                     obj.color_fighter_two = color_fighter_two
+                    number += 1
                     obj.save()
+
                     groups.create(number=number, tournament=tournament, color_fighter_one=color_fighter_one, color_fighter_two=color_fighter_two)
                     messages.success(request, 'grupa dodana.')
                     return HttpResponseRedirect(reverse(
                         "tournaments:tournament_details",
                         args=[tournament_id]))
 
+                else:
+                    form = AddGroupForm
+                    return (
+                        render(request, "add_group.html", context={
+                            'form': form,
+                            'tournament_id': tournament_id,
+
+                        })
+                    )
             else:
                 form = AddGroupForm
                 return (
                     render(request, "add_group.html", context={
                         'form': form,
                         'tournament_id': tournament_id,
-
                     })
                 )
-        else:
-            form = AddGroupForm
-            return (
-                render(request, "add_group.html", context={
-                    'form': form,
-                    'tournament_id': tournament_id,
-                })
-            )
 
 
-# TODO:  jeszcze for jeśli na początku jest taki sam co ostatnie, bo czasem się powtorzy z przodu
+# TODO: jeszcze for jeśli na początku jest taki sam co ostatnie, bo czasem się powtórzy z przodu
 def draw_fights(request, group_id):
     group = Group.objects.get(pk=group_id)
     group_fights = group.fights.all()
@@ -348,7 +358,7 @@ def delete_group_participant(request, tournament_id, group_id, participant_id):
                  'participant_id': participant_id
                  })
 
-#TODO: dodać co, gdy się wpiszę te samą grupę
+
 def delete_group(request, tournament_id, group_id):
     user = request.user
     tournament = Tournament.objects.get(pk=tournament_id)
@@ -459,7 +469,7 @@ def add_rounds(request, group_id):
             })
         )
 
-# pierwsi walczący mają za mało punktów
+
 def add_points (request, group_id, fight_id, round_id):
     group = Group.objects.get(pk=group_id)
     fight_rounds = Round.objects.filter(fight_id=fight_id)
@@ -525,7 +535,7 @@ def add_points (request, group_id, fight_id, round_id):
                             # to punkt dla tego turnieju powiększ o punkty tego zawodnika
                             tournament_fights_points.append(tournament_fight.fighter_two_points)
                     # TU WYLICZAM ŚREDNIĄ DO WYJSCIA
-                    #TODO devision zero:
+
                     if tournament_fights_points is not None:
                     # if tournament_fights_points is not None  or tournament_fights_points !="dyskwalifikacja" or tournament_fights_points !="średnia" or tournament_fights_points !="kontuzja" or tournament_fights_points !="wycofanie" or tournament_fights_points != 0:
                         tournaments_fighters_average = round(sum(tournament_fights_points) / len(tournament_fights_points), 2)
@@ -577,7 +587,7 @@ to przechodzi i nie zwiększa countera, jeśli remis jest na końcu do zwiększa
 dodać dodatkowe punkty dla tych co nie walczyli z kontuzjowanymi 
 i zdyskwalifikowanymi i poddanymi i nieobecnymi
 """
-#TODO: dodać warunek, że gdy podana ilość finalistów do wylosowania jest większa niż ilość zawodników, powinna być zmniejszona do ilości zawodnikóœ
+
 def group_summary(request, group_id):
     group = Group.objects.get(pk=group_id)
     participants = group.participants.all()
@@ -635,7 +645,7 @@ def group_summary(request, group_id):
                 #-------------------------2-----------------------------------------
                 #teraz zamieniam napisy na wartości 0 i ze średniej:
                 for participant in participants:
-                    list_of_excuses = ["kontuzja","dyskwalifikacja","wycofanie"]
+                    list_of_excuses = ["kontuzja","dyskwalifikacja","wycofanie", "poddanie"]
                     # jeśli brał udział w minium jednym starciu:
                     if participant.amount_rounds != 0:
                         for rnd in rounds:
@@ -665,6 +675,7 @@ def group_summary(request, group_id):
                                 rnd.points_fighter_one = 0
                                 rnd.points_fighter_two = participant.round_average
                                 rnd.save()
+
 
                             #-------------------------3---------------------------------------
                             # dodawanie punktów za walki, które się nie odbyły:
@@ -703,7 +714,6 @@ def group_summary(request, group_id):
                                     rnd.points_fighter_two = 0
                                     rnd.save()
 
-                            # FIXME: tu coś nie tak
                             if not "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.rounds_of_participant_two.filter(group_id=group_id) \
                                     or "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.rounds_of_participant_one.filter(
                                 group_id=group_id):
@@ -820,6 +830,8 @@ def group_summary(request, group_id):
                 jeśli jest remis na końcu, counter (ilość finalistów) musi się zwiększyć 
                 o tyle ile jest uczestników z tym samym wynikiem
                 """
+
+
                 for f in finalists:
                     group.finalists.create(participant=f)
                 group.save()

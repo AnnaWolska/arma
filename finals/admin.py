@@ -4,9 +4,9 @@ from .models import Finalist, Stage, FinalFight, FinalRound, Winner
 
 @admin.register(Finalist)
 class FinalistAdmin(admin.ModelAdmin):
-    list_display = ["participant", "final_points", "final_points_average", "group"]
-    search_fields = ["participant", "group"]
-    list_filter = ["participant", "group"]
+    list_display = ["participant","final_points", "final_points_average", "group"]
+    search_fields = [ "group"]
+    list_filter = [ "group"]
 
 
 @admin.register(Stage)

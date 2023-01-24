@@ -51,9 +51,7 @@ def tournament_details(request, tournament_id):
     })
 
 
-# def add_tournament(request, user_id):
 def add_tournament(request):
-
     if request.user.is_authenticated:
         formset = OrganizerFormSet(queryset=Organizer.objects.none())
         if request.method == "POST":

@@ -103,8 +103,8 @@ class AddGroupForm(forms.ModelForm):
 
     class Meta:
         model = Group
-        fields = ['number', 'color_fighter_one', 'color_fighter_two']
-        labels = {"number": 'podaj numer grupy:', "color_fighter_one": 'kolor opski pierwszego zawodnika', "color_fighter_two": 'kolor opski drugiego zawodnika'}
+        fields = ['color_fighter_one', 'color_fighter_two']
+        labels = {"color_fighter_one": 'kolor opaski pierwszego zawodnika', "color_fighter_two": 'kolor opaski drugiego zawodnika'}
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -114,7 +114,7 @@ class AddGroupForm(forms.ModelForm):
             self.helper.layout = Layout(
                 Fieldset(
                     'Dodaj grupę',
-                    'numer',
+                    # 'numer',
                 ),
                 ButtonHolder(
                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 from tournaments.models import Tournament
+# from finals.models import Finalist
 
 #dodać relację do user
 class Participant(models.Model):
@@ -9,15 +10,17 @@ class Participant(models.Model):
     school = models.CharField(max_length=500)
     image = ImageField(upload_to="tournament_calculating/images/%Y/%m/%d/", blank=True, null=True)
     tournaments = models.ManyToManyField('tournaments.Tournament', related_name='participants')
-    #tych punktów musi być wiele
+    # participant_finals = models.ManyToManyField('finals.Finalist', related_name='participants')
     group_points = models.PositiveSmallIntegerField(null=True, default=0)
     points_average = models.FloatField(null=True, default=0)
     round_average = models.FloatField(null=True, default=0)
     amount_rounds = models.PositiveSmallIntegerField(null=True, default=0)
-    # fights = models.ForeignKey("Fight", related_name=)
 
     def __str__(self):
-        return f"{self.name} {self.school} {self.image} {self.tournaments} {self.group_points}  {self.points_average} {self.round_average} {self.amount_rounds}"
+        return f"{self.name} {self.school} {self.image} {self.tournaments} " \
+               f" {self.group_points}  {self.points_average} {self.round_average} " \
+               f"{self.amount_rounds} " \
+               # f"{self.participant_finals}"
 
     class Meta:
         verbose_name = "Zawodnik"
@@ -72,7 +75,7 @@ class Group(models.Model):
     color_fighter_one = models.CharField(max_length=30, choices=COLOR, null=True)
     color_fighter_two = models.CharField(max_length=30, choices=COLOR, null=True)
     number_outgoing = models.CharField(max_length=2, choices=NUMBER, null=True, default=0)
-
+    # outgoings =
 
     def __str__(self):
         return f"{self.number} {self.tournament} {self.participants} {self.color_fighter_one} {self.color_fighter_two}"
@@ -106,9 +109,7 @@ class Fight(models.Model):
     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_two", null=True )
     fighter_one_points = models.PositiveSmallIntegerField(null=True, default=0)
     fighter_two_points = models.PositiveSmallIntegerField(null=True, default=0)
-
     resolved = models.BooleanField(default=False , null=True)
-
 
     def __str__(self):
         return f"{self.group} {self.rounds} {self.tournament} {self.fighter_one} {self.fighter_two}"
@@ -137,8 +138,6 @@ class Round(models.Model):
         ('poddanie', 'poddanie'),
         ('wycofanie', 'wycofanie'),
         ('średnia', 'średnia'),
-
-
     )
     order = models.PositiveSmallIntegerField(null=True)
     fight = models.ForeignKey("Fight", on_delete=models.CASCADE, related_name="rounds_of_fight", null=True)
@@ -154,7 +153,6 @@ class Round(models.Model):
     # numberfield , postsave
     # resolved_fighter_one = models.BooleanField(default=False, null=True)
     # resolved_fighter_two = models.BooleanField(default=False, null=True)
-
 
     def __str__(self):
         return f"{self.order} {self.fight} \

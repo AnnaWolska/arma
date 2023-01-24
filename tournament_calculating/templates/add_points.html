@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
+{% load thumbnail %}
 {% load static %}
 {%  block style %}
 <link href="{% static "tournaments_calculating/css/style.css" %}" rel=stylesheet">
@@ -11,17 +12,39 @@
     {% for p in participants %}
         {% for round in rounds %}
             {% if p.id == round.fighter_one_id %}
-    {{ p.name}}
+    {{ p.name}} z {{ p.school }}
+                         {% if p.image %}
+                {% thumbnail p.image "100x100" as im %}
+                <img src="{{ im.url }}" alt="zdj">
+                {% endthumbnail %}
+                    {% endif %}
+
+
+
+
     {% endif %}
     {% endfor %}
     {% endfor %}
 
 <br>
+
+
                drugi zawodnik -
     {% for p in participants %}
         {% for round in rounds %}
             {% if p.id == round.fighter_two_id %}
-    {{ p.name}}
+    {{ p.name}} z {{ p.school }}
+
+                {% if p.image %}
+                {% thumbnail p.image "100x100" as im %}
+                <img src="{{ im.url }}" alt="zdj">
+                {% endthumbnail %}
+                    {% endif %}
+
+
+
+
+
     {% endif %}
     {% endfor %}
     {% endfor %}

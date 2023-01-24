@@ -6,17 +6,19 @@ from tournament_calculating.models import Participant
 
 
 class Finalist(models.Model):
+
     participant = models.OneToOneField(
         "tournament_calculating.Participant",
         on_delete=models.CASCADE,
-        primary_key=True,
+        primary_key=True
     )
     final_points = models.PositiveSmallIntegerField(null=True, default=0)
     final_points_average = models.PositiveSmallIntegerField(null=True, default=0)
+    group = models.ForeignKey("tournament_calculating.Group", on_delete=models.CASCADE, related_name="finalists",
+                              null=True)
 
     def __str__(self):
-        return f" {self.participant} {self.final_points} {self.final_points_average}"
-    group =  models.ForeignKey("tournament_calculating.Group", on_delete=models.CASCADE, related_name="finalists", null=True)
+        return f"{self.final_points} {self.group}  {self.final_points_average} {self.participant} "
 
 
 class Stage(models.Model):
