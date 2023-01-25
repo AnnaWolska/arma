@@ -9,11 +9,17 @@
     Lista uczestników turniejów:
 </h3>
 
+{#{{ request.user.id }}{{ participants_user_ids}}#}
+                {% if request.user.id not in participants_user_ids %}
+{#                    {{ request.user.id}} {{ participants_user_ids}}#}
+
                 <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:create_participant' %}">
                    dodaj uczestnika
                 </a>
-            </span>
+                 </span>
+ (jeden użytkownik aplikacji może dodać jednego uczestnika turniejów)
+                     {% endif %}
 
 
 
@@ -67,6 +73,26 @@
             <img src="{{ im.url }}" alt="zdj">
             {% endthumbnail %}
             {% endif %}
+
+        użytkownik: {{ participant.user }}
+
+                    {% if organizer.user == request.user %}
+            <button id="delete_organizer" type="button" style="background-color:Tomato; "  class="btn btn-primary">
+{#                <a style="color:white;" href = "{% url 'organizers:delete_participant' participant.id %}">#}
+                    Usuń uczestnika
+                </a>
+            </button>
+            <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary">
+{#                <a style="color:white;" href = "{% url 'organizers:edit_participant' participant.id %}">#}
+                    Edytuj uczestnika
+                </a>
+            </button>
+            {% endif %}
+
+
+
+
+
         </li>
     </ol>
 </div>

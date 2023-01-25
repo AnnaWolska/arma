@@ -26,7 +26,17 @@ def participants_list(request):
     paginator = Paginator(participants, 20)
     page_number = request.GET.get('page')
     participants_register= paginator.get_page(page_number)
-    context = {'participants_register': participants_register}
+    participants_ids = []
+    participants_user_ids = []
+    for participant in participants:
+        participants_user_ids.append(participant.user_id)
+    for participant in participants:
+        participants_ids.append(participant.id)
+    context = {
+               'participants_register': participants_register,
+               'participants_ids': participants_ids,
+               'participants_user_ids': participants_user_ids
+               }
     return render(request, "participants_list.html", context)
 
 
@@ -163,6 +173,7 @@ def create_participant(request):
             form = CreateParticipantForm(request.POST, request.FILES)
             if form.is_valid():
                 instance = form.save()
+                instance.user = request.user
                 instance.save()
             return HttpResponseRedirect(reverse("tournament_calculating:participants_list"))
         else:
