@@ -8,6 +8,16 @@
 <h3>
     Lista uczestników turniejów:
 </h3>
+
+                <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
+                <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:create_participant' %}">
+                   dodaj uczestnika
+                </a>
+            </span>
+
+
+
+
 <div class="pagination">
     <span class = "step-links">
         {% if participants_list.has_previous %}
@@ -44,14 +54,6 @@
                     {{ participant.name}} z {{ participant.school}},
 
                     udział w
-
-{##}
-{#                        {% for p in participant.tournamntes.all %}#}
-{#                            {{ p.name }}#}
-{#                            {% endfor %}#}
-{##}
-{#                    {{ participant.tournaments.all }}#}
-
 
                 {% for p in participant.tournaments.all %}
                     {{ p.title }}

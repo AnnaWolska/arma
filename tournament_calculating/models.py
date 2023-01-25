@@ -6,6 +6,7 @@ from tournaments.models import Tournament
 
 #dodać relację do user
 class Participant(models.Model):
+    user = models.OneToOneField("auth.User", on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
     school = models.CharField(max_length=500)
     image = ImageField(upload_to="tournament_calculating/images/%Y/%m/%d/", blank=True, null=True)
@@ -16,10 +17,13 @@ class Participant(models.Model):
     round_average = models.FloatField(null=True, default=0)
     amount_rounds = models.PositiveSmallIntegerField(null=True, default=0)
 
+
     def __str__(self):
-        return f"{self.name} {self.school} {self.image} {self.tournaments} " \
-               f" {self.group_points}  {self.points_average} {self.round_average} " \
-               f"{self.amount_rounds} " \
+        return f"{self.name}"
+         # {self.school} " \
+        #        f"{self.image} {self.tournaments} " \
+        #        f" {self.group_points}  {self.points_average} {self.round_average} " \
+        #        f"{self.amount_rounds} " \
                # f"{self.participant_finals}"
 
     class Meta:

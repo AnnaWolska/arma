@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404,redirect
 from tournaments.models import Tournament
 from tournament_calculating.models import Group, Fight, Participant, Round
 from tournament_calculating.forms import (
@@ -14,7 +14,9 @@ from tournament_calculating.forms import (
     AddGroupForm,
     AddRoundsForm,
     AddPointsForm,
-    GroupSummaryForm
+    GroupSummaryForm,
+    # ParticipantFormSet,
+    CreateParticipantForm
     )
 from finals.models import Finalist
 
@@ -155,19 +157,101 @@ def fight_details(request, group_id, fight_id):
     })
 
 
+def create_participant(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = CreateParticipantForm(request.POST, request.FILES)
+            if form.is_valid():
+                instance = form.save()
+                instance.save()
+            return HttpResponseRedirect(reverse("tournament_calculating:participants_list"))
+        else:
+            form = CreateParticipantForm
+        return (
+            render(request, "create_participant.html", context={
+                'form': form,
+            })
+        )
+
+# to przykład z turniejów
+# def edit_tournament(request, tournament_id):
+#     tournament = Tournament.objects.get(pk=tournament_id)
+#     user = request.user
+#     if request.method == "POST":
+#         if user.is_authenticated:
+#             if user == tournament.user:
+#                 form = TournamentForm(request.POST, request.FILES, instance=tournament)
+#                 if form.is_valid():
+#                     form.save()
+#                     return HttpResponseRedirect(reverse('tournaments:tournament_details', args=[tournament_id] ))
+#                 else:
+#                     return redirect(reverse('login'))
+#     else:
+#         if user.is_authenticated:
+#             if user == request.user:
+#                 form = TournamentForm(instance=tournament)
+#                 return render(request,"edit_tournament.html", {"form": form})
+
+
+
+#na razie szare, zmieniam...
+# def add_participant(request, tournament_id, group_id):
+#     tournament = Tournament.objects.get(pk=tournament_id)
+#     participants = Participant.objects.all()
+#     if request.user.is_authenticated:
+#         if request.method == "POST":
+#             form = AddParticipantForm(request.POST, request.FILES)
+#             group = Group.objects.get(pk=group_id)
+#             for participant in participants:
+#                 if form.is_valid():
+#                     instance = form.save()
+#                     if participant == instance:
+#                         # instance = form.save()
+#                         # instance.name = instance.name
+#                         participant.groups.add(group)
+#                         participant.tournaments.add(tournament)
+#                         # instance.save()
+#                         participant.update()
+#                 # instance.groups.add(group)
+#                 # instance.name = instance.name
+#                 # instance.tournaments.add(tournament)
+#             return HttpResponseRedirect(reverse(
+#                 "tournament_calculating:group_details",
+#                 args=[group_id])
+#                 )
+#         else:
+#             form = AddParticipantForm
+#         return (
+#             render(request, "add_participant.html", context={
+#                 'form': form,
+#                 'tournament_id': tournament_id,
+#                 'group_id': group_id,
+#             })
+#         )
+#
+
 def add_participant(request, tournament_id, group_id):
     tournament = Tournament.objects.get(pk=tournament_id)
+    participants = Participant.objects.all()
+    group = Group.objects.get(pk=group_id)
     if request.user.is_authenticated:
         if request.method == "POST":
             form = AddParticipantForm(request.POST, request.FILES)
-            group = Group.objects.get(pk=group_id)
-
             if form.is_valid():
-                instance = form.save()
-                instance.groups.add(group)
-                instance.tournaments.add(tournament)
-                instance.save()
-
+                print(form)
+                print("form is valid")
+                form.save()
+                p_name = form.save(commit=False)
+                # p_name.toutnament_id = tournament_id
+                print("p_name.id",p_name.id)
+                for p in participants:
+                    if p.id == p_name.id:
+                        print("instance",p_name.id)
+                        print("p.name",p.id)
+                        print(group.participants)
+                        group.participants.add(p)
+                        group.save()
+                        form.save_m2m()
             return HttpResponseRedirect(reverse(
                 "tournament_calculating:group_details",
                 args=[group_id])
@@ -182,6 +266,10 @@ def add_participant(request, tournament_id, group_id):
             })
         )
 
+
+
+
+
 #TODO: dodać edycję grupy
 def add_group(request, tournament_id):
     tournament = Tournament.objects.get(pk=tournament_id)
@@ -192,6 +280,8 @@ def add_group(request, tournament_id):
             form = AddGroupForm(request.POST, instance=tournament)
             groups = tournament.groups.all()
             num_list = []
+            for n in tournament.groups.all():
+                num_list.append(n.number)
             # many_group_numbers = []
             # for g in groups:
             #     many_group_numbers.append(g.number)
@@ -204,16 +294,19 @@ def add_group(request, tournament_id):
                     color_fighter_two = form.cleaned_data['color_fighter_two']
                     # if groups:
                     # if number not in many_group_numbers:
-                    for n in tournament.groups.all():
-                        num_list.append(n.number)
-                    number = max(num_list)
+
+                    if number:
+                        number = max(num_list)
+                    else:
+                        number = 0
+                    number += 1
                     obj = form.save(commit=False)
                     # obj.number += 1
                     obj.color_fighter_one = color_fighter_one
                     obj.color_fighter_two = color_fighter_two
-                    number += 1
-                    obj.save()
 
+                    obj.save()
+                    number += 1
                     groups.create(number=number, tournament=tournament, color_fighter_one=color_fighter_one, color_fighter_two=color_fighter_two)
                     messages.success(request, 'grupa dodana.')
                     return HttpResponseRedirect(reverse(

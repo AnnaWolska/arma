@@ -57,14 +57,9 @@ def add_tournament(request):
         if request.method == "POST":
             form = TournamentForm(request.POST, request.FILES)
             formset = OrganizerFormSet(request.POST)
-            print("alama")
-            print(form)
             form.instance.user = request.user
-            print(dir(form))
             if formset.is_valid():
                 instance = form.save()
-                # instance.user = request.user
-                # instance.save()
                 for f in formset.cleaned_data:
                     if f:
                         orgaznier, _ = Organizer.objects.get_or_create(**f)
@@ -72,7 +67,7 @@ def add_tournament(request):
                         if orgaznier not in instance.organizers.all():
                             instance.organizers.add(orgaznier)
                 instance.save()
-            # return HttpResponseRedirect(reverse("tournaments:tournaments_list", args=[user_id]))
+
             return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
         else:
             form = TournamentForm()

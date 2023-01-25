@@ -11,7 +11,6 @@ class OrganizerForm(forms.ModelForm):
     class Meta:
         model = Organizer
         fields = ["name", "description", "image"]
-        # fields = "__all__"
         labels = {
             "name": "nazwa organizatora",
             "description": "opis organizatora",

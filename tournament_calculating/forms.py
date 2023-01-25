@@ -1,12 +1,40 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder
 from django import forms
-
 from tournament_calculating.models import Group
 from tournament_calculating.models import Participant, Fight, Round
+from dal import autocomplete
+from django.contrib.admin.widgets import AutocompleteSelectMultiple
 
 
-class AddParticipantForm(forms.ModelForm):
+# class ParticipantForm(forms.ModelForm):
+#     class Meta:
+#         model = Participant
+#         fields = ['name', 'school', 'image']
+#         labels = {
+#             "name": "Imię i nazwisko",
+#             "school": "Szkoła",
+#             "image": "zdjęcie",
+#         }
+#
+#         def __init__(self, *args, **kwargs):
+#             super().__init__(*args, **kwargs)
+#             self.helper = FormHelper()
+#             self.helper.form_method = 'post'
+#             self.helper.form_action = 'tournament_calculating: add_participant'
+#             self.helper.layout = Layout(
+#                 Fieldset(
+#                     'Dodaj uczestnika',
+#                     'Imię i nazwisko',
+#                     'szkoła',
+#                     'zdjęcie'
+#                 ),
+#                 ButtonHolder(
+#                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),
+#                     css_class="d-flex justify-content-end"
+#                 )
+#             )
+class CreateParticipantForm(forms.ModelForm):
     # groups = forms.ModelChoiceField(
     #     queryset=Group.objects.all(),
     #     widget=autocomplete.Select)
@@ -24,7 +52,7 @@ class AddParticipantForm(forms.ModelForm):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.form_method = 'post'
-            self.helper.form_action = 'tournament_calculating: add_participant'
+            self.helper.form_action = 'tournament_calculating: create_participant'
             self.helper.layout = Layout(
                 Fieldset(
                     'Dodaj uczestnika',
@@ -37,6 +65,49 @@ class AddParticipantForm(forms.ModelForm):
                     css_class="d-flex justify-content-end"
                 )
             )
+
+# ParticipantFormSet = forms.modelformset_factory(Participant, form=CreateParticipantForm)
+
+
+class AddParticipantForm(forms.ModelForm):
+    name = forms.ModelChoiceField(
+        queryset=Participant.objects.all(),
+        widget=autocomplete.Select)
+
+    class Meta:
+    #     model = Participant
+    #     fields = ["name"]
+    #     labels = {
+    #         "name": "uczestnik",
+    #     }
+    #     model = Group
+    #     fields =["participants"]
+    #     labels = {
+    #         "participants": "uczestnicy",
+
+
+        model = Group
+        fields =["name"]
+        labels = {
+            "name": "uczestnicy",
+        }
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.form_method = 'post'
+            self.helper.form_action = 'tournament_calculating: add_participant'
+            self.helper.layout = Layout(
+                Fieldset(
+                    'Dodaj uczestnika',
+                ),
+                ButtonHolder(
+                    Submit('submit', 'Dodaj', css_class='btn btn-primary'),
+                    css_class="d-flex justify-content-end"
+                )
+            )
+
+
 
 
 class AddRoundsForm(forms.ModelForm):

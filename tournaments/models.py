@@ -11,7 +11,7 @@ class Organizer(models.Model):
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, default=1, related_name="organizers_created")
 
     def __str__(self):
-        return f"{self.name} {self.description} {self.image} "
+        return f"{self.name} "
 
     class Meta:
         verbose_name = "Organizator"

@@ -3,7 +3,7 @@ from tournament_calculating.views import participants_list, participant_details,
     delete_group_participant, draw_fights, \
     delete_group, \
     delete_fights, add_rounds, add_points,\
-    fight_details, group_summary
+    fight_details, group_summary, create_participant
 
 app_name = "tournament_calculating"
 urlpatterns = [

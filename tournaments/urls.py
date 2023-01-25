@@ -3,7 +3,7 @@ from tournaments.views import tournaments_list, tournament_details,\
     add_tournament, delete_tournament, edit_tournament
 from posts.views import add_post, edit_post, delete_post
 
-from tournament_calculating.views import add_participant, add_group
+from tournament_calculating.views import add_participant, add_group, create_participant
 
 app_name = "tournaments"
 urlpatterns = [
@@ -19,6 +19,7 @@ urlpatterns = [
     path('<int:tournament_id>/edit_post/<int:post_id>', edit_post, name="edit_post"),
     path('<int:tournament_id>/delete_post/<int:post_id>', delete_post, name="delete_post"),
 
+    path('create/', create_participant, name="create_participant"),
     path('<int:tournament_id>/add_participant/<int:group_id>/', add_participant, name="add_participant"),
     path('<int:tournament_id>/add_group/', add_group, name="add_group"),
 ]
