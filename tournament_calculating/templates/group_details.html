@@ -35,6 +35,8 @@
             {% if not rounds %}
             <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}">
+{#                     <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' group_id%}">#}
+{#                   <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' group_id%}">#}
                     Dodaj uczestnika
                 </a>
             </button>

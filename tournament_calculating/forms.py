@@ -70,9 +70,13 @@ class CreateParticipantForm(forms.ModelForm):
 
 
 class AddParticipantForm(forms.ModelForm):
-    name = forms.ModelChoiceField(
+    participants = forms.ModelChoiceField(
         queryset=Participant.objects.all(),
-        widget=autocomplete.Select)
+        # widget=autocomplete.Select)
+        widget=autocomplete.ModelSelect2Multiple(url='tournament_calculating:participant-autocomplete'
+                                                 ))
+    # participants = forms.ModelChoiceField(queryset=Participant.objects.all(), required=False)
+
 
     class Meta:
     #     model = Participant
@@ -84,14 +88,11 @@ class AddParticipantForm(forms.ModelForm):
     #     fields =["participants"]
     #     labels = {
     #         "participants": "uczestnicy",
-
-
         model = Group
-        fields =["name"]
+        fields =["participants"]
         labels = {
-            "name": "uczestnicy",
+            "participants": "uczestnicy",
         }
-
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
@@ -106,8 +107,6 @@ class AddParticipantForm(forms.ModelForm):
                     css_class="d-flex justify-content-end"
                 )
             )
-
-
 
 
 class AddRoundsForm(forms.ModelForm):
