@@ -59,12 +59,13 @@
                 <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
                     {{ participant.name}} z {{ participant.school}},
 
+                {% if participant.tournaments.all %}
                     udział w
 
                 {% for p in participant.tournaments.all %}
                     {{ p.title }}
                     {% endfor %}
-
+{% endif %}
 
                 </a>
             </p>

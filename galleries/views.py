@@ -36,7 +36,10 @@ def show_gallery_details(request, gallery_id):
     created = galleries.created
     modified = galleries.modified
     photos = galleries.photos.all()
-    tournament = galleries.tournament.title
+    if galleries.tournament is not None:
+        tournament = galleries.tournament.title
+    else:
+        tournament = []
     paginator = Paginator(photos, 8)
     page_number = request.GET.get('page')
     gallery_list = paginator.get_page(page_number)
@@ -56,18 +59,21 @@ def show_gallery_details(request, gallery_id):
 
 
 def add_gallery(request):
-    if request.method == "POST":
-        form = GalleryForm(request.POST)
-        if form.is_valid():
-            gallery = form.save()
-            gallery.user = request.user
-            gallery.save()
-            return HttpResponseRedirect(reverse("galleries:add_photo", args=[gallery.id]))
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = GalleryForm(request.POST)
+            if form.is_valid():
+                gallery = form.save()
+                gallery.user = request.user
+                gallery.save()
+                return HttpResponseRedirect(reverse("galleries:add_photo", args=[gallery.id]))
+        else:
+            form = GalleryForm()
+        return(
+            render(request, "galleries/add_gallery.html", {"form":form})
+        )
     else:
-        form = GalleryForm()
-    return(
-        render(request, "galleries/add_gallery.html", {"form":form})
-    )
+        return redirect(reverse('login'))
 
 
 def add_photo(request, gallery_id):

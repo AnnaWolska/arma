@@ -13,7 +13,9 @@
                  <li><div>utworzono: {{ created}}</div></li>
                  <li>zmodyfikowano: {{ modified }}</li>
                  <li>użytkownik: {{ user }}</li>
+                 {% if tournament %}
                  <li>turniej: {{ tournament }}</li>
+                 {% endif %}
             </ol>
 {#        </h5>#}
 
@@ -95,8 +97,10 @@
         <a style="color:white; text-decoration: none;" href = "{% url 'galleries:add_photo' id %}"> Edytuj galerię </a>   </h3>
 
 <br>
+<span id="delete_tournament" type="button" style="background-color:forestgreen "  class="btn btn-primary"  >   <a  style="color:white; text-decoration: none;"  href = "{% url 'galleries:galleries_list' %}"> Powrót do listy galerii </a></span>
 
-            <a href = "{% url 'galleries:galleries_list' %}"> Powrót do listy galerii </a>
+
+
         {% else %}
             <p>tylko twórca galerii może ją edytować </p>
         {% endif %}

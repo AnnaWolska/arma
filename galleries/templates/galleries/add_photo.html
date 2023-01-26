@@ -34,11 +34,19 @@
 {#                <button type="submit"#}
 {#                class = "btn btn-primary">Wyślij</button>#}
                 <hr>
-                <button id="add-form" type="button" class="btn btn-primary">Dodaj jeszczcze jeden</button>
+                <button id="add-form" type="button"  style="background-color:yellowgreen"    class="btn btn-primary">Dodaj jeszczcze jeden</button>
                 <hr>
                 <input type="submit" name="submit" value="Prześlij" class="btn btn-primary"/>
                 </form>
+            <br>
+              <span   id="delete_tournament" type="button" style="background-color:green "  class="btn btn-primary">
+        <a style="color:white; text-decoration: none;" href = "{% url 'galleries:gallery_details' gallery.id %}"> Pokaż galerię </a>   </span>
+
             </div>
+
+
+
+
         </div>
     {% endif %}
 {% endblock %}

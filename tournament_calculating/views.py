@@ -278,61 +278,41 @@ def add_participant(request, tournament_id, group_id):
         )
 
 
-
-
-
 #TODO: dodać edycję grupy
 def add_group(request, tournament_id):
     tournament = Tournament.objects.get(pk=tournament_id)
     number = 0
 
-    while number < 16:
-        if request.user.is_authenticated:
-            form = AddGroupForm(request.POST, instance=tournament)
-            groups = tournament.groups.all()
-            num_list = []
-            for n in tournament.groups.all():
-                num_list.append(n.number)
-            # many_group_numbers = []
-            # for g in groups:
-            #     many_group_numbers.append(g.number)
+    if request.user.is_authenticated:
+        form = AddGroupForm(request.POST, instance=tournament)
+        groups = tournament.groups.all()
+        num_list = []
+        for group in tournament.groups.all():
+            num_list.append(group.number)
+        many_group_numbers = []
+        for group in groups:
+            many_group_numbers.append(group.number)
 
+        if request.method == "POST" and form.is_valid():
             if request.method == "POST" and form.is_valid():
-                if request.method == "POST" and form.is_valid():
-                    # number = form.cleaned_data['number']
-
-                    color_fighter_one = form.cleaned_data['color_fighter_one']
-                    color_fighter_two = form.cleaned_data['color_fighter_two']
-                    # if groups:
-                    # if number not in many_group_numbers:
-
-                    if number:
-                        number = max(num_list)
-                    else:
-                        number = 0
-                    number += 1
-                    obj = form.save(commit=False)
-                    # obj.number += 1
-                    obj.color_fighter_one = color_fighter_one
-                    obj.color_fighter_two = color_fighter_two
-
-                    obj.save()
-                    number += 1
-                    groups.create(number=number, tournament=tournament, color_fighter_one=color_fighter_one, color_fighter_two=color_fighter_two)
-                    messages.success(request, 'grupa dodana.')
-                    return HttpResponseRedirect(reverse(
-                        "tournaments:tournament_details",
-                        args=[tournament_id]))
-
+                color_fighter_one = form.cleaned_data['color_fighter_one']
+                color_fighter_two = form.cleaned_data['color_fighter_two']
+                if groups:
+                    number = max(num_list) + 1
+                    print("sa grupy",number)
                 else:
-                    form = AddGroupForm
-                    return (
-                        render(request, "add_group.html", context={
-                            'form': form,
-                            'tournament_id': tournament_id,
+                    print("nie ma grup",number)
+                    number = 1
 
-                        })
-                    )
+                obj = form.save(commit=False)
+                obj.color_fighter_one = color_fighter_one
+                obj.color_fighter_two = color_fighter_two
+                obj.save()
+                groups.create(number=number, tournament=tournament, color_fighter_one=color_fighter_one, color_fighter_two=color_fighter_two)
+                messages.success(request, 'grupa dodana.')
+                return HttpResponseRedirect(reverse(
+                    "tournaments:tournament_details",
+                    args=[tournament_id]))
             else:
                 form = AddGroupForm
                 return (
@@ -341,6 +321,14 @@ def add_group(request, tournament_id):
                         'tournament_id': tournament_id,
                     })
                 )
+        else:
+            form = AddGroupForm
+            return (
+                render(request, "add_group.html", context={
+                    'form': form,
+                    'tournament_id': tournament_id,
+                })
+            )
 
 
 # TODO: jeszcze for jeśli na początku jest taki sam co ostatnie, bo czasem się powtórzy z przodu

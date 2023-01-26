@@ -40,10 +40,10 @@ class ContactForm(forms.Form):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['user', "bio"]
+        fields = [  "bio"]
 
     labels = {
-        "user": "nazwa użytkownika:",
+        # "name": "nazwa użytkownika:",
         "bio": "o sobie:",
     }
 
