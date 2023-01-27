@@ -73,40 +73,51 @@ class AddParticipantForm(forms.ModelForm):
     participants = forms.ModelChoiceField(
         queryset=Participant.objects.all(),
         # widget=autocomplete.Select)
-        widget=autocomplete.ModelSelect2Multiple(url='tournament_calculating:participant-autocomplete'
-                                                 ))
-    # participants = forms.ModelChoiceField(queryset=Participant.objects.all(), required=False)
+        widget=autocomplete.ModelSelect2Multiple(url='tournament_calculating:participant-autocomplete'))
 
-
-    class Meta:
-    #     model = Participant
-    #     fields = ["name"]
-    #     labels = {
-    #         "name": "uczestnik",
-    #     }
+    # class Meta:
     #     model = Group
     #     fields =["participants"]
     #     labels = {
     #         "participants": "uczestnicy",
+    #     }
+    #     def __init__(self, *args, **kwargs):
+    #         super().__init__(*args, **kwargs)
+    #         self.helper = FormHelper()
+    #         self.helper.form_method = 'post'
+    #         self.helper.form_action = 'tournament_calculating: add_participant'
+    #         self.helper.layout = Layout(
+    #             Fieldset(
+    #                 'Dodaj uczestnika',
+    #             ),
+    #             ButtonHolder(
+    #                 Submit('submit', 'Dodaj', css_class='btn btn-primary'),
+    #                 css_class="d-flex justify-content-end"
+    #             )
+    #         )
+    class Meta:
         model = Group
-        fields =["participants"]
-        labels = {
-            "participants": "uczestnicy",
-        }
+        fields = ['participants']
+        labels = {"participants": 'uczestnicy'}
+
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.form_method = 'post'
-            self.helper.form_action = 'tournament_calculating: add_participant'
+            self.helper.form_action = 'tournament_calculating: add_group'
             self.helper.layout = Layout(
                 Fieldset(
-                    'Dodaj uczestnika',
+                    'Dodaj grupę',
                 ),
                 ButtonHolder(
                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),
                     css_class="d-flex justify-content-end"
                 )
             )
+
+
+
+
 
 
 class AddRoundsForm(forms.ModelForm):
