@@ -4,7 +4,7 @@ from sorl.thumbnail import ImageField
 from tournaments.models import Tournament
 # from finals.models import Finalist
 
-#dodać relację do user
+
 class Participant(models.Model):
     user = models.OneToOneField("auth.User", on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
@@ -16,7 +16,16 @@ class Participant(models.Model):
     points_average = models.FloatField(null=True, default=0)
     round_average = models.FloatField(null=True, default=0)
     amount_rounds = models.PositiveSmallIntegerField(null=True, default=0)
-
+    tournaments_points = models.PositiveSmallIntegerField(null=True, default=0)
+    tournaments_average = models.PositiveSmallIntegerField(null=True, default=0)
+    tournaments_wins = models.PositiveSmallIntegerField(null=True, default=0)
+    tournaments_losses = models.PositiveSmallIntegerField(null=True, default=0)
+    tournaments_doubles = models.PositiveSmallIntegerField(null=True, default=0)
+    tournaments_hands = models.PositiveSmallIntegerField(null=True, default=0)
+    tournaments_disqualifications = models.PositiveSmallIntegerField(null=True, default=0)
+    tournaments_injuries = models.PositiveSmallIntegerField(null=True, default=0)
+    tournaments_surrenders = models.PositiveSmallIntegerField(null=True, default=0)
+    tournaments_opponent_injuries = models.PositiveSmallIntegerField(null=True, default=0)
 
     def __str__(self):
         return f"{self.name}"
@@ -72,17 +81,32 @@ class Group(models.Model):
         (9, '9'),
         (10, '10'),
     )
-
     number = models.PositiveSmallIntegerField( choices=GR_NUMBER, null=False, default=0)
     tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="groups")
     participants = models.ManyToManyField('Participant', related_name='groups')
+    strugglers = models.ManyToManyField('Participant', through='Participation')
+    # strugglers = models.ManyToManyField('Participant')
     color_fighter_one = models.CharField(max_length=30, choices=COLOR, null=True)
     color_fighter_two = models.CharField(max_length=30, choices=COLOR, null=True)
     number_outgoing = models.CharField(max_length=2, choices=NUMBER, null=True, default=0)
     # outgoings =
 
     def __str__(self):
-        return f"{self.number} {self.tournament} {self.participants} {self.color_fighter_one} {self.color_fighter_two}"
+        return f"{self.number} {self.tournament}  {self.color_fighter_one} {self.color_fighter_two}"
+
+    class Participation(models.Model):
+        participant = models.ForeignKey("Participant",on_delete=models.CASCADE)
+        group = models.ForeignKey("Group",on_delete=models.CASCADE)
+        tournament_points = models.PositiveSmallIntegerField(null=True, default=0)
+        tournament_average = models.PositiveSmallIntegerField(null=True, default=0)
+        tournament_wins = models.PositiveSmallIntegerField(null=True, default=0)
+        tournament_losses = models.PositiveSmallIntegerField(null=True, default=0)
+        tournament_doubles = models.PositiveSmallIntegerField(null=True, default=0)
+        tournament_hands = models.PositiveSmallIntegerField(null=True, default=0)
+        tournament_disqualifications = models.PositiveSmallIntegerField(null=True, default=0)
+        tournament_injuries = models.PositiveSmallIntegerField(null=True, default=0)
+        tournament_surrenders = models.PositiveSmallIntegerField(null=True, default=0)
+        tournament_opponent_injuries = models.PositiveSmallIntegerField(null=True, default=0)
 
     class Meta:
         verbose_name = "Grupa"

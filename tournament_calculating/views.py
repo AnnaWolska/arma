@@ -10,6 +10,10 @@ from django.shortcuts import render, get_object_or_404,redirect
 from tournaments.models import Tournament
 from dal import autocomplete
 
+# dostęp m2m
+# Publication.objects.get(id=4).article_set.all()
+# p2.article_set.clear()
+
 from tournament_calculating.models import Group, Fight, Participant, Round
 from tournament_calculating.forms import (
     AddParticipantForm,
@@ -484,6 +488,7 @@ def add_rounds(request, group_id):
 
 
 def add_points (request, group_id, fight_id, round_id):
+    # pass
     group = Group.objects.get(pk=group_id)
     fight_rounds = Round.objects.filter(fight_id=fight_id)
     fight = Fight.objects.get(pk=fight_id)
@@ -600,8 +605,9 @@ to przechodzi i nie zwiększa countera, jeśli remis jest na końcu do zwiększa
 dodać dodatkowe punkty dla tych co nie walczyli z kontuzjowanymi 
 i zdyskwalifikowanymi i poddanymi i nieobecnymi
 """
-
+#
 def group_summary(request, group_id):
+    # pass
     group = Group.objects.get(pk=group_id)
     participants = group.participants.all()
     group_average_points = []
@@ -625,7 +631,7 @@ def group_summary(request, group_id):
     lista participantów i lista punktów
     jeśli pierwszy z listy prtcp ma tyle punktów co max z listy punktów:
     ładuję go do fianl list, jeśli nie sprawdzam to następny
-    pobiera z formualrza ile uczetników z grupy ma przejść do finału, 
+    pobiera z formualrza ile uczetników z grupy ma przejść do finału,
     kasuje tych, co już byli wytopowani, jeśli jest powtórzone działanie
     """
     if request.user.is_authenticated:
@@ -758,7 +764,7 @@ def group_summary(request, group_id):
                 i = 0
                 """
                 dopóki ilość foinalistów jest mniejsza niż ilość uczestników przechodzących do finału,
-                podana w formularzu 
+                podana w formularzu
                 """
                 while len(finalists_list) < int(counter):
                     """
@@ -818,7 +824,7 @@ def group_summary(request, group_id):
                             random.shuffle(list_of_participants)
                 finalists = finalists_list
                 """
-                jeśli jest remis na końcu, counter (ilość finalistów) musi się zwiększyć 
+                jeśli jest remis na końcu, counter (ilość finalistów) musi się zwiększyć
                 o tyle ile jest uczestników z tym samym wynikiem
                 """
 
