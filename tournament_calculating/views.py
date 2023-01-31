@@ -117,7 +117,6 @@ def fight_details(request, group_id, fight_id):
         participants_ids.append(p.id)
     fights = group.fights.all()
     first_fight = fights.first()
-    # ff = fights.filter(pk=group_id)
     rounds = 0
     iter_rounds = []
     for i in range(rounds):
@@ -174,7 +173,7 @@ def create_participant(request):
         if request.method == "POST":
             form = CreateParticipantForm(request.POST, request.FILES)
             if form.is_valid():
-                instance = form.save()
+                instance = form.save(commit=False)
                 instance.user = request.user
                 instance.save()
             return HttpResponseRedirect(reverse("tournament_calculating:participants_list"))
@@ -189,56 +188,26 @@ def create_participant(request):
 
 class ParticipantAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        # if not self.request.user.is_authenticated:
-        #     return Participant.objects.none()
         qs = Participant.objects.all()
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
         return qs
 
 
-# >>> new_list = [obj1, obj2, obj3]
-# >>> e.related_set.set(new_list)
 def add_participant(request, tournament_id, group_id):
     group = Group.objects.get(pk=group_id)
-    # tournament = Tournament.objects.get(pk=tournament_id)
     if request.user.is_authenticated:
         if request.method == "POST":
             group = Group.objects.get(pk=group_id)
-            # tournament = Tournament.objects.get(pk=tournament_id)
-
-            # participants = group.participants.all()
-            # participants = Group.participants.all()
-            # participant_list = []
-            # for participant in participants.all():
-            #     participant_list.append(participant)
-            # print("participant_list",participant_list)
-            # tournament = Tournament.objects.get(pk=tournament_id)
             form = AddParticipantForm(request.POST, request.FILES, instance=group)
-            # print("0 form", form, "koniec")
-            print("pa form")
-            # print("1 form.cleaned_data",form.cleaned_data)
-            # print("3 group.participants",group.participants.all())
             if form.is_valid():
-                print("2 form is valid")
-                # instance = form.save(commit=False)
                 instance = form.save()
-                print("44 participant po saveie", instance)
-                print("55 participant.tournamnets", instance.tournamnets)
-                print("66 participant.tournamnets2", instance.tournamnets)
-                group.participants.add(instance)
-                group.save()
-                form.save_m2m()
-                print("77 group.participants2", group.participants)
-            else:
-                print("!!!!!form is not valid")
-
-            return HttpResponseRedirect(reverse(
-                "tournament_calculating:group_details",
-                args=[group_id])
+                return HttpResponseRedirect(reverse(
+                    "tournament_calculating:group_details",
+                    args=[group_id])
                 )
         else:
-            form = AddParticipantForm
+            form = AddParticipantForm(instance=group)
         return (
             render(request, "add_participant.html", context={
                 'form': form,
@@ -269,9 +238,7 @@ def add_group(request, tournament_id):
                 color_fighter_two = form.cleaned_data['color_fighter_two']
                 if groups:
                     number = max(num_list) + 1
-                    print("sa grupy",number)
                 else:
-                    print("nie ma grup",number)
                     number = 1
 
                 obj = form.save(commit=False)
@@ -348,30 +315,24 @@ def draw_fights(request, group_id):
             else:
                 random.shuffle(result)
                 # jeśli został jeden element to go wstawię na początek
-                print("wstawilem na początek")
                 if len(result_to_show) ==  int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 1):
                     condition_one = result[0] != result_to_show[0][0]
                     condition_two = result[0] != result_to_show[0][1]
                     # ale musi się nie powtarzać z tym początku żaden zawodnik w elemencie wciskanym:
                     if condition_one and condition_two:
                         result_to_show.insert(0,result[0])
-                        print("wstawilem na pierwsze")
                     else:
                         result_to_show.insert(1, result[0])
-                        print("WSATAWILEM NA DRUGIE :D")
                     break
                 # jeśli zostały dwa elementy i w każdym jakiś zawodnik się powtarza:
                 if len(result_to_show) ==  int(((len(list(group.participants.all()))  * (len(list(group.participants.all())) -1)  ) /2) - 2):
-                    print("NOOOOO trzeba dopisać, co jak zostaną dwa elementy")
                     result_to_show.insert(0, result[0])
                     result_to_show.insert(0, result[1])
                     break
                 # jeśli wszystkie się wstawiły dobrze i nic nie zostało:
                 if len(result_to_show) == ((len(list(group.participants.all())) * len(list(group.participants.all()))) - 1) / 2:
-                    print("nic nie wstawiałem wyszło za pierwszym razem")
                     break
     else:
-        print("warunek że walk > 6 nie ruszył, nie da się zmieszać")
         for el in result:
             result_to_show.append(el)
             random.shuffle(result_to_show)
@@ -453,22 +414,12 @@ def delete_fights(request, tournament_id, group_id):
     if request.user.is_authenticated:
         if request.method == "POST":
             tournament = Tournament.objects.get(pk=tournament_id)
-            # group = Group.objects.get(pk=group_id)
             if request.user == tournament.user:
                 fights.delete()
                 for participant in participants:
-                    print("czy działa for")
-                    # for fight in fights:
-                    #     print("czy działa for")
-                    #     if participant.id == fight.fighter_one_id or participant.id == fight.fighter_two_id:
-                    #         participant.group_points = 0
-                    #         print("participant.group_points ni e usuwa",participant.group_points)
-                    #         participant.points_average = 0
-                    #         participant.save()
                     participant.group_points = 0
                     participant.points_average = 0
                     participant.save()
-
                 return HttpResponseRedirect(reverse("tournament_calculating:group_details",
                                                     args=[group_id]))
         else:
@@ -665,7 +616,6 @@ def group_summary(request, group_id):
                 maximum_amount_prtcp_rounds.append(participant)
     # to maksymalna ilość walk w turnieju
     maximum_amount_prtcp_rounds = int(len(maximum_amount_prtcp_rounds) / len(participants))
-    print(" 0 maksymalna ilość starć", maximum_amount_prtcp_rounds)
     list_of_participants = []
     for p in participants:
         list_of_participants.append(p)
@@ -685,23 +635,16 @@ def group_summary(request, group_id):
                 instance = form.save()
                 #----------------1-----------------------
                 for participant in participants:
-                    print("")
                     list_participant_rounds = []
                     #group_average_points (to potrzebne na końcu)
                     group_average_points.append(participant.points_average)
                     for rnd in rounds:
-                        print(participant.name,"1 len(str(rnd.points_fighter_one))",len(str(rnd.points_fighter_one)))
-                        print(participant.name,"2 rnd.points_fighter_one", rnd.points_fighter_one)
-                        print(participant.name,"3 len(str(rnd.points_fighter_two))",len(str(rnd.points_fighter_two)))
-                        print(participant.name,"4 rnd.points_fighter_two",rnd.points_fighter_two)
                         cond1 = len(str(rnd.points_fighter_one)) < 3 and len(str(rnd.points_fighter_two)) < 2
-                        print(participant.name,"5 cond1",cond1)
                         # DODAWANIE ILOŚCI RUND DO PARTICIPANTÓW:
                         # jeśli zawodnik walczy jako pierwszy albo drugi w którejś z rund i w tej rundzie obaj mają przydzielone punkty:
                         if participant == rnd.fighter_one and cond1 or participant == rnd.fighter_two and cond1 :
                             list_participant_rounds.append(rnd.id)
                             participant.amount_rounds = len(list_participant_rounds)
-                            print("6", participant.name, "ilość rund:",list_participant_rounds, participant.amount_rounds)
                             participant.save()
 
                 #-------------------------2-----------------------------------------
@@ -744,15 +687,12 @@ def group_summary(request, group_id):
 
                             # jeśli uczestnik nie ma w rundach pierwszych w tej grupie kontuzji tp...
                             if not "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.rounds_of_participant_one.filter(group_id=group_id):
-                                for x in participant.rounds_of_participant_one.filter(group_id=group_id):
-                                    print("X", x.points_fighter_one, not "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.rounds_of_participant_one.filter(group_id=group_id))
                                 # jeśli zawodnnik jest pierwszym walczącym i nie ma punktów w rundzie,
                                 # ale ma jakieś punkty w grupie i jakąś ilość rund, w których wziął udział
                                 if participant == rnd.fighter_one \
                                         and rnd.points_fighter_one is None \
                                         and participant.group_points is not None \
                                         and participant.amount_rounds != 0:
-                                    print("7",participant.name, "ilość rund i średnia", participant.amount_rounds, participant.round_average)
 
                                     participant.round_average = round(round(((round((maximum_amount_prtcp_rounds / participant.amount_rounds),2)) * participant.group_points), 2) / maximum_amount_prtcp_rounds, 2)
                                     if type(participant.round_average) == int:
@@ -765,7 +705,6 @@ def group_summary(request, group_id):
                                             participant.save()
                                     rnd.points_fighter_one = participant.round_average
                                     rnd.points_fighter_two = 0
-                                    print("8 jedynka", participant.name, "punkt z rund:", rnd.points_fighter_one, rnd.points_fighter_two)
                                     rnd.save()
 
                             else:
@@ -794,7 +733,6 @@ def group_summary(request, group_id):
                                             participant.save()
                                     rnd.points_fighter_two = participant.round_average
                                     rnd.points_fighter_one = 0
-                                    print(" 9 dwójka",participant.name, "punkt z rund:", rnd.points_fighter_one, rnd.points_fighter_two)
                                     rnd.save()
                             else:
                                 if "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.rounds_of_participant_two.filter(group_id=group_id) \
@@ -806,15 +744,6 @@ def group_summary(request, group_id):
                             """
                             może to musi być zamienione na jeden warunek po participant albo walczy jako drugi albo jako pierwszy...
                             """
-                        print("9", participant.name, ", rundy:", participant.amount_rounds, ", punkty:",
-                              participant.group_points, ", średnia:", participant.round_average)
-
-                print("")
-                for p in participants:
-                    print("10 imię:", p.name, ", ilość rund", p.amount_rounds, ", punkty cząstkowe", p.group_points, ", średnia rundowa", p.round_average, ", punkty wyjściowe", p.points_average)
-                for r in rounds:
-                    print(r.points_fighter_one, r.fighter_one.name)
-                    print(r.points_fighter_two, r.fighter_two.name)
 
                 counter = 0
                 counter = group.number_outgoing
