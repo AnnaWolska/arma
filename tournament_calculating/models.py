@@ -83,20 +83,22 @@ class Group(models.Model):
     )
     number = models.PositiveSmallIntegerField( choices=GR_NUMBER, null=False, default=0)
     tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="groups")
-    participants = models.ManyToManyField('Participant', related_name='groups')
-    strugglers = models.ManyToManyField('Participant', through='Participation')
-    # strugglers = models.ManyToManyField('Participant')
     color_fighter_one = models.CharField(max_length=30, choices=COLOR, null=True)
     color_fighter_two = models.CharField(max_length=30, choices=COLOR, null=True)
     number_outgoing = models.CharField(max_length=2, choices=NUMBER, null=True, default=0)
     # outgoings =
+    participants = models.ManyToManyField('Participant', related_name='groups')
+    strugglers = models.ManyToManyField('Participant', through='ParticipantGroup',through_fields=("group","participant"))
+    # tu w każdej grupię dodaję uczesnika do statystyk
+    # strugglers = models.ManyToManyField('Participant', through='Participation',
+    #                                     through_fields="struggler")
 
     def __str__(self):
         return f"{self.number} {self.tournament}  {self.color_fighter_one} {self.color_fighter_two}"
 
-    class Participation(models.Model):
-        participant = models.ForeignKey("Participant",on_delete=models.CASCADE)
-        group = models.ForeignKey("Group",on_delete=models.CASCADE)
+    class ParticipantGroup(models.Model):
+        participant = models.ForeignKey("Participant",on_delete=models.CASCADE, null=True)
+        group = models.ForeignKey("Group",on_delete=models.CASCADE, null=True)
         tournament_points = models.PositiveSmallIntegerField(null=True, default=0)
         tournament_average = models.PositiveSmallIntegerField(null=True, default=0)
         tournament_wins = models.PositiveSmallIntegerField(null=True, default=0)
@@ -107,6 +109,9 @@ class Group(models.Model):
         tournament_injuries = models.PositiveSmallIntegerField(null=True, default=0)
         tournament_surrenders = models.PositiveSmallIntegerField(null=True, default=0)
         tournament_opponent_injuries = models.PositiveSmallIntegerField(null=True, default=0)
+
+        class Meta:
+            unique_together = [("participant", "group")]
 
     class Meta:
         verbose_name = "Grupa"
@@ -130,7 +135,6 @@ class Fight(models.Model):
 
     order = models.PositiveSmallIntegerField(null=True)
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="fights", null=True)
-    # rounds = models.PositiveSmallIntegerField(null=True)
     rounds = models.PositiveSmallIntegerField(choices=ROUNDS_NUMBER, null=False, default=0)
     tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="fights", null=True)
     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="fighters_one", null=True )
@@ -160,7 +164,6 @@ class Round(models.Model):
         ('8', '8'),
         ('9', '9'),
         ('10', '10'),
-        # ('0 dubl', "0 dubl"),
         ('kontuzja', 'kontuzja'),
         ('dyskwalifikacja', 'dyskwalifikacja'),
         ('poddanie', 'poddanie'),
@@ -169,18 +172,11 @@ class Round(models.Model):
     )
     order = models.PositiveSmallIntegerField(null=True)
     fight = models.ForeignKey("Fight", on_delete=models.CASCADE, related_name="rounds_of_fight", null=True)
-    # result_fighter_one = models.CharField(max_length=1, choices=STATUS, null=True)
-    # result_fighter_two = models.CharField(max_length=1, choices=STATUS, null=True)
-    # points_fighter_one = models.PositiveSmallIntegerField(null=True)
-    # points_fighter_two = models.PositiveSmallIntegerField(null=True)
     points_fighter_one = models.CharField(max_length=20, choices=STATUS, null=True)
     points_fighter_two = models.CharField(max_length=20, choices=STATUS, null=True)
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="rounds_of_group", null=True)
     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_one", null=True )
     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_two", null=True )
-    # numberfield , postsave
-    # resolved_fighter_one = models.BooleanField(default=False, null=True)
-    # resolved_fighter_two = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return f"{self.order} {self.fight} \
