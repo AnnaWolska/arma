@@ -118,16 +118,26 @@
                     <hr>
                     <h3>
                         Przejdź do galerii ->
-                            {% for gallery in galleries %}
-                                <a href = "{% url 'galleries:gallery_details' gallery.id %}">{{ gallery.title }}</a>
-                                    {% endfor %}
+
+                        <h3   id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
+        <a style="color:white; text-decoration: none;" href = "{% url 'galleries:add_gallery' %}"> Dodaj galerię </a>   </h3>
+
+
+
+                                <ol>
+                                {% for gallery in galleries %}
+                                <li>   <a href = "{% url 'galleries:gallery_details' gallery.id %}">{{ gallery.title }}</a></li>
+                                {% endfor %}
+                                </ol>
+
+
                     </h3>
                     <hr>
                     <h3>
                         Dyskusja:
                     </h3>
                     <br>
-                    <button id="delete_tournament" type="button" style="background-color:lightseagreen; "  class="btn btn-primary">
+                    <button id="delete_tournament" type="button" style="background-color:yellowgreen; "  class="btn btn-primary">
                         <a style="color:white;" href = "{% url 'tournaments:add_post' tournament_id %}">
                             Dodaj post
                         </a>
@@ -195,7 +205,7 @@
                         </div>
                         {% endfor %}
                         <br>
-                        <button id="delete_tournament" type="button" style="background-color:lightseagreen; "  class="btn btn-primary">
+                        <button id="delete_tournament" type="button" style="background-color:yellowgreen; "  class="btn btn-primary">
                             <a style="color:white;" href = "{% url 'tournaments:add_post' tournament_id %}">
                                 Dodaj post
                             </a>

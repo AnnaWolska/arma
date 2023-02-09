@@ -6,19 +6,34 @@ from tournament_calculating.models import Participant
 
 
 class Finalist(models.Model):
-
-    participant = models.OneToOneField(
-        "tournament_calculating.Participant",
-        on_delete=models.CASCADE,
-        primary_key=True
-    )
+    participants = models.ManyToManyField('tournament_calculating.Participant', through='ParticipantFinalist')
     final_points = models.PositiveSmallIntegerField(null=True, default=0)
+    test_points = models.PositiveSmallIntegerField(null=True, default=0)
     final_points_average = models.PositiveSmallIntegerField(null=True, default=0)
     group = models.ForeignKey("tournament_calculating.Group", on_delete=models.CASCADE, related_name="finalists",
                               null=True)
 
     def __str__(self):
-        return f"{self.final_points} {self.group}  {self.final_points_average} {self.participant} "
+        return f"{self.final_points} {self.group}  {self.final_points_average} "
+
+    class Meta:
+        verbose_name = "Finalista"
+        verbose_name_plural = "Finaliści"
+
+
+class ParticipantFinalist(models.Model):
+    participant = models.ForeignKey("tournament_calculating.Participant",on_delete=models.CASCADE, null=True)
+    finalist = models.ForeignKey("Finalist",on_delete=models.CASCADE, null=True)
+    final_points = models.PositiveSmallIntegerField(null=True, default=0)
+    final_average = models.PositiveSmallIntegerField(null=True, default=0)
+    final_wins = models.PositiveSmallIntegerField(null=True, default=0)
+    final_losses = models.PositiveSmallIntegerField(null=True, default=0)
+    final_doubles = models.PositiveSmallIntegerField(null=True, default=0)
+    final_hands = models.PositiveSmallIntegerField(null=True, default=0)
+    final_disqualifications = models.PositiveSmallIntegerField(null=True, default=0)
+    final_injuries = models.PositiveSmallIntegerField(null=True, default=0)
+    final_surrenders = models.PositiveSmallIntegerField(null=True, default=0)
+    final_opponent_injuries = models.PositiveSmallIntegerField(null=True, default=0)
 
 
 class Stage(models.Model):
@@ -56,8 +71,7 @@ class FinalFight(models.Model):
     final_fighter_two = models.ForeignKey('tournament_calculating.Participant', on_delete=models.CASCADE, related_name="final_fighters_two", null=True )
     final_fighter_one_points = models.PositiveSmallIntegerField(null=True, default=0)
     final_fighter_two_points = models.PositiveSmallIntegerField(null=True, default=0)
-    resolved = models.BooleanField(default=False , null=True)
-
+    resolved = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return f"{self.stage} {self.rounds} {self.tournament} {self.final_fighter_one} {self.final_fighter_two}"
@@ -110,18 +124,13 @@ class FinalRound(models.Model):
         verbose_name_plural = "Rundy finałowe"
 
 
-
 class Winner(models.Model):
     MEDALS = (
     ('złoto','złoto' ),
     ('srebro','srebro' ),
     ('brąz','brąz' ),
     )
-    participant = models.OneToOneField(
-    Participant,
-    on_delete=models.CASCADE,
-    primary_key=True,
-    )
+    participant = models.ManyToManyField('tournament_calculating.Participant', related_name='medals')
     tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, related_name="winners")
     medal = models.CharField(max_length=20, choices=MEDALS, null=True)
 

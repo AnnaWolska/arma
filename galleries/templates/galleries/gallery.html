@@ -104,6 +104,21 @@
         {% else %}
             <p>tylko twórca galerii może ją edytować </p>
         {% endif %}
+
+    <span id="delete_tournament" type="button" style="background-color:yellowgreen "  class="btn btn-primary"  >   <a  style="color:white; text-decoration: none;"  href = "{% url 'tournaments:tournament_details' tournament_id %}"> Powrót do turnieju </a></span>
+
+{#                                {% if tournament.image %}#}
+{#                            {% thumbnail tournament.image "100x100" as im %}#}
+{#                            <img src="{{ im.url }}" alt="zdj">#}
+{#                            {% endthumbnail %}#}
+{#                            {% endif %}#}
+
+
+
+
+                    </a>
+
+
     </h5>
   </div>
 {% endblock %}

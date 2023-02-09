@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404,redirect
-from tournaments.models import Tournament
+from tournaments.models import Tournament, Organizer
 from dal import autocomplete
 
 # dostęp m2m
@@ -34,6 +34,10 @@ def participants_list(request):
     participants_register= paginator.get_page(page_number)
     participants_ids = []
     participants_user_ids = []
+    users_organizers = []
+    organizers = Organizer.objects.all()
+    for organizer in organizers:
+        users_organizers.append(organizer.user_id)
     for participant in participants:
         participants_user_ids.append(participant.user_id)
     for participant in participants:
@@ -41,7 +45,8 @@ def participants_list(request):
     context = {
                'participants_register': participants_register,
                'participants_ids': participants_ids,
-               'participants_user_ids': participants_user_ids
+               'participants_user_ids': participants_user_ids,
+                'users_organizers': users_organizers
                }
     return render(request, "participants_list.html", context)
 
@@ -173,6 +178,10 @@ def fight_details(request, group_id, fight_id):
 
 
 def create_participant(request):
+    organizers = Organizer.objects.all()
+    users_organizers = []
+    for organizer in organizers:
+        users_organizers.append(organizer.user_id)
     if request.user.is_authenticated:
         if request.method == "POST":
             form = CreateParticipantForm(request.POST, request.FILES)
@@ -186,6 +195,7 @@ def create_participant(request):
         return (
             render(request, "create_participant.html", context={
                 'form': form,
+                'users_organizers':users_organizers
             })
         )
 
@@ -596,13 +606,13 @@ def add_points (request, group_id, fight_id, round_id):
 
 """
 jeśli któryś z uczestników jest walczącym jeden w rundzie, gdzie walczącym dwa jest uczestnik,
-który ma w jakiejś rundzie: kontuzję, dyskwalifikację lub wycofanie, to wtedy ten uczestnik ma punkty średnie 
+który ma w jakiejś rundzie: kontuzję, dyskwalifikację lub wycofanie, to wtedy ten uczestnik ma punkty średnie
 równe tym ze wzoru
 """
 """
 jeśli remis jest gdzieś na początku lub w środku,
 to przechodzi i nie zwiększa countera, jeśli remis jest na końcu do zwiększa,
-dodać dodatkowe punkty dla tych co nie walczyli z kontuzjowanymi 
+dodać dodatkowe punkty dla tych co nie walczyli z kontuzjowanymi
 i zdyskwalifikowanymi i poddanymi i nieobecnymi
 """
 #

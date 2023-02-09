@@ -10,7 +10,7 @@
 </h3>
 
 {#{{ request.user.id }}{{ participants_user_ids}}#}
-                {% if request.user.id not in participants_user_ids %}
+                {% if request.user.id not in participants_user_ids or request.user.id in users_organizers %}
 {#                    {{ request.user.id}} {{ participants_user_ids}}#}
 
                 <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
@@ -18,7 +18,7 @@
                    dodaj uczestnika
                 </a>
                  </span>
- (jeden użytkownik aplikacji może dodać jednego uczestnika turniejów)
+ (użytkownik aplikacji, o ile nie jest twórcą profilu organizatora, może dodać siebie do uczestników turniejów (jeden użytkownik może mieć jeden profil)
                      {% endif %}
 
 

@@ -27,6 +27,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(Fight)
 class FightAdmin(admin.ModelAdmin):
+
     list_display = ["id", "get_number", "rounds", "get_name", "get_name2", "get_tournament_name"]
 
     def get_number(self, obj):
