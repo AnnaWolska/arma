@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  db:
+    image: postgres
+    volumes:
+#      utworzy katalod na dysku data/db i w nim będzie przechowywać to co w kontenerze?
+#      - trzeba dodać do gitignore
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+#      - POSTGRES_PAQSSWORD=postgres
+      - POSTGRES_PAQSSWORD=arma2022
+  web:
+#    bild zbuguje na podstawie Dokerfile tu
+    build: .
+#    nasłuchuje na dowolnym adresie IP:
+    command: python manage.py runserver 0.0.0.0:8000
+#    kopiuje wszystko do dockera do katalogu /code, każda zmiana lokalna odzwierciedli się na kontenerze:
+    volumes:
+      - .:/code
+#      na lokalnym komputerzez otwartego portu 8000 wszystko idzie do portu 8000 na kontenerze?
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGERS_NAME=arma_app_db
+      - POSTGRES_USER=arma_app_db
+      - POSTGRES_PASSWORD=arma2022
+    depends_on:
+      - db

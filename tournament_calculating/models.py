@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 from tournaments.models import Tournament
-# from finals.models import Finalist
 
 
 class Participant(models.Model):
@@ -11,7 +10,6 @@ class Participant(models.Model):
     school = models.CharField(max_length=500)
     image = ImageField(upload_to="tournament_calculating/images/%Y/%m/%d/", blank=True, null=True)
     tournaments = models.ManyToManyField('tournaments.Tournament', related_name='participants')
-    # participant_finals = models.ManyToManyField('finals.Finalist', related_name='participants')
     group_points = models.PositiveSmallIntegerField(null=True, default=0)
     points_average = models.FloatField(null=True, default=0)
     round_average = models.FloatField(null=True, default=0)
@@ -42,18 +40,28 @@ class Participant(models.Model):
 
 class Group(models.Model):
     COLOR = (
-        ('lemonchiffon','żółty' ),
-        ('lightgreen', 'zielony'),
-        ('powderblue', 'niebieski'),
-        ('coral','czerwony' ),
-        ('darkorange', 'pomarańczowy'),
-        ('thistle', 'fioletowy'),
-        ('darkblue', 'granatowy'),
-        ('darkslategray', 'czarny'),
-        ('floralwhite', 'biały'),
-        ('peru', 'brązowy'),
-        ('pink','różowy' ),
-        ('darkgrey','szary' )
+        # ('lemonchiffon','żółty' ),
+        # ('lightgreen', 'zielony'),
+        # ('powderblue', 'niebieski'),
+        # ('coral','czerwony' ),
+        # ('darkorange', 'pomarańczowy'),
+        # ('thistle', 'fioletowy'),
+        # ('darkblue', 'granatowy'),
+        # ('darkslategray', 'czarny'),
+        # ('floralwhite', 'biały'),
+        # ('peru', 'brązowy'),
+        # ('pink','różowy' ),
+        # ('darkgrey','szary' )
+
+        ('red', 'red'),
+        ('blue', 'blue'),
+        ('green', 'green'),
+        ('yellow', 'yellow'),
+        ('orange', 'orange)'),
+        ('pink', 'pink'),
+        ('white', 'white'),
+        ('black', 'black)'),
+        ('pink', 'pink'),
     )
     NUMBER = (
         ('0', '0'),
@@ -86,36 +94,29 @@ class Group(models.Model):
     color_fighter_one = models.CharField(max_length=30, choices=COLOR, null=True)
     color_fighter_two = models.CharField(max_length=30, choices=COLOR, null=True)
     number_outgoing = models.CharField(max_length=2, choices=NUMBER, null=True, default=0)
-    # outgoings =
-    participants = models.ManyToManyField('Participant', related_name='groups')
-    strugglers = models.ManyToManyField('Participant', through='ParticipantGroup',through_fields=("group","participant"))
-    # tu w każdej grupię dodaję uczesnika do statystyk
-    # strugglers = models.ManyToManyField('Participant', through='Participation',
-    #                                     through_fields="struggler")
+    participants = models.ManyToManyField('Participant', through='ParticipantGroup')
 
     def __str__(self):
         return f"{self.number} {self.tournament}  {self.color_fighter_one} {self.color_fighter_two}"
 
-    class ParticipantGroup(models.Model):
-        participant = models.ForeignKey("Participant",on_delete=models.CASCADE, null=True)
-        group = models.ForeignKey("Group",on_delete=models.CASCADE, null=True)
-        tournament_points = models.PositiveSmallIntegerField(null=True, default=0)
-        tournament_average = models.PositiveSmallIntegerField(null=True, default=0)
-        tournament_wins = models.PositiveSmallIntegerField(null=True, default=0)
-        tournament_losses = models.PositiveSmallIntegerField(null=True, default=0)
-        tournament_doubles = models.PositiveSmallIntegerField(null=True, default=0)
-        tournament_hands = models.PositiveSmallIntegerField(null=True, default=0)
-        tournament_disqualifications = models.PositiveSmallIntegerField(null=True, default=0)
-        tournament_injuries = models.PositiveSmallIntegerField(null=True, default=0)
-        tournament_surrenders = models.PositiveSmallIntegerField(null=True, default=0)
-        tournament_opponent_injuries = models.PositiveSmallIntegerField(null=True, default=0)
-
-        class Meta:
-            unique_together = [("participant", "group")]
-
     class Meta:
         verbose_name = "Grupa"
         verbose_name_plural = "Grupy"
+
+
+class ParticipantGroup(models.Model):
+    participant = models.ForeignKey("Participant",on_delete=models.CASCADE, null=True)
+    group = models.ForeignKey("Group",on_delete=models.CASCADE, null=True)
+    tournament_points = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_average = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_wins = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_losses = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_doubles = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_hands = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_disqualifications = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_injuries = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_surrenders = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_opponent_injuries = models.PositiveSmallIntegerField(null=True, default=0)
 
 
 class Fight(models.Model):
