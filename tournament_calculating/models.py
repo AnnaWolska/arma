@@ -40,28 +40,26 @@ class Participant(models.Model):
 
 class Group(models.Model):
     COLOR = (
-        # ('lemonchiffon','żółty' ),
-        # ('lightgreen', 'zielony'),
-        # ('powderblue', 'niebieski'),
-        # ('coral','czerwony' ),
-        # ('darkorange', 'pomarańczowy'),
-        # ('thistle', 'fioletowy'),
-        # ('darkblue', 'granatowy'),
-        # ('darkslategray', 'czarny'),
-        # ('floralwhite', 'biały'),
-        # ('peru', 'brązowy'),
-        # ('pink','różowy' ),
-        # ('darkgrey','szary' )
+        ('lemonchiffon','żółty' ),
+        ('lightgreen', 'zielony'),
+        ('powderblue', 'niebieski'),
+        ('coral','czerwony' ),
+        ('darkorange', 'pomarańczowy'),
+        ('thistle', 'fioletowy'),
+        ('floralwhite', 'biały'),
+        ('peru', 'brązowy'),
+        ('pink','różowy' ),
+        ('darkgrey','szary' )
 
-        ('red', 'red'),
-        ('blue', 'blue'),
-        ('green', 'green'),
-        ('yellow', 'yellow'),
-        ('orange', 'orange)'),
-        ('pink', 'pink'),
-        ('white', 'white'),
-        ('black', 'black)'),
-        ('pink', 'pink'),
+        # ('red', 'red'),
+        # ('blue', 'blue'),
+        # ('green', 'green'),
+        # ('yellow', 'yellow'),
+        # ('orange', 'orange)'),
+        # ('pink', 'pink'),
+        # ('white', 'white'),
+        # ('black', 'black)'),
+        # ('pink', 'pink'),
     )
     NUMBER = (
         ('0', '0'),

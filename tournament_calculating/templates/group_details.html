@@ -90,13 +90,7 @@
             dodaj ile starć ma mieć każda walka
             {% endif %}
         </center>
-            {% for group in groups %}
-            <p style=" background:{{group.get_color_fighter_one_display }}">    {{group.color_fighter_one }}{{ group.group.get_color_fighter_one_display }} teeest 1 {{ group.number }}  </p>
-            <p style=" background:{{group.color_fighter_one }}">    {{group.color_fighter_two }}{{ group.get_color_fighter_two_display }} teeest 2{{ group.number }}</p>
-             <p style=" background:{{group.get_color_fighter_two_display}}">    {{group.color_fighter_one }}{{ group.get_color_fighter_one_display }} teeest 3{{ group.number }}</p>
-             <p style=" background:{{group.color_fighter_two}}">    {{group.color_fighter_two.value }}{{ group.get_color_fighter_two_display }} teeest 4{{ group.number }}</p>
 
-            {% endfor %}
         <h5>
             walki grupa {{  number }} :
         </h5>
@@ -111,12 +105,11 @@
 
             <tr>
                 {% for fighter in fighters_one_names %}
-{#                <td style=" background: {{ group.get_color_fighter_two_display }} ">#}
-{#                   <td style=" background: {{ group.color_fighter_one}} ">#}
-                    <td style=" background:  lightyellow  ">
+
+                    <td style=" background:  {{ group.color_fighter_one }}  ">
                     <a style="text-decoration: none; color:black" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                         <b>
-                            {{ fighter.name }}
+                            {{ fighter.name }} iiii {{ group.id }}
                         </b>
                     </a>
                 </td>
@@ -124,7 +117,7 @@
             </tr>
             <tr>
                 {% for fighter in fighters_two_names  %}
-                <td style=" background: deepskyblue">
+                <td style=" background: {{ group.color_fighter_two }}">
                     <a style="text-decoration: none; color:black" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                         <b>
                             {{ fighter.name }}

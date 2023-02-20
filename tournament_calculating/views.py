@@ -109,7 +109,9 @@ def group_details(request, group_id):
         "fights": fights,
         "rounds_obj": rounds_obj,
         "groups": groups,
-        "tournaments_fighters_average": tournaments_fighters_average
+        "tournaments_fighters_average": tournaments_fighters_average,
+        "group":group
+
     })
 
 
