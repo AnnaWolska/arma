@@ -8,46 +8,37 @@
 {% endblock %}
 
 {% block content %}
-   pierwszy zawodnik -
-    {% for p in participants %}
-        {% for round in rounds %}
-            {% if p.id == round.fighter_one_id %}
-    {{ p.name}} z {{ p.school }}
-                         {% if p.image %}
-                {% thumbnail p.image "100x100" as im %}
+                <span style = "background:  {{ group.color_fighter_one }}"> pierwszy zawodnik:
+
+ {{ fighter_one.name}} z {{ fighter_one.school }}
+                    </span>
+
+
+
+                 {% if fighter_one.image %}
+                {% thumbnail fighter_one.image "100x100" as im %}
                 <img src="{{ im.url }}" alt="zdj">
                 {% endthumbnail %}
-                    {% endif %}
+                {% endif %}
 
 
-
-
-    {% endif %}
-    {% endfor %}
-    {% endfor %}
 
 <br>
 
 
-               drugi zawodnik -
-    {% for p in participants %}
-        {% for round in rounds %}
-            {% if p.id == round.fighter_two_id %}
-    {{ p.name}} z {{ p.school }}
+                <span style = "background:  {{ group.color_fighter_two }}"> drugi zawodnik:
 
-                {% if p.image %}
-                {% thumbnail p.image "100x100" as im %}
+
+             {{ fighter_two.name}} z {{ fighter_two.school }}</span>
+
+                 {% if fighter_two.image %}
+                {% thumbnail fighter_two.image "100x100" as im %}
                 <img src="{{ im.url }}" alt="zdj">
                 {% endthumbnail %}
-                    {% endif %}
+                {% endif %}
 
 
 
-
-
-    {% endif %}
-    {% endfor %}
-    {% endfor %}
 
 
 

@@ -1,10 +1,11 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder
 from django import forms
-from tournament_calculating.models import Group
+from tournament_calculating.models import Group, ROUND_STATUS, ROUND_CONTUSIONS_STATUSES, ROUND_SPECIAL_STATUSES
 from tournament_calculating.models import Participant, Fight, Round
 from dal import autocomplete
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
+
 
 
 # class ParticipantForm(forms.ModelForm):
@@ -126,25 +127,32 @@ class AddRoundsForm(forms.ModelForm):
 
 
 class AddPointsForm(forms.ModelForm):
-
+    # dodać walidację match case  'validate' pola albo formularza
+    #
     class Meta:
         model = Round
 
-        fields = [
-            # "resolved_fighter_one",
-                  "points_fighter_one",
-                  # "resolved_fighter_two",
-                  "points_fighter_two"
-                  ]
+        fields = ["points_fighter_one","points_fighter_two"]
 
         labels = {"points_fighter_one": 'punkty pierwszego zawodnika',
                   "points_fighter_two":'punkty drugiego zawodnika',
-                  # "resolved_fighter_one":"czy jest rozstrzygnięcie?",
-                  # "resolved_fighter_two":"czy jest rozstrzygnięcie?"
                   }
+
+
+
+        # def clean(self):
+        #     super(self).clean()
+        #
+        #     points_fighter_one = self.cleaned_data.get(points_fighter_one)
+        #     points_fighter_two = self.cleaned_data.get(points_fighter_two)
+        #
+        #     if points_fighter_one in ['1','2','3','4','5'] and points_fighter_two in ['1','2','3','4','5']:
+        #         self._errors['username'] = self.error_class([
+        #             'Minimum 5 characters required'])
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
+            self.cleaned_data = None
             self.helper = FormHelper()
             self.helper.form_method = 'post'
             self.helper.form_action = 'tournament_calculating:add_points'
@@ -157,7 +165,16 @@ class AddPointsForm(forms.ModelForm):
                     css_class="d-flex justify-content-end"
                 )
             )
+        def clean_points_fighter_one(self, *args, **kwargs):
 
+            points_fighter_one = self.cleaned_data.get("points_fighter_one")
+            points_fighter_two = self.cleaned_data.get("points_fighter_two")
+            # if points_fighter_one in ['1','2','3','4','5'] and points_fighter_two in ['1','2','3','4','5']:
+            if points_fighter_one == 2:
+                raise forms.ValidationError("W starciu tylko jeden zawodnik może mieć punkty")
+            if points_fighter_one == 3:
+                raise forms.ValidationError("W starciu tylko jeden zawodnik może mieć punkty")
+            return points_fighter_one
 
 
 class AddGroupForm(forms.ModelForm):

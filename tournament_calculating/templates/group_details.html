@@ -30,6 +30,9 @@
                 <img src="{{ im.url }}" alt="zdj">
                 {% endthumbnail %}
                 {% endif %}
+            {% for organizer in tournament.organizers.all%}
+                {{ organizer }}
+            {% endfor %}
             </h5>
             {% if tournament.user == request.user %}
             {% if not rounds %}
@@ -39,7 +42,22 @@
 {#                   <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' group_id%}">#}
                     Dodaj uczestnika
                 </a>
+                            <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}">
+{#                     <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' group_id%}">#}
+{#                   <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' group_id%}">#}
+
+                </a>
             </button>
+
+
+{#                        {% if  %}#}
+                                <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
+                <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:create_participant' %}">
+                Utwórz uczestnika
+                </a>
+                 </span>
+
+{#                    {% endif %}#}
             {% endif %}
             {% if not rounds %}
             <button id="delete_tournament" type="button" style="background-color:plum"  class="btn btn-primary">

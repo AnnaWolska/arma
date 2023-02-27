@@ -55,7 +55,8 @@ def show_gallery_details(request, gallery_id):
         'created': created,
         'modified': modified,
         'tournament': tournament,
-        'tournament_id':tournament_id
+        'tournament_id':tournament_id,
+        'gallery_id': gallery_id
     }
     return render(request, "galleries/gallery.html", context)
 
@@ -104,3 +105,19 @@ def add_photo(request, gallery_id):
         return render(
             request,
             "galleries/add_photo.html", {"formset": formset, 'gallery': gallery })
+
+
+def delete_gallery(request, gallery_id):
+    gallery = Gallery.objects.get(pk=gallery_id)
+    user = request.user
+    if request.method == "POST":
+        if user.is_authenticated:
+            if user == gallery.user:
+                gallery.delete()
+                return HttpResponseRedirect(reverse('galleries:galleries_list' ))
+            else:
+                return redirect(reverse('login'))
+    else:
+        if user.is_authenticated:
+            if user == request.user:
+                return render( request,"delete_gallery.html", context={"gallery": gallery})

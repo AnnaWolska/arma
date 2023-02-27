@@ -5,14 +5,14 @@
 {%  block style %}
 <link href="{% static "tournaments_calculating/css/style.css" %}" rel=stylesheet">
 {% endblock %}
-{% block title %}  Nowy uczestnik {% endblock %}
+
 {% block content %}
 <form method = "POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}
         <hr>
     {{ formset.management_form }}
-    <input type="submit" name="submit" value="Dodaj uczestnika" class="btn btn-primary"/>
+    <input type="submit" name="submit" value="Dodaj" class="btn btn-primary"/>
     <hr>
 {#    <button type="submit"#}
 {#    class = "btn btn-primary">Wyślij#}

@@ -5,9 +5,9 @@
 {% block content %}
     <h2> Szczegóły gallerii : </h2>
       <div>
-{#        <h5>#}
+
              <ol>
-{#                <li>id: {{ id }}</li>#}
+
                  <li> tytuł: {{ title }}</li>
                  <li> opis: {{ description }}</li>
                  <li><div>utworzono: {{ created}}</div></li>
@@ -17,7 +17,7 @@
                  <li>turniej: {{ tournament }}</li>
                  {% endif %}
             </ol>
-{#        </h5>#}
+
 
         <div class="pagination">
             <span class = "step-links">
@@ -58,7 +58,7 @@
                                         {{ photo.title }}<br>
 
                                         {{ photo.short_description }}<br>
-{#                                        {{ photo.image }}<br>#}
+
 
 
                                     </p>
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                 </div>
-{#            {% endif %}#}
+
         {% endfor %}
     </div>
 
@@ -91,10 +91,13 @@
 
     <h5>
         {% if user == request.user %}
-{#            <a href = "{% url 'galleries:add_photo' id %}"> Edytuj galerię (dodawaj zdjęcia) <br></a>#}
+
 
                 <h3   id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary">
         <a style="color:white; text-decoration: none;" href = "{% url 'galleries:add_photo' id %}"> Edytuj galerię </a>   </h3>
+            <span id="delete_tournament" type="button" style="background-color:red"  class="btn btn-primary"  >   <a  style="color:white; text-decoration: none;"  href = "{% url 'galleries:delete_gallery' gallery_id %}"> Usuń galerię </a></span>
+
+
 
 <br>
 <span id="delete_tournament" type="button" style="background-color:forestgreen "  class="btn btn-primary"  >   <a  style="color:white; text-decoration: none;"  href = "{% url 'galleries:galleries_list' %}"> Powrót do listy galerii </a></span>
@@ -106,12 +109,6 @@
         {% endif %}
 
     <span id="delete_tournament" type="button" style="background-color:yellowgreen "  class="btn btn-primary"  >   <a  style="color:white; text-decoration: none;"  href = "{% url 'tournaments:tournament_details' tournament_id %}"> Powrót do turnieju </a></span>
-
-{#                                {% if tournament.image %}#}
-{#                            {% thumbnail tournament.image "100x100" as im %}#}
-{#                            <img src="{{ im.url }}" alt="zdj">#}
-{#                            {% endthumbnail %}#}
-{#                            {% endif %}#}
 
 
 

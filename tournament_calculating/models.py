@@ -5,7 +5,8 @@ from tournaments.models import Tournament
 
 
 class Participant(models.Model):
-    user = models.OneToOneField("auth.User", on_delete=models.CASCADE, null=True)
+    # user = models.OneToOneField("auth.User", on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True, related_name="participants")
     name = models.CharField(max_length=255)
     school = models.CharField(max_length=500)
     image = ImageField(upload_to="tournament_calculating/images/%Y/%m/%d/", blank=True, null=True)
@@ -150,29 +151,58 @@ class Fight(models.Model):
         verbose_name_plural = "Walki"
 
 
+disqualification = 'dyskwalifikacja'
+injury = 'kontuzja'
+average = 'średnia'
+surrender = 'poddanie'
+withdrawal = 'wycofanie'
+
+
+# ROUND_SPECIAL_STATUSES = [
+#     (disqualification, 'dyskwalifikacja'),
+#     (surrender, 'poddanie'),
+#     (withdrawal, 'wycofanie'),
+#     (average, 'średnia'),
+# ]
+# ROUND_CONTUSIONS_STATUSES = [
+#     (injury, 'kontuzja'),
+# ]
+
+ROUND_SPECIAL_STATUSES = [
+    ('dyskwalifikacja', 'dyskwalifikacja'),
+    ('poddanie', 'poddanie'),
+    ('wycofanie', 'wycofanie'),
+    ('średnia', 'średnia'),
+]
+ROUND_CONTUSIONS_STATUSES = [
+    (injury, 'kontuzja'),
+]
+
+ROUND_STATUS = [
+    ('0', '0'),
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('5', '5'),
+    # ('6', '6'),
+    # ('7', '7'),
+    # ('8', '8'),
+    # ('9', '9'),
+    # ('10', '10'),
+    # ('kontuzja', 'kontuzja'),
+    # ('dyskwalifikacja', 'dyskwalifikacja'),
+    # ('poddanie', 'poddanie'),
+    # ('wycofanie', 'wycofanie'),
+    # ('średnia', 'średnia'),
+] + ROUND_SPECIAL_STATUSES + ROUND_CONTUSIONS_STATUSES
+
 class Round(models.Model):
-    STATUS = (
-        ('0', '0'),
-        ('1', '1'),
-        ('2', '2'),
-        ('3', '3'),
-        ('4', '4'),
-        ('5', '5'),
-        ('6', '6'),
-        ('7', '7'),
-        ('8', '8'),
-        ('9', '9'),
-        ('10', '10'),
-        ('kontuzja', 'kontuzja'),
-        ('dyskwalifikacja', 'dyskwalifikacja'),
-        ('poddanie', 'poddanie'),
-        ('wycofanie', 'wycofanie'),
-        ('średnia', 'średnia'),
-    )
+
     order = models.PositiveSmallIntegerField(null=True)
     fight = models.ForeignKey("Fight", on_delete=models.CASCADE, related_name="rounds_of_fight", null=True)
-    points_fighter_one = models.CharField(max_length=20, choices=STATUS, null=True)
-    points_fighter_two = models.CharField(max_length=20, choices=STATUS, null=True)
+    points_fighter_one = models.CharField(max_length=20, choices=ROUND_STATUS, null=True)
+    points_fighter_two = models.CharField(max_length=20, choices=ROUND_STATUS, null=True)
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="rounds_of_group", null=True)
     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_one", null=True )
     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_two", null=True )
