@@ -21,12 +21,14 @@ decorator==5.1.1
 defusedxml==0.7.1
 diff-match-patch==20200713
 distro==1.7.0
+dj-database-url==1.2.0
 Django==3.2.12
 django-autocomplete-light==3.9.4
 django-cprofile-middleware==1.0.5
 django-crispy-forms==1.14.0
 django-dal==1.0.0
 django-extensions==3.1.5
+django-heroku==0.3.1
 django-import-export==3.0.1
 django-js-asset==2.0.0
 django-mptt==0.13.4
@@ -85,6 +87,7 @@ pluggy==1.0.0
 prompt-toolkit==3.0.33
 protobuf==3.12.4
 psutil==5.9.0
+psycopg2==2.9.5
 psycopg2-binary==2.9.3
 ptyprocess==0.7.0
 pure-eval==0.2.2
