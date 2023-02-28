@@ -8,6 +8,8 @@ services:
       - ./data/db:/var/lib/postgresql/data
     environment:
 #      - POSTGRES_PAQSSWORD=postgres
+#      - POSTGRES_DB =
+#      - POSTGRES_USER =
       - POSTGRES_PAQSSWORD=arma2022
   web:
 #    bild zbuguje na podstawie Dokerfile tu
