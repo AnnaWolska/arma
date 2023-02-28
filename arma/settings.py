@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # DEBUG = True
 
 ALLOWED_HOSTS = ['herokuappname.herokuapp.com']
+# ALLOWED_HOSTS = os.environ.get(ALLOWED_HOSTS)
 # ALLOWED_HOSTS = ['arma.com']
 
 # Application definition
