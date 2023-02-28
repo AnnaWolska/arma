@@ -23,8 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
-# ALLOWED_HOSTS = ['herokuappname.herokuapp.com']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['herokuappname.herokuapp.com']
+# ALLOWED_HOSTS = ['arma.com']
 
 # Application definition
 

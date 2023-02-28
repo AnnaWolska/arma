@@ -28,3 +28,5 @@ RUN . /venv/bin/activate && pip install -r requirements.txt
 
 
 COPY . /code/
+
+CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "arma.wsgi:application"]
