@@ -2,6 +2,7 @@ FROM python:3
 #tworzą zmienne środowiskowe:
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONBUFFERED=1
+ENV DISABLE_COLLECTSTATIC = 1
 WORKDIR /code
 #COPY requirements.txt /code/
 
