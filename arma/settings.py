@@ -125,7 +125,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, "images")
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
@@ -138,7 +138,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SHELL_PLUS_PRINT_SQL = True
 
-MEDIA_ROOT = BASE_DIR / "images"
+# MEDIA_ROOT = BASE_DIR / "images"
+MEDIA_ROOT = os.path.join(BASE_DIR, "images")
+
 MEDIA_URL = "/images/"
 
 LOGIN_REDIRECT_URL = "/home"
