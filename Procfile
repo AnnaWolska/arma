@@ -1,1 +1,2 @@
-python manage.py migrate && python manage.py collectstatic && gunicorn locallibrary.wsgi
+release: python manage.py migrate
+web: gunicorn arma.wsgi
