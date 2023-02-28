@@ -146,7 +146,7 @@ LOGOUT_REDIRECT_URL = "/home"
 
 # PYDEVD_USE_CYTHON=NO
 # PYDEVD_USE_FRAME_EVAL=NO
-
+DISABLE_COLLECTSTATIC = 1
 
 try:
     from local_settings import *  # noqa: F403
