@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
-ALLOWED_HOSTS = ['armatournaments.herokuapp.com', '']
+ALLOWED_HOSTS = ['armatournaments.herokuapp.com', '127.0.0.1']
 # ALLOWED_HOSTS = os.environ.get(ALLOWED_HOSTS)
 # ALLOWED_HOSTS = ['arma.com']
 
