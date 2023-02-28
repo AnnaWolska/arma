@@ -1,1 +1,1 @@
-web: gunicorn arma.wsgi:application --log-file-
+web: gunicorn arma.wsgi:application
