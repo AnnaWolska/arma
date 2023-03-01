@@ -157,5 +157,5 @@ except ImportError:
     print("no local_settings.py file?")
 
 
-# DISABLE_COLLECTSTATIC=1
+
 
