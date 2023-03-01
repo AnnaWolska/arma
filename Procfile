@@ -1,1 +1,1 @@
-web: gunicorn arma.wsgi
+web: gunicorn arma.app
