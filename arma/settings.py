@@ -139,8 +139,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SHELL_PLUS_PRINT_SQL = True
 
-# MEDIA_ROOT = BASE_DIR / "images"
-MEDIA_ROOT = os.path.join(BASE_DIR, "images")
+MEDIA_ROOT = BASE_DIR / "images"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "images")
 
 MEDIA_URL = "/images/"
 
