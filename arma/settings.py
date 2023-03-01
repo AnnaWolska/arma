@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
 import os
+load_dotenv()
 from local_settings import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -158,5 +160,5 @@ except ImportError:
     print("no local_settings.py file?")
 
 
-
+SECRET_KEY = os.getenv('SECRET_KEY')
 
