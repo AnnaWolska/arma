@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 import os
-# load_dotenv()
-# from local_settings import *
+load_dotenv()
+from local_settings import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -158,10 +158,10 @@ LOGOUT_REDIRECT_URL = "/home"
 # PYDEVD_USE_FRAME_EVAL=NO
 DISABLE_COLLECTSTATIC = 1
 
-# try:
-#     from local_settings import *  # noqa: F403
-# except ImportError:
-#     print("no local_settings.py file?")
+try:
+    from local_settings import *  # noqa: F403
+except ImportError:
+    print("no local_settings.py file?")
 
 
 SECRET_KEY = os.getenv('SECRET_KEY')

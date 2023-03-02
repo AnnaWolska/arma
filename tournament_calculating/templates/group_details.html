@@ -220,7 +220,12 @@
                                 <span style="color: darkblue">
                                     wyjściowe
                                 </span>
-                                grupa {{  number }} ( średnia punktów w turnieju z odbytych walk - {{ participant.points_average }}
+                                grupa {{  number }} ( średnia punktów w turnieju z odbytych walk -
+
+{#                                 {{ participant.tournament_points }}#}
+                                {{ participant.points_average }}
+
+
                                 <span style="color: crimson">
                                     {{ tournaments_fighters_average}}
                                 </span>
@@ -246,9 +251,11 @@
                                         {% endif %}
                                         <td style="width:100%;table-layout:fixed;">
                                             {{ participant.name }} -
-                                            {% if participant.group_points is not None %}
+{#                                            {% if participant.group_points is not None %}#}
+                                                         {% if participant.tournament_points is not None %}
                                             <b>
-                                                {{ participant.group_points }} x
+{#                                                {{ participant.group_points }} x#}
+                                                 {{ participant.tournament_points }} x
                                                 <span style="color: crimson">
                                                     {{ tournaments_fighters_average}}
                                                 </span>

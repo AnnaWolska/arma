@@ -14,7 +14,7 @@ from dal import autocomplete
 # Publication.objects.get(id=4).article_set.all()
 # p2.article_set.clear()
 
-from tournament_calculating.models import Group, Fight, Participant, Round
+from tournament_calculating.models import Group, Fight, Participant, Round, ParticipantGroup
 from tournament_calculating.forms import (
     AddParticipantForm,
     AddGroupForm,
@@ -74,6 +74,8 @@ def group_details(request, group_id):
     number = group.number
     tournament = group.tournament
     participants = group.participants.all().order_by("points_average")
+    # group_participants = ParticipantGroup.all().order_by("tournament_points")
+    # group_participants = group.participants.all()
     fights = group.fights.all().order_by('id')
     groups = Group.objects.filter(tournament=tournament).order_by("number")
     first_fight = fights.first()
@@ -110,7 +112,8 @@ def group_details(request, group_id):
         "rounds_obj": rounds_obj,
         "groups": groups,
         "tournaments_fighters_average": tournaments_fighters_average,
-        "group":group
+        "group":group,
+        # "group_participants":group_participants
 
     })
 
@@ -547,7 +550,13 @@ def add_points (request, group_id, fight_id, round_id):
     points_sum = []
     second_fighter_points = []
     second_points_sum = []
-    participants = group.participants.order_by('-group_points')
+    # participants = group.participants.order_by('-group_points')
+    participants = group.participants.all()
+    print("z poin add:", participants)
+    # group_participants = ParticipantGroup.filter(group=group_id)
+    # group_participants = group.participants.all()
+    # print(group_participants)
+
     points_result_ls = ["0","1","2","3","4","5"]
     fighter_one = []
     fighter_two = []
@@ -585,6 +594,18 @@ def add_points (request, group_id, fight_id, round_id):
                 fight.fighter_two_points = second_final_points
                 fight.save()
 
+                # tu powinnam dodawać punky do punktów tylko dla tego turnieju, a więc grupy
+                # for p in group_participants:
+                #     one_more_ls_to_append = []
+                #     for fight in fights:
+                #         if p.id == fight.fighter_one_id:
+                #             one_more_ls_to_append.append(int(fight.fighter_one_points))
+                #         if p.id == fight.fighter_two_id:
+                #             one_more_ls_to_append.append(int(fight.fighter_two_points))
+                #         # p.group_points = sum(one_more_ls_to_append)
+                #         p.tournament_points = sum(one_more_ls_to_append)
+                #         p.save()
+                # tu powinnam dodawać punky do punktów ze wszystkich turniejów
                 for p in participants:
                     one_more_ls_to_append = []
                     for fight in fights:
@@ -592,8 +613,16 @@ def add_points (request, group_id, fight_id, round_id):
                             one_more_ls_to_append.append(int(fight.fighter_one_points))
                         if p.id == fight.fighter_two_id:
                             one_more_ls_to_append.append(int(fight.fighter_two_points))
-                        p.group_points = sum(one_more_ls_to_append)
+                        # p.tournament_points = sum(one_more_ls_to_append)
+                        helpfull_variable = ParticipantGroup(participant=p, group=group, tournament_points=sum(one_more_ls_to_append))
+                        print("helpfull_variable",helpfull_variable)
+                        # p.tournament_points =
+                        # print("p.tournament_points",p.tournament_points)
+                        # print("one_more_ls_to_append",one_more_ls_to_append)
+                        helpfull_variable.save()
                         p.save()
+
+
 
                 tournament_fights_points = []
                 tournaments = Tournament.objects.all()
