@@ -10,6 +10,7 @@ from posts.forms import PostForm, PostDeleteForm
 from dal import autocomplete
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def posts_list(request, tournament_id):
@@ -63,6 +64,7 @@ def add_post(request, tournament_id):
                 # instance.image = request.FILES
                 instance.save()
                 form.save_m2m()
+            messages.success(request, 'post dodany')
             return HttpResponseRedirect(reverse('tournaments:tournament_details', args=[tournament_id]))
         else:
             form = PostForm()
@@ -84,7 +86,7 @@ def edit_post(request, post_id, tournament_id):
                 form = PostForm(request.POST, request.FILES, instance=post)
                 if form.is_valid():
                     form.save()
-
+                    messages.success(request, 'post zmieniony')
                     return HttpResponseRedirect(reverse('tournaments:tournament_details', args=[tournament_id]))
                 else:
                     return redirect(reverse('login'))
@@ -105,6 +107,7 @@ def delete_post(request, tournament_id, post_id):
             if user.is_authenticated:
                 if user == post.user:
                     post.delete()
+                    messages.warning(request, 'post usunięty')
                     return HttpResponseRedirect(reverse('tournaments:tournament_details', args=[tournament_id] ))
                 else:
                     return redirect(reverse('login'))

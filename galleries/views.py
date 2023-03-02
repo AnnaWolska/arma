@@ -10,6 +10,8 @@ from django.contrib.auth.models import AnonymousUser
 from dal import autocomplete
 from django.forms import modelformset_factory
 from django.db.models import Count
+from django.contrib import messages
+
 
 
 def show_galleries_list(request):
@@ -69,6 +71,7 @@ def add_gallery(request):
                 gallery = form.save()
                 gallery.user = request.user
                 gallery.save()
+                messages.success(request, 'galeria dodana')
                 return HttpResponseRedirect(reverse("galleries:add_photo", args=[gallery.id]))
         else:
             form = GalleryForm()
@@ -101,6 +104,7 @@ def add_photo(request, gallery_id):
                         instance = formset.save(commit=False)
                         # instance.gallery = gallery
                         # instance.save()
+            messages.success(request, 'zdjęcie dodane')
             return HttpResponseRedirect(reverse("galleries:add_photo", args=[gallery_id]))
         return render(
             request,
@@ -114,6 +118,7 @@ def delete_gallery(request, gallery_id):
         if user.is_authenticated:
             if user == gallery.user:
                 gallery.delete()
+                messages.warning(request, 'galeria usunięta')
                 return HttpResponseRedirect(reverse('galleries:galleries_list' ))
             else:
                 return redirect(reverse('login'))

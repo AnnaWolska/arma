@@ -9,6 +9,7 @@ from tournaments.forms import TournamentForm, OrganizerFormSet, TournamentDelete
 from organizers.forms import OrganizerForm
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def organizers_list(request):
@@ -29,6 +30,7 @@ def add_organizer(request):
                 instance = form.save()
                 instance.user = request.user
                 instance.save()
+                messages.success(request, 'organizator dodany')
             return HttpResponseRedirect(reverse("organizers:organizers_list"))
         else:
             form = OrganizerForm()
@@ -46,6 +48,7 @@ def delete_organizer(request, organizer_id):
         if user.is_authenticated:
             if user == organizer.user:
                 organizer.delete()
+                messages.warning(request, 'organizator usunięty')
                 return HttpResponseRedirect(reverse('organizers:organizers_list'))
             else:
                 return redirect(reverse('login'))
@@ -79,6 +82,7 @@ def edit_organizer(request, organizer_id):
                 form = OrganizerForm(request.POST, request.FILES, instance=organizer)
                 if form.is_valid():
                     form.save()
+                    messages.success(request, 'organizator zmieniony')
                     return HttpResponseRedirect(reverse(
                         'organizers:organizer_details',
                         args=[organizer_id])

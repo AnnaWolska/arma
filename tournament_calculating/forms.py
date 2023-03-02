@@ -5,6 +5,7 @@ from tournament_calculating.models import Group, ROUND_STATUS, ROUND_CONTUSIONS_
 from tournament_calculating.models import Participant, Fight, Round
 from dal import autocomplete
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
+from django.core.exceptions import ValidationError
 
 
 
@@ -140,6 +141,7 @@ class AddPointsForm(forms.ModelForm):
 
 
 
+
         # def clean(self):
         #     super(self).clean()
         #
@@ -165,16 +167,21 @@ class AddPointsForm(forms.ModelForm):
                     css_class="d-flex justify-content-end"
                 )
             )
-        def clean_points_fighter_one(self, *args, **kwargs):
 
-            points_fighter_one = self.cleaned_data.get("points_fighter_one")
-            points_fighter_two = self.cleaned_data.get("points_fighter_two")
-            # if points_fighter_one in ['1','2','3','4','5'] and points_fighter_two in ['1','2','3','4','5']:
-            if points_fighter_one == 2:
-                raise forms.ValidationError("W starciu tylko jeden zawodnik może mieć punkty")
-            if points_fighter_one == 3:
-                raise forms.ValidationError("W starciu tylko jeden zawodnik może mieć punkty")
+    def clean_points_fighter_one(self, *args, **kwargs):
+
+        points_fighter_one = self.cleaned_data.get("points_fighter_one")
+        points_fighter_two = self.cleaned_data.get("points_fighter_two")
+        # if points_fighter_one in ['1','2','3','4','5'] and points_fighter_two in ['1','2','3','4','5']:
+        if points_fighter_one == 2:
+            raise ValidationError("W starciu tylko jeden zawodnik może mieć punkty")
+
+        # if points_fighter_one == 3:
+        #     raise ValidationError("W starciu tylko jeden zawodnik może mieć punkty")
+        else:
             return points_fighter_one
+
+
 
 
 class AddGroupForm(forms.ModelForm):

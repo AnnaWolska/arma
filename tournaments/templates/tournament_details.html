@@ -193,7 +193,10 @@
                                         <a style="text-decoration: none;" href = "{% url 'tournaments:edit_post' tournament_id post.id  %}">
                                             Edytuj post
                                         </a>
-                                    </p>
+{#                                        <div class="post" xmlns="http://www.w3.org/1999/xhtml">#}
+{#                                    <a class="btn btn-default" href="{% url 'tournaments:edit_post' tournament_id post.id  %}"><span class="glyphicon glyphicon-pencil"></span></a>#}
+{#                                    </div>#}
+{#                                        </p>#}
                                     <p>
                                         <a style="text-decoration: none; color:Tomato;" href = "{% url 'tournaments:delete_post' tournament_id post.id %}">
                                             Usuń post

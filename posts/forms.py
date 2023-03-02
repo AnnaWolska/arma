@@ -16,7 +16,6 @@ class PostForm(forms.ModelForm):
             "title": "Tytuł",
             "content": "Treść",
         }
-
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
@@ -35,6 +34,13 @@ class PostForm(forms.ModelForm):
                     css_class="d-flex justify-content-end"
                 )
             )
+    def clean_post(self):
+        data_value = self.cleaned_data.get("title")
+        if  "huj" not in data_value:
+            return data_value
+        else:
+            raise forms.ValidationError("trochę kultury może...")
+
 
 
 class PostDeleteForm(forms.ModelForm):

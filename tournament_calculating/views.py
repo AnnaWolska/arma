@@ -191,6 +191,7 @@ def create_participant(request):
                 instance = form.save(commit=False)
                 instance.user = request.user
                 instance.save()
+                messages.success(request, 'uczestnik utworzony')
             return HttpResponseRedirect(reverse("tournament_calculating:participants_list"))
         else:
             form = CreateParticipantForm
@@ -203,29 +204,31 @@ def create_participant(request):
     else:
         return redirect(reverse('login'))
 
-def create_prtcp_by_org(request):
-    organizers = Organizer.objects.all()
-    users_organizers = []
-    for organizer in organizers:
-        users_organizers.append(organizer.user_id)
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            form = CreateParticipantForm(request.POST, request.FILES)
-            if form.is_valid():
-                instance = form.save(commit=False)
-                instance.user = request.user
-                instance.save()
-            return HttpResponseRedirect(reverse("tournament_calculating:participants_list"))
-        else:
-            form = CreateParticipantForm
-        return (
-            render(request, "create_participant.html", context={
-                'form': form,
-                'users_organizers':users_organizers
-            })
-        )
-    else:
-        return redirect(reverse('login'))
+#TODO: ta funkcja  do zrobienia jak wyżej ale przekierowanie do szczegółów grypy:
+
+# def create_prtcp_by_org(request):
+#     organizers = Organizer.objects.all()
+#     users_organizers = []
+#     for organizer in organizers:
+#         users_organizers.append(organizer.user_id)
+#     if request.user.is_authenticated:
+#         if request.method == "POST":
+#             form = CreateParticipantForm(request.POST, request.FILES)
+#             if form.is_valid():
+#                 instance = form.save(commit=False)
+#                 instance.user = request.user
+#                 instance.save()
+#             return HttpResponseRedirect(reverse("tournament_calculating:participants_list"))
+#         else:
+#             form = CreateParticipantForm
+#         return (
+#             render(request, "create_participant.html", context={
+#                 'form': form,
+#                 'users_organizers':users_organizers
+#             })
+#         )
+#     else:
+#         return redirect(reverse('login'))
 
 class ParticipantAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -243,6 +246,8 @@ def add_participant(request, tournament_id, group_id):
             form = AddParticipantForm(request.POST, request.FILES, instance=group)
             if form.is_valid():
                 instance = form.save()
+                messages.success(request, 'uczestnicy dodani')
+
                 return HttpResponseRedirect(reverse(
                     "tournament_calculating:group_details",
                     args=[group_id])
@@ -287,7 +292,7 @@ def add_group(request, tournament_id):
                 obj.color_fighter_two = color_fighter_two
                 obj.save()
                 groups.create(number=number, tournament=tournament, color_fighter_one=color_fighter_one, color_fighter_two=color_fighter_two)
-                messages.success(request, 'grupa dodana.')
+                messages.success(request, 'grupa dodana')
                 return HttpResponseRedirect(reverse(
                     "tournaments:tournament_details",
                     args=[tournament_id]))
@@ -389,6 +394,8 @@ def draw_fights(request, group_id):
                 fighter_two=right_participant[1]
             )
             order_number +=1
+    messages.info(request, 'wylosowano walki, przy małej ilości uczestników (5-6) warto sprawdzić czy na pewno nikt nie ma dwóch walk obok siebie (co jest możliwe od 5 uczestników), jeśli tak - trzeba powtórzyć losowanie:)')
+
     return HttpResponseRedirect(reverse("tournament_calculating:group_details",
                                         args=[group_id]))
 
@@ -409,6 +416,8 @@ def delete_group_participant(request, tournament_id, group_id, participant_id):
                 if participant in group.participants.all():
                     group.participants.remove(participant)
                     fights.delete()
+                    messages.warning(request, 'usunięto uczestnika grupy')
+
                     return HttpResponseRedirect(reverse("tournaments:tournament_details",
                                                         args=[tournament_id]))
         else:
@@ -433,6 +442,7 @@ def delete_group(request, tournament_id, group_id):
             group = Group.objects.get(pk=group_id)
             if request.user == tournament.user:
                 group.delete()
+                messages.warning(request, 'usunięto grupę')
                 return HttpResponseRedirect(reverse(
                     "tournaments:tournament_details",
                     args=[tournament_id])
@@ -457,6 +467,7 @@ def delete_fights(request, tournament_id, group_id):
             tournament = Tournament.objects.get(pk=tournament_id)
             if request.user == tournament.user:
                 fights.delete()
+                messages.warning(request, 'usunięto walki')
                 for participant in participants:
                     participant.group_points = 0
                     participant.points_average = 0
@@ -541,10 +552,10 @@ def add_points (request, group_id, fight_id, round_id):
     fighter_one = []
     fighter_two = []
     for p in participants:
-        for round in fight_rounds:
-            if p.id == round.fighter_one_id:
+        for rnd in fight_rounds:
+            if p.id == rnd.fighter_one_id:
                 fighter_one = p
-            if p.id == round.fighter_two_id:
+            if p.id == rnd.fighter_two_id:
                 fighter_two = p
 
     # dodawanie punktów każdemu z przeciwników w walce
@@ -609,8 +620,9 @@ def add_points (request, group_id, fight_id, round_id):
                             tournament.save()
                             for participant in participants:
                                 if tournaments_fighters_average != 0:
-                                    participant.points_average = round((participant.group_points / tournaments_fighters_average),2)
+                                    participant.points_average = round((participant.group_points / tournaments_fighters_average), 2)
                                     participant.save()
+                messages.success(request, 'punkty dodane')
                 return HttpResponseRedirect(reverse(
                     "tournament_calculating:group_details",
                     args=[group_id],

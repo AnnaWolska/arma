@@ -10,6 +10,7 @@ from tournaments.forms import TournamentForm, OrganizerFormSet, TournamentDelete
 # from django.utils import timezone
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def tournaments_list(request):
@@ -67,7 +68,7 @@ def add_tournament(request):
                         if orgaznier not in instance.organizers.all():
                             instance.organizers.add(orgaznier)
                 instance.save()
-
+            messages.success(request, 'turniej dodany')
             return HttpResponseRedirect(reverse("tournaments:tournaments_list"))
         else:
             form = TournamentForm()
@@ -87,6 +88,7 @@ def edit_tournament(request, tournament_id):
                 form = TournamentForm(request.POST, request.FILES, instance=tournament)
                 if form.is_valid():
                     form.save()
+                    messages.success(request, 'turniej zmieniony')
                     return HttpResponseRedirect(reverse('tournaments:tournament_details', args=[tournament_id] ))
                 else:
                     return redirect(reverse('login'))
@@ -104,6 +106,7 @@ def delete_tournament(request, tournament_id):
         if user.is_authenticated:
             if user == tournament.user:
                 tournament.delete()
+                messages.warning(request, 'turniej usunięty')
                 return HttpResponseRedirect(reverse('tournaments:tournaments_list' ))
             else:
                 return redirect(reverse('login'))
