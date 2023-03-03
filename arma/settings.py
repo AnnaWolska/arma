@@ -15,13 +15,13 @@ import os
 # import dj_database_url
 
 #
-from dotenv import load_dotenv
-load_dotenv()
-from local_settings import *
-try:
-    from local_settings import *
-except ImportError:
-    print("no local_settings.py file?")
+# from dotenv import load_dotenv
+# load_dotenv()
+# from local_settings import *
+# try:
+#     from local_settings import *
+# except ImportError:
+#     print("no local_settings.py file?")
 
 
 
