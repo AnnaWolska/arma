@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404,redirect
 from tournaments.models import Tournament, Organizer
+from finals.models import ParticipantFinalist, Finalist
 from dal import autocomplete
 
 # dostęp m2m
@@ -73,13 +74,15 @@ def group_details(request, group_id):
     rounds_obj = group.rounds_of_group.all()
     number = group.number
     tournament = group.tournament
-    participants = group.participants.all().order_by("points_average")
+    # participants = group.participants.all().order_by("points_average")
+    participants = group.participants.all()
     # group_participants = ParticipantGroup.all().order_by("tournament_points")
-    # group_participants = group.participants.all()
+    group_participants = ParticipantGroup.objects.filter(group_id=group_id)
     fights = group.fights.all().order_by('id')
     groups = Group.objects.filter(tournament=tournament).order_by("number")
     first_fight = fights.first()
     tournaments_fighters_average = tournament.tournament_average
+    # tournaments_fighters_average =
     rounds = 0
     if first_fight:
         rounds = first_fight.rounds
@@ -113,7 +116,7 @@ def group_details(request, group_id):
         "groups": groups,
         "tournaments_fighters_average": tournaments_fighters_average,
         "group":group,
-        # "group_participants":group_participants
+        "group_participants":group_participants
 
     })
 
@@ -445,6 +448,10 @@ def delete_group(request, tournament_id, group_id):
             group = Group.objects.get(pk=group_id)
             if request.user == tournament.user:
                 group.delete()
+                tournament.tournament_average = 0
+                print("tournament.tournament_average",tournament.tournament_average)
+                tournament.save()
+                print("tournament.tournament_average", tournament.tournament_average)
                 messages.warning(request, 'usunięto grupę')
                 return HttpResponseRedirect(reverse(
                     "tournaments:tournament_details",
@@ -557,6 +564,8 @@ def add_points (request, group_id, fight_id, round_id):
     # group_participants = group.participants.all()
     # print(group_participants)
 
+
+
     points_result_ls = ["0","1","2","3","4","5"]
     fighter_one = []
     fighter_two = []
@@ -594,18 +603,6 @@ def add_points (request, group_id, fight_id, round_id):
                 fight.fighter_two_points = second_final_points
                 fight.save()
 
-                # tu powinnam dodawać punky do punktów tylko dla tego turnieju, a więc grupy
-                # for p in group_participants:
-                #     one_more_ls_to_append = []
-                #     for fight in fights:
-                #         if p.id == fight.fighter_one_id:
-                #             one_more_ls_to_append.append(int(fight.fighter_one_points))
-                #         if p.id == fight.fighter_two_id:
-                #             one_more_ls_to_append.append(int(fight.fighter_two_points))
-                #         # p.group_points = sum(one_more_ls_to_append)
-                #         p.tournament_points = sum(one_more_ls_to_append)
-                #         p.save()
-                # tu powinnam dodawać punky do punktów ze wszystkich turniejów
                 for p in participants:
                     one_more_ls_to_append = []
                     for fight in fights:
@@ -613,16 +610,26 @@ def add_points (request, group_id, fight_id, round_id):
                             one_more_ls_to_append.append(int(fight.fighter_one_points))
                         if p.id == fight.fighter_two_id:
                             one_more_ls_to_append.append(int(fight.fighter_two_points))
-                        # p.tournament_points = sum(one_more_ls_to_append)
-                        helpfull_variable = ParticipantGroup(participant=p, group=group, tournament_points=sum(one_more_ls_to_append))
-                        print("helpfull_variable",helpfull_variable)
-                        # p.tournament_points =
-                        # print("p.tournament_points",p.tournament_points)
-                        # print("one_more_ls_to_append",one_more_ls_to_append)
-                        helpfull_variable.save()
-                        p.save()
+                    # helpfull_variable = ParticipantGroup(participant=p, group=group, tournament_points=sum(one_more_ls_to_append))
+                    # print("helpfull_variable", helpfull_variable)
+                    # helpfull_variable.save()
+                    prtcp_to_change = ParticipantGroup.objects.get(participant=p, group=group)
+                    prtcp_to_change.tournament_points = sum(one_more_ls_to_append)
+                    print("prtcp_to_change",prtcp_to_change)
+                    prtcp_to_change.save()
+                    p.save()
 
-
+                # ParticipantGroup.objects.all() lista uczestników
+                # participant.participantgroup_set.all() lista grup
+                # participant.participantgroup_set.first() pierwsza grupa uczestnika ?
+                # participant.participantgroup_set.first().group.id ->id pierwszej gurpy uczestnika
+                # group.participantgroup_set.all()
+               # żeby dostać się do informacji o czymś uczestników turnieju,
+                 # trzeba skorzystać ze _set,
+               # czyli relacji jeden do wielu do modelu ParticipantGroup
+               #  for x in group.participantgroup_set.all():
+               #      x.student(coś)
+               #      x.enrollment_date(coś)
 
                 tournament_fights_points = []
                 tournaments = Tournament.objects.all()
@@ -645,6 +652,7 @@ def add_points (request, group_id, fight_id, round_id):
                         if tournament_fights_points is not None:
                         # if tournament_fights_points is not None  or tournament_fights_points !="dyskwalifikacja" or tournament_fights_points !="średnia" or tournament_fights_points !="kontuzja" or tournament_fights_points !="wycofanie" or tournament_fights_points != 0:
                             tournaments_fighters_average = round(sum(tournament_fights_points) / len(tournament_fights_points), 2)
+
                             tournament.tournament_average = tournaments_fighters_average
                             tournament.save()
                             for participant in participants:
@@ -705,6 +713,7 @@ def group_summary(request, group_id):
     # pass
     group = Group.objects.get(pk=group_id)
     participants = group.participants.all()
+    tournament_finalists = ParticipantFinalist.objects.all()
     group_average_points = []
     finalists_list = []
     for f in group.finalists.all():
@@ -925,7 +934,8 @@ def group_summary(request, group_id):
 
 
                 for f in finalists:
-                    group.finalists.create(participant=f)
+                    tournament_finalists.create(participant=f)
+                    # group.finalists.create(participant=f)
                 group.save()
                 return HttpResponseRedirect(reverse(
                     "finals:finals",
