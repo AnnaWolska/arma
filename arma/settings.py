@@ -172,7 +172,5 @@ LOGOUT_REDIRECT_URL = "/home"
 DISABLE_COLLECTSTATIC = 1
 
 
-
-
-# SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
