@@ -12,19 +12,22 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 
-# from dotenv import load_dotenv
-# load_dotenv()
-# from local_settings import *
-# try:
-#     from local_settings import *
-# except ImportError:
-#     print("no local_settings.py file?")
+from dotenv import load_dotenv
+load_dotenv()
+from local_settings import *
+try:
+    from local_settings import *
+except ImportError:
+    print("no local_settings.py file?")
 
 
 
 
+# DATABASES['default'] = dj_database_url.parse('postgre://username:password@example.com:5432/database')
+DATABASES['default'] = dj_database_url.config()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -170,5 +173,5 @@ DISABLE_COLLECTSTATIC = 1
 
 
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+# SECRET_KEY = os.getenv('SECRET_KEY')
 

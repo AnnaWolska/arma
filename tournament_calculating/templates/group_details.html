@@ -245,7 +245,8 @@
                         <td >
                             <table BORDER CELLSPACING=5 CELLPADDING=15  >
                                 <tr>
-                                                {% for participant in group_participants.all %}
+{#                                                {% for participant in group_participants.all %}#}
+                                                     {% for participant in group_participants.all %}
 {#                                              {% for participant in group_participants.all|dictsortreversed:"tournaments_points" %}#}
                                     {%  if gr.id == group_id %}
                                     <td style="background-color: plum">
