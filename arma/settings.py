@@ -15,13 +15,13 @@ import os
 # import dj_database_url
 
 #
-# from dotenv import load_dotenv
-# load_dotenv()
-# from local_settings import *
-# try:
-#     from local_settings import *
-# except ImportError:
-#     print("no local_settings.py file?")
+from dotenv import load_dotenv
+load_dotenv()
+from local_settings import *
+try:
+    from local_settings import *
+except ImportError:
+    print("no local_settings.py file?")
 
 
 
@@ -31,7 +31,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+DATABASE_URL = os.environ['DATABASE_URL']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -163,14 +163,12 @@ MEDIA_ROOT = BASE_DIR / "images"
 # MEDIA_ROOT = os.path.join(BASE_DIR, "images")
 
 MEDIA_URL = "/images/"
-
 LOGIN_REDIRECT_URL = "/home"
 LOGOUT_REDIRECT_URL = "/home"
 
 # PYDEVD_USE_CYTHON=NO
 # PYDEVD_USE_FRAME_EVAL=NO
 DISABLE_COLLECTSTATIC = 1
-
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
