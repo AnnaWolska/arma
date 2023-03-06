@@ -14,20 +14,21 @@ from pathlib import Path
 import os
 # import dj_database_url
 
-#
-# from dotenv import load_dotenv
-# load_dotenv()
-# from local_settings import *
-# try:
-#     from local_settings import *
-# except ImportError:
-#     print("no local_settings.py file?")
+
+from dotenv import load_dotenv
+load_dotenv()
 
 
 
+IS_PRODUCTION = False  # helper
+
+if os.getcwd() == "/app":
+    DEBUG = False
+    IS_PRODUCTION = True
 
 # DATABASES['default'] = dj_database_url.parse('postgres://username:password@example.com:5432/database')
 # DATABASES['default'] = dj_database_url.config()
+# DATABASES['default'] = dj_database_url.config('postgres://username:password@example.com:5432/database')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -172,3 +173,38 @@ DISABLE_COLLECTSTATIC = 1
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+from local_settings import *
+try:
+    from local_settings import *
+except ImportError:
+    print("no local_settings.py file?")
+
+
+
+if IS_PRODUCTION:
+    import dj_database_url
+
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES["default"].update(db_from_env)
+
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    ALLOWED_HOSTS = ["armatournaments.herokuapp.com"]
+    # debug heroku
+    if DEBUG:
+        import logging
+
+        LOGGING = {
+            "version": 1,
+            "disable_existing_loggers": False,
+            "handlers": {
+                "console": {
+                    "class": "logging.StreamHandler",
+                },
+            },
+            "loggers": {
+                "django": {
+                    "handlers": ["console"],
+                    "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
+                },
+            },
+        }
