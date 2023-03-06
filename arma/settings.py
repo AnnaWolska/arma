@@ -174,7 +174,7 @@ DISABLE_COLLECTSTATIC = 1
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-from local_settings import *
+
 try:
     from local_settings import *
 except ImportError:
