@@ -1,0 +1,64 @@
+
+
+no local_settings.py file?
+
+Traceback (most recent call last):
+
+  File "/app/manage.py", line 22, in <module>
+
+    main()
+
+  File "/app/manage.py", line 18, in main
+
+    execute_from_command_line(sys.argv)
+
+  File "/app/.heroku/python/lib/python3.10/site-packages/django/core/management/__init__.py", line 419, in execute_from_command_line
+
+    utility.execute()
+
+  File "/app/.heroku/python/lib/python3.10/site-packages/django/core/management/__init__.py", line 363, in execute
+
+    settings.INSTALLED_APPS
+
+  File "/app/.heroku/python/lib/python3.10/site-packages/django/conf/__init__.py", line 82, in __getattr__
+
+    self._setup(name)
+
+  File "/app/.heroku/python/lib/python3.10/site-packages/django/conf/__init__.py", line 69, in _setup
+
+    self._wrapped = Settings(settings_module)
+
+  File "/app/.heroku/python/lib/python3.10/site-packages/django/conf/__init__.py", line 170, in __init__
+
+    mod = importlib.import_module(self.SETTINGS_MODULE)
+
+  File "/app/.heroku/python/lib/python3.10/importlib/__init__.py", line 126, in import_module
+
+    return _bootstrap._gcd_import(name[level:], package, level)
+
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+
+  File "/app/arma/settings.py", line 188, in <module>
+
+    db_from_env = dj_database_url.config(conn_max_age=500)
+
+  File "/app/.heroku/python/lib/python3.10/site-packages/dj_database_url.py", line 61, in config
+
+    return parse(
+
+  File "/app/.heroku/python/lib/python3.10/site-packages/dj_database_url.py", line 118, in parse
+
+    engine = SCHEMES[url.scheme] if engine is None else engine
+
+KeyError: ''
+
