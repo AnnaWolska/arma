@@ -8,38 +8,7 @@ from django.contrib.admin.widgets import AutocompleteSelectMultiple
 from django.core.exceptions import ValidationError
 
 
-
-# class ParticipantForm(forms.ModelForm):
-#     class Meta:
-#         model = Participant
-#         fields = ['name', 'school', 'image']
-#         labels = {
-#             "name": "Imię i nazwisko",
-#             "school": "Szkoła",
-#             "image": "zdjęcie",
-#         }
-#
-#         def __init__(self, *args, **kwargs):
-#             super().__init__(*args, **kwargs)
-#             self.helper = FormHelper()
-#             self.helper.form_method = 'post'
-#             self.helper.form_action = 'tournament_calculating: add_participant'
-#             self.helper.layout = Layout(
-#                 Fieldset(
-#                     'Dodaj uczestnika',
-#                     'Imię i nazwisko',
-#                     'szkoła',
-#                     'zdjęcie'
-#                 ),
-#                 ButtonHolder(
-#                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),
-#                     css_class="d-flex justify-content-end"
-#                 )
-#             )
 class CreateParticipantForm(forms.ModelForm):
-    # groups = forms.ModelChoiceField(
-    #     queryset=Group.objects.all(),
-    #     widget=autocomplete.Select)
 
     class Meta:
         model = Participant
@@ -68,8 +37,6 @@ class CreateParticipantForm(forms.ModelForm):
                 )
             )
 
-# ParticipantFormSet = forms.modelformset_factory(Participant, form=CreateParticipantForm)
-
 
 class AddParticipantForm(forms.ModelForm):
 
@@ -77,29 +44,9 @@ class AddParticipantForm(forms.ModelForm):
         model = Group
         fields = ['participants']
         labels = {"participants": 'uczestnicy'}
-
         widgets = {
             'participants': autocomplete.ModelSelect2Multiple(url='tournament_calculating:participant-autocomplete')
         }
-
-        # def __init__(self, *args, **kwargs):
-        #     super().__init__(*args, **kwargs)
-        #     self.helper = FormHelper()
-        #     self.helper.form_method = 'post'
-        #     self.helper.form_action = 'tournament_calculating: add_group'
-        #     self.helper.layout = Layout(
-        #         Fieldset(
-        #             'Dodaj grupę',
-        #         ),
-        #         ButtonHolder(
-        #             Submit('submit', 'Dodaj', css_class='btn btn-primary'),
-        #             css_class="d-flex justify-content-end"
-        #         )
-        #     )
-        #
-
-
-
 
 
 class AddRoundsForm(forms.ModelForm):
@@ -126,28 +73,19 @@ class AddRoundsForm(forms.ModelForm):
             )
 
 
-
 class AddPointsForm(forms.ModelForm):
-    # dodać walidację match case  'validate' pola albo formularza
-    #
+
     class Meta:
         model = Round
-
         fields = ["points_fighter_one","points_fighter_two"]
-
         labels = {"points_fighter_one": 'punkty pierwszego zawodnika',
                   "points_fighter_two":'punkty drugiego zawodnika',
                   }
 
-
-
-
         # def clean(self):
         #     super(self).clean()
-        #
         #     points_fighter_one = self.cleaned_data.get(points_fighter_one)
         #     points_fighter_two = self.cleaned_data.get(points_fighter_two)
-        #
         #     if points_fighter_one in ['1','2','3','4','5'] and points_fighter_two in ['1','2','3','4','5']:
         #         self._errors['username'] = self.error_class([
         #             'Minimum 5 characters required'])
@@ -171,17 +109,10 @@ class AddPointsForm(forms.ModelForm):
     def clean_points_fighter_one(self, *args, **kwargs):
 
         points_fighter_one = self.cleaned_data.get("points_fighter_one")
-        points_fighter_two = self.cleaned_data.get("points_fighter_two")
-        # if points_fighter_one in ['1','2','3','4','5'] and points_fighter_two in ['1','2','3','4','5']:
         if points_fighter_one == 2:
-            raise ValidationError("W starciu tylko jeden zawodnik może mieć punkty")
-
-        # if points_fighter_one == 3:
-        #     raise ValidationError("W starciu tylko jeden zawodnik może mieć punkty")
+            raise ValidationError("sprawdzam czy wyskoczył błąd, że jest 2")
         else:
             return points_fighter_one
-
-
 
 
 class AddGroupForm(forms.ModelForm):
@@ -199,7 +130,6 @@ class AddGroupForm(forms.ModelForm):
             self.helper.layout = Layout(
                 Fieldset(
                     'Dodaj grupę',
-                    # 'numer',
                 ),
                 ButtonHolder(
                     Submit('submit', 'Dodaj', css_class='btn btn-primary'),

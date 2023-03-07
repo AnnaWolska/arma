@@ -15,7 +15,6 @@ class OrganizerForm(forms.ModelForm):
             "name": "nazwa organizatora",
             "description": "opis organizatora",
             "image": "zdjęcie",
-
         }
 
 
@@ -23,11 +22,6 @@ OrganizerFormSet = forms.modelformset_factory(Organizer, form=OrganizerForm)
 
 
 class TournamentForm(forms.ModelForm):
-    # tournaments = forms.ModelMultipleChoiceField(
-    #     queryset=Tournament.objects.all(),
-    #     widget=autocomplete.ModelSelect2Multiple(url='tournaments:tournament-autocomplete')
-    # )
-    # organizator = forms.ModelChoiceField(queryset=Organizer.objects.all(), required=False)
 
     class Meta:
         model = Tournament
@@ -44,7 +38,6 @@ class TournamentForm(forms.ModelForm):
             self.helper = FormHelper()
             self.helper.from_method = 'post'
             self.helper.from_method = 'tournaments:add'
-            # to jest dwa razy metod i działa, nie ma action, o co chodzi?
             self.helper.layout = Layout(
                 Fieldset(
                     'title',
