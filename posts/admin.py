@@ -1,12 +1,5 @@
 from django.contrib import admin
-# from import_export import resources
-# from import_export.admin import ExportMixin
 from .models import Post
-
-#
-# class PostResource(resources.ModelResource):
-#     class Meta:
-#         model = Post
 
 
 @admin.register(Post)

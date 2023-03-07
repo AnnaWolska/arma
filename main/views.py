@@ -11,7 +11,7 @@ from django.contrib.auth import get_user_model
 def home_view(request):
     return render(request, 'home.html')
 
-# jeden return?
+
 def contact(request):
     if request.method == "POST":
         form = ContactForm(data=request.POST)
@@ -45,22 +45,3 @@ def user_profile(request, user_id):
             form.helper.inputs = []
     return render(request, 'userprofile.html', {'form':form})
 
-
-# user_profile_exists = UserProfile.objects.filter(user=user).exists()
-
-
-#
-# def user_profile(request, user_id):
-#     user = get_object_or_404(get_user_model(), id=user_id)
-#     # profile = user.user(request.POST)
-#     form = UserProfileForm(request.POST, instance=user)
-#     if request.method == "POST":
-#
-#         if form.is_valid():
-#             form.save()
-#             form = UserProfileForm(initial={"user": user, "bio": "bio"})
-#         if request.user != user:
-#             for field in form.fields:
-#                 form.fields[field].disabled = True
-#             form.helper.inputs = []
-#     return render(request, 'userprofile.html', {'form':form})

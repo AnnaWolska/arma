@@ -16,32 +16,32 @@
                 <p>
                     <h5>
                         {{  title   }}   -----
-
-                                    {% if user == request.user %}
+                        {% if user == request.user %}
                         <button id="delete_tournament" type="button" style=" text-decoration: none; background-color:Tomato; "  class="btn btn-primary">
                             <a style="color:white;" href = "{% url 'tournaments:delete_tournament' tournament_id %}">
                                 Usuń turniej
                             </a>
                         </button>
                         {% endif %}
-            </h5>
-
-            <br>
-                        organizauje:
-                        {% for organizer in organizers %}
-                        <a style="color:blue; text-decoration: none;" href = "{% url 'organizers:organizer_details' organizer.id %}" >
-                           <ul><li>{{  organizer.name }}</li></ul>
-                        </a>
-                        {% endfor %}
-
-                        <div>
-                            {% if image %}
-                            {% thumbnail image "300x300" as im %}
-                            <img src="{{ im.url }}" alt="zdj">
-                            {% endthumbnail %}
-                            {% endif %}
-                        </div>
-
+                    </h5>
+                    <br>
+                    organizauje:
+                    {% for organizer in organizers %}
+                    <a style="color:blue; text-decoration: none;" href = "{% url 'organizers:organizer_details' organizer.id %}" >
+                        <ul>
+                            <li>
+                                {{  organizer.name }}
+                            </li>
+                        </ul>
+                    </a>
+                    {% endfor %}
+                    <div>
+                        {% if image %}
+                        {% thumbnail image "300x300" as im %}
+                        <img src="{{ im.url }}" alt="zdj">
+                        {% endthumbnail %}
+                        {% endif %}
+                    </div>
                     wydarzenie utworzył użytkownik
                     {{  user }} w dniu {{ created}}
                     <br>
@@ -62,26 +62,23 @@
                     <hr>
                     grupy:
                     <ul style="column-count: 1;">
-
                         <ul>
-{#column-fill: auto;#}
                             {% for group in groups %}
                             <li>
                                 <a style="color:blue" href = "{% url 'tournament_calculating:group_details' group.id %}" >
                                     grupa {{ group.number }}{{ first_particpant }}
-
                                 </a>
                                 {% if user == request.user %}
-                                    {%  for f in fights %}
-                                    {% if not f.rounds %}
+                                {%  for f in fights %}
+                                {% if not f.rounds %}
                                 <button id="delete_tournament" type="button" style="background-color:plum; "  class="btn btn-primary">
                                     <a style="color:white;" href = "{% url 'tournament_calculating:draw_fights' group.id  %}">
                                         Losuj walki
                                     </a>
                                 </button>
-                                        {% endif %}
-                                    {% endfor %}
-                            {% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
                             </li>
                             <ol>
                                 {% for participant in group.participants.all %}
@@ -105,11 +102,11 @@
                         <li>
                             <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
                                 {{ participant.name }}
-                                                           {% if participant.image %}
-                            {% thumbnail participant.image "100x100" as im %}
-                            <img src="{{ im.url }}" alt="zdj">
-                            {% endthumbnail %}
-                            {% endif %}
+                                {% if participant.image %}
+                                {% thumbnail participant.image "100x100" as im %}
+                                <img src="{{ im.url }}" alt="zdj">
+                                {% endthumbnail %}
+                                {% endif %}
                             </a>
                         </li>
                         {% endfor %}
@@ -118,19 +115,20 @@
                     <hr>
                     <h3>
                         Przejdź do galerii ->
-
                         <h3   id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
-        <a style="color:white; text-decoration: none;" href = "{% url 'galleries:add_gallery' %}"> Dodaj galerię </a>   </h3>
-
-
-
-                                <ol>
-                                {% for gallery in galleries %}
-                                <li>   <a href = "{% url 'galleries:gallery_details' gallery.id %}">{{ gallery.title }}</a></li>
-                                {% endfor %}
-                                </ol>
-
-
+                            <a style="color:white; text-decoration: none;" href = "{% url 'galleries:add_gallery' %}">
+                                Dodaj galerię
+                            </a>
+                        </h3>
+                        <ol>
+                            {% for gallery in galleries %}
+                            <li>
+                                <a href = "{% url 'galleries:gallery_details' gallery.id %}">
+                                    {{ gallery.title }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ol>
                     </h3>
                     <hr>
                     <h3>
@@ -193,50 +191,46 @@
                                         <a style="text-decoration: none;" href = "{% url 'tournaments:edit_post' tournament_id post.id  %}">
                                             Edytuj post
                                         </a>
-{#                                        <div class="post" xmlns="http://www.w3.org/1999/xhtml">#}
-{#                                    <a class="btn btn-default" href="{% url 'tournaments:edit_post' tournament_id post.id  %}"><span class="glyphicon glyphicon-pencil"></span></a>#}
-{#                                    </div>#}
-{#                                        </p>#}
-                                    <p>
-                                        <a style="text-decoration: none; color:Tomato;" href = "{% url 'tournaments:delete_post' tournament_id post.id %}">
-                                            Usuń post
-                                        </a>
-                                    </p>
-                                    {% endif %}
-                                </li>
-                            </ol>
-                        </div>
-                        {% endfor %}
-                        <br>
-                        <button id="delete_tournament" type="button" style="background-color:yellowgreen; "  class="btn btn-primary">
-                            <a style="color:white;" href = "{% url 'tournaments:add_post' tournament_id %}">
-                                Dodaj post
-                            </a>
-                        </button>
-                    </ul>
-                    <div class="pagination">
-                        <span class = "step-links">
-                            {% if posts.has_previous %}
-                            <a href="?page=1">
-                                &laquo; pierwsza
-                            </a>
-                            <a href="?page={{ posts.previous_page_number }}">
-                                poprzednia
-                            </a>
-                            {% endif %}
-                            <span class="current">
-                                strona {{ posts.number}}  z {{ posts.paginator.num_pages }}
+                                        <p>
+                                            <a style="text-decoration: none; color:Tomato;" href = "{% url 'tournaments:delete_post' tournament_id post.id %}">
+                                                Usuń post
+                                            </a>
+                                        </p>
+                                        {% endif %}
+                                    </li>
+                                </ol>
+                            </div>
+                            {% endfor %}
+                            <br>
+                            <button id="delete_tournament" type="button" style="background-color:yellowgreen; "  class="btn btn-primary">
+                                <a style="color:white;" href = "{% url 'tournaments:add_post' tournament_id %}">
+                                    Dodaj post
+                                </a>
+                            </button>
+                        </ul>
+                        <div class="pagination">
+                            <span class = "step-links">
+                                {% if posts.has_previous %}
+                                <a href="?page=1">
+                                    &laquo; pierwsza
+                                </a>
+                                <a href="?page={{ posts.previous_page_number }}">
+                                    poprzednia
+                                </a>
+                                {% endif %}
+                                <span class="current">
+                                    strona {{ posts.number}}  z {{ posts.paginator.num_pages }}
+                                </span>
+                                {% if posts.has_next %}
+                                <a href="?page={{ posts.next_page_number }}">
+                                    następna
+                                </a>
+                                <a href="?page={{ posts.end_index }}">
+                                    ostatnia
+                                </a>
+                                {% endif %}
+                                {% if posts.end_index %}
+                                {% endif %}
                             </span>
-                            {% if posts.has_next %}
-                            <a href="?page={{ posts.next_page_number }}">
-                                następna
-                            </a>
-                            <a href="?page={{ posts.end_index }}">
-                                ostatnia
-                            </a>
-                            {% endif %}
-                            {% if posts.end_index %}
-                            {% endif %}
-                        </span>
-                    </div>
-                    {% endblock %}
+                        </div>
+                        {% endblock %}
