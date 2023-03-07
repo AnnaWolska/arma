@@ -13,13 +13,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 # import dj_database_url
-
-
 from dotenv import load_dotenv
-
 load_dotenv()
-
-
 
 IS_PRODUCTION = False  # helper
 
@@ -42,11 +37,8 @@ DATABASE_URL = os.environ['DATABASE_URL']
 # DEBUG = True
 
 ALLOWED_HOSTS = ['armatournaments.herokuapp.com', '127.0.0.1']
-# ALLOWED_HOSTS = os.environ.get(ALLOWED_HOSTS)
-# ALLOWED_HOSTS = ['arma.com']
 
 # Application definition
-
 INSTALLED_APPS = [
     'dal',
     'dal_select2',
@@ -153,11 +145,20 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, "images")
-STATIC_URL = 'static/'
+
+# STATIC_ROOT = os.path.join(BASE_DIR, "images")
+STATIC_ROOT = BASE_DIR / "images"
+STATIC_URL = 'images/'
+MEDIA_ROOT = BASE_DIR / "images"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "images")
+MEDIA_URL = "/images/"
+
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 # LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -166,10 +167,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SHELL_PLUS_PRINT_SQL = True
 
-MEDIA_ROOT = BASE_DIR / "images"
-# MEDIA_ROOT = os.path.join(BASE_DIR, "images")
 
-MEDIA_URL = "/images/"
+
+
 LOGIN_REDIRECT_URL = "/home"
 LOGOUT_REDIRECT_URL = "/home"
 
