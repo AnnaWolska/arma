@@ -16,7 +16,6 @@ from django.contrib import messages
 def posts_list(request, tournament_id):
     tournament = Tournament.objects.get(pk=tournament_id)
     posts = Post.objects.filter(pk=tournament_id).order_by('id')
-    # posts = Post.objects.get_queryset().filter(pk=tournament_id).order_by('id')
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     posts_list = paginator.get_page(page_number)
@@ -61,7 +60,6 @@ def add_post(request, tournament_id):
                 instance = form.save(commit=False)
                 instance.user = request.user
                 instance.tournament_id =tournament_id
-                # instance.image = request.FILES
                 instance.save()
                 form.save_m2m()
             messages.success(request, 'post dodany')

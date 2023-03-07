@@ -13,13 +13,11 @@ from django.db.models import Count
 from django.contrib import messages
 
 
-
 def show_galleries_list(request):
     galleries = Gallery.objects.all()
     # galleries = Gallery.objects.filter(status=Status.PUBLISHED).annotate(
     #             p_count=Count('photos')
     #          ).filter(p_count__gt=0)
-
     # galleries = [g for g in galleries if g.photos.count() >0]
 
     paginator = Paginator(galleries, 8)
@@ -85,25 +83,19 @@ def add_gallery(request):
 def add_photo(request, gallery_id):
 
     if request.user.is_authenticated:
-        # gallery = get_object_or_404(Gallery, pk=gallery_id)
         gallery = Gallery.objects.get(pk=gallery_id)
-        # form = PhotoForm()
         PhotosFormSet = modelformset_factory(Photo, form=PhotoForm, extra=1)
         formset = PhotosFormSet(queryset=gallery.photos.none())
-        # context = {
-        #     "gallery": gallery,
-        # }
+
         if request.method == "POST":
-            # form = PhotoForm(request.POST, request.FILES)
             formset = PhotosFormSet(request.POST, request.FILES)
             if formset.is_valid():
                 for f in formset.cleaned_data:
                     if f:
                         Photo.objects.create(gallery=gallery, **f)
-                        # Photo.objects.create(gallery=gallery)
+
                         instance = formset.save(commit=False)
-                        # instance.gallery = gallery
-                        # instance.save()
+
             messages.success(request, 'zdjęcie dodane')
             return HttpResponseRedirect(reverse("galleries:add_photo", args=[gallery_id]))
         return render(

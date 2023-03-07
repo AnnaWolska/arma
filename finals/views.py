@@ -31,10 +31,6 @@ def finals(request, group_id):
     # finalists = prtcp_ls
     # print(prtcp_ls)
 
-
-
-
-
     for p in participants:
         for f in finalists:
             if p.id == f.participant_id:

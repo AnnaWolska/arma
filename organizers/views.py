@@ -22,7 +22,6 @@ def organizers_list(request):
 
 
 def add_organizer(request):
-
     if request.user.is_authenticated:
         if request.method == "POST":
             form = OrganizerForm(request.POST, request.FILES)
