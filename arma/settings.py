@@ -227,7 +227,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-# import dj_database_url
+import dj_database_url
 
 
 from dotenv import load_dotenv
@@ -249,6 +249,11 @@ if os.getcwd() == "/app":
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASE_URL = os.environ['DATABASE_URL']
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -275,6 +280,7 @@ INSTALLED_APPS = [
     'import_export',
     'crispy_forms',
     'sorl.thumbnail',
+    'whitenoise.runserver_nostatic',
     # 'tinymce',
     #arma:
     'tournaments.apps.TournamentsConfig',
@@ -383,10 +389,14 @@ else:
 #     # BASE_DIR / 'static'
 #     os.path.join(BASE_DIR, 'static'),
 # ]
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'arma/static')
+]
 
-MEDIA_ROOT = BASE_DIR / "images"
-# MEDIA_ROOT = os.path.join(BASE_DIR, "images")
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# MEDIA_ROOT = BASE_DIR / "images"
+MEDIA_ROOT = os.path.join(BASE_DIR, "images")
 MEDIA_URL = "/images/"
 
 # LOCALE_PATHS = [str(BASE_DIR / "locale")]
@@ -396,7 +406,6 @@ MEDIA_URL = "/images/"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SHELL_PLUS_PRINT_SQL = True
-
 
 
 LOGIN_REDIRECT_URL = "/home"
