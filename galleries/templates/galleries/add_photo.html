@@ -3,8 +3,6 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
-{#from django import forms#}
-{#from django.forms import formset_factory#}
 
 {%  block style %}
     <link href= "{% static "organizers/css/style.css" %}" rel=stylesheet">
@@ -22,7 +20,7 @@
                 {% endfor %}
             </div>
             <div class="col-6 offset-md-3">
-{#                <form method = "POST" enctype="multipart/form-data">#}
+
                 <form id="form-container" method = "POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ formset.management_form }}
@@ -31,8 +29,7 @@
                         {{ form|crispy }}
                     </div>
                 {% endfor %}
-{#                <button type="submit"#}
-{#                class = "btn btn-primary">Wyślij</button>#}
+
                 <hr>
                 <button id="add-form" type="button"  style="background-color:yellowgreen"    class="btn btn-primary">Dodaj jeszczcze jeden</button>
                 <hr>
@@ -43,8 +40,6 @@
         <a style="color:white; text-decoration: none;" href = "{% url 'galleries:gallery_details' gallery.id %}"> Pokaż galerię </a>   </span>
 
             </div>
-
-
 
 
         </div>
@@ -70,6 +65,4 @@
         }
     </script>
 
-{#    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>#}
-{#    {{ form.media }}#}
 {% endblock %}
