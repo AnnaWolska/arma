@@ -2,20 +2,16 @@
 {% load crispy_forms_tags %}
 {% block title %} Profil {% endblock %}
 {% block content %}
-    <p><h4>profil:</h4></p>
-
-{#   {{ username }}#}
-{#    {{ name }}#}
-    {{ bio }}
-{#    {{ participant }}#}
-
-
-    <img src="/static/students.jpeg" alt="studenci">
+<p>
+    <h4>
+        profil:
+    </h4>
+</p>
+{{ bio }}
+<img src="/static/students.jpeg" alt="studenci">
 {% crispy form %}
-    <div>
-
+<div>
     <ol>
-
     </ol>
-    </div>
+</div>
 {% endblock %}

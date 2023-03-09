@@ -2,7 +2,6 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
-{#{% load util %}#}
 {% block style %}
 <link href ="{% static "tournaments_calculating/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
@@ -30,34 +29,24 @@
                 <img src="{{ im.url }}" alt="zdj">
                 {% endthumbnail %}
                 {% endif %}
-            {% for organizer in tournament.organizers.all%}
+                {% for organizer in tournament.organizers.all%}
                 {{ organizer }}
-            {% endfor %}
+                {% endfor %}
             </h5>
             {% if tournament.user == request.user %}
             {% if not rounds %}
             <button id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}">
-{#                     <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' group_id%}">#}
-{#                   <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' group_id%}">#}
                     Dodaj uczestnika
                 </a>
-                            <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}">
-{#                     <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' group_id%}">#}
-{#                   <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' group_id%}">#}
-
+                <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:add_participant' tournament.id group_id%}">
                 </a>
             </button>
-
-
-{#                        {% if  %}#}
-                                <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
+            <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:create_participant' %}">
-                Utwórz uczestnika
+                    Utwórz uczestnika
                 </a>
-                 </span>
-
-{#                    {% endif %}#}
+            </span>
             {% endif %}
             {% if not rounds %}
             <button id="delete_tournament" type="button" style="background-color:plum"  class="btn btn-primary">
@@ -73,24 +62,13 @@
                 </a>
             </button>
             {% endif %}
-
-{#                                {% if rounds %}#}
-{#            <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">#}
-{#                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:' group_id %}">#}
-{#                    uzupełnienie punktów#}
-{#                </a>#}
-{#            </span>#}
-{#                    {% endif %}#}
-
-
-                {% if rounds %}
+            {% if rounds %}
             <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
                 <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:group_summary' group_id %}">
                     podsumowanie grupy
                 </a>
             </span>
-                {% endif %}
-
+            {% endif %}
             {% endif %}
         </div>
         <hr>
@@ -108,7 +86,6 @@
             dodaj ile starć ma mieć każda walka
             {% endif %}
         </center>
-
         <h5>
             walki grupa {{  number }} :
         </h5>
@@ -120,11 +97,9 @@
                 </td>
                 {% endfor %}
             </tr>
-
             <tr>
                 {% for fighter in fighters_one_names %}
-
-                    <td style=" background:  {{ group.color_fighter_one }}  ">
+                <td style=" background:  {{ group.color_fighter_one }}  ">
                     <a style="text-decoration: none; color:black" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                         <b>
                             {{ fighter.name }}
@@ -147,7 +122,6 @@
                 <td>
                     {% for r in fight.rounds_of_fight.all|dictsort:"id" %}
                     <a id="delete_tournament" class="btn btn-primary" style="color:white; background-color:orange; text-decoration: none;   " href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
-                        {#                            {% if r.points_fighter_one == int and r.points_fighter_one > 0 or r.points_fighter_one == 0%}#}
                         {% if r.points_fighter_one %}
                         <b>
                             <span style=" color: white">
@@ -156,11 +130,11 @@
                         </b>
                         <b>
                             <span style=" color: black" >
-                                 {% if r.points_fighter_one|floatformat %}
+                                {% if r.points_fighter_one|floatformat %}
                                 {{ r.points_fighter_one|floatformat:"-2" }}
-                                                                         {% else %}
-                                    {{ r.points_fighter_one}}
-                                    {% endif %}
+                                {% else %}
+                                {{ r.points_fighter_one}}
+                                {% endif %}
                             </span>
                         </b>
                         {% endif %}
@@ -175,9 +149,9 @@
                             <span style=" color: black">
                                 {% if r.points_fighter_two|floatformat %}
                                 {{ r.points_fighter_two|floatformat:"-2" }}
-                                    {% else %}
-                                    {{ r.points_fighter_two}}
-                                    {% endif %}
+                                {% else %}
+                                {{ r.points_fighter_two}}
+                                {% endif %}
                             </span>
                         </b>
                         {% else %}
@@ -221,11 +195,8 @@
                                     wyjściowe
                                 </span>
                                 grupa {{  number }} ( średnia punktów w turnieju z odbytych walk -
-
-{#                                 {{ participant.tournament_points }}#}
+                                {#                                 {{ participant.tournament_points }}#}
                                 {{ participant.points_average }}
-
-
                                 <span style="color: crimson">
                                     {{ tournaments_fighters_average}}
                                 </span>
@@ -245,27 +216,19 @@
                         <td >
                             <table BORDER CELLSPACING=5 CELLPADDING=15  >
                                 <tr>
-{#                                                {% for participant in group_participants.all %}#}
-                                                     {% for participant in group_participants.all %}
-{#                                              {% for participant in group_participants.all|dictsortreversed:"tournaments_points" %}#}
+                                    {% for participant in group_participants.all %}
                                     {%  if gr.id == group_id %}
                                     <td style="background-color: plum">
                                         {% endif %}
                                         <td style="width:100%;table-layout:fixed;">
                                             {{ participant.participant.name }} -
-{#                                            {% if participant.group_points is not None %}#}
-                                                         {% if participant.tournament_points is not None %}
+                                            {% if participant.tournament_points is not None %}
                                             <b>
-
-{#                                                {{ participant.group_points }} x#}
-                                                 {{ participant.tournament_points }} x
+                                                {{ participant.tournament_points }} x
                                                 <span style="color: crimson">
                                                     {{ tournaments_fighters_average}}
                                                 </span>
                                                 =
-{#                                                <span style="color: darkblue">#}
-{#                                                    {{ participant.points_average }}#}
-{#                                                </span>#}
                                             </b>
                                             {% endif %}
                                         </td>
@@ -292,15 +255,13 @@
                                         {% endthumbnail %}
                                         {% endif %}
                                     </a>
-
                                     {% if tournament.user == request.user %}
-                                   {% if not rounds %}
+                                    {% if not rounds %}
                                     <a style="color:red;  column-count: 2;"   href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >
                                         usuń
                                     </a>
                                     {% endif %}
-                                      {% endif %}
-
+                                    {% endif %}
                                 </li>
                             </ul>
                             {% endfor %}

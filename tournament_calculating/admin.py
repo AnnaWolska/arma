@@ -7,8 +7,6 @@ class ParticipantAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "school"]
     search_fields = ["name", "school"]
     list_filter = ["name", "school"]
-    # filter_horizontal =
-    # autocomplete_fields =
 
 
 @admin.register(Group)
@@ -52,8 +50,6 @@ class FightAdmin(admin.ModelAdmin):
 
     search_fields = ["group", "rounds"]
     list_filter = ["group", "rounds"]
-
-
 
 
 @admin.register(Round)

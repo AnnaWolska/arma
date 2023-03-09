@@ -5,7 +5,6 @@ from tournaments.models import Tournament
 
 
 class Participant(models.Model):
-    # user = models.OneToOneField("auth.User", on_delete=models.CASCADE, null=True)
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True, related_name="participants")
     name = models.CharField(max_length=255)
     school = models.CharField(max_length=500)
@@ -51,16 +50,6 @@ class Group(models.Model):
         ('peru', 'brązowy'),
         ('pink','różowy' ),
         ('darkgrey','szary' )
-
-        # ('red', 'red'),
-        # ('blue', 'blue'),
-        # ('green', 'green'),
-        # ('yellow', 'yellow'),
-        # ('orange', 'orange)'),
-        # ('pink', 'pink'),
-        # ('white', 'white'),
-        # ('black', 'black)'),
-        # ('pink', 'pink'),
     )
     NUMBER = (
         ('0', '0'),
