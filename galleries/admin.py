@@ -10,21 +10,18 @@ from sorl.thumbnail import get_thumbnail
 
 
 class AdminImageWidget(AdminFileWidget):
-
     def render(self, name, value, attrs=None, renderer=None):
         output = []
         if value and getattr(value, "url", None):
             t = get_thumbnail(value, "150")
             output.append(f'<a href="{value.url}" target="_blank"><img src="{t.url}"></a>')
         output.append(super(AdminFileWidget, self).render(name, value, attrs, renderer))
-        # return mark_safe(''.join(output))
         return ''.join(output)
 
 
 class PhotoInLine(admin.StackedInline):
     model = Photo
     fields = ['title', 'short_description', 'image']
-    # readonly_fields = ['slug']
     extra = 1
     formfield_overrides = {
         models.ImageField: {'widget': AdminImageWidget}
@@ -58,7 +55,6 @@ class HasPhotosFilter(admin.SimpleListFilter):
 @admin.register(Gallery)
 class GalleryAdmin(ExportMixin,admin.ModelAdmin):
     list_display = ["id","title","photos_count","description","created","modified","user","tournament"]
-    # fields = ["title","slug","description","created","modified","user"]
     fieldsets = (
         ('', {
             'fields': ('title',),
@@ -70,7 +66,6 @@ class GalleryAdmin(ExportMixin,admin.ModelAdmin):
 
     )
     search_fields = ["title","description","created","modified","user"]
-    # list_filter = ["title","slug","description","created","modified","user"]
     list_filter = [HasPhotosFilter]
     resource_class = GalleryResource
     inlines = (PhotoInLine,)

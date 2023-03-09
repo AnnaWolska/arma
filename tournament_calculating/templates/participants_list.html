@@ -8,24 +8,16 @@
 <h3>
     Lista uczestników turniejów:
 </h3>
-
-{#{{ request.user.id }}{{ participants_user_ids}}#}
-                {% if request.user.id not in participants_user_ids or request.user.id in users_organizers %}
-{#                    {{ request.user.id}} {{ participants_user_ids}}#}
-
-                <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
-                <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:create_participant' %}">
-                   dodaj uczestnika
-                </a>
-                 </span>
-
-                     {% endif %}
+{% if request.user.id not in participants_user_ids or request.user.id in users_organizers %}
+<span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
+    <a style="color:white; text-decoration: none;" href = "{% url 'tournaments:create_participant' %}">
+        dodaj uczestnika
+    </a>
+</span>
+{% endif %}
 użytkownik aplikacji może dodać jeden profil ucestnika turniejów - swój
-    <br>
-    organizator może dodać wiele profilów
-
-
-
+<br>
+organizator może dodać wiele profilów
 <div class="pagination">
     <span class = "step-links">
         {% if participants_list.has_previous %}
@@ -51,24 +43,19 @@ użytkownik aplikacji może dodać jeden profil ucestnika turniejów - swój
         {% endif %}
     </span>
 </div>
-
 {% for participant in participants_register  %}
 <div class="list-group">
     <ol>
         <li class="list-group-item" >
-{#            <p style="font-family: cursive " >#}
             <p>
                 <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
                     {{ participant.name}} z {{ participant.school}},
-
-                {% if participant.tournaments.all %}
+                    {% if participant.tournaments.all %}
                     udział w
-
-                {% for p in participant.tournaments.all %}
+                    {% for p in participant.tournaments.all %}
                     {{ p.title }}
                     {% endfor %}
-{% endif %}
-
+                    {% endif %}
                 </a>
             </p>
             {% if participant.image %}
@@ -76,54 +63,47 @@ użytkownik aplikacji może dodać jeden profil ucestnika turniejów - swój
             <img src="{{ im.url }}" alt="zdj">
             {% endthumbnail %}
             {% endif %}
-
-        użytkownik: {{ participant.user }}
-
-                    {% if organizer.user == request.user %}
+            użytkownik: {{ participant.user }}
+            {% if organizer.user == request.user %}
             <button id="delete_organizer" type="button" style="background-color:Tomato; "  class="btn btn-primary">
-{#                <a style="color:white;" href = "{% url 'organizers:delete_participant' participant.id %}">#}
+                {#
+                <a style="color:white;" href = "{% url 'organizers:delete_participant' participant.id %}">
+                    #}
                     Usuń uczestnika
                 </a>
             </button>
             <button id="delete_tournament" type="button" style="background-color:blue "  class="btn btn-primary">
-{#                <a style="color:white;" href = "{% url 'organizers:edit_participant' participant.id %}">#}
-                    Edytuj uczestnika
-                </a>
-            </button>
-            {% endif %}
-
-
-
-
-
-        </li>
-    </ol>
+                Edytuj uczestnika
+            </a>
+        </button>
+        {% endif %}
+    </li>
+</ol>
 </div>
 {% endfor %}
-
 <div class="pagination">
-    <span class = "step-links">
-        {% if participants_list.has_previous %}
-        <a style="text-decoration: none;" href="?page=1">
-            &laquo; pierwsza
-        </a>
-        <a style="text-decoration: none;" href="?page={{participants_list.previous_page_number }}">
-            poprzednia
-        </a>
-        {% endif %}
-        <span class="current">
-            strona {{ participants_list.number}}  z {{ participants_list.paginator.num_pages }}
-        </span>
-        {% if participants_list.has_next %}
-        <a style="text-decoration: none;" href="?page={{ participants_list.next_page_number }}">
-            następna
-        </a>
-        <a style="text-decoration: none;" href="?page={{ participants_list.end_index }}">
-            ostatnia
-        </a>
-        {% endif %}
-        {% if participants_list.end_index %}
-        {% endif %}
+<span class = "step-links">
+    {% if participants_list.has_previous %}
+    <a style="text-decoration: none;" href="?page=1">
+        &laquo; pierwsza
+    </a>
+    <a style="text-decoration: none;" href="?page={{participants_list.previous_page_number }}">
+        poprzednia
+    </a>
+    {% endif %}
+    <span class="current">
+        strona {{ participants_list.number}}  z {{ participants_list.paginator.num_pages }}
     </span>
+    {% if participants_list.has_next %}
+    <a style="text-decoration: none;" href="?page={{ participants_list.next_page_number }}">
+        następna
+    </a>
+    <a style="text-decoration: none;" href="?page={{ participants_list.end_index }}">
+        ostatnia
+    </a>
+    {% endif %}
+    {% if participants_list.end_index %}
+    {% endif %}
+</span>
 </div>
 {% endblock %}
