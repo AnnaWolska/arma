@@ -110,10 +110,6 @@ TEMPLATES = [
     },
 ]
 
-
-
-
-
 WSGI_APPLICATION = 'arma.wsgi.application'
 
 # Database
@@ -136,7 +132,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -184,7 +179,6 @@ except ImportError:
     print("no local_settings.py file?")
 
 
-
 if IS_PRODUCTION:
     import dj_database_url
 
@@ -212,3 +206,7 @@ if IS_PRODUCTION:
                 },
             },
         }
+
+CLOUDINARY_STORAGE = { 'CLOUD_NAME': '',
+                       'API_KEY': '',
+                       'API_SECRET': '' }
