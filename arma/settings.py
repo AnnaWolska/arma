@@ -9,9 +9,14 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
+# import dj_database_url
+
+
 from dotenv import load_dotenv
+
 load_dotenv()
+
+
 
 IS_PRODUCTION = False  # helper
 
@@ -26,8 +31,6 @@ if os.getcwd() == "/app":
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASE_URL = os.environ['DATABASE_URL']
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -38,6 +41,8 @@ DATABASES['default'].update(db_from_env)
 ALLOWED_HOSTS = ['armatournaments.herokuapp.com', '127.0.0.1']
 # ALLOWED_HOSTS = os.environ.get(ALLOWED_HOSTS)
 # ALLOWED_HOSTS = ['arma.com']
+
+# Application definition
 
 INSTALLED_APPS = [
     'dal',
@@ -52,7 +57,6 @@ INSTALLED_APPS = [
     'import_export',
     'crispy_forms',
     'sorl.thumbnail',
-    'whitenoise.runserver_nostatic',
     # 'tinymce',
     #arma:
     'tournaments.apps.TournamentsConfig',
@@ -107,10 +111,13 @@ DATABASES = {
     }
 }
 
+
+
 WSGI_APPLICATION = 'arma.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -129,6 +136,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -142,30 +150,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-
-# STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "images")
 STATIC_URL = 'static/'
-if DEBUG:
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'static')
-    ]
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-# STATIC_ROOT =  BASE_DIR / "static"
-# STATICFILES_DIRS = [
-#     # BASE_DIR / 'static'
-#     os.path.join(BASE_DIR, 'static'),
-# ]
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'arma/static')
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
 ]
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-# MEDIA_ROOT = BASE_DIR / "images"
-MEDIA_ROOT = os.path.join(BASE_DIR, "images")
-MEDIA_URL = "/images/"
-
 # LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -174,6 +163,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SHELL_PLUS_PRINT_SQL = True
 
+MEDIA_ROOT = BASE_DIR / "images"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "images")
+
+MEDIA_URL = "/images/"
 LOGIN_REDIRECT_URL = "/home"
 LOGOUT_REDIRECT_URL = "/home"
 
@@ -183,10 +176,13 @@ LOGOUT_REDIRECT_URL = "/home"
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+
 try:
     from local_settings import *
 except ImportError:
     print("no local_settings.py file?")
+
+
 
 if IS_PRODUCTION:
     import dj_database_url
@@ -215,4 +211,3 @@ if IS_PRODUCTION:
                 },
             },
         }
-# else:
