@@ -216,12 +216,13 @@
                         <td >
                             <table BORDER CELLSPACING=5 CELLPADDING=15  >
                                 <tr>
-                                    {% for participant in group_participants.all %}
+                                    {% for participant in gr.participants.all %}
                                     {%  if gr.id == group_id %}
                                     <td style="background-color: plum">
                                         {% endif %}
                                         <td style="width:100%;table-layout:fixed;">
-                                            {{ participant.participant.name }} -
+                                        {{ participant }} -
+
                                             {% if participant.tournament_points is not None %}
                                             <b>
                                                 {{ participant.tournament_points }} x
