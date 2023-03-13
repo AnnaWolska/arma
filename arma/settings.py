@@ -160,8 +160,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SHELL_PLUS_PRINT_SQL = True
 
-MEDIA_ROOT = BASE_DIR / "images"
-# MEDIA_ROOT = os.path.join(BASE_DIR, "images")
+# MEDIA_ROOT = BASE_DIR / "images"
+MEDIA_ROOT = os.path.join(BASE_DIR, "images")
 
 MEDIA_URL = "/images/"
 LOGIN_REDIRECT_URL = "/home"
@@ -169,7 +169,7 @@ LOGOUT_REDIRECT_URL = "/home"
 
 # PYDEVD_USE_CYTHON=NO
 # PYDEVD_USE_FRAME_EVAL=NO
-DISABLE_COLLECTSTATIC = 1
+
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
