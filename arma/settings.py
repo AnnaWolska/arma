@@ -207,6 +207,6 @@ if IS_PRODUCTION:
             },
         }
 
-CLOUDINARY_STORAGE = { 'CLOUD_NAME': '',
-                       'API_KEY': '',
-                       'API_SECRET': '' }
+CLOUDINARY_STORAGE = { 'CLOUD_NAME': 'arma',
+                       'API_KEY': 'API_KAY',
+                       'API_SECRET': 'API_SECRET' }
