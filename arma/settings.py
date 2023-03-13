@@ -18,7 +18,9 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 IS_PRODUCTION = False  # helper
 
@@ -59,6 +61,8 @@ INSTALLED_APPS = [
     'import_export',
     'crispy_forms',
     'sorl.thumbnail',
+    'cloudinary_storage',
+    'cloudinary',
     # 'tinymce',
     #arma:
     'tournaments.apps.TournamentsConfig',
