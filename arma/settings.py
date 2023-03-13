@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 # import dj_database_url
-
-
 # from dotenv import load_dotenv
 # load_dotenv()
 
@@ -64,7 +62,6 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'cloudinary_storage',
     'cloudinary',
-    # 'tinymce',
     #arma:
     'tournaments.apps.TournamentsConfig',
     'posts.apps.PostsConfig',
@@ -147,12 +144,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "images")
 # STATIC_ROOT = "/static/"
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'statics'
+    BASE_DIR / 'static'
 ]
 # LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # Default primary key field type
@@ -172,7 +170,6 @@ LOGOUT_REDIRECT_URL = "/home"
 # PYDEVD_USE_CYTHON=NO
 # PYDEVD_USE_FRAME_EVAL=NO
 
-
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 from local_settings import *
@@ -180,7 +177,6 @@ try:
     from local_settings import *
 except ImportError:
     print("no local_settings.py file?")
-
 
 if IS_PRODUCTION:
     import dj_database_url
