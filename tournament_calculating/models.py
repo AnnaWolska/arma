@@ -95,6 +95,7 @@ class Group(models.Model):
 class ParticipantGroup(models.Model):
     participant = models.ForeignKey("Participant",on_delete=models.CASCADE, null=True)
     group = models.ForeignKey("Group",on_delete=models.CASCADE, null=True)
+    tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, null=True)
     tournament_points = models.PositiveSmallIntegerField(null=True, default=0)
     tournament_average = models.PositiveSmallIntegerField(null=True, default=0)
     tournament_wins = models.PositiveSmallIntegerField(null=True, default=0)

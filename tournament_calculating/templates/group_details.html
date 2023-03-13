@@ -223,6 +223,13 @@
                                         <td style="width:100%;table-layout:fixed;">
                                         {{ participant }} -
 
+
+                                        {% for participantgroup in all_group_participants %}
+                                        {% if participant.id  == participantgroup.id %}
+                                                            {{ participantgroup.tournament_points }}
+                                        {% endif %}
+                                        {% endfor %}
+
                                             {% if participant.tournament_points is not None %}
                                             <b>
                                                 {{ participant.tournament_points }} x

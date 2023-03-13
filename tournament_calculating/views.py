@@ -68,12 +68,18 @@ def group_details(request, group_id):
     rounds_obj = group.rounds_of_group.all()
     number = group.number
     tournament = group.tournament
+    tournament_groups_ids = []
+    groups = Group.objects.filter(tournament=tournament).order_by("number")
+    all_group_participants = []
+    for group in groups:
+        all_group_participants.append(group.id)
     # participants = group.participants.all().order_by("points_average")
     participants = group.participants.all()
     # group_participants = ParticipantGroup.all().order_by("tournament_points")
+    # all_group_participants = ParticipantGroup.objects.filter(group_id  tournament_groups_ids)
     group_participants = ParticipantGroup.objects.filter(group_id=group_id)
     fights = group.fights.all().order_by('id')
-    groups = Group.objects.filter(tournament=tournament).order_by("number")
+
     first_fight = fights.first()
     tournaments_fighters_average = tournament.tournament_average
     # tournaments_fighters_average =
@@ -110,8 +116,8 @@ def group_details(request, group_id):
         "groups": groups,
         "tournaments_fighters_average": tournaments_fighters_average,
         "group":group,
-        "group_participants":group_participants
-
+        "group_participants":group_participants,
+        "all_group_participants":all_group_participants
     })
 
 
@@ -266,6 +272,7 @@ def add_participant(request, tournament_id, group_id):
 #TODO: dodać edycję grupy
 def add_group(request, tournament_id):
     tournament = Tournament.objects.get(pk=tournament_id)
+    # group_participants = ParticipantGroup.objects.filter(group_id=)
     number = 0
 
     if request.user.is_authenticated:
@@ -292,6 +299,7 @@ def add_group(request, tournament_id):
                 obj.color_fighter_two = color_fighter_two
                 obj.save()
                 groups.create(number=number, tournament=tournament, color_fighter_one=color_fighter_one, color_fighter_two=color_fighter_two)
+
                 messages.success(request, 'grupa dodana')
                 return HttpResponseRedirect(reverse(
                     "tournaments:tournament_details",
@@ -595,6 +603,8 @@ def add_points (request, group_id, fight_id, round_id):
                         if p.id == fight.fighter_two_id:
                             one_more_ls_to_append.append(int(fight.fighter_two_points))
                     prtcp_to_change = ParticipantGroup.objects.get(participant=p, group=group)
+                    # dodaję punktu z danego turnieju danemu zawodnikowi
+                    print("prtcp_to_change",prtcp_to_change,sum(one_more_ls_to_append))
                     prtcp_to_change.tournament_points = sum(one_more_ls_to_append)
                     prtcp_to_change.save()
                     p.save()
