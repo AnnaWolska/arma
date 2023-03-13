@@ -1,0 +1,20 @@
+
+li:nth-child(odd) a {background-color:lavender;}
+.select2-selection_rendered {border:1px solid lightgray}
+
+.select2-container {
+    min-width: 15em !important;
+    width: 100% !important ;
+}
+
+
+#clickable{
+    background-color: black;
+    color: white;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    text-decoration: none;
+    width: 100px;
+    text-align: center;
+}
