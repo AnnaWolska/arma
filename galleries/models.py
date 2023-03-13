@@ -8,6 +8,7 @@ import string
 from random import random
 from django.db import models
 # from django.utils.text import slugify
+from cloudinary.models import CloudinaryField
 
 
 class Gallery(Timestamped):
