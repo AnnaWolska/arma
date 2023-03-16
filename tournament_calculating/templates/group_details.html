@@ -248,24 +248,25 @@
                         </table>
                         <br>
                         uczestnicy:
-                        {% for participant in participants|dictsortreversed:"points_average" %}
+{#                        {% for participant in participants|dictsortreversed:"points_average" %}#}
+                           {% for participant in group_participants|dictsortreversed:"tournament_average" %}
                         <ul>
                             <li>
                                 <br>
                                 <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
                                     <b>
-                                        {{  participant.name }} z {{ participant.school  }}
+                                        {{  participant.participant.name }} z {{ participant.participant.school  }}
                                     </b>
                                     <div>
-                                        {% if participant.image %}
-                                        {% thumbnail participant.image "100x100" as im %}
+                                        {% if participant.participant.image %}
+                                        {% thumbnail participant.participant.image "100x100" as im %}
                                         <img src="{{ im.url }}" alt="zdj">
                                         {% endthumbnail %}
                                         {% endif %}
                                     </a>
                                     {% if tournament.user == request.user %}
                                     {% if not rounds %}
-                                    <a style="color:red;  column-count: 2;"   href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.id%}" >
+                                    <a style="color:red;  column-count: 2;"   href = "{% url 'tournament_calculating:delete_group_participant' group_id tournament.id participant.participant.id%}" >
                                         usuń
                                     </a>
                                     {% endif %}

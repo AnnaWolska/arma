@@ -75,11 +75,11 @@ def group_details(request, group_id):
         all_group_participants.append(group.id)
     # participants = group.participants.all().order_by("points_average")
     participants = group.participants.all()
+    print("participants",participants)
     # group_participants = ParticipantGroup.all().order_by("tournament_points")
     # all_group_participants = ParticipantGroup.objects.filter(group_id  tournament_groups_ids)
     group_participants = ParticipantGroup.objects.filter(group_id=group_id)
     fights = group.fights.all().order_by('id')
-
     first_fight = fights.first()
     tournaments_fighters_average = tournament.tournament_average
     # tournaments_fighters_average =
@@ -329,9 +329,9 @@ def draw_fights(request, group_id):
     if group_fights:
         group_fights.delete()
         group.save()
-        for participant in group.participants.all():
-            participant.group_points = 0
-            participant.save()
+        # for participant in group.participants.all():
+            # participant.group_points = 0
+            # participant.save()
     tournament = group.tournament
     fights = Fight.objects.all().order_by('id')
     participants_pairs = list(itertools.chain.from_iterable(itertools.combinations(group.participants.all(), r)
