@@ -72,6 +72,7 @@ def group_details(request, group_id):
     groups = Group.objects.filter(tournament=tournament).order_by("number")
     participants = group.participants.all()
     group_participants = ParticipantGroup.objects.filter(group_id=group_id)
+    tournament_participants = ParticipantGroup.objects.filter(tournament_id=tournament)
     fights = group.fights.all().order_by('id')
     first_fight = fights.first()
     tournaments_fighters_average = tournament.tournament_average
@@ -110,6 +111,7 @@ def group_details(request, group_id):
         "tournaments_fighters_average": tournaments_fighters_average,
         "group":group,
         "group_participants":group_participants,
+        "tournament_participants":tournament_participants,
     })
 
 
@@ -120,7 +122,9 @@ def fight_details(request, group_id, fight_id):
     number = group.number
     tournament = group.tournament
     groups = Group.objects.all(tournament=tournament)
+    print("")
     participants = group.participants.all()
+    # tournament_participants =
     participants_ids = []
     for p in participants:
         participants_ids.append(p.id)
@@ -238,12 +242,17 @@ class ParticipantAutocomplete(autocomplete.Select2QuerySetView):
 
 def add_participant(request, tournament_id, group_id):
     group = Group.objects.get(pk=group_id)
+    tournament = group.tournament
+    group_participants = ParticipantGroup.objects.filter(group_id=group_id)
     if request.user.is_authenticated:
         if request.method == "POST":
             group = Group.objects.get(pk=group_id)
             form = AddParticipantForm(request.POST, request.FILES, instance=group)
             if form.is_valid():
                 instance = form.save()
+                for gr_pr in group_participants:
+                    gr_pr.tournament = tournament
+                    gr_pr.save()
                 messages.success(request, 'uczestnicy dodani')
 
                 return HttpResponseRedirect(reverse(

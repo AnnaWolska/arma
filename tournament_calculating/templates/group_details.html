@@ -215,6 +215,7 @@
                             <table BORDER CELLSPACING=5 CELLPADDING=15  >
                                 <tr>
                                     {% for participant in gr.participants.all %}
+{#                                        {% for  %}#}
                                     {%  if gr.id == group_id %}
                                     <td style="background-color: plum">
                                         {% endif %}
@@ -223,6 +224,7 @@
 
                                            {%  for gr_prtcp in group_participants %}
                                                {% if gr_prtcp.participant == participant %}
+{#                                                   {% if gr_prtcp.tournament == tournament_id %}#}
                                                     {{ gr_prtcp.tournament_points }}
                                                      {% if gr_prtcp.tournament_points is not None %}
                                                     x
