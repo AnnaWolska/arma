@@ -70,19 +70,12 @@ def group_details(request, group_id):
     tournament = group.tournament
     tournament_groups_ids = []
     groups = Group.objects.filter(tournament=tournament).order_by("number")
-    all_group_participants = []
-    for group in groups:
-        all_group_participants.append(group.id)
-    # participants = group.participants.all().order_by("points_average")
     participants = group.participants.all()
-    print("participants",participants)
-    # group_participants = ParticipantGroup.all().order_by("tournament_points")
-    # all_group_participants = ParticipantGroup.objects.filter(group_id  tournament_groups_ids)
     group_participants = ParticipantGroup.objects.filter(group_id=group_id)
     fights = group.fights.all().order_by('id')
     first_fight = fights.first()
     tournaments_fighters_average = tournament.tournament_average
-    # tournaments_fighters_average =
+
     rounds = 0
     if first_fight:
         rounds = first_fight.rounds
@@ -117,7 +110,6 @@ def group_details(request, group_id):
         "tournaments_fighters_average": tournaments_fighters_average,
         "group":group,
         "group_participants":group_participants,
-        "all_group_participants":all_group_participants
     })
 
 
