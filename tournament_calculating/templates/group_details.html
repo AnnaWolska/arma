@@ -195,8 +195,6 @@
                                     wyjściowe
                                 </span>
                                 grupa {{  number }} ( średnia punktów w turnieju z odbytych walk -
-                                {#                                 {{ participant.tournament_points }}#}
-                                {{ participant.points_average }}
                                 <span style="color: crimson">
                                     {{ tournaments_fighters_average}}
                                 </span>
@@ -223,22 +221,18 @@
                                         <td style="width:100%;table-layout:fixed;">
                                         {{ participant }} -
 
+                                           {%  for gr_prtcp in group_participants %}
+                                               {% if gr_prtcp.participant == participant %}
+                                                    {{ gr_prtcp.tournament_points }}
+                                                     {% if gr_prtcp.tournament_points is not None %}
+                                                    x
+                                                    {{ gr_prtcp.tournament_average}}
+                                                    =
+                                                    {{ gr_prtcp.tournament_points_modified}}
+                                                    {% endif %}
+                                               {% endif %}
+                                           {% endfor %}
 
-                                        {% for participantgroup in all_group_participants %}
-                                        {% if participant.id  == participantgroup.id %}
-                                                            {{ participantgroup.tournament_points }}
-                                        {% endif %}
-                                        {% endfor %}
-
-                                            {% if participant.tournament_points is not None %}
-                                            <b>
-                                                {{ participant.tournament_points }} x
-                                                <span style="color: crimson">
-                                                    {{ tournaments_fighters_average}}
-                                                </span>
-                                                =
-                                            </b>
-                                            {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}
