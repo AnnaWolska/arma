@@ -562,6 +562,7 @@ def add_points (request, group_id, fight_id, round_id):
     points_result_ls = ["0","1","2","3","4","5"]
     fighter_one = []
     fighter_two = []
+    group_participants = ParticipantGroup.objects.filter(group_id=group_id)
     for p in participants:
         for rnd in fight_rounds:
             if p.id == rnd.fighter_one_id:
@@ -605,7 +606,7 @@ def add_points (request, group_id, fight_id, round_id):
                             one_more_ls_to_append.append(int(fight.fighter_two_points))
                     prtcp_to_change = ParticipantGroup.objects.get(participant=p, group=group)
                     # dodaję punktu z danego turnieju danemu zawodnikowi
-                    print("prtcp_to_change",prtcp_to_change,sum(one_more_ls_to_append))
+                    # print("prtcp_to_change",prtcp_to_change,sum(one_more_ls_to_append))
                     prtcp_to_change.tournament_points = sum(one_more_ls_to_append)
                     prtcp_to_change.save()
                     p.save()
@@ -626,8 +627,8 @@ def add_points (request, group_id, fight_id, round_id):
                             if tournament_fight.fighter_two_points != 0 or tournament_fight.fighter_one_points !="dyskwalifikacja" or tournament_fight.fighter_one_points !="średnia" or tournament_fight.fighter_one_points !="kontuzja" or tournament_fight.fighter_one_points !="wycofanie":
                                 # to punkt dla tego turnieju powiększ o punkty tego zawodnika
                                 tournament_fights_points.append(tournament_fight.fighter_two_points)
-                        # TU WYLICZAM ŚREDNIĄ DO WYJSCIA
 
+                        # TU WYLICZAM ŚREDNIĄ DO WYJSCIA zapisaną w modelu Tournametns jako tournament_average
                         if tournament_fights_points is not None:
                         # if tournament_fights_points is not None  or tournament_fights_points !="dyskwalifikacja" or tournament_fights_points !="średnia" or tournament_fights_points !="kontuzja" or tournament_fights_points !="wycofanie" or tournament_fights_points != 0:
                             tournaments_fighters_average = round(sum(tournament_fights_points) / len(tournament_fights_points), 2)
@@ -637,12 +638,15 @@ def add_points (request, group_id, fight_id, round_id):
                                 if tournaments_fighters_average != 0:
                                     participant.points_average = round((participant.group_points / tournaments_fighters_average), 2)
                                     participant.save()
+                            # obliczą średnią dla danego zawodnika w danym turnieju
+                            # for gr_pr in group_participants:
+                            #     gr_pr.tournament_average = round((participant.group_points / len(tournament_fights_points)), 2)
                 messages.success(request, 'punkty dodane')
+                # print("len(tournament_fights_points)",len(tournament_fights_points))
                 return HttpResponseRedirect(reverse(
                     "tournament_calculating:group_details",
                     args=[group_id],
                 ))
-
             else:
                 print(form.errors)
 
@@ -690,6 +694,9 @@ i zdyskwalifikowanymi i poddanymi i nieobecnymi
 def group_summary(request, group_id):
     group = Group.objects.get(pk=group_id)
     participants = group.participants.all()
+    print("participants", participants)
+    group_participants = ParticipantGroup.objects.filter(group_id=group_id)
+    print("group_participants", group_participants)
     tournament_finalists = ParticipantFinalist.objects.all()
     group_average_points = []
     finalists_list = []
@@ -733,6 +740,8 @@ def group_summary(request, group_id):
                             list_participant_rounds.append(rnd.id)
                             participant.amount_rounds = len(list_participant_rounds)
                             participant.save()
+                        # DODAĆ ILOSĆ RUND DO gr_prtcp
+
 
                 #-------------------------2-----------------------------------------
                 #teraz zamieniam napisy na wartości 0 i ze średniej:

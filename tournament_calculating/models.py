@@ -106,6 +106,7 @@ class ParticipantGroup(models.Model):
     tournament_injuries = models.PositiveSmallIntegerField(null=True, default=0)
     tournament_surrenders = models.PositiveSmallIntegerField(null=True, default=0)
     tournament_opponent_injuries = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_amount_rounds = models.PositiveSmallIntegerField(null=True, default=0)
 
 
 class Fight(models.Model):
