@@ -648,8 +648,6 @@ def add_points (request, group_id, fight_id, round_id):
                                 participant.tournament_points_modified = participant.tournament_points * participant.tournament_average
                                 participant.save()
 
-
-
                 messages.success(request, 'punkty dodane')
                 # print("len(tournament_fights_points)",len(tournament_fights_points))
                 return HttpResponseRedirect(reverse(
@@ -715,7 +713,7 @@ def group_summary(request, group_id):
 
     for participant in group_participants:
         for rd in rounds:
-            if participant.id == rd.fighter_one_id or participant.id == rd.fighter_two_id:
+            if participant.participant_id == rd.fighter_one_id or participant.participant_id == rd.fighter_two_id:
                 maximum_amount_prtcp_rounds.append(participant)
     # to maksymalna ilość walk w turnieju
     maximum_amount_prtcp_rounds = int(len(maximum_amount_prtcp_rounds) / len(participants))
@@ -763,30 +761,41 @@ def group_summary(request, group_id):
                     list_of_excuses = ["kontuzja","dyskwalifikacja","wycofanie", "poddanie"]
                     # jeśli brał udział w minium jednym starciu:
                     if participant.tournament_amount_rounds != 0:
+                        print("uczestnik grupy ma jakieś starcia")
                         for rnd in rounds:
                             # jeśli uczestnik jest pierwszym walczącym w rundzie, a drugi ma kontuzję, jest zdyswkalifikowany lub się wycofał:
-                            if participant.participant_id == rnd.fighter_one.id and participant.tournament_amount_rounds != 0 and rnd.points_fighter_two in list_of_excuses :
+                            # print("11 uczestnik grupy jest walczącym nr 1? - ",
+                            #       participant.participant_id == rnd.fighter_one.id)
+                            # print("22 drugi ma zero, ", participant.tournament_amount_rounds != 0)
+                            # print("33 drugi ma jakąś wymówkę", rnd.points_fighter_two in list_of_excuses)
+                            print("44", participant.participant_id == rnd.fighter_one.id and participant.tournament_amount_rounds != 0 and rnd.points_fighter_two in list_of_excuses)
+                            if participant.participant_id == rnd.fighter_one.id and participant.tournament_amount_rounds != 0 and rnd.points_fighter_two in list_of_excuses:
+                                print("1 uczestnik grupy jest walczącym nr 1? - ",participant.participant_id == rnd.fighter_one.id)
+                                print("2 drugi ma zero, ",participant.tournament_amount_rounds != 0)
+                                print("3 drugi ma jakąś wymówkę", rnd.points_fighter_two in list_of_excuses)
                                 # tu jest devision 0
                                 # to pierwszy otrzymuje punkty ze średniej
 
                                 # ZMIANY PO ZMIAMACH W MODELACH
                                 # participant.round_average = round(round(((round((maximum_amount_prtcp_rounds/participant.amount_rounds),2)) * participant.group_points),2)/maximum_amount_prtcp_rounds,2)
                                 # participant.save()
-                                participant.tournaments_average == round(round(((round((maximum_amount_prtcp_rounds/participant.amount_rounds),2)) * participant.tournament_points),2)/maximum_amount_prtcp_rounds,2)
-                                print("participant.tournaments_average", participant.name, participant.tournaments_average, participant.tournament_points)
+                                print("gdzie jest zero?", participant.amount_rounds, maximum_amount_prtcp_rounds)
+                                participant.tournament_average == round(round(((round((maximum_amount_prtcp_rounds/participant.amount_rounds),2)) * participant.tournament_points),2)/maximum_amount_prtcp_rounds,2)
+                                # print("participant.tournaments_average", participant.tournaments_average, participant.tournament_points)
                                 participant.save()
 
                                 # a drugi otrzymuje zero (ten kontuzowany itp)
                                 rnd.points_fighter_two = 0
-                                rnd.points_fighter_one = participant.tournaments_average
+                                rnd.points_fighter_one = participant.tournament_average
                                 rnd.save()
                             # jeśli uczestnik jest drugim walczącym w rundzie, a pierwszy ma kontuzję, jest zdyswkalifikowany lub się wycofał:
                             # if participant == rnd.fighter_two and participant.amount_rounds != 0 and condition_4 or condition_5 or condition_6 :
+                            print("555", participant == rnd.fighter_two and participant.amount_rounds != 0 and rnd.points_fighter_one in list_of_excuses)
                             if participant == rnd.fighter_two and participant.amount_rounds != 0 and rnd.points_fighter_one in list_of_excuses:
                                 participant.tournaments_average = round(round(((round((maximum_amount_prtcp_rounds/participant.amount_rounds),2)) * participant.tournament_points),2)/maximum_amount_prtcp_rounds,2)
                                 participant.save()
                                 rnd.points_fighter_one = 0
-                                rnd.points_fighter_two = participant.tournaments_average
+                                rnd.points_fighter_two = participant.tournament_average
                                 rnd.save()
 
                             #-------------------------3---------------------------------------

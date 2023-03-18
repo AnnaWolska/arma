@@ -13,14 +13,22 @@
 
             uczestnicy fazy pucharowej:
 
-            {% for group in groups %}
+            {% for group in groups|dictsort:"number" %}
                 <ol>
-
+ grupa {{ group.number }}:
 {#                {% for p in prtcp_ls|dictsortreversed:"points_average" %}#}
-              {% for p in group.participants.all|dictsortreversed:"points_average" %}
+              {% for p in group.participants.all%}
 
                 <li>
-                {{  p.name }} z {{ p.school  }} {{ p.points_average }} {{ p.group_id }}
+                {{  p.name }} z {{ p.school  }} -
+
+                        {% for g_p in group_participants %}
+                            {% if g_p.participant_id == p.id %}
+                    {{ g_p.tournament_points_modified }}
+                            {% endif %}
+                            {% endfor %}
+
+
                  {% if p.image %}
                 {% thumbnail p.image "100x100" as im %}
                 <img src="{{ im.url }}" alt="zdj">
