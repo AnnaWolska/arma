@@ -111,6 +111,7 @@ class ParticipantGroup(models.Model):
     round_average = models.PositiveSmallIntegerField(null=True, default=0)
 
 
+
 class Fight(models.Model):
     ROUNDS_NUMBER = (
         (0, '0'),

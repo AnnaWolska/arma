@@ -195,7 +195,7 @@
                     <thead>
                         <tr>
                             <h5>
-                                punkty cząstkowe zebrane i
+                                punkty  <span style="color: saddlebrown">cząstkowe zsumowane </span> i
                                 <span style="color: darkblue">
                                     wyjściowe
                                 </span>
@@ -210,6 +210,9 @@
                             {% for group in groups %}
                             <th style="background: bisque">
                                 grupa nr {{ group.number }}
+                                {%  if group.id == group_id %}
+                                (teraz jesteś)
+                                {% endif %}
                                 {% endfor %}
                             </th>
                         </tr>
@@ -219,30 +222,23 @@
                         <td >
                             <table BORDER CELLSPACING=5 CELLPADDING=15  >
                                 <tr>
-                                    {% for participant in gr.participants.all %}
-{#                                        {% for  %}#}
-                                    {%  if gr.id == group_id %}
-                                    <td style="background-color: plum">
-                                        {% endif %}
+
+                            {% for participant in gr.participants.all %}
+                            {% for testgroup in participant.participantgroup_set.all %}
+                                   {% if testgroup.tournament_id == tournament.id %}
                                         <td style="width:100%;table-layout:fixed;">
-                                        {{ participant }}
-                                                    <br>
-                                           {%  for gr_prtcp in group_participants %}
-                                               {% if gr_prtcp.participant == participant %}
-{#                                                   {% if gr_prtcp.tournament == tournament_id %}#}
-                                                    {{ gr_prtcp.tournament_points }}
+                                         {%  if group_id == testgroup.group_id %}
+                                        {% endif %}
 
-                                                     {% if gr_prtcp.tournament_points is not None %}
-                                                    x
-{#                                                    {{ gr_prtcp.tournament_average}}#}
-                                                         {{ tournaments_fighters_average }}
-                                                    =
-                                                    {{ gr_prtcp.tournament_points_modified}}
-                                                    {% endif %}
-                                               {% endif %}
-                                           {% endfor %}
-
+                                       <p> {{ testgroup.participant.name }} <span style="color: saddlebrown">{{ testgroup.tournament_points }} </span> x <span style="color: #ba2121">{{ tournaments_fighters_average }}</span> = <span style="color: darkblue">{{ testgroup.tournament_points_modified }} </span> </p>
+                                   {% endif %}
                                         </td>
+                                        {% endfor %}
+
+                                    {%  if gr.id == group_id %}
+                                        <td style="background-color: plum"> </td>
+                                        {% endif %}
+
                                     </tr>
                                     {% endfor %}
                                 </table>
@@ -250,8 +246,8 @@
                             </tr>
                         </table>
                         <br>
+
                         uczestnicy:
-{#                        {% for participant in participants|dictsortreversed:"points_average" %}#}
                            {% for participant in group_participants|dictsortreversed:"tournament_average" %}
                         <ul>
                             <li>
