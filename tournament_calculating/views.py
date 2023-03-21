@@ -762,7 +762,7 @@ def group_summary(request, group_id):
                 #teraz zamieniam napisy na wartości 0 i ze średniej:
                 for participant in group_participants:
                     list_of_excuses = ["kontuzja","dyskwalifikacja","wycofanie", "poddanie"]
-                    # jeśli brał udział w minimum jednym starciu:
+                    # jeśli zawodnik brał udział w minimum jednym starciu:
                     if participant.tournament_amount_rounds != 0:
                         # dla każdego ze starć po kolei:
                         for rnd in rounds:
@@ -791,9 +791,11 @@ def group_summary(request, group_id):
 
                             #||DRUGI WTOPA||
                             # jeśli uczestnik nie ma w swoich rundach pierwszych w tej grupie kontuzji itp... czyli należy mu się średnia
-                            if not "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
+                            # if not "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
+                            if "kontuzja" or "dyskwalifikacja" or "wycofanie" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
+                            or "kontuzja" or "dyskwalifikacja" or "wycofanie" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
                                 # jeśli zawodnnik jest pierwszym walczącym i nie ma punktów w rundzie, bo nie miał z kim walczyć i trzeba je dodać,
-                                # ale ma jakieś punkty w grupie i jakąś ilość rund, w których wziął udział, więc jest z czego mu dać średnią:
+                                # ale ma jakieś punkty w grupie \ i jakąś ilość rund, w których wziął udział, więc jest z czego mu dać średnią:
                                 if participant.participant == rnd.fighter_one \
                                         and rnd.points_fighter_one is None \
                                         and participant.tournament_points is not None \
@@ -827,10 +829,9 @@ def group_summary(request, group_id):
                             #         rnd.save()
 
                             #|PIERWSZY WTOPA|
-                            # jeśli zawodnik ma kontuzję w jakiejś rundzie drugiej i w tej rundzie jest walczącym nr dwa ||
-                            if not "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_two.filter(group_id=group_id):
-                                    # or "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_one.filter(
-                                # group_id=group_id):
+                            # jeśli zawodnik nie ma kontuzji w rundach drugich i w tej rundzie jest walczącym nr dwa ||
+                            if "kontuzja" or "dyskwalifikacja" or "wycofanie" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
+                            or "kontuzja" or "dyskwalifikacja" or "wycofanie" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
                                 if participant.participant == rnd.fighter_two \
                                         and rnd.points_fighter_two is None \
                                         and participant.tournament_points is not None \
@@ -857,26 +858,24 @@ def group_summary(request, group_id):
                             #         rnd.points_fighter_one = 0
                             #         rnd.points_fighter_two = 0
                             #         rnd.save()
-                        # jeśli zawodnik ma w swoich rundach WTOPĘ i
+                        # jeśli zawodnik ma w swoich rundach pierwszych albo drugich WTOPĘ:
                         if "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
-                        and "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
+                        or "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
                             print("zawodnik ma w swoich rundach WTOPĘ")
-                            # jeśli walczy jako pierwszy to pierwszy ma zero
+                            # i jeśli walczy jako pierwszy to pierwszy ma zero
                             if participant.participant.id == rnd.fighter_one.id:
+                                print("zawodnik walczy w tym starciu jako: pierwszy")
                                 rnd.points_fighter_one = 0
                                 rnd.save()
                             #jeśli walczy jako drugi, to drugi ma zero
                             if participant.participant.id == rnd.fighter_two.id:
+                                print("zawodnik walczy w tym starciu jako: pierwszy")
                                 rnd.points_fighter_two = 0
                                 rnd.save()
-
+                print("KONIEC DODAWANIA PUNKTÓW")
                         # i jego oponent ma swoich rundach WTOPĘ:
-
-
-
                         #     if "kontuzja" or "dyskwalifikacja" or "wycofanie" in  rnd.points_fighter_one \
                         #     and "kontuzja" or "dyskwalifikacja" or "wycofanie" in rnd.points_fighter_two:
-
                         # jeśli uczestnik jest pierwszym walczącym w starciu i w jego rundach jest runda z wtopą
                         # oraz w walkach drugiego
                         # if rnd.fighter_one.id == participant.participant_id and
@@ -892,6 +891,7 @@ def group_summary(request, group_id):
                 group.number_outgoing = instance.number_outgoing
                 instance.save()
                 group.refresh_from_db()
+                print("1 group.finalists",group.finalists)
                 if group.finalists:
                     for f in group.finalists.all():
                         f.delete()
@@ -902,6 +902,7 @@ def group_summary(request, group_id):
                 podana w formularzu
                 """
                 while len(finalists_list) < int(counter):
+
                     """
                     jeśli są już wytypowani wcześniej finaliści:
                     """
@@ -930,7 +931,6 @@ def group_summary(request, group_id):
                                 group_average_points.remove(max(group_average_points))
                                 random.shuffle(list_of_participants)
                                 if  len(finalists_list) == counter and group_average_points and finalists_list[-1].points_average == max(group_average_points):
-                                    "czwarty if"
                                     counter += 1
                             else:
                                 """
@@ -941,8 +941,6 @@ def group_summary(request, group_id):
                     else:
                         """
                         jeśli nie ma listy wylosowanych już finalistów
-                        """
-                        """
                         jeśli uczestnik ma takie punkty wyjściowe jak najwyższe z pozostałych z listy punktów w grupie
                         """
                         if list_of_participants[i].points_average == max(group_average_points):
@@ -958,12 +956,14 @@ def group_summary(request, group_id):
                         else:
                             random.shuffle(list_of_participants)
                 finalists = finalists_list
+                print("2 finalists ",finalists)
                 """
                 jeśli jest remis na końcu, counter (ilość finalistów) musi się zwiększyć
                 o tyle ile jest uczestników z tym samym wynikiem
                 """
 
                 for f in finalists:
+                    print("3 tworzy finalistów")
                     tournament_finalists.create(participant=f)
                 group.save()
                 return HttpResponseRedirect(reverse(
