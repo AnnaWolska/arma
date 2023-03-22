@@ -792,8 +792,12 @@ def group_summary(request, group_id):
                             #||DRUGI WTOPA||
                             # jeśli uczestnik nie ma w swoich rundach pierwszych w tej grupie kontuzji itp... czyli należy mu się średnia
                             # if not "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
-                            if "kontuzja" or "dyskwalifikacja" or "wycofanie" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
-                            or "kontuzja" or "dyskwalifikacja" or "wycofanie" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
+                            if "kontuzja" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id)  \
+                            or "dyskwalifikacja" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
+                            or "wycofanie" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
+                            or "kontuzja" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id)\
+                            or "dyskwalifikacja" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id)\
+                            or "wycofanie" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
                                 # jeśli zawodnnik jest pierwszym walczącym i nie ma punktów w rundzie, bo nie miał z kim walczyć i trzeba je dodać,
                                 # ale ma jakieś punkty w grupie \ i jakąś ilość rund, w których wziął udział, więc jest z czego mu dać średnią:
                                 if participant.participant == rnd.fighter_one \
@@ -830,8 +834,12 @@ def group_summary(request, group_id):
 
                             #|PIERWSZY WTOPA|
                             # jeśli zawodnik nie ma kontuzji w rundach drugich i w tej rundzie jest walczącym nr dwa ||
-                            if "kontuzja" or "dyskwalifikacja" or "wycofanie" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
-                            or "kontuzja" or "dyskwalifikacja" or "wycofanie" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
+                            if "kontuzja" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
+                            or "dyskwalifikacja" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
+                            or "wycofanie" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
+                            or "kontuzja" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id) \
+                            or "dyskwalifikacja" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id) \
+                            or "wycofanie" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
                                 if participant.participant == rnd.fighter_two \
                                         and rnd.points_fighter_two is None \
                                         and participant.tournament_points is not None \
@@ -858,20 +866,29 @@ def group_summary(request, group_id):
                             #         rnd.points_fighter_one = 0
                             #         rnd.points_fighter_two = 0
                             #         rnd.save()
+
+
+
+
                         # jeśli zawodnik ma w swoich rundach pierwszych albo drugich WTOPĘ:
-                        if "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
-                        or "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
-                            print("zawodnik ma w swoich rundach WTOPĘ")
-                            # i jeśli walczy jako pierwszy to pierwszy ma zero
-                            if participant.participant.id == rnd.fighter_one.id:
-                                print("zawodnik walczy w tym starciu jako: pierwszy")
-                                rnd.points_fighter_one = 0
-                                rnd.save()
-                            #jeśli walczy jako drugi, to drugi ma zero
-                            if participant.participant.id == rnd.fighter_two.id:
-                                print("zawodnik walczy w tym starciu jako: pierwszy")
-                                rnd.points_fighter_two = 0
-                                rnd.save()
+                        # if "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
+                        # or "kontuzja" or "dyskwalifikacja" or "wycofanie" in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
+                        #     print("zawodnik ma w swoich rundach WTOPĘ")
+                        #     # i jeśli walczy jako pierwszy to pierwszy ma zero
+                        #     if participant.participant.id == rnd.fighter_one.id:
+                        #         print("zawodnik walczy w tym starciu jako: pierwszy")
+                        #         rnd.points_fighter_one = 0
+                        #         rnd.save()
+                        #     #jeśli walczy jako drugi, to drugi ma zero
+                        #     if participant.participant.id == rnd.fighter_two.id:
+                        #         print("zawodnik walczy w tym starciu jako: pierwszy")
+                        #         rnd.points_fighter_two = 0
+                        #         rnd.save()
+
+
+
+
+
                 print("KONIEC DODAWANIA PUNKTÓW")
                         # i jego oponent ma swoich rundach WTOPĘ:
                         #     if "kontuzja" or "dyskwalifikacja" or "wycofanie" in  rnd.points_fighter_one \
