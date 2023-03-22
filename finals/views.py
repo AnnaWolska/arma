@@ -7,7 +7,7 @@ from django.urls import reverse
 # from django.core.paginator import Paginator
 from django.shortcuts import render
 from tournaments.models import Tournament
-from finals.models import Finalist
+from finals.models import Finalist, ParticipantFinalist
 from tournament_calculating.models import Group, Fight, Participant, Round,  ParticipantGroup
 # from tournament_calculating.forms import (
 #     AddParticipantForm,
@@ -24,7 +24,9 @@ def finals(request, group_id):
     tournament = group.tournament
     groups = tournament.groups.all()
     participants = group.participants.all()
-    finalists = Finalist.objects.filter(group = group)
+    # finalists = Finalist.objects.filter(group = group)
+    finalists = ParticipantFinalist.objects.all()
+    # print("TUTITU:", finalists)
     # for f in finalists:
     # for p in participants:
     #     prtcp_ls.append( Finalist.objects.get(participant_id=p.id))
@@ -41,5 +43,7 @@ def finals(request, group_id):
         "finalists": finalists,
         "prtcp_ls": prtcp_ls,
         "groups": groups,
-        "group_participants": group_participants
+        "group_participants": group_participants,
+        "tournament": tournament,
+        "finalists": finalists
     })
