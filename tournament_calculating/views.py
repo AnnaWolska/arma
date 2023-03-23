@@ -904,17 +904,21 @@ def group_summary(request, group_id):
                 #o tyle ile jest uczestników z tym samym wynikiem
 
                 var_to_count_finalists = []
-                for group_participant in group.participants.all():
-                    var_to_count_finalists.append(group_participant)
-                print("AAAAAAAAAAAAAAAAAAAaa",var_to_count_finalists)
-                for f in finalists:
-                    print("7 tworzy finalistów")
-                    # all_finalists.create(participants. f.participant)
-                    group.finalists = var_to_count_finalists
-                    group.save()
-                    tournament_finalists.create(participant = f.participant)
+                # for group_participant in group.participants.all():
+                #     var_to_count_finalists.append(group_participant)
+                # print("AAAAAAAAAAAAAAAAAAAaa",var_to_count_finalists)
+                # for f in finalists:
+                #     print("7 tworzy finalistów")
+                #     group.finalists = var_to_count_finalists
+                #     group.save()
+                #     tournament_finalists.create(participant = f.participant)
 
-                group.save()
+                # group.save()
+                print("1111111111111",finalists)
+                print("222222222222222", var_to_count_finalists)
+                for f in all_finalists:
+                    f.participants = finalists
+                    f.save()
                 return HttpResponseRedirect(reverse(
                     "finals:finals",
                     args=[group_id]
