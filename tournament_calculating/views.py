@@ -703,6 +703,7 @@ def group_summary(request, group_id):
     participants = group.participants.all()
     group_participants = ParticipantGroup.objects.filter(group_id=group_id)
     all_finalists = Finalist.objects.all()
+    participant_finalists = ParticipantFinalist.objects.all()
     tournament_finalists = ParticipantFinalist.objects.all()
     group_average_points = []
     finalists_list = []
@@ -857,7 +858,7 @@ def group_summary(request, group_id):
                         f.delete()
                 i = 0
 
-                #dopóki ilość foinalistów jest mniejsza niż ilość uczestników przechodzących do finału, podana w formularzu
+                #dopóki ilość finalistów jest mniejsza niż ilość uczestników przechodzących do finału, podana w formularzu
                 while len(finalists_list) < int(counter):
                     print("2 finalists_list", finalists_list)
                     print("2a group_average_points",group_average_points)
@@ -912,13 +913,21 @@ def group_summary(request, group_id):
                 #     group.finalists = var_to_count_finalists
                 #     group.save()
                 #     tournament_finalists.create(participant = f.participant)
-
                 # group.save()
-                print("1111111111111",finalists)
-                print("222222222222222", var_to_count_finalists)
-                for f in all_finalists:
-                    f.participants = finalists
-                    f.save()
+                for finalist in finalists:
+                    instance = all_finalists.create(group_id=group_id)
+                    instance.save()
+                    participant_finalists_instance = participant_finalists.create(finalist_id=finalist.participant.id)
+                    participant_finalists_instance.save()
+                # for participant_finalist in participant_finalists:
+                #     if participant_finalist.finalist == instance:
+                #         participant_finalist.participant = participant
+                #         participant_finalist.save()
+
+
+                # through model
+                # instance.participants.add(participants=finalists)
+
                 return HttpResponseRedirect(reverse(
                     "finals:finals",
                     args=[group_id]
