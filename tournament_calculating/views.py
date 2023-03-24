@@ -112,6 +112,7 @@ def group_details(request, group_id):
         "group":group,
         "group_participants":group_participants,
         "tournament_participants":tournament_participants,
+        "group_summary":group_summary
     })
 
 
@@ -841,102 +842,110 @@ def group_summary(request, group_id):
                                     rnd.points_fighter_two = participant.round_average
                                     rnd.points_fighter_one = 0
                                     rnd.save()
-                                # else:
-                                #     print("i co zrobić....pierwszy nie ma wtopy")
-
-                print("KONIEC DODAWANIA PUNKTÓW")
-                # WYŁANIAM FINALISTÓW:
-                counter = 0
-                counter = group.number_outgoing
-                group.refresh_from_db()
-                group.number_outgoing = instance.number_outgoing
-                instance.save()
-                group.refresh_from_db()
-                print("1 group.finalists",group.finalists)
-                if group.finalists:
-                    for f in group.finalists.all():
-                        f.delete()
-                i = 0
-
-                #dopóki ilość finalistów jest mniejsza niż ilość uczestników przechodzących do finału, podana w formularzu
-                while len(finalists_list) < int(counter):
-                    print("2 finalists_list", finalists_list)
-                    print("2a group_average_points",group_average_points)
-                    print("2b list_of_participants[i]",list_of_participants[i])
-                    print("list_of_participants", list_of_participants)
-                    #jeśli są już wytypowani wcześniej finaliści:
-                    if finalists_list and list_of_participants:
-                        print("3 jeśli pierwszy z uczetsników w grupie nie jest na liście finalistów:")
-                        #jeśli jest lista uczestników i pierwszy z uczetsników w grupie nie jest na liście finalistów:
-                        if list_of_participants and list_of_participants[i] not in finalists_list:
-                            print("4 jeśli punkty wyjściowe pierwszego z uczestników są takie same jaknajwyższe punkty wyjściowe w grupie")
-                            #jeśli punkty wyjściowe pierwszego z uczestników są takie same jak najwyższe punkty wyjściowe w grupie:
-                            if list_of_participants[i].tournament_average == max(group_average_points):
-                                print("5 to ten uczestnik pojawia w się w liście finalistów", list_of_participants[i])
-                                finalists_list.append(list_of_participants[i])
-                                #ten uczestnik znika z lity uczestników grupy
-                                list_of_participants.remove(list_of_participants[i])
-                                #z listy punktów wyjściowych w grupie znikają jego punkty
-                                #(jak to działa w przypadku remisów?)
-                                group_average_points.remove(max(group_average_points))
-                                random.shuffle(list_of_participants)
-                                if  len(finalists_list) == counter and group_average_points and finalists_list[-1].points_average == max(group_average_points):
-                                    counter += 1
-                            else:
-                                #jeśli punkty wyjściowe pierwszego z zawodników nie są takie same jak
-                                #najwyższe punkty wyjściowe w grupie:
-                                random.shuffle(list_of_participants)
-                    else:
-                        #jeśli nie ma listy wylosowanych już finalistów
-                        #jeśli uczestnik ma takie punkty wyjściowe jak najwyższe z pozostałych z listy punktów w grupie
-                        if list_of_participants[i].tournament_average == max(group_average_points):
-                            finalists_list.append(list_of_participants[i])
-                            list_of_participants.remove(list_of_participants[i])
-                            group_average_points.remove(max(group_average_points))
-                            if  len(finalists_list) == counter and group_average_points and finalists_list[-1].points_average == max(group_average_points):
-                                counter += 1
-                            random.shuffle(list_of_participants)
-                            #jeśli uczestnik ma inne punkty wyjściowe niż najwyższe z listy punktów w grupie
-                        else:
-                            random.shuffle(list_of_participants)
-                finalists = finalists_list
-                print("6 finalists ", finalists)
-                #jeśli jest remis na końcu, counter (ilość finalistów) musi się zwiększyć
-                #o tyle ile jest uczestników z tym samym wynikiem
-
-                var_to_count_finalists = []
-                # for group_participant in group.participants.all():
-                #     var_to_count_finalists.append(group_participant)
-                # print("AAAAAAAAAAAAAAAAAAAaa",var_to_count_finalists)
-                # for f in finalists:
-                #     print("7 tworzy finalistów")
-                #     group.finalists = var_to_count_finalists
-                #     group.save()
-                #     tournament_finalists.create(participant = f.participant)
-                # group.save()
-                for finalist in finalists:
-                    instance = all_finalists.create(group_id=group_id)
-                    instance.save()
-                    participant_finalists_instance = participant_finalists.create(finalist_id=finalist.participant.id)
-                    participant_finalists_instance.save()
-                # for participant_finalist in participant_finalists:
-                #     if participant_finalist.finalist == instance:
-                #         participant_finalist.participant = participant
-                #         participant_finalist.save()
-
-
-                # through model
-                # instance.participants.add(participants=finalists)
 
                 return HttpResponseRedirect(reverse(
-                    "finals:finals",
+                    "tournament_calculating:group_details",
                     args=[group_id]
                 ))
             else:
                 form = GroupSummaryForm(instance=group)
                 return (
-                    render(request, "group_summary.html", context={
+                    render(request, "group_details.html", context={
                         'form': form,
                         'group': group,
                     })
                 )
+
+def get_finalists(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    participants = group.participants.all()
+    group_participants = ParticipantGroup.objects.filter(group_id=group_id)
+    all_finalists = Finalist.objects.all()
+    participant_finalists = ParticipantFinalist.objects.all()
+    tournament_finalists = ParticipantFinalist.objects.all()
+    counter = 0
+    counter = group.number_outgoing
+    group.refresh_from_db()
+    group.number_outgoing = instance.number_outgoing
+    instance.save()
+    group.refresh_from_db()
+    print("1 group.finalists", group.finalists)
+    if group.finalists:
+        for f in group.finalists.all():
+            f.delete()
+    i = 0
+
+    if request.user.is_authenticated:
+        form = GroupSummaryForm(request.POST, instance=group)
+        if request.method == "POST" and form.is_valid():
+            instance = form.save()
+
+            #------------1-----DODAJĘ ILOŚĆ RUND---------------------
+            for participant in group_participants:
+                # dopóki ilość finalistów jest mniejsza niż ilość uczestników przechodzących do finału, podana w formularzu
+                while len(finalists_list) < int(counter):
+                    # jeśli są już wytypowani wcześniej finaliści:
+                    if finalists_list and list_of_participants:
+                        # jeśli jest lista uczestników i pierwszy z uczetsników w grupie nie jest na liście finalistów:
+                        if list_of_participants and list_of_participants[i] not in finalists_list:
+                            # jeśli punkty wyjściowe pierwszego z uczestników są takie same jak najwyższe punkty wyjściowe w grupie:
+                            if list_of_participants[i].tournament_average == max(group_average_points):
+                                print("5 to ten uczestnik pojawia w się w liście finalistów", list_of_participants[i])
+                                finalists_list.append(list_of_participants[i])
+                                # ten uczestnik znika z lity uczestników grupy
+                                list_of_participants.remove(list_of_participants[i])
+                                # z listy punktów wyjściowych w grupie znikają jego punkty
+                                # (jak to działa w przypadku remisów?)
+                                group_average_points.remove(max(group_average_points))
+                                random.shuffle(list_of_participants)
+                                if len(finalists_list) == counter and group_average_points and finalists_list[
+                                    -1].points_average == max(group_average_points):
+                                    counter += 1
+                            else:
+                                # jeśli punkty wyjściowe pierwszego z zawodników nie są takie same jak
+                                # najwyższe punkty wyjściowe w grupie:
+                                random.shuffle(list_of_participants)
+                        else:
+                            random.shuffle(list_of_participants)
+                    else:
+                        # jeśli nie ma listy wylosowanych już finalistów
+                        # jeśli uczestnik ma takie punkty wyjściowe jak najwyższe z pozostałych z listy punktów w grupie
+                        if list_of_participants[i].tournament_average == max(group_average_points):
+                            finalists_list.append(list_of_participants[i])
+                            list_of_participants.remove(list_of_participants[i])
+                            group_average_points.remove(max(group_average_points))
+                            if len(finalists_list) == counter and group_average_points and finalists_list[-1].points_average == max(
+                                    group_average_points):
+                                counter += 1
+                            random.shuffle(list_of_participants)
+                            # jeśli uczestnik ma inne punkty wyjściowe niż najwyższe z listy punktów w grupie
+                        else:
+                            random.shuffle(list_of_participants)
+                finalists = finalists_list
+                # jeśli jest remis na końcu, counter (ilość finalistów) musi się zwiększyć
+                # o tyle ile jest uczestników z tym samym wynikiem
+                # dla każdego kto ma przejść do fianłów
+                for finalist in finalists:
+                    # tworzę w moedelu finaliści instację fonalistów z ich numerem grupy
+                    instance = all_finalists.create(group_id=group_id)
+                    instance.save()
+                    participant_finalists.create(participant_id=participant.id, finalist_id=finalist.id)
+                    participant_finalists.save()
+                print("CO TUUUU JEST,finalists :", finalists)
+                print("CO TUUUU JEST, participants:", participants)
+                print("CO TUUUU JEST, all_finalists:", all_finalists)
+                for f in participant_finalists:
+                    print("szukamy participantów w finalistachprtcp, f.participants :", f.participants_set.all())
+
+        return HttpResponseRedirect(reverse(
+            "finals:finals",
+            args=[group_id]
+        ))
+    else:
+        form = GroupSummaryForm(instance=group)
+        return (
+            render(request, "group_summary.html", context={
+                'form': form,
+                'group': group,
+            })
+        )

@@ -63,11 +63,40 @@
             </button>
             {% endif %}
             {% if rounds %}
-            <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
-                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:group_summary' group_id %}">
+{#                        <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">#}
+{#                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:group_details' group_id group_summary %}">#}
+{#                    uzupełnij punkty#}
+{#                </a>#}
+{#            </span>#}
+            <span id="delete_tournament" type="button" style="background-color:violet"  class="btn btn-primary">
+                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:get_finalists' group_id %}">
                     podsumowanie grupy
                 </a>
             </span>
+
+
+
+
+           <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">
+{#                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:group_details' group_id group_summary %}">#}
+                 <span onclick="myFunction(this, 'red')">  uzupełnij punkty</span>
+
+            </span>
+
+            <script>
+            function myFunction(element, color) {
+              element.style.color = color;
+            }
+            </script>
+<script>
+function myFunction2() {
+  document.getElementById("demo").innerHTML = "Hello World";
+}
+</script>
+ <button onclick="myFunction2()">Click me</button>
+<p id="demo"></p>
+
+
             {% endif %}
             {% endif %}
         </div>

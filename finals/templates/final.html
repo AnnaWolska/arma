@@ -14,17 +14,19 @@
 
             {% for group in groups|dictsort:"number" %}
                 <ol>
- grupa {{ group.number }}:
+ grupa {{ group.number }} {{ group.id }}:
 {#                {% for p in prtcp_ls|dictsortreversed:"points_average" %}#}
-              {% for p in group.participants.all%}
-
+{#              {% for p in group.participants.all%}#}
+                  {% for  p in prtcp_ls %}
 {#                  {% if p in finalists.all %}#}
                 <li>
 
                 {{  p.name }} z {{ p.school  }} -
 
                         {% for g_p in group_participants %}
+{#                            {%  for finalist in finalists %}#}
                             {% if g_p.participant_id == p.id %}
+                {
 
                     {{ g_p.tournament_points_modified }}
                             {% endif %}

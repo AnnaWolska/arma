@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Finalist, Stage, FinalFight, FinalRound, Winner
+from .models import Finalist, Stage, FinalFight, FinalRound, Winner, ParticipantFinalist
 
 
 @admin.register(Finalist)
@@ -36,3 +36,6 @@ class WinnerAdmin(admin.ModelAdmin):
     # list_filter = ["", ""]
 
 
+@admin.register(ParticipantFinalist)
+class ParticipantFinalistAdmin(admin.ModelAdmin):
+    list_display = ["id", "finalist_id", "participant_id"]

@@ -24,8 +24,10 @@ def finals(request, group_id):
     tournament = group.tournament
     groups = tournament.groups.all()
     participants = group.participants.all()
-    # finalists = Finalist.objects.filter(group = group)
-    finalists = ParticipantFinalist.objects.all()
+    # finalists = Finalist.objects.all()
+    finalists = Finalist.objects.filter(group_id=group_id)
+    print(finalists)
+    # finalists = ParticipantFinalist.objects.all()
     # print("TUTITU:", finalists)
     # for f in finalists:
     # for p in participants:
@@ -33,10 +35,14 @@ def finals(request, group_id):
     # finalists = prtcp_ls
     # print(prtcp_ls)
 
-    for p in participants:
-        for f in finalists:
-            if p.id == f.participant_id:
-                prtcp_ls.append(p)
+    # for p in participants:
+    #     for f in finalists:
+    #         if p.id == f.participant_id:
+    #             prtcp_ls.append(p)
+    for finalist in finalists:
+        print(finalist.participants, finalist.group, finalist.id)
+        prtcp_ls.append(finalist)
+    print("FIIIINAŁY", prtcp_ls)
 
 
     return render(request, "final.html", context={

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Participant, Group, Fight, Round
+from .models import Participant, Group, Fight, Round, ParticipantGroup
 
 
 @admin.register(Participant)
@@ -58,3 +58,8 @@ class RoundAdmin(admin.ModelAdmin):
 
     search_fields = ["id", "fight"]
     list_filter = ["id", "fight"]
+
+
+@admin.register(ParticipantGroup)
+class ParticipantGroupAdmin(admin.ModelAdmin):
+    list_display = ["id", "tournament_id", "participant_id", "group_id"]
