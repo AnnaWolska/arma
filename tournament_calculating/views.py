@@ -701,6 +701,7 @@ i zdyskwalifikowanymi i poddanymi i nieobecnymi
 
 def group_summary(request, group_id):
     group = Group.objects.get(pk=group_id)
+    tournament = group.tournament
     participants = group.participants.all()
     group_participants = ParticipantGroup.objects.filter(group_id=group_id)
     all_finalists = Finalist.objects.all()
@@ -728,7 +729,7 @@ def group_summary(request, group_id):
     lista participantów i lista punktów,
     jeśli pierwszy z listy prtcp ma tyle punktów co max z listy punktów:
     ładuję go do fianal_list, jeśli nie, sprawdzam to następny
-    pobiera z formualrza ile uczetników z grupy ma przejść do finału,
+    pobiera z formualrza ile uczetników z grupy ma przejść do finału,information_schema
     kasuje tych, co już byli wytypowani, jeśli jest powtórzone działanie
     """
     if request.user.is_authenticated:
@@ -853,6 +854,8 @@ def group_summary(request, group_id):
                     render(request, "group_details.html", context={
                         'form': form,
                         'group': group,
+                        'tournament': tournament,
+                        'group_id': group_id
                     })
                 )
 
@@ -863,12 +866,14 @@ def get_finalists(request, group_id):
     all_finalists = Finalist.objects.all()
     participant_finalists = ParticipantFinalist.objects.all()
     tournament_finalists = ParticipantFinalist.objects.all()
-    counter = 0
+    # counter = 0
     counter = group.number_outgoing
-    group.refresh_from_db()
-    group.number_outgoing = instance.number_outgoing
-    instance.save()
-    group.refresh_from_db()
+    # group.refresh_from_db()
+    # group.number_outgoing = instance.number_outgoing
+    # instance.save()
+    #pracujemy na modelu grupy (w group_summarry jets)
+    # group.save()
+    # group.refresh_from_db()
     print("1 group.finalists", group.finalists)
     if group.finalists:
         for f in group.finalists.all():
@@ -922,16 +927,17 @@ def get_finalists(request, group_id):
                         else:
                             random.shuffle(list_of_participants)
                 finalists = finalists_list
+                print("CO TUUUU JEST,finalists :", finalists)
                 # jeśli jest remis na końcu, counter (ilość finalistów) musi się zwiększyć
                 # o tyle ile jest uczestników z tym samym wynikiem
                 # dla każdego kto ma przejść do fianłów
                 for finalist in finalists:
                     # tworzę w moedelu finaliści instację fonalistów z ich numerem grupy
-                    instance = all_finalists.create(group_id=group_id)
-                    instance.save()
+                    instance = create(group_id=group_id)
+                    # instance.save()
                     participant_finalists.create(participant_id=participant.id, finalist_id=finalist.id)
-                    participant_finalists.save()
-                print("CO TUUUU JEST,finalists :", finalists)
+                    # participant_finalists.save()
+
                 print("CO TUUUU JEST, participants:", participants)
                 print("CO TUUUU JEST, all_finalists:", all_finalists)
                 for f in participant_finalists:

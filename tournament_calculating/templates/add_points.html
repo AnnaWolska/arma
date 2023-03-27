@@ -30,8 +30,14 @@
     {% csrf_token %}
     {{ form|crispy }}
     <button type="submit"
-    class = "btn btn-primary">Wyślij
-</button>
+
+    class = "btn btn-primary">
+{#                    <span id="delete_tournament" type="button" style="background-color:blueviolet"  class="btn btn-primary">#}
+                <a style="color:white; text-decoration: none;" href = "{% url 'tournament_calculating:group_summary' group_id %}">
+                    przelicz
+                </a>
+{#            </span>#}
+    </button>
 </form>
 {% endblock %}
 {% block additional_scripts %}

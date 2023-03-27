@@ -14,6 +14,7 @@ urlpatterns = [
          name="delete_group_participant"),
 
     path('<int:group_id>/group/', group_details, name="group_details"),
+    path('<int:group_id>/group/summary', group_summary, name="group_summary"),
     path('<int:group_id>/<int:tournament_id>/delete_group/', delete_group, name="delete_group"),
 
     path('<int:group_id>/group_details/', draw_fights, name="draw_fights"),
