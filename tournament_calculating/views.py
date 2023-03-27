@@ -904,29 +904,10 @@ def group_summary(request, group_id):
                 #jeśli jest remis na końcu, counter (ilość finalistów) musi się zwiększyć
                 #o tyle ile jest uczestników z tym samym wynikiem
 
-                var_to_count_finalists = []
-                # for group_participant in group.participants.all():
-                #     var_to_count_finalists.append(group_participant)
-                # print("AAAAAAAAAAAAAAAAAAAaa",var_to_count_finalists)
-                # for f in finalists:
-                #     print("7 tworzy finalistów")
-                #     group.finalists = var_to_count_finalists
-                #     group.save()
-                #     tournament_finalists.create(participant = f.participant)
-                # group.save()
                 for finalist in finalists:
-                    instance = all_finalists.create(group_id=group_id)
-                    instance.save()
-                    participant_finalists_instance = participant_finalists.create(finalist_id=finalist.participant.id)
-                    participant_finalists_instance.save()
-                # for participant_finalist in participant_finalists:
-                #     if participant_finalist.finalist == instance:
-                #         participant_finalist.participant = participant
-                #         participant_finalist.save()
-
-
-                # through model
-                # instance.participants.add(participants=finalists)
+                    Finalist.objects.create(group_id=group_id)
+                    for prtcp_finalist in all_finalists:
+                        ParticipantFinalist.objects.create(participant = finalist.participant , finalist=prtcp_finalist)
 
                 return HttpResponseRedirect(reverse(
                     "finals:finals",

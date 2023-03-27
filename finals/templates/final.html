@@ -18,7 +18,7 @@
 {#                {% for p in prtcp_ls|dictsortreversed:"points_average" %}#}
               {% for p in group.participants.all%}
 
-{#                  {% if p in finalists.all %}#}
+{#                  {% for p in finalists %}#}
                 <li>
 
                 {{  p.name }} z {{ p.school  }} -
