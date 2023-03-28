@@ -6,13 +6,12 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+
 from pathlib import Path
 import os
 import dj_database_url
 from dotenv import load_dotenv
 load_dotenv()
-
-
 
 IS_PRODUCTION = False  # helper
 
@@ -26,23 +25,15 @@ if os.getcwd() == "/app":
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+DATABASE_URL = os.environ['DATABASE_URL']
 db_from_env = dj_database_url.config(conn_max_age=600)
-
-
-
-# WWW:
-# DATABASE_URL = os.environ['DATABASE_URL']
-# DATABASES['default'].update(db_from_env)
-# local:
-DEBUG = True
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-
+DATABASES['default'].update(db_from_env)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-# SECURITY WARNING: don't run with debug turned on in production!
 
+# SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True
 
 ALLOWED_HOSTS = ['armatournaments.herokuapp.com', '127.0.0.1']
 # ALLOWED_HOSTS = os.environ.get(ALLOWED_HOSTS)
@@ -62,6 +53,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'sorl.thumbnail',
     'whitenoise.runserver_nostatic',
+    # 'tinymce',
     #arma:
     'tournaments.apps.TournamentsConfig',
     'posts.apps.PostsConfig',
@@ -187,6 +179,7 @@ LOGOUT_REDIRECT_URL = "/home"
 
 # PYDEVD_USE_CYTHON=NO
 # PYDEVD_USE_FRAME_EVAL=NO
+# DISABLE_COLLECTSTATIC = 1
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
