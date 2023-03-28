@@ -8,6 +8,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import cloudinary_storage
+import cloudinary.uploader
+import cloudinary.api
 import os
 import dj_database_url
 from dotenv import load_dotenv
@@ -48,6 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary',
+    'cloudinary_storage'
     'django_extensions',
     'import_export',
     'crispy_forms',
@@ -216,3 +221,12 @@ if IS_PRODUCTION:
             },
         }
 # else:
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dcgtoiogb',
+    'API_KEY': '327397828378715',
+    'API_SECRET': '9tH72WF-BPu38YLGAsD1wKh1_FE'
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
