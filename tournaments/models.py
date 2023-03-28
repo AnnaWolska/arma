@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 from datetime import datetime
+from cloudinary.models import CloudinaryField
 
 
 class Organizer(models.Model):
@@ -22,7 +23,8 @@ class Tournament(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     organizers = models.ManyToManyField('Organizer', related_name="tournaments")
-    image = ImageField(upload_to="tournaments/logos/%Y/%m/%d/", blank=True, null=True)
+    # image = ImageField(upload_to="tournaments/logos/%Y/%m/%d/", blank=True, null=True)
+    image = CloudinaryField(upload_to="tournaments/logos/%Y/%m/%d/", blank=True, null=True)
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="tournaments_created")
     created = models.DateTimeField(auto_now=True, null=True)
     modified = models.DateTimeField(auto_now=True, null=True)

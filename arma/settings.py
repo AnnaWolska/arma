@@ -11,11 +11,12 @@ from pathlib import Path
 import cloudinary_storage
 import cloudinary.uploader
 import cloudinary.api
+
 import os
 import dj_database_url
 from dotenv import load_dotenv
 load_dotenv()
-
+DEBUG = False
 IS_PRODUCTION = False  # helper
 
 if os.getcwd() == "/app":
@@ -29,8 +30,9 @@ if os.getcwd() == "/app":
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASE_URL = os.environ['DATABASE_URL']
+# DATABASE_URL = '://tubphmzekpfhbv:d901cee21a961066447a15323a0555af25cb008f35eb69b762d64c853c979e47@ec2-176-34-211-0.eu-west-1.compute.amazonaws.com:5432/djjlihih2flh9'
 db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+# DATABASES = ['default'].update(db_from_env)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -50,9 +52,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+
     'django.contrib.staticfiles',
-    'cloudinary',
     'cloudinary_storage'
+    'cloudinary',
     'django_extensions',
     'import_export',
     'crispy_forms',
@@ -230,3 +233,4 @@ CLOUDINARY_STORAGE = {
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
