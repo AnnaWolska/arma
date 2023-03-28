@@ -51,7 +51,7 @@ def participant_details(request, participant_id):
     name = participant.name
     school = participant.school
     image = participant.image
-    groups = participant.groups.all()
+    groups = participant.participantgroup_set.all()
     tournaments = participant.tournaments.all()
     return render(request, "participant_details.html", context={
         "name": name,
