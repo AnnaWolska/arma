@@ -2,6 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 from datetime import datetime
+
+import cloudinary
+# import cloudinary_storage
+# from cloudinary import CloudinaryField
+# from cloudinary_storage import cloudinary_storagecloudinary
 from cloudinary.models import CloudinaryField
 
 
