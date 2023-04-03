@@ -2,6 +2,8 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
+{% load cloudinary %}
+
 {% block style %}
 <link href ="{% static "posts/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
@@ -37,9 +39,16 @@
                     {% endfor %}
                     <div>
                         {% if image %}
-                        {% thumbnail image "300x300" as im %}
-                        <img src="{{ im.url }}" alt="zdj">
-                        {% endthumbnail %}
+{#                        {% thumbnail image "300x300" as im %}#}
+{#                        <img src="{{ im.url }}" alt="zdj">#}
+{#                        {% endthumbnail %}#}
+
+                        {% cloudinary image width="300" crop="fill" %}
+
+
+
+
+
                         {% endif %}
                     </div>
                     wydarzenie utworzył użytkownik

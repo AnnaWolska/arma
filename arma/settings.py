@@ -8,10 +8,10 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import cloudinary
-import cloudinary_storage
-import cloudinary.uploader
-import cloudinary.api
+# import cloudinary
+# import cloudinary_storage
+# import cloudinary.uploader
+# import cloudinary.api
 import os
 import dj_database_url
 from dotenv import load_dotenv
@@ -54,15 +54,14 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-
     'django.contrib.staticfiles',
-    'cloudinary_storage'
-    'cloudinary',
     'django_extensions',
     'import_export',
     'crispy_forms',
     'sorl.thumbnail',
-    'whitenoise.runserver_nostatic',
+    # 'whitenoise.runserver_nostatic',
+    'cloudinary_storage'
+    'cloudinary',
     # 'tinymce',
     #arma:
     'tournaments.apps.TournamentsConfig',
@@ -235,4 +234,4 @@ CLOUDINARY_STORAGE = {
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
