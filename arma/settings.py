@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'sorl.thumbnail',
     # 'whitenoise.runserver_nostatic',
-    'cloudinary_storage'
+    'cloudinary_storage',
     'cloudinary',
     # 'tinymce',
     #arma:
