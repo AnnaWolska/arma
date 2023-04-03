@@ -6,7 +6,6 @@ from datetime import datetime
 # import cloudinary
 # import cloudinary_storage
 # from cloudinary import CloudinaryField
-# from cloudinary_storage import cloudinary_storagecloudinary
 from cloudinary.models import CloudinaryField
 
 
