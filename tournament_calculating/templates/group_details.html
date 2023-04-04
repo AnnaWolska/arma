@@ -24,10 +24,11 @@
                 <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >
                     {{  tournament.title }}
                 </a>
-                {% if tournament.image %}
-                {% thumbnail tournament.image "100x100" as im %}
-                <img src="{{ im.url }}" alt="zdj">
-                {% endthumbnail %}
+                {% if image %}
+                    {% cloudinary tournament.image "100x100" as im crop="fill" %}
+{#                {% thumbnail tournament.image "100x100" as im %}#}
+{#                <img src="{{ im.url }}" alt="zdj">#}
+{#                {% endthumbnail %}#}
                 {% endif %}
                 {% for organizer in tournament.organizers.all%}
                 {{ organizer }}
