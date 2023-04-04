@@ -46,9 +46,13 @@
 {#            {% thumbnail gallery.photos.first.image "300x300" crop="center" as im %}#}
 {#            <img class=card-img-top" src="{{  im.url }}" alt="">#}
 {#            {% endthumbnail %}#}
-            {% cloudinary gallery.photos.first.image "300x300" crop="center" as im%}
-                 <img class=card-img-top" src="{{  im.url }}" alt="">#}
+{#            {% cloudinary gallery.photos.first.image "300x300" crop="center" as im%}#}
+{#                 <img class=card-img-top" src="{{  im.url }}" alt="">#}
 {#            width="300" #}
+
+             {% cloudinary gallery.photos.first.image "300x300" crop="center"%}
+
+
 
             <div class="card-body">
                 <h4 class="card-title text-center">

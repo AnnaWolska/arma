@@ -66,9 +66,12 @@
 {#                    <img  class="card-img-top" src="{{  im.url }}" alt="">#}
 {#                </a>#}
 {#                {% endthumbnail %}#}
-                {% cloudinary image "300x300" crop="center" as im %}
-                <a href="{{ photo.image.url }}">
-                    <img  class="card-img-top" src="{{  im.url }}" alt="">
+
+{#                {% cloudinary image "300x300" crop="center" as im %}#}
+{#                <a href="{{ photo.image.url }}">#}
+{#                    <img  class="card-img-top" src="{{  im.url }}" alt="">#}
+
+                    {% cloudinary photo.image width="300" crop="fill" %}
                 </a>
 
 
