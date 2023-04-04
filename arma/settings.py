@@ -29,8 +29,8 @@ if os.getcwd() == "/app":
 # DATABASES['default'] = dj_database_url.config('postgres://username:password@example.com:5432/database')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# BASE_DIR = Path(__file__).resolve().parent.parent
-BASE_DIR=os.path(os.path(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR=os.path(os.path(os.path.abspath(__file__)))
 # DATABASE_URL = os.environ['DATABASE_URL']
 DATABASE_URL = 'postgres://tubphmzekpfhbv:d901cee21a961066447a15323a0555af25cb008f35eb69b762d64c853c979e47@ec2-176-34-211-0.eu-west-1.compute.amazonaws.com:5432/djjlihih2flh9'
 # DATABASE_URL = '://tubphmzekpfhbv:d901cee21a961066447a15323a0555af25cb008f35eb69b762d64c853c979e47@ec2-176-34-211-0.eu-west-1.compute.amazonaws.com:5432/djjlihih2flh9'
