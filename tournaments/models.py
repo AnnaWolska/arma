@@ -12,7 +12,8 @@ from cloudinary.models import CloudinaryField
 class Organizer(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    image = ImageField(upload_to="organizers/logos/%Y/%m/%d/", blank=True, null=True)
+    # image = ImageField(upload_to="organizers/logos/%Y/%m/%d/", blank=True, null=True)
+    image = CloudinaryField(blank=True, null=True)
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, default=1, related_name="organizers_created")
 
     def __str__(self):
