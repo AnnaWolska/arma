@@ -230,7 +230,7 @@ if IS_PRODUCTION:
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dcgtoiogb',
     'API_KEY': '327397828378715',
-    'API_SECRET': '9tH72WF-BPu38YLGAsD1wKh1_FE'
+    'API_SECRET': os.getenv('API_SECRET')
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
