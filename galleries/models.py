@@ -7,6 +7,7 @@ from posts.models import Timestamped
 import string
 from random import random
 from django.db import models
+from cloudinary.models import CloudinaryField
 # from django.utils.text import slugify
 
 
