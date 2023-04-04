@@ -157,7 +157,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 if DEBUG:
     STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'arma/static')
+        os.path.join(BASE_DIR, 'static')
     ]
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -167,7 +167,7 @@ else:
 #     # BASE_DIR / 'static'
 #     os.path.join(BASE_DIR, 'static'),
 # ]
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'arma/static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')
 ]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
