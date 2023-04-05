@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
+{% load cloudinary %}
 
 {%  block style %}
     <link href= "{% static "organizers/css/style.css" %}" rel=stylesheet">
@@ -14,9 +15,13 @@
             <h3>Dodaj zdjęcie do galerii {{ gallery.title }}</h3>
             <div>
                 {% for photo in gallery.photos.all %}
-                    {% thumbnail photo.image "80" as im %}
-                        <img src="{{ im.url }}" alt=""/>
-                    {% endthumbnail %}
+
+                    {% cloudinary image width="80" crop="fill" %}
+
+{#                    {% thumbnail photo.image "80" as im %}#}
+{#                        <img src="{{ im.url }}" alt=""/>#}
+{#                    {% endthumbnail %}#}
+
                 {% endfor %}
             </div>
             <div class="col-6 offset-md-3">
