@@ -2,6 +2,8 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
+{% load cloudinary %}
+
 {% block style %}
 <link href ="{% static "organizers/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
@@ -50,9 +52,12 @@
         {% endif %}
         <div>
             {% if image %}
-            {% thumbnail image "300x300" as im %}
-            <img src="{{ im.url }}" alt="zdj">
-            {% endthumbnail %}
+
+                {% cloudinary image width="100" crop="fill" %}
+
+{#            {% thumbnail image "300x300" as im %}#}
+{#            <img src="{{ im.url }}" alt="zdj">#}
+{#            {% endthumbnail %}#}
             {% endif %}
         </div>
         {% endblock %}
