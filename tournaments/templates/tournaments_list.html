@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load cloudinary %}
+
 {% block content %}
 <img src="/static/sword.jpeg" width="225" height="225" alt="zdj">
 <button id="delete_tournament" type="button" style="background-color:lightseagreen; "  class="btn btn-primary">
@@ -45,9 +47,12 @@
                     <a style="text-decoration: none;" href = "{% url 'tournaments:tournament_details' tournament.id %}" >
                         {{  tournament.title }}
                             {% if tournament.image %}
-                            {% thumbnail tournament.image "100x100" as im %}
-                            <img src="{{ im.url }}" alt="zdj">
-                            {% endthumbnail %}
+
+                                {% cloudinary tournament.image width="80" crop="fill" %}
+
+{#                            {% thumbnail tournament.image "100x100" as im %}#}
+{#                            <img src="{{ im.url }}" alt="zdj">#}
+{#                            {% endthumbnail %}#}
                             {% endif %}
                     </a>
                 </h5>
