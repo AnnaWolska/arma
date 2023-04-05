@@ -16,7 +16,7 @@
             <div>
                 {% for photo in gallery.photos.all %}
 
-                    {% cloudinary image width="80" crop="fill" %}
+                    {% cloudinary photo width="80" crop="fill" %}
 
 {#                    {% thumbnail photo.image "80" as im %}#}
 {#                        <img src="{{ im.url }}" alt=""/>#}
