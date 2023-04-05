@@ -27,11 +27,12 @@
                     {{  tournament.title }}
                 </a>
                 {% if image %}
-                    {% cloudinary tournament.image  width="100" crop="fill" %}
+                {% cloudinary tournament.image  width="100" crop="fill" %}
 
 {#                {% thumbnail tournament.image "100x100" as im %}#}
 {#                <img src="{{ im.url }}" alt="zdj">#}
 {#                {% endthumbnail %}#}
+
                 {% endif %}
                 {% for organizer in tournament.organizers.all%}
                 {{ organizer }}

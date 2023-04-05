@@ -2,10 +2,11 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
+{% load cloudinary %}
+
 {% block style %}
 <link href ="{% static "organizers/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
-
 
 {% block content %}
 <img src="/static/czytaja.jpg" width="360" height="250" alt="zdj">
@@ -54,9 +55,12 @@
 
         </div>
                     {% if organizer.image %}
-            {% thumbnail organizer.image "100x100" as im %}
-            <img src="{{ im.url }}" alt="zdj">
-            {% endthumbnail %}
+
+{#            {% thumbnail organizer.image "100x100" as im %}#}
+{#            <img src="{{ im.url }}" alt="zdj">#}
+{#            {% endthumbnail %}#}
+                 {% cloudinary organizer.image width="800" crop="fill" %}
+
             {% endif %}
                 </a>
             </p>
