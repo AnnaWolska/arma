@@ -2,6 +2,8 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
+{% load cloudinary %}
+
 {% block style %}
 <link href ="{% static "tournaments_calculating/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
@@ -25,7 +27,8 @@
                     {{  tournament.title }}
                 </a>
                 {% if image %}
-                    {% cloudinary tournament.image "100x100" as im crop="fill" %}
+                    {% cloudinary tournament.image  width="100" crop="fill" %}
+
 {#                {% thumbnail tournament.image "100x100" as im %}#}
 {#                <img src="{{ im.url }}" alt="zdj">#}
 {#                {% endthumbnail %}#}
@@ -259,9 +262,13 @@
                                     </b>
                                     <div>
                                         {% if participant.participant.image %}
-                                        {% thumbnail participant.participant.image "100x100" as im %}
-                                        <img src="{{ im.url }}" alt="zdj">
-                                        {% endthumbnail %}
+
+                                         {% cloudinary participant.participant.image width="100" crop="fill" %}
+
+{#                                        {% thumbnail participant.participant.image "100x100" as im %}#}
+{#                                        <img src="{{ im.url }}" alt="zdj">#}
+{#                                        {% endthumbnail %}#}
+
                                         {% endif %}
                                     </a>
                                     {% if tournament.user == request.user %}
