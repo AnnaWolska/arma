@@ -42,9 +42,7 @@
                         {% thumbnail image "300x300" as im %}
                         <img src="{{ im.url }}" alt="zdj">
                         {% endthumbnail %}
-
 {#                        {% cloudinary image width="100" crop="fill" %}#}
-
                         {% endif %}
                     </div>
                     wydarzenie utworzył użytkownik
@@ -109,11 +107,10 @@
                                 {{ participant.name }}
                                 {% if participant.image %}
 
-{#                                {% thumbnail participant.image "100x100" as im %}#}
-{#                                <img src="{{ im.url }}" alt="zdj">#}
-{#                                {% endthumbnail %}#}
-
-                                    {% cloudinary participant.image width="100" crop="fill" %}
+                                {% thumbnail participant.image "100x100" as im %}
+                                <img src="{{ im.url }}" alt="zdj">
+                                {% endthumbnail %}
+{#                                    {% cloudinary participant.image width="100" crop="fill" %}#}
 
                                 {% endif %}
                             </a>
@@ -192,10 +189,10 @@
                                     </ul>
                                     {% if post.image %}
 
-{#                                    {% thumbnail post.image "300x300" as im %}#}
-{#                                    <img src="{{ im.url }}" alt="zdj">#}
-{#                                    {% endthumbnail %}#}
-                                        {% cloudinary post.image width="100" crop="fill" %}
+                                    {% thumbnail post.image "300x300" as im %}
+                                    <img src="{{ im.url }}" alt="zdj">
+                                    {% endthumbnail %}
+{#                                        {% cloudinary post.image width="100" crop="fill" %}#}
                                     {% endif %}
                                     {% if post.user == request.user %}
                                     <p>
