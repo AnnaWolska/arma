@@ -39,16 +39,11 @@
                     {% endfor %}
                     <div>
                         {% if image %}
-{#                        {% thumbnail image "300x300" as im %}#}
-{#                        <img src="{{ im.url }}" alt="zdj">#}
-{#                        {% endthumbnail %}#}
-                                image
+                        {% thumbnail image "300x300" as im %}
+                        <img src="{{ im.url }}" alt="zdj">
+                        {% endthumbnail %}
+
 {#                        {% cloudinary image width="100" crop="fill" %}#}
-                           1 {% cloudinary image %}
-{#                            2 {% cloudinary image width="100" height:"1000" crop="scale" %}#}
-{##}
-{#                            3 {% cloudinary image width="100" height="1000" crop="scale" %}#}
-{#                                 <img src="{{ image.url }}" alt="zdj">#}
 
                         {% endif %}
                     </div>
