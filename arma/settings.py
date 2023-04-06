@@ -19,21 +19,18 @@ if os.getcwd() == "/app":
 # DATABASES['default'] = dj_database_url.parse('postgres://username:password@example.com:5432/database')
 # DATABASES['default'] = dj_database_url.config()
 # DATABASES['default'] = dj_database_url.config('postgres://username:password@example.com:5432/database')
+ # DATABASES = ['default'].update(db_from_env)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# BASE_DIR=os.path(os.path(os.path.abspath(__file__)))
+
 # DATABASE_URL = os.environ['DATABASE_URL']
 DATABASE_URL = 'postgres://tubphmzekpfhbv:d901cee21a961066447a15323a0555af25cb008f35eb69b762d64c853c979e47@ec2-176-34-211-0.eu-west-1.compute.amazonaws.com:5432/djjlihih2flh9'
-# DATABASE_URL = '://tubphmzekpfhbv:d901cee21a961066447a15323a0555af25cb008f35eb69b762d64c853c979e47@ec2-176-34-211-0.eu-west-1.compute.amazonaws.com:5432/djjlihih2flh9'
+
 db_from_env = dj_database_url.config(conn_max_age=600)
-# DATABASES = ['default'].update(db_from_env)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
 
 ALLOWED_HOSTS = ['armatournaments.herokuapp.com', '127.0.0.1']
 # ALLOWED_HOSTS = os.environ.get(ALLOWED_HOSTS)
@@ -52,10 +49,9 @@ INSTALLED_APPS = [
     'import_export',
     'crispy_forms',
     'sorl.thumbnail',
-    # 'whitenoise.runserver_nostatic',
+    'whitenoise.runserver_nostatic',
     'cloudinary_storage',
     'cloudinary',
-    # 'tinymce',
     #arma:
     'tournaments.apps.TournamentsConfig',
     'posts.apps.PostsConfig',
@@ -144,8 +140,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-
-# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = 'static/'
 if DEBUG:
     STATICFILES_DIRS = [
@@ -181,7 +175,6 @@ LOGOUT_REDIRECT_URL = "/home"
 
 # PYDEVD_USE_CYTHON=NO
 # PYDEVD_USE_FRAME_EVAL=NO
-# DISABLE_COLLECTSTATIC = 1
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
