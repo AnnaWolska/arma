@@ -212,7 +212,6 @@ if IS_PRODUCTION:
         }
 # else:
 
-
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dcgtoiogb',
     'API_KEY': '327397828378715',
