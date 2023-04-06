@@ -20,9 +20,13 @@ load_dotenv()
 DEBUG = False
 IS_PRODUCTION = False  # helper
 
-if os.getcwd() == "/app":
-    DEBUG = False
-    IS_PRODUCTION = True
+ # Get the current working
+cwd = os.getcwd()
+print("Current working directory:", cwd)
+
+# if os.getcwd() == "/app":
+#     DEBUG = False
+#     IS_PRODUCTION = True
 
 # DATABASES['default'] = dj_database_url.parse('postgres://username:password@example.com:5432/database')
 # DATABASES['default'] = dj_database_url.config()
