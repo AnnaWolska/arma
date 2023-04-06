@@ -42,12 +42,9 @@
 {#                        {% thumbnail image "300x300" as im %}#}
 {#                        <img src="{{ im.url }}" alt="zdj">#}
 {#                        {% endthumbnail %}#}
-
-                        {% cloudinary image width="100" crop="fill" %}
-
-
-
-
+                                image
+{#                        {% cloudinary image width="100" crop="fill" %}#}
+                            {% cloudinary image %}
 
                         {% endif %}
                     </div>
