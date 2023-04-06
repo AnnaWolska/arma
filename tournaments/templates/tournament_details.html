@@ -44,11 +44,11 @@
 {#                        {% endthumbnail %}#}
                                 image
 {#                        {% cloudinary image width="100" crop="fill" %}#}
-                            {% cloudinary image %}
-                            {% cloudinary image width="100" height:"1000" crop="scale" %}
-
-                             {% cloudinary image width="100" height="1000" crop="scale" %}
-                                 <img src="{{ image.url }}" alt="zdj">
+{#                           1 {% cloudinary image %}#}
+{#                            2 {% cloudinary image width="100" height:"1000" crop="scale" %}#}
+{##}
+{#                            3 {% cloudinary image width="100" height="1000" crop="scale" %}#}
+{#                                 <img src="{{ image.url }}" alt="zdj">#}
 
                         {% endif %}
                     </div>
