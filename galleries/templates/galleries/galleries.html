@@ -43,14 +43,10 @@
     {%  for gallery in galleries_list %}
     <div class="col-lg-3 col-md-6 mb-4">
         <div class="card h-100">
-{#            {% thumbnail gallery.photos.first.image "300x300" crop="center" as im %}#}
-{#            <img class=card-img-top" src="{{  im.url }}" alt="">#}
-{#            {% endthumbnail %}#}
-{#            {% cloudinary gallery.photos.first.image "300x300" crop="center" as im%}#}
-{#                 <img class=card-img-top" src="{{  im.url }}" alt="">#}
-{#            width="300" #}
-
-             {% cloudinary gallery.photos.first.image width="100" crop="fill"%}
+            {% thumbnail gallery.photos.first.image "300x300" crop="center" as im %}
+            <img class=card-img-top" src="{{  im.url }}" alt="">
+            {% endthumbnail %}
+{#             {% cloudinary gallery.photos.first.image width="100" crop="fill"%}#}
 
             <div class="card-body">
                 <h4 class="card-title text-center">
