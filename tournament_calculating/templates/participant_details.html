@@ -2,9 +2,13 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
+{% load cloudinary %}
+
 {% block style %}
 <link href ="{% static "tournaments_calculating/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
+
+
 {% block content %}
 <h3>
     <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participants_list' %}">
@@ -45,9 +49,12 @@
                 <hr>
                 <div>
                     {% if image %}
-                    {% thumbnail image "300x300" as im %}
-                    <img src="{{ im.url }}" alt="zdj">
-                    {% endthumbnail %}
+{#                    {% thumbnail image "300x300" as im %}#}
+{#                    <img src="{{ im.url }}" alt="zdj">#}
+{#                    {% endthumbnail %}#}
+                        {% cloudinary image width="100" crop="fill" %}
+
+
                     {% endif %}
                 </div>
                 {% endblock %}

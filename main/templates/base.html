@@ -47,20 +47,19 @@
                             Organizatorzy
                         </a>
                     </li>
-                    {#
-                    <li class="nav-item">
-                        <a style="color:gray" class="btn btn-outline-primary me-2">
-                            Statystyki
-                        </a>
-                    </li>
-                    #}
-                    {#
-                    <li class="nav-item">
-                        <a href="{% url 'main:contact' %}" class="btn btn-outline-primary me-2">
-                            Kontakt
-                        </a>
-                    </li>
-                    #}
+{#                    #}
+{#                    <li class="nav-item">#}
+{#                        <a style="color:gray" class="btn btn-outline-primary me-2">#}
+{#                            Statystyki#}
+{#                        </a>#}
+{#                    </li>#}
+{#                #}
+{#                    <li class="nav-item">#}
+{#                        <a href="{% url 'main:contact' %}" class="btn btn-outline-primary me-2">#}
+{#                            Kontakt#}
+{#                        </a>#}
+{#                    </li>#}
+{#                 #}
                     {% if user.id %}
                     <li class="nav-item">
                         <a href="{% url 'main:userprofile' user.id %}" class="btn btn-outline-primary me-2">
@@ -114,20 +113,19 @@
                             Strona główna
                         </a>
                     </li>
-                    {#
-                    <li class="nav-item">
-                        <a href="{% url 'main:hello' %}" class="nav-link px-2 text-muted">
-                            O nas
-                        </a>
-                    </li>
-                    #}
-                    {#
-                    <li class="nav-item">
-                        <a href="{% url 'main:contact' %}" class="nav-link px-2 text-muted">
-                            Kontakt
-                        </a>
-                    </li>
-                    #}
+
+{#                    <li class="nav-item">#}
+{#                        <a href="{% url 'main:hello' %}" class="nav-link px-2 text-muted">#}
+{#                            O nas#}
+{#                        </a>#}
+{#                    </li>#}
+{#              #}
+{#                    <li class="nav-item">#}
+{#                        <a href="{% url 'main:contact' %}" class="nav-link px-2 text-muted">#}
+{#                            Kontakt#}
+{#                        </a>#}
+{#                    </li>#}
+
                 </ul>
             </footer>
             {% endblock %}

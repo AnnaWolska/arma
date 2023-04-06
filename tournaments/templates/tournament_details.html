@@ -2,6 +2,8 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load thumbnail %}
+{% load cloudinary %}
+
 {% block style %}
 <link href ="{% static "posts/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
@@ -37,9 +39,17 @@
                     {% endfor %}
                     <div>
                         {% if image %}
-                        {% thumbnail image "300x300" as im %}
-                        <img src="{{ im.url }}" alt="zdj">
-                        {% endthumbnail %}
+{#                        {% thumbnail image "300x300" as im %}#}
+{#                        <img src="{{ im.url }}" alt="zdj">#}
+{#                        {% endthumbnail %}#}
+                                image
+{#                        {% cloudinary image width="100" crop="fill" %}#}
+                            {% cloudinary image %}
+                            {% cloudinary image width="100" height:"1000" crop="scale" %}
+
+                             {% cloudinary image width="100" height="1000" crop="scale" %}
+                                 <img src="{{ image.url }}" alt="zdj">
+
                         {% endif %}
                     </div>
                     wydarzenie utworzył użytkownik
@@ -103,9 +113,13 @@
                             <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
                                 {{ participant.name }}
                                 {% if participant.image %}
-                                {% thumbnail participant.image "100x100" as im %}
-                                <img src="{{ im.url }}" alt="zdj">
-                                {% endthumbnail %}
+
+{#                                {% thumbnail participant.image "100x100" as im %}#}
+{#                                <img src="{{ im.url }}" alt="zdj">#}
+{#                                {% endthumbnail %}#}
+
+                                    {% cloudinary participant.image width="100" crop="fill" %}
+
                                 {% endif %}
                             </a>
                         </li>
@@ -182,9 +196,11 @@
                                         {{ post.content }}
                                     </ul>
                                     {% if post.image %}
-                                    {% thumbnail post.image "300x300" as im %}
-                                    <img src="{{ im.url }}" alt="zdj">
-                                    {% endthumbnail %}
+
+{#                                    {% thumbnail post.image "300x300" as im %}#}
+{#                                    <img src="{{ im.url }}" alt="zdj">#}
+{#                                    {% endthumbnail %}#}
+                                        {% cloudinary post.image width="100" crop="fill" %}
                                     {% endif %}
                                     {% if post.user == request.user %}
                                     <p>
