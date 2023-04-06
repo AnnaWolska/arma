@@ -49,10 +49,10 @@
                 <hr>
                 <div>
                     {% if image %}
-{#                    {% thumbnail image "300x300" as im %}#}
-{#                    <img src="{{ im.url }}" alt="zdj">#}
-{#                    {% endthumbnail %}#}
-                        {% cloudinary image width="100" crop="fill" %}
+                    {% thumbnail image "300x300" as im %}
+                    <img src="{{ im.url }}" alt="zdj">
+                    {% endthumbnail %}
+{#                        {% cloudinary image width="100" crop="fill" %}#}
 
 
                     {% endif %}

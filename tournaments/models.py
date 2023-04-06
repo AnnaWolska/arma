@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 from datetime import datetime
-
-# import cloudinary
-# import cloudinary_storage
 # from cloudinary import CloudinaryField
 from cloudinary.models import CloudinaryField
 
@@ -34,7 +31,6 @@ class Tournament(models.Model):
     created = models.DateTimeField(auto_now=True, null=True)
     modified = models.DateTimeField(auto_now=True, null=True)
     tournament_average = models.FloatField(null=True)
-
 
     def __str__(self):
         return f"{self.id} {self.title} {self.description} {self.image}"

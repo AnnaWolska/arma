@@ -58,10 +58,14 @@ organizator może dodać wiele profilów
                     {% endif %}
                 </a>
             </p>
+
+
             {% if participant.image %}
             {% thumbnail participant.image "100x100" as im %}
             <img src="{{ im.url }}" alt="zdj">
             {% endthumbnail %}
+
+
             {% endif %}
             użytkownik: {{ participant.user }}
             {% if organizer.user == request.user %}
