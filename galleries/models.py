@@ -8,7 +8,6 @@ import string
 from random import random
 from django.db import models
 from cloudinary.models import CloudinaryField
-# from django.utils.text import slugify
 
 
 class Gallery(Timestamped):
@@ -38,8 +37,8 @@ def photos_count(self):
 class Photo(Timestamped):
     title = models.CharField(max_length=100)
     short_description = models.CharField(max_length=300, null=True, blank=True)
-    # image = models.ImageField(upload_to=upload_to, null=True, blank=True)
-    image = CloudinaryField(blank=True, null=True)
+    image = models.ImageField(upload_to=upload_to, null=True, blank=True)
+    # image = CloudinaryField(blank=True, null=True)
     gallery = models.ForeignKey("Gallery",on_delete=models.CASCADE, related_name="photos")
 
     def __str__(self):

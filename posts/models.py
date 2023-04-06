@@ -26,8 +26,8 @@ class Post(Timestamped):
     content = models.TextField(verbose_name="Treść")
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="posts")
     exemple_file = models.FileField(upload_to='posts/examples', blank=True, null=True)
-    # image = ImageField(upload_to="posts/images/%Y/%m/%d/", blank=True, null=True)
-    image = CloudinaryField(blank=True, null=True)
+    image = ImageField(upload_to="posts/images/%Y/%m/%d/", blank=True, null=True)
+    # image = CloudinaryField(blank=True, null=True)
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name="comments",  blank=True, null=True)
 
     def __str__(self):
