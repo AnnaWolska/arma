@@ -230,7 +230,7 @@ import dj_database_url
 from dotenv import load_dotenv
 load_dotenv()
 
-IS_PRODUCTION = True
+IS_PRODUCTION = False
 
  # Get the current working
 cwd = os.getcwd()
