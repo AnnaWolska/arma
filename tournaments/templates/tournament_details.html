@@ -88,6 +88,9 @@
                                 <li>
                                     <a style="text-decoration: none;" href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
                                         {{  participant.name }}
+                                {% thumbnail participant.image "100x100" as im %}
+                                <img src="{{ im.url }}" alt="zdj">
+                                {% endthumbnail %}
                                     </a>
                                 </li>
                                 {% endfor %}
@@ -97,28 +100,28 @@
                         <br>
                     </div>
                     <hr>
-                    wszyscy uczestnicy:
-                    <br>
-                    <br>
-                    <ol style="column-count: 3;">
-                        {% for participant in participants %}
-                        <li>
-                            <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >
-                                {{ participant.name }}
-                                {% if participant.image %}
-
-                                {% thumbnail participant.image "100x100" as im %}
-                                <img src="{{ im.url }}" alt="zdj">
-                                {% endthumbnail %}
+{#                    wszyscy uczestnicy:#}
+{#                    <br>#}
+{#                    <br>#}
+{#                    <ol style="column-count: 3;">#}
+{#                        {% for participant in participants %}#}
+{#                        <li>#}
+{#                            <a style="text-decoration: none;"  href = "{% url 'tournament_calculating:participant_details' participant.id %}" >#}
+{#                                {{ participant.name }}#}
+{#                                {% if participant.image %}#}
+{##}
+{#                                {% thumbnail participant.image "100x100" as im %}#}
+{#                                <img src="{{ im.url }}" alt="zdj">#}
+{#                                {% endthumbnail %}#}
 {#                                    {% cloudinary participant.image width="100" crop="fill" %}#}
-
-                                {% endif %}
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ol>
-                    <hr>
-                    <hr>
+{##}
+{#                                {% endif %}#}
+{#                            </a>#}
+{#                        </li>#}
+{#                        {% endfor %}#}
+{#                    </ol>#}
+{#                    <hr>#}
+{#                    <hr>#}
                     <h3>
                         Przejdź do galerii ->
                         <h3   id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
@@ -131,6 +134,12 @@
                             <li>
                                 <a href = "{% url 'galleries:gallery_details' gallery.id %}">
                                     {{ gallery.title }}
+
+                                    {% thumbnail gallery.photos.first.image "100x100" crop="center" as im %}
+                                <img class=card-img-top" src="{{  im.url }}" alt="">
+                                    {% endthumbnail %}
+
+
                                 </a>
                             </li>
                             {% endfor %}
