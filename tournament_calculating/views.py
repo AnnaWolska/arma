@@ -763,13 +763,15 @@ def group_summary(request, group_id):
                         # dla każdego ze starć po kolei:
                         for rnd in rounds:
                             print("")
-                            print("RUNDA", rnd.fighter_one.name, rnd.fighter_two.name)
+                            print("RUNDA:", rnd.id, rnd.fighter_one.name, "walczy z:", rnd.fighter_two.name)
 
                             # jeśli uczestnik jest >>PIERWSZYM<< walczącym w rundzie, a ||DRUGI WTOPA|| ma kontuzję, jest zdyswkalifikowany lub się wycofał:
                             if participant.participant_id == rnd.fighter_one.id and participant.tournament_amount_rounds != 0 and rnd.points_fighter_two in list_of_excuses:
                                 # tu może być devision 0
                                 # to pierwszy otrzymuje punkty ze średniej
-                                participant.tournament_average = round(round(((round((maximum_amount_prtcp_rounds/participant.amount_rounds),2)) * participant.tournament_points),2)/maximum_amount_prtcp_rounds,2)
+                                # participant.tournament_average = round(round(((round((maximum_amount_prtcp_rounds/participant.amount_rounds),2)) * participant.tournament_points),2)/maximum_amount_prtcp_rounds,2)
+                                participant.tournament_average = round(((maximum_amount_prtcp_rounds/participant.amount_rounds) * participant.tournament_points) / maximum_amount_prtcp_rounds,2)
+
                                 participant.save()
                                 # a drugi otrzymuje zero (ten kontuziowany itp)
                                 rnd.points_fighter_two = 0
@@ -777,8 +779,9 @@ def group_summary(request, group_id):
                                 rnd.save()
                             # jeśli uczestnik jest >>DRUGIM<< walczącym w rundzie, a ||PIERWSZY WTOPA|| ma kontuzję, jest zdyswkalifikowany lub się wycofał:
                             if participant.participant_id == rnd.fighter_two.id and participant.tournament_amount_rounds != 0 and rnd.points_fighter_one in list_of_excuses:
-                                # participant.tournaments_average = round(round(((round((maximum_amount_prtcp_rounds/participant.amount_rounds),2)) * participant.tournament_points),2)/maximum_amount_prtcp_rounds,2)
-                                participant.tournament_average = round(round(((round((maximum_amount_prtcp_rounds/participant.amount_rounds),2)) * participant.tournament_points),2)/maximum_amount_prtcp_rounds,2)
+                                # participant.tournament_average = round(round(((round((maximum_amount_prtcp_rounds/participant.amount_rounds),2)) * participant.tournament_points),2)/maximum_amount_prtcp_rounds,2)
+                                participant.tournament_average = round(((maximum_amount_prtcp_rounds/participant.amount_rounds) * participant.tournament_points)/maximum_amount_prtcp_rounds,2)
+
                                 participant.save()
                                 # to pierwszy, co ma wtopę dostaje zero, a drugi dostaje swoją indywidualną średnią z turnieju:
                                 rnd.points_fighter_one = 0
@@ -787,7 +790,8 @@ def group_summary(request, group_id):
 
                             #-------3-----------DODAWANIE PUNKTÓW ZA WALKI, KTÓRE SIĘ NIE ODBYŁY---------------------------
                             # ||DRUGI WTOPA||
-                            # jeśli uczestnik nie ma w swoich rundach pierwszych i drugich w tej grupie kontuzji itp... czyli należy mu się średnia
+
+                            # warunek, że pierwszy walczacy w tym starciu nie ma w żadnych swoich rundach (pierwszych i drugich) wtopy:
                             condition_one = "kontuzja" not in rnd.fighter_one.rounds_of_participant_one.filter(group_id=group_id) \
                                 or "kontuzja" not in rnd.fighter_one.rounds_of_participant_two.filter(group_id=group_id) \
                                 or "dyskwalifikacja" not in rnd.fighter_one.rounds_of_participant_one.filter(group_id=group_id) \
@@ -795,28 +799,26 @@ def group_summary(request, group_id):
                                 or "wycofanie" not in rnd.fighter_one.rounds_of_participant_one.filter(group_id=group_id) \
                                 or "wycofanie" not in rnd.fighter_one.rounds_of_participant_two.filter(group_id=group_id)
 
+                            # jeśli uczestnik nie ma w swoich rundach pierwszych i drugich w tej grupie kontuzji itp... czyli należy mu się średnia
                             if "kontuzja" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id)  \
                             or "dyskwalifikacja" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
                             or "wycofanie" not in participant.participant.rounds_of_participant_two.filter(group_id=group_id) \
                             or "kontuzja" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id)\
                             or "dyskwalifikacja" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id)\
                             or "wycofanie" not in participant.participant.rounds_of_participant_one.filter(group_id=group_id):
-
-                                # print("uczestnik:", participant.participant, "nie ma żadnej wtopy")
                                 # jeśli zawodnnik jest pierwszym walczącym i nie ma punktów w rundzie, bo nie miał z kim walczyć i trzeba je dodać,
-                                # ale ma jakieś punkty w grupie \ i jakąś ilość rund, w których wziął udział, więc jest z czego mu dać średnią:
+                                # ale ma jakieś punkty w grupie i jakąś ilość rund, w których wziął udział, więc jest z czego mu dać średnią:
                                 if participant.participant == rnd.fighter_one \
                                 and rnd.points_fighter_one is None \
                                 and participant.tournament_points is not None \
                                 and participant.amount_rounds != 0 \
                                 and condition_one:
-
-                                    # print("uczestnik", participant.participant, "w tm starciu walczy jako pierwszy, ma jakieś punkty i jakieś rundy")
+                                    print("uczestnik", participant.participant.name, "w tm starciu walczy jako pierwszy z ", rnd.points_fighter_two , "ma jakieś punkty z rund i jakieś rundy")
                                     # ---------ŚREDNIA INDYWIDUALNA:----------------------
-                                    participant.round_average = round(round(((round((maximum_amount_prtcp_rounds / participant.amount_rounds),2)) * participant.tournament_points), 2) / maximum_amount_prtcp_rounds, 2)
-
-                                    print("DRUGI WTOPA OBLICZENIA", "{(", maximum_amount_prtcp_rounds, ":", participant.amount_rounds, ") *", participant.tournament_points, "}:", maximum_amount_prtcp_rounds, "suma =",participant.round_average )
-                                    print(" DRUGI WTOPA  uczestnik", participant.participant, "w tm starciu walczy jako pierwszy, ma jakieś punkty i jakieś rundy, dostanie średnią:", participant.round_average, condition_one )
+                                    # participant.round_average = round(round(((round((maximum_amount_prtcp_rounds / participant.amount_rounds),2)) * participant.tournament_points), 2) / maximum_amount_prtcp_rounds, 2)
+                                    participant.round_average = round(((maximum_amount_prtcp_rounds / participant.amount_rounds) * participant.tournament_points) / maximum_amount_prtcp_rounds, 2)
+                                    print("DRUGI WTOPA OBLICZENIA dla pierwszegp", "{(", maximum_amount_prtcp_rounds, ":", participant.amount_rounds, ") *", participant.tournament_points, "}:", maximum_amount_prtcp_rounds, "suma =",participant.round_average )
+                                    print(" DRUGI WTOPA  uczestnik", participant.participant, " walczy jako pierwszy i dostanie średnią:", participant.round_average, "Spełnienie warunku:", condition_one )
 
                                     if type(participant.round_average) == int:
                                         print("participant.round_average is int", participant.round_average)
@@ -832,6 +834,7 @@ def group_summary(request, group_id):
                                         else:
                                             participant.save()
                                     # teraz dostaje swoje punkty ze średniej za walki, których nie mógł odbyć
+                                    print("punkty ze śrdeniej do dadania pierwszemu za walkę, która się nie odbyła z takim co ma wtopę:", participant.round_average)
                                     rnd.points_fighter_one = participant.round_average
                                     # oponent, który z jakiegoś powodu nie walczył, ma zero:
                                     rnd.points_fighter_two = 0
@@ -861,7 +864,8 @@ def group_summary(request, group_id):
                                 and participant.amount_rounds != 0 \
                                 and condition_two:
                                     # print("uczestnik pierwszy wtopa, uczestnik", participant.participant ,"waczly drugi")
-                                    participant.round_average = round(round(((round((maximum_amount_prtcp_rounds / participant.amount_rounds),2)) * participant.tournament_points), 2) / maximum_amount_prtcp_rounds, 2)
+                                    # participant.round_average = round(round(((round((maximum_amount_prtcp_rounds / participant.amount_rounds),2)) * participant.tournament_points), 2) / maximum_amount_prtcp_rounds, 2)
+                                    participant.round_average = round(((maximum_amount_prtcp_rounds / participant.amount_rounds) * participant.tournament_points) / maximum_amount_prtcp_rounds, 2)
                                     print("PIERWSZY WTOPA OBLICZENIA", "{(", maximum_amount_prtcp_rounds, ":",
                                           participant.amount_rounds, ") *", participant.tournament_points, "}:",
                                           maximum_amount_prtcp_rounds, "suma =", participant.round_average, condition_two)
