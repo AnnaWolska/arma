@@ -126,13 +126,13 @@ class AddPointsForm(forms.ModelForm):
                 )
             )
 
-    def clean_points_fighter_one(self, *args, **kwargs):
-
-        points_fighter_one = self.cleaned_data.get("points_fighter_one")
-        if points_fighter_one == 2:
-            raise ValidationError("sprawdzam czy wyskoczył błąd, że jest 2")
-        else:
-            return points_fighter_one
+    # def clean_points_fighter_one(self, *args, **kwargs):
+    #
+    #     points_fighter_one = self.cleaned_data.get("points_fighter_one")
+        # if points_fighter_one == 2:
+        #     raise ValidationError("sprawdzam czy wyskoczył błąd, że jest 2")
+        # else:
+        #     return points_fighter_one
 
 
 class AddGroupForm(forms.ModelForm):

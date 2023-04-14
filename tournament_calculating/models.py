@@ -184,6 +184,11 @@ ROUND_STATUS = [
     ('3', '3'),
     ('4', '4'),
     ('5', '5'),
+    ('-1', '-1'),
+    ('-2', '-2'),
+    ('-3', '-3'),
+    ('-4', '-4'),
+    ('-5', '-5'),
     # ('6', '6'),
     # ('7', '7'),
     # ('8', '8'),
@@ -200,8 +205,8 @@ class Round(models.Model):
 
     order = models.PositiveSmallIntegerField(null=True)
     fight = models.ForeignKey("Fight", on_delete=models.CASCADE, related_name="rounds_of_fight", null=True)
-    points_fighter_one = models.CharField(max_length=20, choices=ROUND_STATUS, null=True)
-    points_fighter_two = models.CharField(max_length=20, choices=ROUND_STATUS, null=True)
+    points_fighter_one = models.CharField(max_length=20, choices=ROUND_STATUS, null=True, blank=True)
+    points_fighter_two = models.CharField(max_length=20, choices=ROUND_STATUS, null=True, blank=True)
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="rounds_of_group", null=True)
     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_one", null=True )
     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_two", null=True )

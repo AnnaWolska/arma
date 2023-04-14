@@ -140,6 +140,9 @@
                                 {{ r.points_fighter_one|floatformat:"-2" }}
                                 {% else %}
                                 {{ r.points_fighter_one}}
+
+
+
                                 {% endif %}
                             </span>
                         </b>
@@ -164,6 +167,16 @@
                         {% else %}
                         <b>
                             starcie  {{ r.order }}
+
+                                    <li class="list-group-item list-group-item-light">
+                                        <h4 class="stat-title"> Add 4 to one </h4>
+                                        <form action="/simple_function">
+                                            <button id="stat-btn" class="btn"> Do it </button>
+                                        </form>
+                                    </li>
+
+
+
                         </b>
                         {% endif %}
                     </a>
@@ -281,4 +294,8 @@
                                 </li>
                             </ul>
                             {% endfor %}
+
+
+                            <script src="counting.js"></script>
+
                             {% endblock %}

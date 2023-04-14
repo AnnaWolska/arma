@@ -4,7 +4,9 @@ from tournament_calculating.views import participants_list, participant_details,
     ParticipantAutocomplete, \
     delete_group, \
     delete_fights, add_rounds, add_points,\
-    fight_details, group_summary, create_participant
+    fight_details, group_summary, create_participant, \
+    add_four_points_one
+
 
 app_name = "tournament_calculating"
 urlpatterns = [
@@ -25,5 +27,6 @@ urlpatterns = [
     path('<int:group_id>/', group_summary, name="group_summary"),
 
     path("participant-autocomplete/", ParticipantAutocomplete.as_view(), name="participant-autocomplete"),
+    path("<int:group_id>/<int:fight_id>/<int:round_id>/add_four_points_one/",add_four_points_one)
 
 ]
