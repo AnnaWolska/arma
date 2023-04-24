@@ -11,7 +11,7 @@ if (warunek) {
     //jeszcze inne polecenie;
 }
 
-var result = 120;
+let result = 120;
 
 for (var i = 0; i < 3; i++) {
     result = result + 1;
@@ -27,5 +27,9 @@ getName();
 function getName() {
     console.log("Ala");
 }
+
+let link = document.querySelector('#glink');
+document.getElementById("id");
+
 
  */

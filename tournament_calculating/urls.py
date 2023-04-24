@@ -25,8 +25,10 @@ urlpatterns = [
     path('<int:group_id>/add_rounds/', add_rounds, name="add_rounds"),
     path('<int:group_id>/<int:fight_id>/<int:round_id>/add_points/', add_points, name="add_points"),
     path('<int:group_id>/', group_summary, name="group_summary"),
-
     path("participant-autocomplete/", ParticipantAutocomplete.as_view(), name="participant-autocomplete"),
-    path("<int:group_id>/<int:fight_id>/<int:round_id>/add_four_points_one/",add_four_points_one)
+
+    path("<int:group_id>/<int:fight_id>/<int:round_id>/add_four_points_one/", add_four_points_one, name="add_four_points_one"),
+    path("<int:group_id>/<int:fight_id>/<int:round_id>/add_points_to_fighter/", add_four_points_one, name="add_points_to_fighter")
 
 ]
+# add points to fighter_

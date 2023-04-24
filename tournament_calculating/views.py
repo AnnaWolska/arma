@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404,redirect
+from django.contrib.auth.decorators import login_required
 from tournaments.models import Tournament, Organizer
 from finals.models import ParticipantFinalist, Finalist
 from dal import autocomplete
@@ -548,201 +549,216 @@ def add_rounds(request, group_id):
 
 
 def add_four_points_one (request, group_id, fight_id, round_id):
-    # group = Group.objects.get(pk=group_id)
-    # fight_rounds = Round.objects.filter(fight_id=fight_id)
-    # fight = Fight.objects.get(pk=fight_id)
-    # fights = group.fights.all()
-    # round_of_fight = fight_rounds.get(pk=round_id)
-    # round_of_fight.points_fighter_one += 4
-    print("COŚ SOBI JEDNAK")
-    # return HttpResponse("""<html><script>window.location.replace('group_details.html/');</script></html>""")
-    # return HttpResponse("""<html><script>window.location.replace('/tournament_calculating/156/group/add_four_points_one/');</script></html>""")
-    # return HttpResponse("""<html><script>window.location.replace('/add_four_points_one');</script></html>""")
-    return HttpResponse("""<html><script>window.location.replace('add_four_points_one');</script></html>""")
-
-
-def add_points (request, group_id, fight_id, round_id):
     group = Group.objects.get(pk=group_id)
     fight_rounds = Round.objects.filter(fight_id=fight_id)
     fight = Fight.objects.get(pk=fight_id)
     fights = group.fights.all()
     round_of_fight = fight_rounds.get(pk=round_id)
-    first_fighter_points = []
-    points_sum = []
-    second_fighter_points = []
-    second_points_sum = []
-    participants = group.participants.all()
-    points_result_ls = ["0", "1", "2", "3", "4", "5"]
-    # points_result_ls = ["0","1","2","3","4","5","-1","-2","-3","-4","-5"]
-    fighter_one = []
-    fighter_two = []
-    fighter_one_points = []
-    fighter_two_points = []
-    group_participants = ParticipantGroup.objects.filter(group_id=group_id)
-    for p in participants:
-        for rnd in fight_rounds:
-            if p.id == rnd.fighter_one_id:
-                fighter_one = p
-            if p.id == rnd.fighter_two_id:
-                fighter_two = p
+    if round_of_fight.points_fighter_one is None:
+        print("czy wchodzi do ifa z Nonem")
+        round_of_fight.points_fighter_one = 0
+    print(" pierwszy: round_of_fight.points_fighter_one = ",round_of_fight.id, round_of_fight.points_fighter_one)
+    print(type(round_of_fight.points_fighter_one))
+    print(round_of_fight.points_fighter_one)
+    round_of_fight.points_fighter_one += 4
+    round_of_fight.save()
+    print("round_of_fight.points_fighter_one = ", round_of_fight.id, round_of_fight.points_fighter_one)
+    if request.method == "GET":
+        print(request.GET)
+        print("TAK dla geta")
+        print("round_of_fight.points_fighter_one = ", round_of_fight.id, round_of_fight.points_fighter_one)
+        return redirect(reverse("tournament_calculating:group_details",args=[group_id]))
+    # return HttpResponseRedirect(reverse("arch-summary", args=[1945]))
+    # path('<int:group_id>/group/', group_details, name="group_details"),
 
-    # dodawanie punktów każdemu z przeciwników w starciu
-    if request.user.is_authenticated:
-        form = AddPointsForm()
-        if request.method == "POST":
-            form = AddPointsForm(request.POST, instance=round_of_fight)
-            if form.is_valid():
-                form.save()
-                fighter_one_points.append(int(round_of_fight.points_fighter_one))
-                fighter_two_points.append(int(round_of_fight.points_fighter_two))
-                print("GGGGGGgggggg111:", fighter_one_points, fighter_two_points)
-                # round_of_fight.points_fighter_one = int(round_of_fight.points_fighter_one) + int(round_of_fight.points_fighter_one)
-                # round_of_fight.points_fighter_two = int(round_of_fight.points_fighter_two) + int(round_of_fight.points_fighter_two)
-                # round_of_fight.save()
-
-                for round_in_fight in fight.rounds_of_fight.all():
-
-                    #
-                    # if round_in_fight.points_fighter_one is None:
-                    #     round_in_fight.points_fighter_one = round_in_fight.points_fighter_one
-                    #     round_in_fight.save()
-                    # else:
-                    #     round_in_fight.points_fighter_one += round_in_fight.points_fighter_one
-                    #     round_in_fight.save()
-
-                    # if round_in_fight.points_fighter_two is None:
-                    #     round_in_fight.points_fighter_two = round_in_fight.points_fighter_two
-                    #     round_in_fight.save()
-                    # else:
-                    #     round_in_fight.points_fighter_two += round_in_fight.points_fighter_two
-                    #     round_in_fight.save()
-
-                    if round_in_fight.points_fighter_one in points_result_ls:
-                        first_fighter_points.append(int(round_in_fight.points_fighter_one))
-                    if round_in_fight.points_fighter_two in points_result_ls:
-                        second_fighter_points.append(int(round_in_fight.points_fighter_two))
-                # tu zbieram punkty ze wszystkich rund w danej walce dla pierwszego zawodnika
-                for el in first_fighter_points:
-                    if type(el) == int:
-                        # bo jak jest None to nie działa
-                        points_sum.append(el)
-                # tu zbieram punkty ze wszystkich rund w danej walce dla drugiego zawodnika
-                for el in second_fighter_points:
-                    if type(el) == int:
-                        second_points_sum.append(el)
-                final_points = sum(points_sum)
-                second_final_points = sum(second_points_sum)
-                # final_points = 0
-                # second_final_points = 0
-                # final_points += sum(points_sum)
-                # second_final_points += sum(second_points_sum)
-                fight.fighter_one_points = final_points
-                fight.fighter_two_points = second_final_points
-                fight.save()
-                # round_of_fight.points_fighter_one +=
-
-
-                #zliczm punkty z turnieju po uczestnikach
-                for p in participants:
-                    one_more_ls_to_append = []
-                    for fight in fights:
-                        if p.id == fight.fighter_one_id:
-                            one_more_ls_to_append.append(int(fight.fighter_one_points))
-                        if p.id == fight.fighter_two_id:
-                            one_more_ls_to_append.append(int(fight.fighter_two_points))
-                    prtcp_to_change = ParticipantGroup.objects.get(participant=p, group=group)
-                    # dodaję punktu z danego turnieju danemu zawodnikowi
-                    # print("prtcp_to_change",prtcp_to_change,sum(one_more_ls_to_append))
-                    prtcp_to_change.tournament_points = sum(one_more_ls_to_append)
-                    # prtcp_to_change.tournament_points += int(sum(one_more_ls_to_append))
-                    # prtcp_to_change.tournament_amount_rounds =
-                    prtcp_to_change.save()
-                    p.save()
-
-                tournament_fights_points = []
-                tournaments = Tournament.objects.all()
-                # dla każdego turnieju z turniejów:
-                for tournament in tournaments:
-                    #jeśli jego id jest takie samo jak id turnieju walk:
-                    if tournament.id == fight.tournament_id:
-                        # dla każdej walki w tego turnieju walkacj:
-                        for tournament_fight in tournament.fights.all():
-                            #jeśli w tej walce pierwszy zawodnik ma jakieś punkty:
-                            if tournament_fight.fighter_one_points != 0 or tournament_fight.fighter_one_points !="dyskwalifikacja" or tournament_fight.fighter_one_points !="średnia" or tournament_fight.fighter_one_points !="kontuzja" or tournament_fight.fighter_one_points !="wycofanie":
-                                #to dla tego turnieju punkty z walki powiększ o punkty tego zawodnika
-                                tournament_fights_points.append(tournament_fight.fighter_one_points)
-                                #jeśli drugi zawodnik ma jakieś punkty:
-                            if tournament_fight.fighter_two_points != 0 or tournament_fight.fighter_one_points !="dyskwalifikacja" or tournament_fight.fighter_one_points !="średnia" or tournament_fight.fighter_one_points !="kontuzja" or tournament_fight.fighter_one_points !="wycofanie":
-                                # to punkt dla tego turnieju powiększ o punkty tego zawodnika
-                                tournament_fights_points.append(tournament_fight.fighter_two_points)
-
-                        # TU WYLICZAM ŚREDNIĄ DO WYJSCIA zapisaną w modelu Tournametns jako tournament_average
-                        if tournament_fights_points is not None:
-                        # if tournament_fights_points is not None  or tournament_fights_points !="dyskwalifikacja" or tournament_fights_points !="średnia" or tournament_fights_points !="kontuzja" or tournament_fights_points !="wycofanie" or tournament_fights_points != 0:
-                            tournaments_fighters_average = round(sum(tournament_fights_points) / len(tournament_fights_points), 2)
-                            tournament.tournament_average = tournaments_fighters_average
-                            tournament.save()
-                        # obliczam średnią ale dla użytkowników w ogole
-                            # for participant in participants:
-                            #     if tournaments_fighters_average != 0:
-                            #         participant.points_average = round((participant.group_points / tournaments_fighters_average), 2)
-                            #         participant.save()
-                            # obliczą średnią dla danego zawodnika w danym turnieju
-                            for participant in group_participants:
-                                if tournaments_fighters_average != 0:
-                                    participant.tournament_average = round((participant.tournament_points / tournaments_fighters_average), 2)
-                                    participant.save()
-                                participant.tournament_points_modified = participant.tournament_points * participant.tournament_average
-                                participant.save()
-
-                fighter_one_points.append(fighter_one_points[0])
-                fighter_two_points.append(fighter_two_points[0])
-                print("GGGGGGgggggg22222:", fighter_one_points, fighter_two_points)
-
-
-
-
-                messages.success(request, 'punkty dodane')
-                # print("len(tournament_fights_points)",len(tournament_fights_points))
-                return HttpResponseRedirect(reverse(
-                    "tournament_calculating:group_details",
-                    args=[group_id],
-                ))
-            else:
-                print(form.errors)
-            # fighter_one_points += fighter_one_points
-            # fighter_two_points += fighter_two_points
-            # print("GGGGGGgggggg22:", fighter_one_points, fighter_two_points)
-
-
-        else:
-            form = AddPointsForm(instance=round_of_fight)
-            return (
-                render(request, "add_points.html", context={
-                    'form': form,
-                    'group': group,
-                    'fight': fight,
-                    'group_id': group_id,
-                    'fight_id': fight_id,
-                    'round_id':round_id,
-                    'participants': participants,
-                    'rounds': fight_rounds,
-                    'fighter_one': fighter_one,
-                    'fighter_two': fighter_two
-
-                })
-            )
     else:
-        form = AddPointsForm
-        return (
-            render(request, "add_points.html", context={
-                'form': form,
-                'group_id': group_id,
-                'fight_id': fight_id,
-                'round_id': round_id,
-                'participants':participants
-            })
-        )
+        print(" NIE MA:request.GET.get(points_fighter_one)")
+    print("COŚ ROBI DALej")
+
+# ?points_fighter_one={}
+# (round_of_fight.points_fighter_one)
+
+# +"?x=y"
+def add_points (request, group_id, fight_id, round_id):
+    pass
+    # group = Group.objects.get(pk=group_id)
+    # fight_rounds = Round.objects.filter(fight_id=fight_id)
+    # fight = Fight.objects.get(pk=fight_id)
+    # fights = group.fights.all()
+    # round_of_fight = fight_rounds.get(pk=round_id)
+    # first_fighter_points = []
+    # points_sum = []
+    # second_fighter_points = []
+    # second_points_sum = []
+    # participants = group.participants.all()
+    # points_result_ls = ["0", "1", "2", "3", "4", "5"]
+    # # points_result_ls = ["0","1","2","3","4","5","-1","-2","-3","-4","-5"]
+    # fighter_one = []
+    # fighter_two = []
+    # fighter_one_points = []
+    # fighter_two_points = []
+    # group_participants = ParticipantGroup.objects.filter(group_id=group_id)
+    # for p in participants:
+    #     for rnd in fight_rounds:
+    #         if p.id == rnd.fighter_one_id:
+    #             fighter_one = p
+    #         if p.id == rnd.fighter_two_id:
+    #             fighter_two = p
+    #
+    # # dodawanie punktów każdemu z przeciwników w starciu
+    # if request.user.is_authenticated:
+    #     # w gecie zmienna : punkty zawodnika
+    #     form = AddPointsForm()
+    #     if request.method == "POST" or request.GET.get("points_fighter_one") or request.GET.get("points_fighter_two") :
+    #
+    #         form = AddPointsForm(request.GET, instance=round_of_fight)
+    #         print("czy form jest VALID", form.is_valid() )
+    #         if form.is_valid():
+    #             form.save()
+    #             fighter_one_points.append(int(round_of_fight.points_fighter_one))
+    #             fighter_two_points.append(int(round_of_fight.points_fighter_two))
+    #             print("GGGGGGgggggg111:", fighter_one_points, fighter_two_points)
+    #             # round_of_fight.points_fighter_one = int(round_of_fight.points_fighter_one) + int(round_of_fight.points_fighter_one)
+    #             # round_of_fight.points_fighter_two = int(round_of_fight.points_fighter_two) + int(round_of_fight.points_fighter_two)
+    #             # round_of_fight.save()
+    #
+    #             for round_in_fight in fight.rounds_of_fight.all():
+    #
+    #                 #
+    #                 # if round_in_fight.points_fighter_one is None:
+    #                 #     round_in_fight.points_fighter_one = round_in_fight.points_fighter_one
+    #                 #     round_in_fight.save()
+    #                 # else:
+    #                 #     round_in_fight.points_fighter_one += round_in_fight.points_fighter_one
+    #                 #     round_in_fight.save()
+    #
+    #                 # if round_in_fight.points_fighter_two is None:
+    #                 #     round_in_fight.points_fighter_two = round_in_fight.points_fighter_two
+    #                 #     round_in_fight.save()
+    #                 # else:
+    #                 #     round_in_fight.points_fighter_two += round_in_fight.points_fighter_two
+    #                 #     round_in_fight.save()
+    #
+    #                 if round_in_fight.points_fighter_one in points_result_ls:
+    #                     first_fighter_points.append(int(round_in_fight.points_fighter_one))
+    #                 if round_in_fight.points_fighter_two in points_result_ls:
+    #                     second_fighter_points.append(int(round_in_fight.points_fighter_two))
+    #             # tu zbieram punkty ze wszystkich rund w danej walce dla pierwszego zawodnika
+    #             for el in first_fighter_points:
+    #                 if type(el) == int:
+    #                     # bo jak jest None to nie działa
+    #                     points_sum.append(el)
+    #             # tu zbieram punkty ze wszystkich rund w danej walce dla drugiego zawodnika
+    #             for el in second_fighter_points:
+    #                 if type(el) == int:
+    #                     second_points_sum.append(el)
+    #             final_points = sum(points_sum)
+    #             second_final_points = sum(second_points_sum)
+    #             # final_points = 0
+    #             # second_final_points = 0
+    #             # final_points += sum(points_sum)
+    #             # second_final_points += sum(second_points_sum)
+    #             fight.fighter_one_points = final_points
+    #             fight.fighter_two_points = second_final_points
+    #             fight.save()
+    #             # round_of_fight.points_fighter_one +=
+    #
+    #             #zliczm punkty z turnieju po uczestnikach
+    #             for p in participants:
+    #                 one_more_ls_to_append = []
+    #                 for fight in fights:
+    #                     if p.id == fight.fighter_one_id:
+    #                         one_more_ls_to_append.append(int(fight.fighter_one_points))
+    #                     if p.id == fight.fighter_two_id:
+    #                         one_more_ls_to_append.append(int(fight.fighter_two_points))
+    #                 prtcp_to_change = ParticipantGroup.objects.get(participant=p, group=group)
+    #                 # dodaję punktu z danego turnieju danemu zawodnikowi
+    #                 # print("prtcp_to_change",prtcp_to_change,sum(one_more_ls_to_append))
+    #                 prtcp_to_change.tournament_points = sum(one_more_ls_to_append)
+    #                 # prtcp_to_change.tournament_points += int(sum(one_more_ls_to_append))
+    #                 # prtcp_to_change.tournament_amount_rounds =
+    #                 prtcp_to_change.save()
+    #                 p.save()
+    #
+    #             tournament_fights_points = []
+    #             tournaments = Tournament.objects.all()
+    #             # dla każdego turnieju z turniejów:
+    #             for tournament in tournaments:
+    #                 #jeśli jego id jest takie samo jak id turnieju walk:
+    #                 if tournament.id == fight.tournament_id:
+    #                     # dla każdej walki w tego turnieju walkacj:
+    #                     for tournament_fight in tournament.fights.all():
+    #                         #jeśli w tej walce pierwszy zawodnik ma jakieś punkty:
+    #                         if tournament_fight.fighter_one_points != 0 or tournament_fight.fighter_one_points !="dyskwalifikacja" or tournament_fight.fighter_one_points !="średnia" or tournament_fight.fighter_one_points !="kontuzja" or tournament_fight.fighter_one_points !="wycofanie":
+    #                             #to dla tego turnieju punkty z walki powiększ o punkty tego zawodnika
+    #                             tournament_fights_points.append(tournament_fight.fighter_one_points)
+    #                             #jeśli drugi zawodnik ma jakieś punkty:
+    #                         if tournament_fight.fighter_two_points != 0 or tournament_fight.fighter_one_points !="dyskwalifikacja" or tournament_fight.fighter_one_points !="średnia" or tournament_fight.fighter_one_points !="kontuzja" or tournament_fight.fighter_one_points !="wycofanie":
+    #                             # to punkt dla tego turnieju powiększ o punkty tego zawodnika
+    #                             tournament_fights_points.append(tournament_fight.fighter_two_points)
+    #
+    #                     # TU WYLICZAM ŚREDNIĄ DO WYJSCIA zapisaną w modelu Tournametns jako tournament_average
+    #                     if tournament_fights_points is not None:
+    #                     # if tournament_fights_points is not None  or tournament_fights_points !="dyskwalifikacja" or tournament_fights_points !="średnia" or tournament_fights_points !="kontuzja" or tournament_fights_points !="wycofanie" or tournament_fights_points != 0:
+    #                         tournaments_fighters_average = round(sum(tournament_fights_points) / len(tournament_fights_points), 2)
+    #                         tournament.tournament_average = tournaments_fighters_average
+    #                         tournament.save()
+    #                     # obliczam średnią ale dla użytkowników w ogole
+    #                         # for participant in participants:
+    #                         #     if tournaments_fighters_average != 0:
+    #                         #         participant.points_average = round((participant.group_points / tournaments_fighters_average), 2)
+    #                         #         participant.save()
+    #                         # obliczą średnią dla danego zawodnika w danym turnieju
+    #                         for participant in group_participants:
+    #                             if tournaments_fighters_average != 0:
+    #                                 participant.tournament_average = round((participant.tournament_points / tournaments_fighters_average), 2)
+    #                                 participant.save()
+    #                             participant.tournament_points_modified = participant.tournament_points * participant.tournament_average
+    #                             participant.save()
+    #
+    #             fighter_one_points.append(fighter_one_points[0])
+    #             fighter_two_points.append(fighter_two_points[0])
+    #             print("GGGGGGgggggg22222:", fighter_one_points, fighter_two_points)
+    #
+    #             messages.success(request, 'punkty dodane')
+    #             # print("len(tournament_fights_points)",len(tournament_fights_points))
+    #             return HttpResponseRedirect(reverse(
+    #                 "tournament_calculating:group_details",
+    #                 args=[group_id],
+    #             ))
+    #         else:
+    #             print(form.errors)
+    #         # fighter_one_points += fighter_one_points
+    #         # fighter_two_points += fighter_two_points
+    #         # print("GGGGGGgggggg22:", fighter_one_points, fighter_two_points)
+    #
+    #     else:
+    #         form = AddPointsForm(instance=round_of_fight)
+    #         return (
+    #             render(request, "add_points.html", context={
+    #                 'form': form,
+    #                 'group': group,
+    #                 'fight': fight,
+    #                 'group_id': group_id,
+    #                 'fight_id': fight_id,
+    #                 'round_id':round_id,
+    #                 'participants': participants,
+    #                 'rounds': fight_rounds,
+    #                 'fighter_one': fighter_one,
+    #                 'fighter_two': fighter_two
+    #             })
+    #         )
+    # else:
+    #     form = AddPointsForm
+    #     return (
+    #         render(request, "add_points.html", context={
+    #             'form': form,
+    #             'group_id': group_id,
+    #             'fight_id': fight_id,
+    #             'round_id': round_id,
+    #             'participants':participants
+    #         })
+    #     )
 
 """
 jeśli któryś z uczestników jest walczącym jeden w rundzie, gdzie walczącym dwa jest uczestnik,

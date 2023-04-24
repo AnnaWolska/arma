@@ -188,3 +188,12 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'arma/static')]
+#
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+#         "LOCATION": "127.0.0.1:11211",
+#     }
+# }
+# pip install pymemcache
+

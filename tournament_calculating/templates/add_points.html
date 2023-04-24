@@ -7,7 +7,7 @@
 <link href="{% static "tournaments_calculating/css/style.css" %}" rel=stylesheet">
 {% endblock %}
 {% block content %}
-<span style = "background:  {{ group.color_fighter_one }}">
+<span style = "background: {{ group.color_fighter_one }}">
     pierwszy zawodnik:
     {{ fighter_one.name}} z {{ fighter_one.school }}
 </span>
@@ -26,13 +26,27 @@
 <img src="{{ im.url }}" alt="zdj">
 {% endthumbnail %}
 {% endif %}
-<form method = "POST" action="" enctype="multipart/form-data">
+<form method = "POST" action="" >
     {% csrf_token %}
     {{ form|crispy }}
     <button type="submit"
     class = "btn btn-primary">Wyślij
 </button>
+
+
+
+
+
 </form>
+  <form method = "GET" action="" >
+   <p> wysyła się getem</p>
+    {{ form|crispy }}
+    <button type="submit"
+    class = "btn btn-primary">Wyślij
+    </button>
+</form>
+
+
 {% endblock %}
 {% block additional_scripts %}
 <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>

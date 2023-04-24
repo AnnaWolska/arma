@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import posts_list, post_details, add_post, edit_post
+from .views import post_details
 
 app_name = "posts"
 urlpatterns = [
