@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from tournaments.models import Tournament, Organizer
 from finals.models import ParticipantFinalist, Finalist
 from dal import autocomplete
-from tournament_calculating.models import Group, Fight, Participant, Round, ParticipantGroup
+from tournament_calculating.models import Group, Fight, Participant, Round, ParticipantGroup, ROUND_STATUS
 from tournament_calculating.forms import (
     AddParticipantForm,
     AddGroupForm,
@@ -97,6 +97,7 @@ def group_details(request, group_id):
     for i in range(1,len(fighters_one_names) + 1):
         fights_numbers.append(i)
 
+    print("ROUND_STATUS",ROUND_STATUS)
     return render(request, "group_details.html", context={
         "number": number,
         "tournament": tournament,
@@ -113,6 +114,7 @@ def group_details(request, group_id):
         "group":group,
         "group_participants":group_participants,
         "tournament_participants":tournament_participants,
+        "ROUND_STATUS":ROUND_STATUS
     })
 
 
@@ -557,10 +559,14 @@ def add_four_points_one (request, group_id, fight_id, round_id):
     if round_of_fight.points_fighter_one is None:
         print("czy wchodzi do ifa z Nonem")
         round_of_fight.points_fighter_one = 0
+    if round_of_fight.points_fighter_two is None:
+        print("czy wchodzi do ifa z Nonem")
+        round_of_fight.points_fighter_two = 0
     print(" pierwszy: round_of_fight.points_fighter_one = ",round_of_fight.id, round_of_fight.points_fighter_one)
     print(type(round_of_fight.points_fighter_one))
     print(round_of_fight.points_fighter_one)
-    round_of_fight.points_fighter_one += 4
+    print(request.GET)
+    round_of_fight.points_fighter_one = request.GET["points"]
     round_of_fight.save()
     print("round_of_fight.points_fighter_one = ", round_of_fight.id, round_of_fight.points_fighter_one)
     if request.method == "GET":
@@ -568,17 +574,11 @@ def add_four_points_one (request, group_id, fight_id, round_id):
         print("TAK dla geta")
         print("round_of_fight.points_fighter_one = ", round_of_fight.id, round_of_fight.points_fighter_one)
         return redirect(reverse("tournament_calculating:group_details",args=[group_id]))
-    # return HttpResponseRedirect(reverse("arch-summary", args=[1945]))
-    # path('<int:group_id>/group/', group_details, name="group_details"),
-
     else:
         print(" NIE MA:request.GET.get(points_fighter_one)")
     print("COŚ ROBI DALej")
 
-# ?points_fighter_one={}
-# (round_of_fight.points_fighter_one)
 
-# +"?x=y"
 def add_points (request, group_id, fight_id, round_id):
     pass
     # group = Group.objects.get(pk=group_id)

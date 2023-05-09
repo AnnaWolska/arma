@@ -3,7 +3,6 @@
 {% load static %}
 {% load thumbnail %}
 {% load cloudinary %}
-
 {% block style %}
 <link href ="{% static "tournaments_calculating/css/style.css" %}" rel = "stylesheet">
 {% endblock %}
@@ -11,7 +10,7 @@
 <div class="list-group">
     <ol>
         <br class="list-group-item">
-        <p>
+      
             {% if tournament.user == request.user %}
             {% if not rounds %}
             <button id="delete_tournament" type="button" style="background-color:red"  class="btn btn-primary">
@@ -27,8 +26,6 @@
                     {{  tournament.title }}
                 </a>
                 {% if image %}
-{#                    {% cloudinary tournament.image  width="100" crop="fill" %}#}
-
                 {% thumbnail tournament.image "100x100" as im %}
                 <img src="{{ im.url }}" alt="zdj">
                 {% endthumbnail %}
@@ -126,12 +123,12 @@
                 <td>
                     {% for r in fight.rounds_of_fight.all|dictsort:"id" %}
                          {% if r.points_fighter_one %}
-                    <a id="delete_tournament" class="btn btn-primary" style="color:white; background-color:orange; text-decoration: none;   " href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
+                    <a id="delete_tournament" class="btn btn-primary" style="color:black; background-color:oldlace; text-decoration: none;   " href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
 
                         <b>
                         {{ r.order }}
                             <br>
-                            <span style=" color: white">
+                            <span style=" color: black">
                                 {{ fight.fighter_one.name }}:
                             </span>
                         </b>
@@ -141,9 +138,6 @@
                                 {{ r.points_fighter_one|floatformat:"-2" }}
                                 {% else %}
                                 {{ r.points_fighter_one}}
-
-
-
                                 {% endif %}
                             </span>
                         </b>
@@ -151,7 +145,7 @@
                         {% if r.points_fighter_one %}
                         <hr style="color: black">
                         <b>
-                            <span style=" color: white">
+                            <span style=" color: black">
                                 {{ fight.fighter_two.name }}:
                             </span>
                         </b>
@@ -165,19 +159,36 @@
                             </span>
                         </b>
                         {% else %}
-{#                             <a id="delete_tournament" class="btn btn-primary" style="color:white; background-color:lightblue; text-decoration: none;   " href = "{% url 'tournament_calculating:add_four_points_one' group_id fight.id r.id    %}">#}
                         <b >
-                            starcie  {{ r.order }}
+                            starcie  {{ r.order }} {{ fight.fighter_one.name }}
+{#                            <li>#}
+                            <li style="background-color:{{ group.color_fighter_one }};" class="list-group-item list-group-item-light">
 
-                                    <li class="list-group-item list-group-item-light">
-                                        <a style="color:white; text-decoration: none;" href="{% url 'tournament_calculating:add_four_points_one' group_id fight.id r.id %}?points_fighter_one={{ r.points_fighter_one }}">   <span id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary"> dodaj 4 </span> </a>
-                                        <a style="color:white; text-decoration: none;" href="{% url 'tournament_calculating:add_points_to_fighter' group_id fight.id r.id %}?points={{ r.points_fighter_one }}&fighter=fighter_one">   <span id="delete_tournament" type="button" style="background-color:orange"  class="btn btn-primary"> dodaj do pierwszego fightera</span> </a>
+                                   {% for status in ROUND_STATUS %}
 
-                                    </li>
+                                  <a style="color:white; text-decoration: none;" href="{% url 'tournament_calculating:add_points_to_fighter' group_id fight.id r.id %}?points={{ status.0 }}&fighter={{ r.fighter_one.id }}"> <span style= "color: black; background-color: white;" type="button" class="btn btn-primary" > {{ status.0 }}</span> </a>
+{#                                       <a style="color:white; text-decoration: none;" href="{% url 'tournament_calculating:add_points_to_fighter' group_id fight.id r.id %}?points={{ status.0 }}&fighter={{ r.fighter_two.id }}"> <span style= "color: black; background-color: white;" type="button" class="btn btn-primary" > {{ status.0 }}</span> </a>#}
+{#                                       <li>#}
+{#                                       <a href="{% url 'tournament_calculating:add_points_to_fighter' group_id fight.id r.id %}?points={{ status.0 }}&fighter={{ r.fighter_one.id }}"> {{ status.0 }}</a>#}
+{#                                   </li>#}
+                                   {% endfor %}
+                                </li>
+                        starcie  {{ r.order }} {{ fight.fighter_two.name }}
+                             <li style="background-color:{{ group.color_fighter_two }};" class="list-group-item list-group-item-light">
+                                                               {% for status in ROUND_STATUS %}
 
+                                  <a style="color:white; text-decoration: none;" href="{% url 'tournament_calculating:add_points_to_fighter' group_id fight.id r.id %}?points={{ status.0 }}&fighter={{ r.fighter_two.id }}"> <span style= "color: black; background-color: white;" type="button" class="btn btn-primary" > {{ status.0 }}</span> </a>
+{#                                       <a style="color:white; text-decoration: none;" href="{% url 'tournament_calculating:add_points_to_fighter' group_id fight.id r.id %}?points={{ status.0 }}&fighter={{ r.fighter_two.id }}"> <span style= "color: black; background-color: white;" type="button" class="btn btn-primary" > {{ status.0 }}</span> </a>#}
+{#                                       <li>#}
+{#                                       <a href="{% url 'tournament_calculating:add_points_to_fighter' group_id fight.id r.id %}?points={{ status.0 }}&fighter={{ r.fighter_one.id }}"> {{ status.0 }}</a>#}
+{#                                   </li>#}
+                                   {% endfor %}
+
+                            </li>
+ <hr>
                         </b>
                         {% endif %}
-{#                    </a>#}
+
                     <br>
                     <br>
                     {% endfor %}
@@ -185,12 +196,10 @@
                     {{ fight.fighter_one.name }}:
                     {% if fight.fighter_one_points %}
                     <b>
-{#                        {{ fight.fighter_one_points }}#}
                     {{ add_four_points_one  }}
                     </b>
                     {% endif %}
                     <br>
-
                     {{ fight.fighter_two.name }}:
                     {% if fight.fighter_two_points %}
                     <b>
@@ -261,7 +270,6 @@
                             </tr>
                         </table>
                         <br>
-
                         uczestnicy:
                            {% for participant in group_participants|dictsortreversed:"tournament_average" %}
                         <ul>
@@ -275,7 +283,6 @@
 
                                     <div>
                                         {% if participant.participant.image %}
-{#                                         {% cloudinary participant.participant.image width="100" crop="fill" %}#}
                                         {% thumbnail participant.participant.image "100x100" as im %}
                                         <img src="{{ im.url }}" alt="zdj">
                                         {% endthumbnail %}
@@ -292,10 +299,6 @@
                                 </li>
                             </ul>
                             {% endfor %}
-
-
-{#                        <a href="{% url 'tournament_calculating:add_four_points_one' group_id fight.id r.id %} "> kliknij </a>#}
-
                             <script src="counting.js"></script>
 
                             {% endblock %}
