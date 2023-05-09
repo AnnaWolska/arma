@@ -550,33 +550,50 @@ def add_rounds(request, group_id):
         )
 
 
-def add_four_points_one (request, group_id, fight_id, round_id):
+def add_points_fighter_one (request, group_id, fight_id, round_id):
     group = Group.objects.get(pk=group_id)
     fight_rounds = Round.objects.filter(fight_id=fight_id)
     fight = Fight.objects.get(pk=fight_id)
     fights = group.fights.all()
     round_of_fight = fight_rounds.get(pk=round_id)
     if round_of_fight.points_fighter_one is None:
-        print("czy wchodzi do ifa z Nonem")
+        # print("czy wchodzi do ifa z Nonem")
         round_of_fight.points_fighter_one = 0
     if round_of_fight.points_fighter_two is None:
-        print("czy wchodzi do ifa z Nonem")
+        # print("czy wchodzi do ifa z Nonem")
         round_of_fight.points_fighter_two = 0
-    print(" pierwszy: round_of_fight.points_fighter_one = ",round_of_fight.id, round_of_fight.points_fighter_one)
-    print(type(round_of_fight.points_fighter_one))
-    print(round_of_fight.points_fighter_one)
-    print(request.GET)
+    # print(" pierwszy: round_of_fight.points_fighter_one = ",round_of_fight.id, round_of_fight.points_fighter_one)
+    # print(type(round_of_fight.points_fighter_one))
+    # print(round_of_fight.points_fighter_one)
+    # print(request.GET)
     round_of_fight.points_fighter_one = request.GET["points"]
+    # round_of_fight.points_fighter_two = request.GET["points"]
+
     round_of_fight.save()
-    print("round_of_fight.points_fighter_one = ", round_of_fight.id, round_of_fight.points_fighter_one)
+    # print("round_of_fight.points_fighter_one = ", round_of_fight.id, round_of_fight.points_fighter_one)
     if request.method == "GET":
-        print(request.GET)
-        print("TAK dla geta")
-        print("round_of_fight.points_fighter_one = ", round_of_fight.id, round_of_fight.points_fighter_one)
+        # print(request.GET)
+        # print("TAK dla geta")
+        # print("round_of_fight.points_fighter_one = ", round_of_fight.id, round_of_fight.points_fighter_one)
         return redirect(reverse("tournament_calculating:group_details",args=[group_id]))
-    else:
-        print(" NIE MA:request.GET.get(points_fighter_one)")
-    print("COŚ ROBI DALej")
+    # else:
+    #     print(" NIE MA:request.GET.get(points_fighter_one)")
+    # print("COŚ ROBI DALej")
+
+def add_points_fighter_two (request, group_id, fight_id, round_id):
+    group = Group.objects.get(pk=group_id)
+    fight_rounds = Round.objects.filter(fight_id=fight_id)
+    fight = Fight.objects.get(pk=fight_id)
+    fights = group.fights.all()
+    round_of_fight = fight_rounds.get(pk=round_id)
+    if round_of_fight.points_fighter_one is None:
+        round_of_fight.points_fighter_one = 0
+    if round_of_fight.points_fighter_two is None:
+        round_of_fight.points_fighter_two = 0
+    round_of_fight.points_fighter_two = request.GET["points"]
+    round_of_fight.save()
+    if request.method == "GET":
+        return redirect(reverse("tournament_calculating:group_details",args=[group_id]))
 
 
 def add_points (request, group_id, fight_id, round_id):
