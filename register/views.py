@@ -13,8 +13,11 @@ def register(response):
             instance = form.save(commit=False)
             instance.save()
             print(instance)
-        messages.success(response, 'zarejestrowany nowy użytkownik')
-        return redirect(reverse('main:home'))
+            messages.success(response, 'zarejestrowany nowy użytkownik')
+            return redirect(reverse('main:home'))
+        else:
+            return render(response, "accounts/register.html", {"form": form})
+
 
     else:
         form = RegisterForm()

@@ -189,16 +189,7 @@ ROUND_STATUS = [
     ('-3', '-3'),
     ('-4', '-4'),
     ('-5', '-5'),
-    # ('6', '6'),
-    # ('7', '7'),
-    # ('8', '8'),
-    # ('9', '9'),
-    # ('10', '10'),
-    # ('kontuzja', 'kontuzja'),
-    # ('dyskwalifikacja', 'dyskwalifikacja'),
-    # ('poddanie', 'poddanie'),
-    # ('wycofanie', 'wycofanie'),
-    # ('średnia', 'średnia'),
+
 ] + ROUND_SPECIAL_STATUSES + ROUND_CONTUSIONS_STATUSES
 
 class Round(models.Model):

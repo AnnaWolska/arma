@@ -89,7 +89,8 @@
     <h5>
         walki grupa {{  number }} :
     </h5>
-    <table  BORDER CELLSPACING=5 CELLPADDING=15 style=" vertical-align:top"><caption align="top"></caption>
+    <table  BORDER CELLSPACING=5 CELLPADDING=25><caption align="top"></caption>
+
         <tr>
             {% for fight in fights%}
             <td>
@@ -97,9 +98,11 @@
             </td>
             {% endfor %}
         </tr>
-        <tr style=" vertical-align:top">
+
+
+        <tr >
             {% for fighter in fighters_one_names %}
-            <td style=" background:  {{ group.color_fighter_one }}; vertical-align:top">
+            <td style=" background:  {{ group.color_fighter_one }}">
                 <a style="text-decoration: none; color:black" href = "{% url 'tournament_calculating:participant_details' fighter.id %}" >
                     <b>
                         {{ fighter.name }}
@@ -108,6 +111,8 @@
             </td>
             {% endfor %}
         </tr>
+
+
         <tr>
             {% for fighter in fighters_two_names  %}
             <td style=" background: {{ group.color_fighter_two }}">
@@ -115,14 +120,20 @@
                     <b>
                         {{ fighter.name }}
                     </b>
+                    </a>
                 </td>
                 {% endfor %}
             </tr>
+
+
+
             {% for fight in fights %}
-            <td>
-                {% for r in fight.rounds_of_fight.all|dictsort:"id" %}
-                <b >
-                    <span style="background-color:{{ group.color_fighter_one }};" class="list-group-item list-group-item-light">
+
+            <td style=" vertical-align:top ">
+            {% for r in fight.rounds_of_fight.all|dictsort:"id" %}
+
+
+
                         {% if r.points_fighter_one %}
                         <a id="delete_tournament" class="btn btn-primary" style="color:black; background-color:oldlace; text-decoration: none;   " href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
                             <b>
@@ -141,7 +152,12 @@
                                     {% endif %}
                                 </span>
                             </b>
+
                             {% endif %}
+
+
+
+
                             {% if r.points_fighter_one %}
                             <hr style="color: black">
                             <b>
@@ -158,8 +174,14 @@
                                     {% endif %}
                                 </span>
                             </b>
+                                 </a>
                             {% endif %}
-                            starcie  {{ r.order }} {{ fight.fighter_one.name }}
+
+
+
+
+                        <span style="background-color:{{ group.color_fighter_one }};" class="list-group-item list-group-item-light">
+                            starcie {{ r.order }} {{ fight.fighter_one.name }}vvvvvvvvvvv
                             {% for status in ROUND_STATUS %}
                             <a  id="kotwica" style="color:white; text-decoration: none;" href="{% url 'tournament_calculating:add_points_fighter_one' group_id fight.id r.id %}?points={{ status.0 }}&fighter={{ r.fighter_one.id }}#kotwica">
                                 <span style= "color: black; background-color: white;" type="button" class="btn btn-primary">
@@ -168,8 +190,9 @@
                             </a>
                             {% endfor %}
                         </span>
+
                         <span style="background-color:{{ group.color_fighter_two }};" class="list-group-item list-group-item-light">
-                            starcie  {{ r.order }} {{ fight.fighter_two.name }}
+                            starcie {{ r.order }} {{ fight.fighter_two.name }}
                             {% for status in ROUND_STATUS %}
                             <a style="color:white; text-decoration: none;" href="{% url 'tournament_calculating:add_points_fighter_two' group_id fight.id r.id %}?points={{ status.0 }}&fighter={{ r.fighter_two.id }}">
                                 <span style= "color: black; background-color: white;" type="button" class="btn btn-primary" >
@@ -178,11 +201,19 @@
                             </a>
                             {% endfor %}
                         </span>
-                        <hr>
-                    </b>
+
+
+
+
                     <br>
                     <br>
                     {% endfor %}
+
+
+
+
+
+
                     <br>
                     {{ fight.fighter_one.name }}:
                     {% if fight.fighter_one_points %}
@@ -298,5 +329,5 @@
                                 {% endif %}
                         </ul>
                         {% endfor %}
-{#                        <script src="counting.js"></script>#}
+
                         {% endblock %}
