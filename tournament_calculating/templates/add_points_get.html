@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load thumbnail %}
+{% load static %}
+{%  block style %}
+<link href="{% static "tournaments_calculating/css/style.css" %}" rel=stylesheet">
+{% endblock %}
+{% block content %}
+
+{#<span style = "background:  {{ group.color_fighter_one }}">#}
+{#    pierwszy zawodnik:#}
+{#    {{ fighter_one.name}} z {{ fighter_one.school }}#}
+{#</span>#}
+{#{% if fighter_one.image %}#}
+{#{% thumbnail fighter_one.image "100x100" as im %}#}
+{#<img src="{{ im.url }}" alt="zdj">#}
+{#{% endthumbnail %}#}
+{#{% endif %}#}
+{#<br>#}
+{#<span style = "background:  {{ group.color_fighter_two }}">#}
+{#    drugi zawodnik:#}
+{#    {{ fighter_two.name}} z {{ fighter_two.school }}#}
+{#</span>#}
+{#{% if fighter_two.image %}#}
+{#{% thumbnail fighter_two.image "100x100" as im %}#}
+{#<img src="{{ im.url }}" alt="zdj">#}
+{#{% endthumbnail %}#}
+{#{% endif %}#}
+{#<form method = "POST" action="" >#}
+{#    {% csrf_token %}#}
+{#    {{ form|crispy }}#}
+{#    <button type="submit"#}
+{#    class = "btn btn-primary">Wyślij#}
+{#</button>#}
+    {#</form>#}
+
+<form method = "GET" >
+        <button type="submit"
+        class = "btn btn-primary">Wyślij
+        </button>
+</form>
+
+{# <form method = "GET" action="add_points_fighter_one" >#}
+{#    <p> wysyła się getem </p>#}
+{#        {{ form|crispy }}#}
+{#        <button type="submit"#}
+{#        class = "btn btn-primary">Wyślij#}
+{#        </button>#}
+{#</form>   #}
+
+{% endblock %}
+{% block additional_scripts %}
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+{{ form.media }}
+{% endblock %}

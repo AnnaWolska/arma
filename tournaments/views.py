@@ -31,7 +31,12 @@ def tournament_details(request, tournament_id):
     user = tournament.user
     created = tournament.created
     participants = tournament.participants.all()
+    # participants = []
+
     groups = tournament.groups.all().order_by('number')
+    # for group in groups:
+    #     participants.append(group.participants)
+    # print("participants", participants)
     galleries = tournament.galleries.all()
     paginator = Paginator(posts, 20)
     page_number = request.GET.get('page')

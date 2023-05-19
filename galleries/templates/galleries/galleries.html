@@ -3,6 +3,8 @@
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 {% load thumbnail %}
+{% load cloudinary %}
+
 {% block content %}
 <h3   id="delete_tournament" type="button" style="background-color:lightseagreen "  class="btn btn-primary">
     <a style="color:white; text-decoration: none;" href = "{% url 'galleries:add_gallery' %}">
@@ -44,6 +46,8 @@
             {% thumbnail gallery.photos.first.image "300x300" crop="center" as im %}
             <img class=card-img-top" src="{{  im.url }}" alt="">
             {% endthumbnail %}
+{#             {% cloudinary gallery.photos.first.image width="100" crop="fill"%}#}
+
             <div class="card-body">
                 <h4 class="card-title text-center">
                     {{ gallery.title }}

@@ -13,14 +13,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
-def posts_list(request, tournament_id):
-    tournament = Tournament.objects.get(pk=tournament_id)
-    posts = Post.objects.filter(pk=tournament_id).order_by('id')
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    posts_list = paginator.get_page(page_number)
-    context = {'posts_list': posts_list}
-    return render(request, "posts_list.html", context)
+# def posts_list(request, tournament_id):
+#     tournament = Tournament.objects.get(pk=tournament_id)
+#     posts = Post.objects.filter(pk=tournament_id).order_by('id')
+#     paginator = Paginator(posts, 10)
+#     page_number = request.GET.get('page')
+#     posts_list = paginator.get_page(page_number)
+#     context = {'posts_list': posts_list}
+#     return render(request, "posts_list.html", context)
 
 
 def post_details(request, post_id):

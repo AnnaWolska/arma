@@ -6,6 +6,7 @@ from tournament_calculating.models import Participant, Fight, Round
 from dal import autocomplete
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
 from django.core.exceptions import ValidationError
+from tournaments.models import Tournament
 
 
 class CreateParticipantForm(forms.ModelForm):
@@ -41,7 +42,26 @@ class CreateParticipantForm(forms.ModelForm):
 class AddParticipantForm(forms.ModelForm):
 
     class Meta:
+        # tournament = Tournament.objects.all()
+
         model = Group
+        # tournament = Group.tournament
+        # groups = Group.objects.filter(tournament=tournament)
+        # print("tournament",tournament)
+        # some_variable = ['participants']
+        # avaible_participants = []
+        #
+        # for group in groups:
+        #     print("group", group)
+        #     participants.append(group.participants)
+        #     print("participants", participants)
+        # for p in some_variable:
+        #     for participant in participants:
+        #         if p != participant.name:
+        #             avaible_participants.append(p)
+        #
+        # fields = avaible_participants
+
         fields = ['participants']
         labels = {"participants": 'uczestnicy'}
         widgets = {
@@ -106,13 +126,13 @@ class AddPointsForm(forms.ModelForm):
                 )
             )
 
-    def clean_points_fighter_one(self, *args, **kwargs):
-
-        points_fighter_one = self.cleaned_data.get("points_fighter_one")
-        if points_fighter_one == 2:
-            raise ValidationError("sprawdzam czy wyskoczył błąd, że jest 2")
-        else:
-            return points_fighter_one
+    # def clean_points_fighter_one(self, *args, **kwargs):
+    #
+    #     points_fighter_one = self.cleaned_data.get("points_fighter_one")
+        # if points_fighter_one == 2:
+        #     raise ValidationError("sprawdzam czy wyskoczył błąd, że jest 2")
+        # else:
+        #     return points_fighter_one
 
 
 class AddGroupForm(forms.ModelForm):

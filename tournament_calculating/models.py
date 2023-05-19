@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 from tournaments.models import Tournament
+from cloudinary.models import CloudinaryField
+
 
 
 class Participant(models.Model):
@@ -9,6 +11,9 @@ class Participant(models.Model):
     name = models.CharField(max_length=255)
     school = models.CharField(max_length=500)
     image = ImageField(upload_to="tournament_calculating/images/%Y/%m/%d/", blank=True, null=True)
+    # image = CloudinaryField(blank=True, null=True)
+
+
     tournaments = models.ManyToManyField('tournaments.Tournament', related_name='participants')
     group_points = models.PositiveSmallIntegerField(null=True, default=0)
     points_average = models.FloatField(null=True, default=0)
@@ -95,6 +100,7 @@ class Group(models.Model):
 class ParticipantGroup(models.Model):
     participant = models.ForeignKey("Participant",on_delete=models.CASCADE, null=True)
     group = models.ForeignKey("Group",on_delete=models.CASCADE, null=True)
+    tournament = models.ForeignKey("tournaments.Tournament", on_delete=models.CASCADE, null=True)
     tournament_points = models.PositiveSmallIntegerField(null=True, default=0)
     tournament_average = models.PositiveSmallIntegerField(null=True, default=0)
     tournament_wins = models.PositiveSmallIntegerField(null=True, default=0)
@@ -105,6 +111,10 @@ class ParticipantGroup(models.Model):
     tournament_injuries = models.PositiveSmallIntegerField(null=True, default=0)
     tournament_surrenders = models.PositiveSmallIntegerField(null=True, default=0)
     tournament_opponent_injuries = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_amount_rounds = models.PositiveSmallIntegerField(null=True, default=0)
+    tournament_points_modified = models.PositiveSmallIntegerField(null=True, default=0)
+    round_average = models.PositiveSmallIntegerField(null=True, default=0)
+
 
 
 class Fight(models.Model):
@@ -174,24 +184,20 @@ ROUND_STATUS = [
     ('3', '3'),
     ('4', '4'),
     ('5', '5'),
-    # ('6', '6'),
-    # ('7', '7'),
-    # ('8', '8'),
-    # ('9', '9'),
-    # ('10', '10'),
-    # ('kontuzja', 'kontuzja'),
-    # ('dyskwalifikacja', 'dyskwalifikacja'),
-    # ('poddanie', 'poddanie'),
-    # ('wycofanie', 'wycofanie'),
-    # ('średnia', 'średnia'),
+    ('-1', '-1'),
+    ('-2', '-2'),
+    ('-3', '-3'),
+    ('-4', '-4'),
+    ('-5', '-5'),
+
 ] + ROUND_SPECIAL_STATUSES + ROUND_CONTUSIONS_STATUSES
 
 class Round(models.Model):
 
     order = models.PositiveSmallIntegerField(null=True)
     fight = models.ForeignKey("Fight", on_delete=models.CASCADE, related_name="rounds_of_fight", null=True)
-    points_fighter_one = models.CharField(max_length=20, choices=ROUND_STATUS, null=True)
-    points_fighter_two = models.CharField(max_length=20, choices=ROUND_STATUS, null=True)
+    points_fighter_one = models.CharField(max_length=20, choices=ROUND_STATUS, null=True, blank=True)
+    points_fighter_two = models.CharField(max_length=20, choices=ROUND_STATUS, null=True, blank=True)
     group = models.ForeignKey("Group", on_delete=models.CASCADE, related_name="rounds_of_group", null=True)
     fighter_one = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_one", null=True )
     fighter_two = models.ForeignKey('Participant', on_delete=models.CASCADE, related_name="rounds_of_participant_two", null=True )
