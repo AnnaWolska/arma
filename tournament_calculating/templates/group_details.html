@@ -89,7 +89,7 @@
     <h5>
         walki grupa {{  number }} :
     </h5>
-    <table  BORDER CELLSPACING=5 CELLPADDING=25><caption align="top"></caption>
+    <table BORDER CELLSPACING=5 CELLPADDING=25 ><caption align="top"></caption>
 
         <tr>
             {% for fight in fights%}
@@ -133,7 +133,6 @@
             {% for r in fight.rounds_of_fight.all|dictsort:"id" %}
 
 
-
                         {% if r.points_fighter_one %}
                         <a id="delete_tournament" class="btn btn-primary" style="color:black; background-color:oldlace; text-decoration: none;   " href = "{% url 'tournament_calculating:add_points' group_id fight.id r.id    %}">
                             <b>
@@ -152,10 +151,7 @@
                                     {% endif %}
                                 </span>
                             </b>
-
                             {% endif %}
-
-
 
 
                             {% if r.points_fighter_one %}
@@ -178,10 +174,8 @@
                             {% endif %}
 
 
-
-
                         <span style="background-color:{{ group.color_fighter_one }};" class="list-group-item list-group-item-light">
-                            starcie {{ r.order }} {{ fight.fighter_one.name }}vvvvvvvvvvv
+                            starcie {{ r.order }} {{ fight.fighter_one.name }}
                             {% for status in ROUND_STATUS %}
                             <a  id="kotwica" style="color:white; text-decoration: none;" href="{% url 'tournament_calculating:add_points_fighter_one' group_id fight.id r.id %}?points={{ status.0 }}&fighter={{ r.fighter_one.id }}#kotwica">
                                 <span style= "color: black; background-color: white;" type="button" class="btn btn-primary">
@@ -201,12 +195,9 @@
                             </a>
                             {% endfor %}
                         </span>
-
-
-
-
                     <br>
                     <br>
+
                     {% endfor %}
 
 
@@ -329,5 +320,5 @@
                                 {% endif %}
                         </ul>
                         {% endfor %}
-
+{#check#}
                         {% endblock %}
